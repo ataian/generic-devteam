@@ -31,7 +31,7 @@ Der Projektname erscheint NUR bei der ersten Datei — danach dient der Name als
 Feature-Namensgeber (kurz halten, 1–2 Wörter, damit der Dateiname nicht zu
 lang wird).
 
-## SemVer-Bedeutung auf Planspezifikationen (Max-Konvention, 2026-08-29)
+## SemVer-Bedeutung auf Planspezifikationen
 
 - **MAJOR** — inkompatible Änderung an der Spezifikation (Architektur/Pipeline
   bricht ab, z. B. `video` → `input`-Namensumbenennung).
@@ -99,7 +99,15 @@ Datei im Repo-Root, Keep-a-Changelog-Stil:
 
 ### 3) App-Codeversion (SemVer) vs. Plan-Dateiversion
 
-Die App-Codeversion folgt eigenem SemVer-Schema, getrennt von den
-Plan-Dateien: MAJOR bei inkompatibler API-Änderung, MINOR bei neuem Feature,
-PATCH bei Bugfix. Beispiel: Der Upload-Wechsel 303→201 (inkompatibel) war ein
-MAJOR-Bump auf 2.0.0 — während die Plan-Dateien bei 1.x.0 blieben.
+Die App-Codeversion folgt eigenem SemVer-Schema, getrennt von den Plan-Dateien: 
+MAJOR bei inkompatibler API-Änderung, 
+MINOR bei neuem Feature,
+PATCH bei Bugfix. 
+
+Die Plan-Dateien haben als Versionsnummer immer die aktuelle Version des Projekts 
+von dem ausgehend die Änderung geplant wird.
+
+Beispiel: 
+Für eine App in Version 1.3.0 wird ein Wechsel des API returncodes 303→201 (inkompatibel = MAJOR Bump) geplant.
+Die Plan-Dateien erhalten 1.3.0 in ihren Versionsnummern.
+Für die App wird bei der Implementierung ein MAJOR-Bump auf 2.0.0 gemacht.
