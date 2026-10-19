@@ -87,7 +87,7 @@ berichten dem Planner. Die portable Plannerregel erlaubt bis zu drei eigenständ
 entschiedene Budgeterweiterungen im beschriebenen Ticketkontext; sie löst nicht das separate
 native Rate-Limit-Gesamtbudget-Gate G1.
 
-Der [Setupweg](setup.md) führt Eingang → Bestätigung → privaten Record →
+Der [Setupweg](../../references/setup.md) führt Eingang → Bestätigung → privaten Record →
 Wiederaufnahme/Abgleich → rollenbezogene Feldauswahl → `render_role` → Annahme →
 Schreiben ins bestätigte Rollenhome als `SOUL.md` → bytegenaue Rücklese aus.
 Tests verwenden ausschließlich synthetische Daten und öffentliche Vorlagen;

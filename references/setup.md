@@ -17,7 +17,7 @@ bestätigte, nichtgeheime Variablen; keine rohen Nutzereingaben als Shellcode.
    allein sind kein Beleg für den Dispatcher. Keine neue Daemonplattform anlegen.
 3. Prüfe native Profile, Config set/get, Boards, blocked-first-Erstellung,
    expliziten Reviewer/Handoff, Same-Card-Rückgabe und Wake anhand der installierten
-   Parser/Leser sowie [nativer Referenz](native-workflow.md). Bei fehlender Syntax
+   Parser/Leser sowie [nativer Referenz](../unklar/references/native-workflow.md). Bei fehlender Syntax
    zuerst aktuelle Docs/Quelltext lesen; erst nach Freigabe CLI/Loader prüfen.
 4. Inventarisiere aktivierte Plugins/Memoryprovider aller gemeinsam betroffenen
    Profile und die PM-Abhängigkeitsgeneration ohne Secretwerte. Normale CLIstarts,
@@ -158,7 +158,7 @@ Integrationen bereitstellen. Halte die realen Codex-Binary-/Homewerte für die a
 Bindungsersetzung fest. Originalkomponenten zunächst bereitstellen/konfigurieren;
 die in den Rezepten beschriebenen echten Einzelprüfungen folgen erst nach
 vollständigen eigenen Rollen-/Bindingdateien und ihrer Annahme in Abschnitt 7.
-Lade das vollständige [Codeanalyserezept](code-analysis.md) und verwende genau
+Lade das vollständige [Codeanalyserezept](../unklar/references/code-analysis.md) und verwende genau
 den gewählten Weg für alle drei Hermes-Rollen und Team-Codex. Ziele, vollständige
 Originaldateimengen, Runtime und Lizenzen zurücklesen. G2/A01-CBM bleibt bis zum
 genehmigten Originaloutput-/Bytevergleich offen; statische Ableitung genügt nicht.
@@ -223,12 +223,12 @@ Unvollständiges/ungültiges JSON oder widersprüchliche Tabellen/Belege halten 
 Die Pakettests führen nur diese Textfragmente und das folgende Renderfragment mit
 synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
 
-1. Kopiere je `own_skills.targets` im [Manifest](../../manifest.json) **den ganzen
+1. Kopiere je `own_skills.targets` im [Manifest](../manifest.json) **den ganzen
    eigenen Skillbaum** in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
    `screenshot-to-code` in seinem Prozess-HOME unter `.agents/skills/`.
    Nur `SKILL.md.template` wird zu `SKILL.md`. Screenshot bleibt bytegleich.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.
-2. Erstelle aus [model-policy.md](../templates/model-policy.md) eine ausgefüllte
+2. Erstelle aus [model-policy.md](../unklar/templates/model-policy.md) eine ausgefüllte
    nichtgeheime Policy je Rollenhome unter `devteam/model-policy.md`. Fülle die
    tatsächlichen Hermes-/Codex-Auswahlen, erlaubten höheren Routen, Hilfsmodelle,
    Original-Agentpins und Freigabe-/Prüfbelege aus. Alle Rollen erhalten dieselbe
@@ -244,7 +244,7 @@ synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
    lokale Policy, nicht nur in den Makertext oder einen einmaligen Testauftrag.
    Fülle auch den Codeanalyseabschnitt: genau eine Auswahl, Originalskill-Ladepflicht
    in jedem Analyseauftrag/Resume, Corpus/Roots und Nachführungsweg aus dem
-   [Analyserezept](code-analysis.md). Nicht gewählte Anweisungsvariante entfernen;
+   [Analyserezept](../unklar/references/code-analysis.md). Nicht gewählte Anweisungsvariante entfernen;
    alle drei Rollen bekommen dieselbe Auswahl, Codex den entsprechenden Auftrag.
 3. Erstelle je Rollenhome `devteam/g1.md`: Zielrevision, geprüfter Retrypfad,
    Status und konkrete fehlende Voraussetzung; bei Lösung endliches natives
@@ -252,7 +252,7 @@ synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
    Keine Statusanhebung aus einem Cooldown. Bindungsfeld `G1_EVIDENCE` zeigt auf
    diese tatsächlich geschriebene erreichbare Datei.
 4. Verwende **denselben reinen Textweg wie die Pakettests**:
-   [references/render_text.py](../../references/render_text.py). Er liest/schreibt keine Dateien,
+   [references/render_text.py](render_text.py). Er liest/schreibt keine Dateien,
    lädt keine Runtime und hat keinen CLI-Einstieg. Lade das Modul im freigegebenen
    Zielsetup über den absoluten Pfad des geprüften Makerpakets (z. B.
    `importlib.util.spec_from_file_location`), nicht aus einem fremden gleichnamigen
@@ -280,7 +280,7 @@ synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
    einschließlich aller Kommunikationswerte zur Validierung. Das Modul entfernt
    den vollständigen Nur-Planner-Abschnitt für Coder/Reviewer. Verwende technische
    Werte unverändert als Daten, nicht die maskierte Markdownfassung als Shellwerte.
-5. Der Textweg validiert den [Rollenfeldvertrag](native-workflow.md): nichtleere
+5. Der Textweg validiert den [Rollenfeldvertrag](../unklar/references/native-workflow.md): nichtleere
    einzeilige Rohwerte, Namen maximal 120 Zeichen, keine Steuer-/Formatzeichen,
    Templateklammern, Einrückung, Backticks, Backslashes oder Fence-Ausbrüche.
    Er ersetzt alle passenden Mehrfachvorkommen genau in einem Durchlauf, ohne
@@ -320,7 +320,7 @@ synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
 Nach vollständigen angenommenen Rollen-/Skill-/Policy-/Bindingdateien die
 geplanten profilrichtigen Einzelprüfungen aus den Integrationsrezepten ausführen:
 Discovery, vollständige Promptaufnahme, Modelle, persistente Modi und Memory.
-Für die gewählte Analyse die [Funktions-/Updateprüfung](code-analysis.md) im
+Für die gewählte Analyse die [Funktions-/Updateprüfung](../unklar/references/code-analysis.md) im
 separaten Testworkspace durchführen; CBM-MCP und beide Harness-Hookwege getrennt
 belegen. G2-Originaloutputvergleich ist eine eigene vorherige Freigabe, kein
 Nebenprodukt des Indexlaufs. A01-CBM und R1 bleiben ohne jeweilige Belege offen.

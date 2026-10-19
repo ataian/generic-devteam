@@ -107,8 +107,8 @@ G1 nicht durch einen beaufsichtigten Erfolgsdurchlauf als gelöst darstellen.
 | B06 Pipeline | Harmloser Auftrag im separaten Testrepo: Plan → getrennte Annahme → native Karte/Dispatcher → Codex-Artefakt, Tests, Commit → unabhängiger Review derselben Karte → korrelierter Planner-Wake und tatsächliche Projektkanalantwort. Kein künstlicher Fehler-/Reviewrücklauf nötig. |
 | B07 Grenzen | Produktprojekt und fremden Zustand erhalten, genehmigtes Budget/Versuche erfassen, Pflichtnachweise einzeln ehrlich bewerten. Testdaten nur im freigegebenen Umfang zurücknehmen. |
 
-Die [Integrationsrezepte](integrations.md), [Codeanalyse](code-analysis.md) und das
-[Setup](setup.md) bestimmen die konkreten Zielprüfungen. Für den gewählten
+Die [Integrationsrezepte](../../references/integrations.md), [Codeanalyse](code-analysis.md) und das
+[Setup](../../references/setup.md) bestimmen die konkreten Zielprüfungen. Für den gewählten
 Analyseweg echte Workspacebindung, Index, Symbol-/Relationsquery sowie Nachführung
 nach einer autorisierten Änderung belegen; die nicht ausgeübte Alternative bleibt
 hinsichtlich Laufzeit offen. Fachliches Projekt-Onboarding folgt separat.

@@ -9,7 +9,7 @@ enthält seine eigene technische Referenz; er benötigt das Makerpaket nicht meh
 Die Makerseite [native-workflow.md](unklar/references/native-workflow.md) beschreibt
 Einrichtung und Prüfung der Arbeitsbindungen sowie den Render-/Kontextvertrag
 für die drei enthaltenen Rollen-SOULs. Der [Maker](SKILL.md), das geführte
-[Setup](unklar/references/setup.md), allgemeine [Integrationsrezepte](unklar/references/integrations.md),
+[Setup](references/setup.md), allgemeine [Integrationsrezepte](references/integrations.md),
 private Protokoll-/Policyvorlagen und reine Textvalidierung sind enthalten.
 Beide [Codeanalysewege](unklar/references/code-analysis.md) sind als vollständige
 Originalquellenrezepte enthalten. G2/A01-CBM bleibt offen; statisch dekodierte

@@ -1,7 +1,7 @@
 # Codeanalyse: zwei Originalwege, eine Auswahl
 
 Diese Anleitung ist ein statisches Einrichtungsrezept, keine Installation oder
-Funktionsabnahme. [Setup](setup.md) bestimmt Freigaben und Reihenfolge,
+Funktionsabnahme. [Setup](../../references/setup.md) bestimmt Freigaben und Reihenfolge,
 [Manifest](../../manifest.json) die Rollenmatrix und geprüften Dateimengen,
 [Herkunft](upstream-sources.md) die Bezugsquellen. Fremdassets werden beim späteren
 Zielsetup vollständig aus der gewählten Originalrevision bezogen, nicht aus
@@ -23,7 +23,7 @@ Erster Index-/Query-Nachweis ausschließlich im später genehmigten separaten Te
    Produktstack aus AGENTS/Manifesten/Lockfiles, keine universellen DevHours-Pins.
 3. Absolute Rollenhomes aus nativer Profilauflösung verwenden. Team-Codex bindet
    ausschließlich im eigenen Prozess `HOME=CODEX_PROCESS_HOME` und `CODEX_HOME`
-   gemäß [Team-Codex](integrations.md#team-codex). Keine globale Env-Änderung.
+   gemäß [Team-Codex](../../references/integrations.md#team-codex). Keine globale Env-Änderung.
    Symlinks, fremde Dateien und gleiche Skillnamen vor Schreibzugriff prüfen.
 4. Skills und Lizenzen vollständig kopieren, außerhalb aktiver Discovery
    vorbereiten; nur bestätigte eigene Ziele beschreiben. Vorherige eigene Fassung

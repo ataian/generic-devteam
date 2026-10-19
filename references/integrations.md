@@ -189,7 +189,7 @@ erweitern; bestehende Liste zunächst lesen, duplikatfrei mergen und als JSON-Li
 danach `config get skills.auto_load`. Nicht die ganze vorhandene Liste ersetzen.
 Im echten neuen Kontext geladenen Originalhauptskill nachweisen. Team-Codex erhält
 `$caveman` ausdrücklich in **jedem neuen Auftrag**, auch nach Neustart/Resume.
-Diese Pflicht steht dauerhaft in der [lokalen Modell-/Risikopolicy](../templates/model-policy.md).
+Diese Pflicht steht dauerhaft in der [lokalen Modell-/Risikopolicy](../unklar/templates/model-policy.md).
 Beim Setup die Klausel mit ausgeben und über MODEL_POLICY_REF im Coderhome rücklesen;
 der installierte Alltagsvertrag darf nicht vom erneuten Laden dieses Makers abhängen.
 
@@ -211,7 +211,7 @@ Ergänzungsvorschläge gehen über Coder zum Planner, nicht automatisch installi
 
 [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents),
 MIT-`LICENSE` erhalten. Genau die sechs Originalpfade des
-[Manifests](../../manifest.json) beziehen: `test-automator`, `security-auditor`,
+[Manifests](../manifest.json) beziehen: `test-automator`, `security-auditor`,
 `reviewer`, `anti-ui-slop-reviewer`, `ui-fixer`, `docker-expert`.
 Keine anderen Agentpakete pauschal installieren. Nach `CODEX_HOME/agents/` unter
 Originalbasename schreiben, erst nach Kollisions-/Eigentumsprüfung.
@@ -425,13 +425,13 @@ keine historische besondere Thread-Abnahme hinzufügen.
 ## Codeanalyse und Quellenstand
 
 Die Wahl zwischen `codebase-memory` und `graphify` bleibt verbindlich.
-[Codeanalyse](code-analysis.md) enthält beide vollständigen Originaldateimengen,
+[Codeanalyse](../unklar/references/code-analysis.md) enthält beide vollständigen Originaldateimengen,
 Runtime-/Zielkontexte, Aktivierung, Index-/Query-/Updateprüfung und Rückwege.
 Genau den gewählten Weg auf alle drei Hermes-Rollen und Team-Codex anwenden.
 G2/A01-CBM bleibt offen: echte Originalausgabe und Bytevergleich der selektiven
 Übernahme ohne zusätzliche Helfer benötigen eine gesonderte Freigabe. Keine
 Umdeutung der statischen Ableitung zum Installerbeleg. Die sechs VoltAgent-Helfer
-bleiben unverändert. Quellen und Status stehen im [Herkunftsverzeichnis](upstream-sources.md).
+bleiben unverändert. Quellen und Status stehen im [Herkunftsverzeichnis](../unklar/references/upstream-sources.md).
 
 Statische Recherche vom 18.10.2026: Superpowers `bb92a77741419a4ab5f06e711a283343f1ada0c3`,
 Ponytail `09c434ab73ca43761c5d8b0c5d341926c2fba710`, Caveman

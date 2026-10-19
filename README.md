@@ -54,7 +54,7 @@ oder Bauen des Pakets ein Setup auszuführen.
    [NOTICE](NOTICE.md) und [Originalquellen](unklar/references/upstream-sources.md).
 2. Ermittle das tatsächliche Home des Hermes-Profils, in dem du den Maker aufrufen
    willst, über die vorhandene Profilkonfiguration. Prüfe vor jedem CLI-Aufruf
-   mögliche Bootstrap-/PM-Wirkungen gemäß [Setup](unklar/references/setup.md).
+   mögliche Bootstrap-/PM-Wirkungen gemäß [Setup](references/setup.md).
 3. Nach Freigabe kopiere diesen vollständigen Baum in dessen
    `skills/generic-devteam/`. Existiert das Ziel, vergleiche zuerst Herkunft und
    lokale Änderungen; niemals fremde Anpassungen überschreiben. Die eingebetteten
