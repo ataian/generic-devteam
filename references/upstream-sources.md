@@ -66,8 +66,8 @@ Blocker melden. Der Codex-Agent `reviewer` ersetzt nicht die Hermes-Reviewrolle.
 
 | Komponente | Originalquelle | Benötigter Umfang | Ziel |
 |---|---|---|---|
-| <a id="codebase-memory"></a>Codebase-memory | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | Passendes offizielles Release sowie Originalskill, Hermes-Plugin und Codex-Hooks für die gewählten Zielkontexte; `LICENSE` und Release-`THIRD_PARTY_NOTICES.md` erhalten. Keine zusätzlichen Codex-Agent-TOMLs übernehmen. | Alle Hermes-Rollen und Team-Codex |
+| <a id="codebase-memory"></a>Codebase-memory | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | Passendes offizielles Release und vollständige native Hermes-/Codex-Integration: Originalskill, MCP, Hooks sowie die zu CBM gehörenden Codex-Unteragenten; `LICENSE` und Release-`THIRD_PARTY_NOTICES.md` erhalten. | Alle Hermes-Rollen und Team-Codex |
 | <a id="graphify"></a>Graphify | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Runtime; für Hermes `graphify/skill-claw.md` und vollständiges `graphify/skills/claw/references/`, für Codex `graphify/skill-codex.md` und vollständiges `graphify/skills/codex/references/`; `LICENSE`, `LICENSE-MIT` und `NOTICE` erhalten. | Alle Hermes-Rollen und Team-Codex |
 
-Auswahl und Einrichtung erfolgen im Setup. Diese Quellenübersicht ersetzt weder
+Auswahl und Einrichtung stehen in [code-analysis.md](code-analysis.md). Diese Quellenübersicht ersetzt weder
 das jeweilige Integrationsrezept noch die Funktionsprüfung im Zielkontext.

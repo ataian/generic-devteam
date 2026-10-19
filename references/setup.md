@@ -158,10 +158,10 @@ Integrationen bereitstellen. Halte die realen Codex-Binary-/Homewerte für die a
 Bindungsersetzung fest. Originalkomponenten zunächst bereitstellen/konfigurieren;
 die in den Rezepten beschriebenen echten Einzelprüfungen folgen erst nach
 vollständigen eigenen Rollen-/Bindingdateien und ihrer Annahme in Abschnitt 7.
-Lade das vollständige [Codeanalyserezept](../unklar/references/code-analysis.md) und verwende genau
+Lade das vollständige [Codeanalyserezept](code-analysis.md) und verwende genau
 den gewählten Weg für alle drei Hermes-Rollen und Team-Codex. Ziele, vollständige
-Originaldateimengen, Runtime und Lizenzen zurücklesen. G2/A01-CBM bleibt bis zum
-genehmigten Originaloutput-/Bytevergleich offen; statische Ableitung genügt nicht.
+Originaldateimengen, Runtime und Lizenzen zurücklesen. Bei CBM gehört die vollständige
+offizielle Codex-Integration einschließlich ihrer Unteragenten zur Einrichtung.
 Erster Index-/Query-/Änderungsnachweis erst im separat genehmigten Testworkspace.
 Vor aktiver MCP-/Hookaufnahme auch bei hot-admittierten Profilen den tatsächlichen
 Test-CWD und MCP-Root binden; ohne Freigabe/Testbindung nur außerhalb aktiver
@@ -242,10 +242,10 @@ synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
    Übernimm die feste Team-Codex-Auftragsregel unverändert: `$caveman` ausdrücklich
    in jedem neuen Auftrag, auch nach Neustart/Resume. Sie gehört in jede ausgegebene
    lokale Policy, nicht nur in den Makertext oder einen einmaligen Testauftrag.
-   Fülle auch den Codeanalyseabschnitt: genau eine Auswahl, Originalskill-Ladepflicht
-   in jedem Analyseauftrag/Resume, Corpus/Roots und Nachführungsweg aus dem
-   [Analyserezept](../unklar/references/code-analysis.md). Nicht gewählte Anweisungsvariante entfernen;
-   alle drei Rollen bekommen dieselbe Auswahl, Codex den entsprechenden Auftrag.
+   Binde die gewählte Codeanalyse gemäß [Analyserezept](code-analysis.md) über die
+   installierten Originalskills und deren native Aktivierung ein. Auswahl, Roots
+   und Nachführungsweg im Setup-Protokoll festhalten; alle drei Rollen und Team-Codex
+   erhalten denselben Analyseweg. Dafür keine zusätzliche Modell-/Auftragspolicy anlegen.
 3. Erstelle je Rollenhome `devteam/g1.md`: Zielrevision, geprüfter Retrypfad,
    Status und konkrete fehlende Voraussetzung; bei Lösung endliches natives
    Gesamtbudget samt Beleg, bei Anforderungsänderung deren Annahmequelle/Umfang.
@@ -320,10 +320,9 @@ synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
 Nach vollständigen angenommenen Rollen-/Skill-/Policy-/Bindingdateien die
 geplanten profilrichtigen Einzelprüfungen aus den Integrationsrezepten ausführen:
 Discovery, vollständige Promptaufnahme, Modelle, persistente Modi und Memory.
-Für die gewählte Analyse die [Funktions-/Updateprüfung](../unklar/references/code-analysis.md) im
+Für die gewählte Analyse die [Funktions-/Updateprüfung](code-analysis.md#funktionspruefung) im
 separaten Testworkspace durchführen; CBM-MCP und beide Harness-Hookwege getrennt
-belegen. G2-Originaloutputvergleich ist eine eigene vorherige Freigabe, kein
-Nebenprodukt des Indexlaufs. A01-CBM und R1 bleiben ohne jeweilige Belege offen.
+belegen. Ohne diese Zielprüfungen bleibt die Codeanalyse-Abnahme offen.
 Für Mattermost Rezeptphase 8 einhalten: Planneradapter nachweisen, dann Homebindung
 im DM setzen/rücklesen, danach Erwähnung/Free-Response/DM prüfen. Frühere
 Hot-Admission ersetzt weder Rollenaufnahme noch Adapternachweis.

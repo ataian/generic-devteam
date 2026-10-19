@@ -53,13 +53,12 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
    Record, Board, Team-Codex/Originalkomponenten, Memory-/Messagingkonfiguration,
    eigene Bäume/Policy und endgültige Bindungen; danach erst Einzelprüfungen.
    Lade dazu [Integrationen](references/integrations.md),
-   [Quellen](references/upstream-sources.md), beide [Codeanalysewege](unklar/references/code-analysis.md)
+   [Quellen](references/upstream-sources.md), beide [Codeanalysewege](references/code-analysis.md)
    und [Manifest](manifest.json); richte genau die gewählte Alternative ein.
 5. Halte bei fehlenden Voraussetzungen an der betroffenen Fähigkeit an. Insbesondere
    bleibt G1 vor automatischer Dispatchfreigabe gesperrt, bis eine endliche native
-   Gesamtgrenze belegt oder die Anforderung ausdrücklich geändert ist. Die
-   CBM-Integration bleibt bei G2/A01-CBM offen, bis der gesondert genehmigte
-   Originaloutput-/Bytevergleich besteht. Dokumentierte Rezepte sind keine
+   Gesamtgrenze belegt oder die Anforderung ausdrücklich geändert ist.
+   Dokumentierte Rezepte sind keine
    installierten Fähigkeiten; erster Index-/Querytest nur im separaten Testworkspace.
 6. Nach gesonderter Aktivierungs-/Testfreigabe die tatsächlichen Zielkontexte,
    Modellwege, Modi, Memoryrequests, normalen Kanal-/DM-Dialog und Planner-Wake
@@ -84,4 +83,4 @@ Lies jedes angelegte native Objekt und jede Zielausgabe zurück. Die öffentlich
 [Dateitests](README.md) prüfen Paketdaten und den reinen Textweg, nicht das
 Verhalten eines Agenten. Ohne echte Zielabnahme lautet das Urteil:
 **„Paket geprüft; Setup-Laufzeitabnahme offen.“** G1 und die noch offenen
-Codeanalyse-/G2-Nachweise bleiben dabei ausdrücklich sichtbar.
+Codeanalyse-Funktionsnachweise bleiben dabei ausdrücklich sichtbar.

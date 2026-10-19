@@ -11,9 +11,9 @@ Einrichtung und Prüfung der Arbeitsbindungen sowie den Render-/Kontextvertrag
 für die drei enthaltenen Rollen-SOULs. Der [Maker](SKILL.md), das geführte
 [Setup](references/setup.md), allgemeine [Integrationsrezepte](references/integrations.md),
 private Protokoll-/Policyvorlagen und reine Textvalidierung sind enthalten.
-Beide [Codeanalysewege](unklar/references/code-analysis.md) sind als vollständige
-Originalquellenrezepte enthalten. G2/A01-CBM bleibt offen; statisch dekodierte
-Originalstrings sind keine ausgeführte Originalinstallerausgabe. Keine fremde
+Beide [Codeanalysewege](references/code-analysis.md) sind als Einrichtungsrezepte
+enthalten. CBM umfasst seine offizielle Codex-Integration einschließlich Unteragenten.
+Die Funktionsprüfung erfolgt erst beim Zielsetup. Keine fremde
 Runtime oder Originalskillkopie wird in diesem Maker mitexportiert.
 
 ## Eigene Texte und G3

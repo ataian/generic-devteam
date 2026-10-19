@@ -12,11 +12,10 @@ und `tests/` gehören dazu. Nutzung und weitere Bearbeitung erfolgen in diesem
 Repository.
 
 **Liefergrenze:** Der geführte Maker, allgemeine Integrationsrezepte und beide
-[Codeanalysewege](unklar/references/code-analysis.md) sind statisch dokumentiert, mit
-vollständigen Originaldateimengen und Zielkontexten. A01-CBM bleibt wegen G2 offen.
+[Codeanalysewege](references/code-analysis.md) sind als Einrichtungsrezepte dokumentiert,
+mit Originalkomponenten und Zielkontexten. Ihre Laufzeitabnahme erfolgt beim Zielsetup.
 G1 (endliche native Rate-Limit-Gesamtgrenze)
-bleibt ein Halt vor betroffener automatischer Dispatchfreigabe; G2 betrifft den
-noch ausstehenden Originaloutput-/Bytevergleich der selektiven CBM-Integration.
+bleibt ein Halt vor betroffener automatischer Dispatchfreigabe.
 Statische Pakettests sind keine Betriebsbereitschaft und kein unabhängiger Review.
 
 ## Voraussetzungen
@@ -115,7 +114,7 @@ Die [Prüfanleitung](unklar/references/verification.md) erklärt alle Checks, sy
 Fälle, isolierten Defektkopien und die getrennten A-/B-Kriterien. Der unabhängige
 Whole-Branch-Review des Paketstands ist abgeschlossen; der anschließende
 Paketexport wurde auf Dateimenge, Commitbytes und ZIP-CRC geprüft. Spätere
-Änderungen benötigen ihre eigene betroffene Prüfung. A01-CBM/G2 bleibt offen,
+Änderungen benötigen ihre eigene betroffene Prüfung. Die Codeanalyse-Laufzeitabnahme bleibt offen,
 die G1-Budgetanforderung aus A03 ist im untersuchten nativen Stand unerfüllt.
 
 Die spätere Zielabnahme umfasst reale Discovery/Promptaufnahme, persistente Modi,

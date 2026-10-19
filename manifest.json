@@ -428,7 +428,7 @@
       "recipe_status": "documented",
       "reviewed_revision": "a7158ac2f48ca646b4527341b76f930f2aeff87e",
       "reviewed_release": "v0.12.1",
-      "g2_status": "open",
+      "g2_status": "not-applicable-native-integration",
       "a01_status": "open-for-cbm",
       "asset_evidence": "static-source-derivation-not-installer-output",
       "codex_skill_target": "<CODEX_HOME>/skills/codebase-memory/SKILL.md",
@@ -439,7 +439,7 @@
         "install.sh",
         "THIRD_PARTY_NOTICES.md"
       ],
-      "excluded_codex_assets": [
+      "codex_agent_assets": [
         "agents/codebase-memory-scout.toml",
         "agents/codebase-memory.toml",
         "agents/codebase-memory-auditor.toml"

@@ -15,7 +15,7 @@ Zustandsautorität. Bei Wiederaufnahme erneut lesen, nicht blind Create wiederho
 - Je Repository: Root- und Bereichs-AGENTS, Manifest/Lockfile/Wrapper, bestehende Änderungen: offen
 - Boardkennung / nativer Rücklesebeleg / Standardworkspace: offen
 - Projektbank / vorhandener Hindsight-Dienst / Eigentumsbeleg: offen
-- Codeanalyse (genau eine) / Rezeptrevision / G2-Status: offen
+- Codeanalyse (genau eine) / Rezeptrevision / Funktionsprüfung: offen
 
 ## Rollen
 
@@ -101,9 +101,10 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 |---|---|---|---|---|---|
 | aus Manifest einzeln aufführen | offen | offen | offen | offen | offen |
 
-Alle sechs Original-TOMLs einzeln: Originalpfad, Hash, Modell-/Reasoningpin,
+Alle sechs VoltAgent-Original-TOMLs einzeln: Originalpfad, Hash, Modell-/Reasoningpin,
 Discovery, tatsächlicher Delegationscall. Konfigurationsnachweis, Originalidentität
-und Runtimebeleg bleiben getrennt. Keine zusätzlichen Helfer still aufnehmen.
+und Runtimebeleg bleiben getrennt. Bei CBM zusätzlich die vom offiziellen Installer
+bereitgestellten Codex-Unteragenten und ihre Discovery dokumentieren.
 
 | Repository / Fähigkeit | Quellmanifest / Constraint | Aufruf-CWD / Wrapper / Lockfile | Tatsächliche Toolauflösung | Prüfstatus / Beleg |
 |---|---|---|---|---|
@@ -127,7 +128,7 @@ mit Begründung. Nie aus Quellenprüfung einen echten Lauf ableiten.
 
 | ID | Kriterium | Geprüfter Stand | Ergebnis und Belegpfad |
 |---|---|---|---|
-| A01 | Vollständige Ausstattung, Codeanalyse/G2 gesondert | offen | offen |
+| A01 | Vollständige Ausstattung, Codeanalyse-Funktionsprüfung gesondert | offen | offen |
 | A02 | Portabler Export ohne private Abhängigkeiten | offen | offen |
 | A03 | Rollen-/Modell-/Git-/Freigabekonsistenz, G1 sichtbar | offen | offen |
 | A04 | Statische Qualität und Datenprüfungen | offen | offen |

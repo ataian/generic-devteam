@@ -425,13 +425,12 @@ keine historische besondere Thread-Abnahme hinzufügen.
 ## Codeanalyse und Quellenstand
 
 Die Wahl zwischen `codebase-memory` und `graphify` bleibt verbindlich.
-[Codeanalyse](../unklar/references/code-analysis.md) enthält beide vollständigen Originaldateimengen,
-Runtime-/Zielkontexte, Aktivierung, Index-/Query-/Updateprüfung und Rückwege.
+[Codeanalyse](code-analysis.md) enthält beide Einrichtungswege mit Originalkomponenten,
+Runtime-/Zielkontexten, Aktivierung, Index-/Query-/Updateprüfung und Rückwegen.
 Genau den gewählten Weg auf alle drei Hermes-Rollen und Team-Codex anwenden.
-G2/A01-CBM bleibt offen: echte Originalausgabe und Bytevergleich der selektiven
-Übernahme ohne zusätzliche Helfer benötigen eine gesonderte Freigabe. Keine
-Umdeutung der statischen Ableitung zum Installerbeleg. Die sechs VoltAgent-Helfer
-bleiben unverändert. Quellen stehen im [Bezugsquellenverzeichnis](upstream-sources.md).
+Bei CBM die offizielle Codex-Integration einschließlich ihrer Unteragenten einrichten;
+die sechs VoltAgent-Helfer bleiben daneben erhalten. Einrichtung und Funktion im
+Teamkontext prüfen. Quellen stehen im [Bezugsquellenverzeichnis](upstream-sources.md).
 
 Statische Recherche vom 18.10.2026: Superpowers `bb92a77741419a4ab5f06e711a283343f1ada0c3`,
 Ponytail `09c434ab73ca43761c5d8b0c5d341926c2fba710`, Caveman
