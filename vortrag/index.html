@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Generic Devteam · Vom Skill zum eigenen Entwicklungsteam</title>
+<style>
+:root{--paper:#f4f2ec;--ink:#19342f;--muted:#63746b;--line:#cbd4c9;--accent:#d7ed7c;--green:#234b3f}
+*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:20px}body{margin:0;background:#dce1d9;color:var(--ink);font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
+nav{display:flex;justify-content:center;gap:20px;padding:16px;font-size:13px}nav a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--muted);padding:4px}
+.slide{position:relative;container-type:inline-size;width:min(1440px,100%);aspect-ratio:16/9;margin:0 auto 24px;background:var(--paper);padding:4.2% 5%;overflow:hidden}
+@media(min-width:1440px){.slide{padding:60px 72px}}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:1cqw;letter-spacing:.14em;text-transform:uppercase;font-weight:700}.brand{display:flex;align-items:center;gap:.8cqw}.mark{width:1.1cqw;height:1.1cqw;background:var(--green);display:inline-block}.chapter{color:var(--muted)}
+h1,h2,h3,p{margin:0}h1{font-size:6.5cqw;line-height:1.02;letter-spacing:-.055em;font-weight:700;margin-top:4.2cqw}h2{font-size:4.15cqw;line-height:1.08;letter-spacing:-.04em;margin-top:3cqw;max-width:90%}h3{font-size:1.15cqw;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:1.6cqw;color:var(--muted)}
+.lead{font-size:1.8cqw;line-height:1.5;max-width:70%;margin-top:1.8cqw;color:var(--muted)}.footer{position:absolute;bottom:2.6cqw;left:5%;right:5%;display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:1cqw;color:var(--muted);font-size:.95cqw}.footer span:last-child{font-variant-numeric:tabular-nums;letter-spacing:.12em}
+.dark{background:var(--ink);color:var(--paper)}.dark .mark{background:var(--accent)}.dark .chapter,.dark .lead,.dark .footer{color:#bccdc1}.dark .footer{border-color:#496058}.highlight{color:var(--accent)}
+.roles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.4cqw;margin-top:3.8cqw}.role{border-top:2px solid #718878;padding-top:1.5cqw}.role .number{font-size:1.1cqw;letter-spacing:.1em;color:var(--accent)}.role strong{display:block;font-size:2cqw;margin:1cqw 0 .6cqw}.role p{font-size:1.25cqw;color:#c3d1c6}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:5cqw;margin-top:3.3cqw}.cols.three{grid-template-columns:1fr 1fr 1fr;gap:2.6cqw}.panel{border-top:2px solid var(--green);padding-top:1.6cqw}ul{margin:0;padding:0;list-style:none}li{position:relative;padding-left:1.4cqw;font-size:1.65cqw;line-height:1.45;margin-bottom:1.05cqw}li:before{content:'•';position:absolute;left:0;color:var(--green)}.compact li{font-size:1.36cqw;margin-bottom:1.05cqw;line-height:1.4}.tag{display:inline-block;background:var(--accent);padding:.4cqw .8cqw;font-size:.95cqw;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-top:1.7cqw}.subline{font-size:1.1cqw;color:var(--muted);line-height:1.4;margin-top:1.1cqw}.outcome{margin-top:2.6cqw;background:var(--accent);padding:1.7cqw 2cqw;font-size:1.85cqw;line-height:1.35;font-weight:700}.closing h2{font-size:4cqw}.closing .cols{margin-top:2.1cqw}.closing li{font-size:1.35cqw;margin-bottom:.8cqw}.note{margin-top:1.8cqw;font-size:1.08cqw;line-height:1.5;color:var(--muted);max-width:96%}.note strong{color:var(--ink)}
+@media print{@page{size:320mm 180mm;margin:0}html,body{background:white;margin:0;padding:0}nav{display:none}.slide{width:320mm;height:180mm;aspect-ratio:auto;margin:0;padding:13.3mm 16mm;break-after:page;page-break-after:always;print-color-adjust:exact;-webkit-print-color-adjust:exact}.slide:last-child{break-after:auto;page-break-after:auto}}
+</style>
+</head>
+<body>
+<nav aria-label="Folien"><a href="#ziel">01 Ziel</a><a href="#basis">02 Basis</a><a href="#skills">03 Skills</a><a href="#werkzeuge">04 Werkzeuge</a><a href="#ergebnis">05 Ergebnis</a></nav>
+<main>
+<section class="slide dark" id="ziel" aria-labelledby="title-1">
+<div class="top"><span class="brand"><i class="mark"></i>Generic Devteam</span><span class="chapter">Skill / HOWTO</span></div>
+<h1 id="title-1">Ein eigenes<br><span class="highlight">KI-Entwicklungsteam.</span></h1>
+<p class="lead">Geführte technische Einrichtung in Hermes.<br>Klare Rollen. Gemeinsames Wissen. Unabhängiger Review.</p>
+<div class="roles"><div class="role"><span class="number">01 / PLANUNG</span><strong>Planner</strong><p>Planung &amp; Koordination</p></div><div class="role"><span class="number">02 / UMSETZUNG</span><strong>Coding-Orchestrator</strong><p>Implementierung über Team-Codex</p></div><div class="role"><span class="number">03 / QUALITÄT</span><strong>Reviewer</strong><p>Unabhängige Prüfung</p></div></div>
+<div class="footer"><span>Das Setup schafft das Team – der Projektauftrag folgt danach.</span><span>01 / 05</span></div>
+</section>
+<section class="slide" id="basis" aria-labelledby="title-2">
+<div class="top"><span class="brand"><i class="mark"></i>Generic Devteam</span><span class="chapter">Wird eingerichtet / Team &amp; Zusammenarbeit</span></div>
+<h2 id="title-2">Die gemeinsame Arbeitsbasis.</h2>
+<div class="cols"><div class="panel"><h3>Team &amp; Steuerung</h3><ul><li>Drei eigene Hermes-Profile</li><li>Rollennamen, Personas &amp; Rollenregeln</li><li>Projekt- und Workspace-Bindung</li><li>Modelle, Provider &amp; Modellpolicy</li><li>Eigenes Kanban-Board</li></ul></div><div class="panel"><h3>Wissen &amp; Kommunikation</h3><ul><li>Neue gemeinsame Hindsight-Projektbank</li><li>Eigener Mattermost-Bot für den Planner</li><li>Projektkanal &amp; Direktnachrichten</li><li>Review-, Rückgabe- &amp; Benachrichtigungsweg</li><li>Privates Setup- und Übergabeprotokoll</li></ul></div></div>
+<div class="footer"><span>Anbindung an vorhandene Dienste; keine neue Serverplattform.</span><span>02 / 05</span></div>
+</section>
+<section class="slide" id="skills" aria-labelledby="title-3">
+<div class="top"><span class="brand"><i class="mark"></i>Generic Devteam</span><span class="chapter">Wird eingerichtet / Skills &amp; Arbeitsregeln</span></div>
+<h2 id="title-3">Ein gemeinsamer Arbeitsstandard.</h2>
+<div class="cols three compact"><div class="panel"><h3>Planen &amp; koordinieren</h3><ul><li>devteam-workflow</li><li>brownfield-feature-planning</li><li>plan-versioning-semver</li><li>Superpowers</li></ul></div><div class="panel"><h3>Umsetzen &amp; prüfen</h3><ul><li>minimal-change-engineering</li><li>project-lib-versioning</li><li>screenshot-to-code</li><li>Hermes-Codex-Skill</li><li>sdlc-review</li></ul></div><div class="panel"><h3>Ergänzende Ausstattung</h3><ul><li>Ponytail</li><li>Caveman</li><li>find-skills</li></ul><span class="tag">Rollenbezogen</span><p class="subline">Jeweils in den vorgesehenen<br>Hermes- und Codex-Kontexten.</p></div></div>
+<div class="footer"><span>Gemeinsame Regeln für Planung, Umsetzung und Review.</span><span>03 / 05</span></div>
+</section>
+<section class="slide" id="werkzeuge" aria-labelledby="title-4">
+<div class="top"><span class="brand"><i class="mark"></i>Generic Devteam</span><span class="chapter">Wird eingerichtet / Codex &amp; Codeanalyse</span></div>
+<h2 id="title-4">Die technische Ausstattung.</h2>
+<div class="cols three compact"><div class="panel"><h3>Team-Codex</h3><ul><li>Codex CLI &amp; Anmeldung</li><li>Eigener Team-Arbeitszustand</li><li>Modell- und Skillbindung</li><li>Projektabhängige Build-,<br>Test- &amp; Entwicklungswerkzeuge</li></ul></div><div class="panel"><h3>Codeanalyse</h3><ul><li>codebase-memory</li><li>oder Graphify</li></ul><span class="tag">Genau eine Auswahl</span><p class="subline">Für die Hermes-Rollen<br>und Team-Codex.</p></div><div class="panel"><h3>Codex-Spezialagenten</h3><ul><li>test-automator</li><li>security-auditor</li><li>reviewer</li><li>anti-ui-slop-reviewer</li><li>ui-fixer</li><li>docker-expert</li></ul></div></div>
+<div class="footer"><span>Werkzeuge passend zum Zielprojekt – kein fest vorgegebener Technologie-Stack.</span><span>04 / 05</span></div>
+</section>
+<section class="slide closing" id="ergebnis" aria-labelledby="title-5">
+<div class="top"><span class="brand"><i class="mark"></i>Generic Devteam</span><span class="chapter">Ergebnis &amp; Rahmen</span></div>
+<h2 id="title-5">Die Basis für den ersten Projektauftrag.</h2>
+<div class="outcome">Nach erfolgreicher Einrichtung und Abnahme:<br>ein verbundenes Team für Planung → Umsetzung → Review.</div>
+<div class="cols"><div class="panel"><h3>Das wird erreicht</h3><ul><li>Klare Zuständigkeiten &amp; Übergaben</li><li>Gemeinsames Projektwissen</li><li>Nachvollziehbare Aufgaben &amp; Rückmeldungen</li><li>Dokumentierter, wiederaufnehmbarer Setupstand</li></ul></div><div class="panel"><h3>Das wird vorausgesetzt</h3><ul><li>Linux &amp; funktionsfähiges Hermes</li><li>Erreichbares Mattermost &amp; Hindsight</li><li>Autorisierte Modell- und Codex-Zugänge</li><li>Freigaben für Einrichtung &amp; Aktivierung</li></ul></div></div>
+<p class="note"><strong>Aktueller Stand:</strong> Paket statisch geprüft; reale Zielabnahme noch offen.<br>Automatischer Dispatch: Retry-Gesamtbudget offen. CBM-Integration: Originaloutput-/Bytevergleich offen.</p>
+<div class="footer"><span>Fachliche Projektplanung und Produktentwicklung starten mit einem separaten Auftrag.</span><span>05 / 05</span></div>
+</section>
+</main>
+<!-- Inhaltliche Grundlage: ../SKILL.md, ../manifest.json, ../references/setup.md, ../references/integrations.md. Keine Installation oder Laufzeitabnahme durch diese Präsentation. -->
+</body>
+</html>
