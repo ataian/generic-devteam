@@ -53,7 +53,7 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
    Record, Board, Team-Codex/Originalkomponenten, Memory-/Messagingkonfiguration,
    eigene Bäume/Policy und endgültige Bindungen; danach erst Einzelprüfungen.
    Lade dazu [Integrationen](references/integrations.md),
-   [Quellen](unklar/references/upstream-sources.md), beide [Codeanalysewege](unklar/references/code-analysis.md)
+   [Quellen](references/upstream-sources.md), beide [Codeanalysewege](unklar/references/code-analysis.md)
    und [Manifest](manifest.json); richte genau die gewählte Alternative ein.
 5. Halte bei fehlenden Voraussetzungen an der betroffenen Fähigkeit an. Insbesondere
    bleibt G1 vor automatischer Dispatchfreigabe gesperrt, bis eine endliche native

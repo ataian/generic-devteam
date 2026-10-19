@@ -4,7 +4,7 @@
 
 Die sechs eigenen Skillbäume und ihre Begleitdateien sind enthalten. Der exakte
 Bestand steht in [manifest.json](manifest.json), Rollen und Quellen in
-[upstream-sources.md](unklar/references/upstream-sources.md). Der installierte Workflow
+[upstream-sources.md](references/upstream-sources.md). Der installierte Workflow
 enthält seine eigene technische Referenz; er benötigt das Makerpaket nicht mehr.
 Die Makerseite [native-workflow.md](unklar/references/native-workflow.md) beschreibt
 Einrichtung und Prüfung der Arbeitsbindungen sowie den Render-/Kontextvertrag

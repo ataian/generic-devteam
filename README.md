@@ -51,7 +51,7 @@ oder Bauen des Pakets ein Setup auszuführen.
    separates Paketarchiv: `SKILL.md`, `README.md`, `manifest.json`, `LICENSE`,
    `NOTICE.md` sowie `references/`, `templates/` und `tests/`. Git-Metadaten sind
    kein Bestandteil der Skillinstallation. Herkunft und Lizenz stehen in
-   [NOTICE](NOTICE.md) und [Originalquellen](unklar/references/upstream-sources.md).
+   [NOTICE](NOTICE.md) und [Originalquellen](references/upstream-sources.md).
 2. Ermittle das tatsächliche Home des Hermes-Profils, in dem du den Maker aufrufen
    willst, über die vorhandene Profilkonfiguration. Prüfe vor jedem CLI-Aufruf
    mögliche Bootstrap-/PM-Wirkungen gemäß [Setup](references/setup.md).

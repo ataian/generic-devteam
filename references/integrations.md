@@ -431,7 +431,7 @@ Genau den gewählten Weg auf alle drei Hermes-Rollen und Team-Codex anwenden.
 G2/A01-CBM bleibt offen: echte Originalausgabe und Bytevergleich der selektiven
 Übernahme ohne zusätzliche Helfer benötigen eine gesonderte Freigabe. Keine
 Umdeutung der statischen Ableitung zum Installerbeleg. Die sechs VoltAgent-Helfer
-bleiben unverändert. Quellen und Status stehen im [Herkunftsverzeichnis](../unklar/references/upstream-sources.md).
+bleiben unverändert. Quellen stehen im [Bezugsquellenverzeichnis](upstream-sources.md).
 
 Statische Recherche vom 18.10.2026: Superpowers `bb92a77741419a4ab5f06e711a283343f1ada0c3`,
 Ponytail `09c434ab73ca43761c5d8b0c5d341926c2fba710`, Caveman
