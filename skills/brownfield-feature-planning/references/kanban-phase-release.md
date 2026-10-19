@@ -1,4 +1,3 @@
-*** VON GORDON ANFANG***
 # Verified Kanban phase release
 
 Use after explicit acceptance of a dependency-ordered implementation plan. This is orchestration, not permission for the planner to implement or manually spawn workers.
@@ -39,4 +38,3 @@ Do not repeat a successful write merely because parsing failed; re-read the reco
 4. Read the whole project board once more. Report `ready` until a real claim/start is observed; do not wait or manually dispatch just to turn an honest ready status into a running claim. Leave later phase advancement to the dispatcher and independent review gates.
 
 The release handoff is not completion of the app, a guarantee of provider availability or customer acceptance of the result.
-*** VON GORDON ENDE ***
