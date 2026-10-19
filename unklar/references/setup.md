@@ -223,7 +223,7 @@ Unvollständiges/ungültiges JSON oder widersprüchliche Tabellen/Belege halten 
 Die Pakettests führen nur diese Textfragmente und das folgende Renderfragment mit
 synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
 
-1. Kopiere je `own_skills.targets` im [Manifest](../manifest.json) **den ganzen
+1. Kopiere je `own_skills.targets` im [Manifest](../../manifest.json) **den ganzen
    eigenen Skillbaum** in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
    `screenshot-to-code` in seinem Prozess-HOME unter `.agents/skills/`.
    Nur `SKILL.md.template` wird zu `SKILL.md`. Screenshot bleibt bytegleich.
@@ -252,7 +252,7 @@ synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
    Keine Statusanhebung aus einem Cooldown. Bindungsfeld `G1_EVIDENCE` zeigt auf
    diese tatsächlich geschriebene erreichbare Datei.
 4. Verwende **denselben reinen Textweg wie die Pakettests**:
-   [references/render_text.py](render_text.py). Er liest/schreibt keine Dateien,
+   [references/render_text.py](../../references/render_text.py). Er liest/schreibt keine Dateien,
    lädt keine Runtime und hat keinen CLI-Einstieg. Lade das Modul im freigegebenen
    Zielsetup über den absoluten Pfad des geprüften Makerpakets (z. B.
    `importlib.util.spec_from_file_location`), nicht aus einem fremden gleichnamigen

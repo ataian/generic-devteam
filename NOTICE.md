@@ -4,14 +4,14 @@
 
 Die sechs eigenen Skillbäume und ihre Begleitdateien sind enthalten. Der exakte
 Bestand steht in [manifest.json](manifest.json), Rollen und Quellen in
-[upstream-sources.md](references/upstream-sources.md). Der installierte Workflow
+[upstream-sources.md](unklar/references/upstream-sources.md). Der installierte Workflow
 enthält seine eigene technische Referenz; er benötigt das Makerpaket nicht mehr.
-Die Makerseite [native-workflow.md](references/native-workflow.md) beschreibt
+Die Makerseite [native-workflow.md](unklar/references/native-workflow.md) beschreibt
 Einrichtung und Prüfung der Arbeitsbindungen sowie den Render-/Kontextvertrag
 für die drei enthaltenen Rollen-SOULs. Der [Maker](SKILL.md), das geführte
-[Setup](references/setup.md), allgemeine [Integrationsrezepte](references/integrations.md),
+[Setup](unklar/references/setup.md), allgemeine [Integrationsrezepte](unklar/references/integrations.md),
 private Protokoll-/Policyvorlagen und reine Textvalidierung sind enthalten.
-Beide [Codeanalysewege](references/code-analysis.md) sind als vollständige
+Beide [Codeanalysewege](unklar/references/code-analysis.md) sind als vollständige
 Originalquellenrezepte enthalten. G2/A01-CBM bleibt offen; statisch dekodierte
 Originalstrings sind keine ausgeführte Originalinstallerausgabe. Keine fremde
 Runtime oder Originalskillkopie wird in diesem Maker mitexportiert.
@@ -136,7 +136,7 @@ reales Dateischreiben und effektive Aufnahme bleiben dort gesonderte Prüfungen.
 Syntaxprüfung ist keine Ausführung operativer Quellhelper. Weder Netzwerk, Quellprofile
 noch Hermes/Codex/Dienste sind erforderlich. Kein Bootstrap oder Modell wird
 aufgerufen. Discovery, Setup, Laufzeitverhalten und unabhängige Paketabnahme
-bleiben gesonderte Nachweise. Die [Prüfanleitung](references/verification.md)
+bleiben gesonderte Nachweise. Die [Prüfanleitung](unklar/references/verification.md)
 trennt die einzeln zu bewertenden A-/B-Kriterien, den unabhängigen Gesamtabschlussreview
 und den erst danach zu prüfenden Export. Der ursprüngliche Paketreview und
 Paketexport sind abgeschlossen; neue Änderungen und Exporte erneut prüfen.

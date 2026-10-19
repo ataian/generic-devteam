@@ -4,11 +4,11 @@
 
 Dies ist die Quellen- und Rezeptzuordnung des T5-Lieferstands. Der [geführte Setupweg](setup.md), die [allgemeinen Integrationsrezepte](integrations.md) und beide [Codeanalysealternativen](code-analysis.md) sind enthalten; ihre Manifestverweise stehen auf `documented`. G2/A01-CBM bleibt ausdrücklich offen. Die Einträge behaupten keine erfolgreiche Installation. Vor Zielbezug den geeigneten Originalstand neu auflösen, Version/Revision, vollständige Assetmenge und Lizenz-/Noticepflichten dokumentieren; erst im bestätigten Zielscope einrichten und prüfen. Vorhandene geeignete Distributionen wiederverwenden.
 
-Das [Manifest](../manifest.json) ordnet die Quellen maschinenlesbar zu. `hermes: coder` bedeutet Coding-Orchestrator; `codex: team-codex` bedeutet den getrennten Teamzustand. Rollen sind Funktionen, keine vorhandenen Profilnamen. Für beide Analysealternativen gilt dieselbe Rollenmatrix; beim Setup wird genau ein Weg gewählt.
+Das [Manifest](../../manifest.json) ordnet die Quellen maschinenlesbar zu. `hermes: coder` bedeutet Coding-Orchestrator; `codex: team-codex` bedeutet den getrennten Teamzustand. Rollen sind Funktionen, keine vorhandenen Profilnamen. Für beide Analysealternativen gilt dieselbe Rollenmatrix; beim Setup wird genau ein Weg gewählt.
 
 ## Eigene Fähigkeiten: enthaltene T2-Fassungen
 
-Alle folgenden Fähigkeiten sind vollständig enthalten. [NOTICE](../NOTICE.md) beschreibt G3: Screenshot wird unverändert übernommen, die übrigen fünf Fähigkeiten sind neu aus bestätigten Regeln formuliert. Jede Neufassung enthält ihre eigene vollständige MIT-Lizenz und Herkunftsnotice. Private Quellpfade bleiben außerhalb des Exports; die öffentlichen Screenshot-Dateihashes dienen dem portablen Integritätscheck.
+Alle folgenden Fähigkeiten sind vollständig enthalten. [NOTICE](../../NOTICE.md) beschreibt G3: Screenshot wird unverändert übernommen, die übrigen fünf Fähigkeiten sind neu aus bestätigten Regeln formuliert. Jede Neufassung enthält ihre eigene vollständige MIT-Lizenz und Herkunftsnotice. Private Quellpfade bleiben außerhalb des Exports; die öffentlichen Screenshot-Dateihashes dienen dem portablen Integritätscheck.
 
 <a id="own-workflow"></a>
 ### devteam-workflow
@@ -43,18 +43,18 @@ Kanonisches eigenständiges Paket `screenshot-to-code` 1.0.0; Autorenfeld `Max, 
 <a id="own-roles"></a>
 ## Eigene Rollen-SOULs: quellnahe aktuelle Fassungen
 
-[Planner](../templates/roles/planner.SOUL.md.template) und
-[Coder](../templates/roles/coder.SOUL.md.template) sind im ausdrücklich bestätigten
+[Planner](../../templates/roles/planner.SOUL.md.template) und
+[Coder](../../templates/roles/coder.SOUL.md.template) sind im ausdrücklich bestätigten
 Auftrag quellnah aus den vorhandenen Rollen-SOULs abgeleitet: Struktur, Methodik,
 Berichtswege und die genehmigte portable Plannerregel bis zu drei
 Budgeterweiterungen bleiben erhalten. Persönliche Projekt-/Teambindungen werden
 durch erklärte Felder ersetzt; Modellrouten stammen aus aktueller bestätigter
 Policy und Konfiguration, nicht aus SOUL-Pins. Keine aktiven Profile werden exportiert.
-Der [Reviewer](../templates/roles/reviewer.SOUL.md.template) ist die vom Nutzer
+Der [Reviewer](../../templates/roles/reviewer.SOUL.md.template) ist die vom Nutzer
 überarbeitete maßgebliche Vorlage und wird bei der Makerintegration nicht geändert.
 Die frühere T3-Neufassung und ihre Integration sind historischer Lieferstand,
 keine Beschreibung dieser aktuellen Rollen. Es gibt keinen erzwungenen bytegleichen
-neunstufigen Prozess. Herkunft und Grenzen stehen in der [Notice](../NOTICE.md);
+neunstufigen Prozess. Herkunft und Grenzen stehen in der [Notice](../../NOTICE.md);
 die private Vergleichsquelle ist weder Paketbestandteil noch Testabhängigkeit.
 
 `role_templates` ordnet jede Vorlage genau einem Hermes-Rollenprofil zu. Keine
@@ -63,7 +63,7 @@ Auftrag. Der [Render-/Kontextvertrag](native-workflow.md) erklärt alle Namen,
 Projekt-/Bank-/Boardfelder und technischen Profilwerte; Anzeigenamen sind
 keine technischen IDs. Nur tatsächlich vorkommende Felder werden übergeben,
 Mehrfachvorkommen ersetzt und alle anderen Bytes erhalten. Keine Persona-Abfrage.
-Der [reine Textweg](render_text.py) wird im [Setupweg](setup.md) verbindlich genutzt,
+Der [reine Textweg](../../references/render_text.py) wird im [Setupweg](setup.md) verbindlich genutzt,
 mit bestätigten Rohwerten aus dem privaten Record auch bei Wiederaufnahme.
 Das ist kein operativer Setuphelfer und kein Nachweis effektiver Promptaufnahme.
 

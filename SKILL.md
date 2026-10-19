@@ -37,8 +37,8 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
 
 ## Geführter Ablauf
 
-1. Lade [Setup](references/setup.md) vollständig sowie den
-   [Bindungsvertrag](references/native-workflow.md). Beginne mit Zielbestand,
+1. Lade [Setup](unklar/references/setup.md) vollständig sowie den
+   [Bindungsvertrag](unklar/references/native-workflow.md). Beginne mit Zielbestand,
    Gateway-/Dispatcherzuständigkeit und gemeinsamen PM-Wirkungen, nicht mit Create.
 2. Frage Projektname/Workspace zuerst; gleiche den absoluten Workspace auf dem
    Zielkonto mit `~/projects/<PROJECT_NAME>` aus der festen Reviewer-Vorlage ab.
@@ -47,13 +47,13 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
    technische Kennungen getrennt von Anzeigenamen, Modelle und genau eine
    Codeanalyse und Planner-Kommunikationsziele. Keine erneute Auswahl fester
    Rollen, Modi oder Komponenten. Lasse den konkreten Änderungsumfang freigeben.
-3. Verwende die [private Protokollvorlage](templates/setup-record.md). Prüfe jede
+3. Verwende die [private Protokollvorlage](unklar/templates/setup-record.md). Prüfe jede
    vorhandene Zielidentität vor Anlage; bei Wiederaufnahme native Objekte abgleichen.
 4. Führe die Setupschritte in Reihenfolge aus: Profile/Modellbindung und privater
    Record, Board, Team-Codex/Originalkomponenten, Memory-/Messagingkonfiguration,
    eigene Bäume/Policy und endgültige Bindungen; danach erst Einzelprüfungen.
-   Lade dazu [Integrationen](references/integrations.md),
-   [Quellen](references/upstream-sources.md), beide [Codeanalysewege](references/code-analysis.md)
+   Lade dazu [Integrationen](unklar/references/integrations.md),
+   [Quellen](unklar/references/upstream-sources.md), beide [Codeanalysewege](unklar/references/code-analysis.md)
    und [Manifest](manifest.json); richte genau die gewählte Alternative ein.
 5. Halte bei fehlenden Voraussetzungen an der betroffenen Fähigkeit an. Insbesondere
    bleibt G1 vor automatischer Dispatchfreigabe gesperrt, bis eine endliche native

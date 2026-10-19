@@ -211,7 +211,7 @@ Ergänzungsvorschläge gehen über Coder zum Planner, nicht automatisch installi
 
 [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents),
 MIT-`LICENSE` erhalten. Genau die sechs Originalpfade des
-[Manifests](../manifest.json) beziehen: `test-automator`, `security-auditor`,
+[Manifests](../../manifest.json) beziehen: `test-automator`, `security-auditor`,
 `reviewer`, `anti-ui-slop-reviewer`, `ui-fixer`, `docker-expert`.
 Keine anderen Agentpakete pauschal installieren. Nach `CODEX_HOME/agents/` unter
 Originalbasename schreiben, erst nach Kollisions-/Eigentumsprüfung.

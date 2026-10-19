@@ -16,7 +16,7 @@ separate Paketaufgaben. Hier entstehen weder Profile noch Dienstobjekte.
 
 ## Vollständige eigene Bäume bereitstellen
 
-Rollenmatrix und tatsächliche Dateien aus [manifest.json](../manifest.json) lesen.
+Rollenmatrix und tatsächliche Dateien aus [manifest.json](../../manifest.json) lesen.
 Je Zielskill **alle** Dateien seines Baums einschließlich eigener Lizenz/Notices
 kopieren. Nur `SKILL.md.template` wird am bestätigten Ziel zu `SKILL.md` umbenannt.
 Die native Suche prüft den exakten Namen `SKILL.md`; der Transportname ist nach
@@ -35,8 +35,8 @@ Die quellnahen Rollen-SOULs haben zusätzlich die unten deklarierten Felder;
 
 ## Rollen-SOULs — Render- und Kontextvertrag für T4
 
-Das Manifest liefert genau drei `role_templates`: [Planner](../templates/roles/planner.SOUL.md.template),
-[Coder](../templates/roles/coder.SOUL.md.template) und [Reviewer](../templates/roles/reviewer.SOUL.md.template).
+Das Manifest liefert genau drei `role_templates`: [Planner](../../templates/roles/planner.SOUL.md.template),
+[Coder](../../templates/roles/coder.SOUL.md.template) und [Reviewer](../../templates/roles/reviewer.SOUL.md.template).
 Produzent ist der Maker im ausdrücklich freigegebenen Zielsetup. Er ordnet die
 Vorlage dem bestätigten technischen Rollenprofil zu und schreibt die gerenderte
 Fassung dort als `SOUL.md`; dieser Transportname ist kein aktueller

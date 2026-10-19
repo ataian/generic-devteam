@@ -12,7 +12,7 @@ und `tests/` gehören dazu. Nutzung und weitere Bearbeitung erfolgen in diesem
 Repository.
 
 **Liefergrenze:** Der geführte Maker, allgemeine Integrationsrezepte und beide
-[Codeanalysewege](references/code-analysis.md) sind statisch dokumentiert, mit
+[Codeanalysewege](unklar/references/code-analysis.md) sind statisch dokumentiert, mit
 vollständigen Originaldateimengen und Zielkontexten. A01-CBM bleibt wegen G2 offen.
 G1 (endliche native Rate-Limit-Gesamtgrenze)
 bleibt ein Halt vor betroffener automatischer Dispatchfreigabe; G2 betrifft den
@@ -51,10 +51,10 @@ oder Bauen des Pakets ein Setup auszuführen.
    separates Paketarchiv: `SKILL.md`, `README.md`, `manifest.json`, `LICENSE`,
    `NOTICE.md` sowie `references/`, `templates/` und `tests/`. Git-Metadaten sind
    kein Bestandteil der Skillinstallation. Herkunft und Lizenz stehen in
-   [NOTICE](NOTICE.md) und [Originalquellen](references/upstream-sources.md).
+   [NOTICE](NOTICE.md) und [Originalquellen](unklar/references/upstream-sources.md).
 2. Ermittle das tatsächliche Home des Hermes-Profils, in dem du den Maker aufrufen
    willst, über die vorhandene Profilkonfiguration. Prüfe vor jedem CLI-Aufruf
-   mögliche Bootstrap-/PM-Wirkungen gemäß [Setup](references/setup.md).
+   mögliche Bootstrap-/PM-Wirkungen gemäß [Setup](unklar/references/setup.md).
 3. Nach Freigabe kopiere diesen vollständigen Baum in dessen
    `skills/generic-devteam/`. Existiert das Ziel, vergleiche zuerst Herkunft und
    lokale Änderungen; niemals fremde Anpassungen überschreiben. Die eingebetteten
@@ -111,7 +111,7 @@ noch Setup-/CLI-Einstieg. Synthetische Daten-/Textfälle samt negativen Mutation
 sind **keine Agentenverhaltensprüfung**. Es werden keine Hermes-/Codex-Module,
 operativen Helfer, Bootstraproutinen, Modelle oder Dienste gestartet.
 
-Die [Prüfanleitung](references/verification.md) erklärt alle Checks, synthetischen
+Die [Prüfanleitung](unklar/references/verification.md) erklärt alle Checks, synthetischen
 Fälle, isolierten Defektkopien und die getrennten A-/B-Kriterien. Der unabhängige
 Whole-Branch-Review des Paketstands ist abgeschlossen; der anschließende
 Paketexport wurde auf Dateimenge, Commitbytes und ZIP-CRC geprüft. Spätere

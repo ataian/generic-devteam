@@ -87,7 +87,7 @@ bewertet die beschriebenen Handlungen pro Fall zusätzlich semantisch.
 
 G3: Screenshot-Lizenz und Originalbytes sind erhalten; die fünf weiteren Skills
 sind Neufassungen mit eigenen vollständigen Lizenzen. Aktuelle Rollen-SOULs sind
-quellnahe Ableitungen bzw. die maßgebliche Nutzerfassung, siehe [NOTICE](../NOTICE.md).
+quellnahe Ableitungen bzw. die maßgebliche Nutzerfassung, siehe [NOTICE](../../NOTICE.md).
 Historische ungeklärte Rechte werden dadurch nicht rückwirkend geklärt.
 
 ## B — echte Einrichtung, alle Kriterien weiterhin offen

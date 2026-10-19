@@ -2,7 +2,7 @@
 
 Diese Anleitung ist ein statisches Einrichtungsrezept, keine Installation oder
 Funktionsabnahme. [Setup](setup.md) bestimmt Freigaben und Reihenfolge,
-[Manifest](../manifest.json) die Rollenmatrix und geprüften Dateimengen,
+[Manifest](../../manifest.json) die Rollenmatrix und geprüften Dateimengen,
 [Herkunft](upstream-sources.md) die Bezugsquellen. Fremdassets werden beim späteren
 Zielsetup vollständig aus der gewählten Originalrevision bezogen, nicht aus
 privaten Profilen. Dieses Makerpaket enthält Rezepte, keine Graphify-/CBM-Runtime.
