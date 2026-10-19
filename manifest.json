@@ -1,7 +1,7 @@
 {
   "name": "generic-devteam",
   "version": "0.1.0",
-  "stage": "static-reviewed-runtime-acceptance-open",
+  "stage": "runtime-acceptance-open",
   "files": [
     "LICENSE",
     "NOTICE.md",
@@ -14,38 +14,25 @@
     "references/setup.md",
     "references/upstream-sources.md",
     "references/verification.md",
+    "skills/brownfield-feature-planning/SKILL.md",
+    "skills/brownfield-feature-planning/references/kanban-phase-release.md",
+    "skills/brownfield-feature-planning/references/kanban-status-inspection.md",
+    "skills/brownfield-feature-planning/references/operator-script-acceptance.md",
+    "skills/brownfield-feature-planning/references/project-retrospectives.md",
+    "skills/brownfield-feature-planning/references/replacement-imports.md",
+    "skills/minimal-change-engineering/SKILL.md",
+    "skills/plan-versioning-semver/SKILL.md",
+    "skills/project-lib-versioning/SKILL.md",
+    "skills/screenshot-to-code/LICENSE",
+    "skills/screenshot-to-code/SKILL.md",
+    "skills/screenshot-to-code/references/offline-export.md",
+    "skills/screenshot-to-code/references/runtime-usage.md",
+    "skills/screenshot-to-code/references/source-and-assets.md",
+    "skills/screenshot-to-code/references/visual-check.md",
     "templates/roles/coder.SOUL.md.template",
     "templates/roles/planner.SOUL.md.template",
     "templates/roles/reviewer.SOUL.md.template",
-    "templates/setup-record.md",
-    "templates/skills/brownfield-feature-planning/LICENSE",
-    "templates/skills/brownfield-feature-planning/NOTICE.md",
-    "templates/skills/brownfield-feature-planning/SKILL.md.template",
-    "templates/skills/brownfield-feature-planning/references/plan-checklist.md",
-    "templates/skills/minimal-change-engineering/LICENSE",
-    "templates/skills/minimal-change-engineering/NOTICE.md",
-    "templates/skills/minimal-change-engineering/SKILL.md.template",
-    "templates/skills/plan-versioning-semver/LICENSE",
-    "templates/skills/plan-versioning-semver/NOTICE.md",
-    "templates/skills/plan-versioning-semver/SKILL.md.template",
-    "templates/skills/project-lib-versioning/LICENSE",
-    "templates/skills/project-lib-versioning/NOTICE.md",
-    "templates/skills/project-lib-versioning/SKILL.md.template",
-    "templates/skills/screenshot-to-code/LICENSE",
-    "templates/skills/screenshot-to-code/SKILL.md.template",
-    "templates/skills/screenshot-to-code/references/offline-export.md",
-    "templates/skills/screenshot-to-code/references/runtime-usage.md",
-    "templates/skills/screenshot-to-code/references/source-and-assets.md",
-    "templates/skills/screenshot-to-code/references/visual-check.md",
-    "tests/fixtures/setup-cases.json",
-    "tests/fixtures/target-context.md",
-    "tests/fixtures/workflow-cases.json",
-    "tests/test_code_analysis.py",
-    "tests/test_package.py",
-    "tests/test_roles.py",
-    "tests/test_setup.py",
-    "tests/test_skills.py",
-    "tests/test_verification.py"
+    "templates/setup-record.md"
   ],
   "role_templates": {
     "planner": {
@@ -130,14 +117,14 @@
           "planner"
         ]
       },
-      "origin": "Neu formulierter bestätigter Planungskern; fachliche Vorläufer brownfield-feature-planning und codebase-update-planning.",
-      "changes": "Neu formulierter technischer Planungskern mit Plancheckliste; ohne historische Spezialverfahren.",
+      "origin": "Übernommene und vom Nutzer bearbeitete Skillfassung mit ihren Referenzen.",
+      "changes": "Aktuelle Nutzerfassung; beim Setup den vollständigen Skillbaum unverändert kopieren.",
       "origin_ref": "references/upstream-sources.md#own-planning",
-      "license_path": "templates/skills/brownfield-feature-planning/LICENSE",
-      "notice_path": "templates/skills/brownfield-feature-planning/NOTICE.md",
-      "skill_path": "templates/skills/brownfield-feature-planning/SKILL.md.template",
+      "license_path": null,
+      "notice_path": "NOTICE.md",
+      "skill_path": "skills/brownfield-feature-planning/SKILL.md",
       "transport": {
-        "SKILL.md.template": "SKILL.md"
+        "SKILL.md": "SKILL.md"
       }
     },
     "minimal-change-engineering": {
@@ -148,14 +135,14 @@
           "reviewer"
         ]
       },
-      "origin": "Neufassung bestätigter Regeln; portable Sammlung als fachlicher Vergleich, Quellangabe Max (drafted) + Joi und MIT-Identifier ohne separaten ursprünglichen Lizenztext.",
-      "changes": "Bestätigte Regeln neu formuliert auf fachlicher Basis der portablen Sammlung; Projektprüfungen/Fixtures und Planner-/Reviewerrollen präzisiert.",
+      "origin": "Übernommene, vom Nutzer bearbeitete Skillfassung; MIT-Angabe im Frontmatter, historischer Autoren-/Auditverweis nicht zusätzlich belegt.",
+      "changes": "Aktuelle Nutzerfassung; beim Setup den vollständigen Skillbaum unverändert kopieren.",
       "origin_ref": "references/upstream-sources.md#own-minimal",
-      "license_path": "templates/skills/minimal-change-engineering/LICENSE",
-      "notice_path": "templates/skills/minimal-change-engineering/NOTICE.md",
-      "skill_path": "templates/skills/minimal-change-engineering/SKILL.md.template",
+      "license_path": null,
+      "notice_path": "NOTICE.md",
+      "skill_path": "skills/minimal-change-engineering/SKILL.md",
       "transport": {
-        "SKILL.md.template": "SKILL.md"
+        "SKILL.md": "SKILL.md"
       }
     },
     "plan-versioning-semver": {
@@ -165,14 +152,14 @@
           "planner"
         ]
       },
-      "origin": "Neue Formulierung bestätigter Planversionsregeln; historische gleichnamige Quelle ohne belegte ursprüngliche Lizenz.",
-      "changes": "Bestätigte Planversionsregeln neu formuliert; Historienerhalt und gültige Referenzen, keine produktgebundene Version-API.",
+      "origin": "Übernommene, vom Nutzer bearbeitete Skillfassung; Autorenfeld Mariko, kein Lizenzfeld im Frontmatter.",
+      "changes": "Aktuelle Nutzerfassung; beim Setup den vollständigen Skillbaum unverändert kopieren.",
       "origin_ref": "references/upstream-sources.md#own-plan-versioning",
-      "license_path": "templates/skills/plan-versioning-semver/LICENSE",
-      "notice_path": "templates/skills/plan-versioning-semver/NOTICE.md",
-      "skill_path": "templates/skills/plan-versioning-semver/SKILL.md.template",
+      "license_path": null,
+      "notice_path": "NOTICE.md",
+      "skill_path": "skills/plan-versioning-semver/SKILL.md",
       "transport": {
-        "SKILL.md.template": "SKILL.md"
+        "SKILL.md": "SKILL.md"
       }
     },
     "project-lib-versioning": {
@@ -185,14 +172,14 @@
         ]
       },
       "codex_instruction_only": true,
-      "origin": "Neue Formulierung bestätigter Bibliotheksregeln; generische und projektgebundene Bibliotheksversionsregeln als fachliche Vorläufer, historischer Auditverweis unbelegt.",
-      "changes": "Bestätigte Bibliotheksregeln neu formuliert; technologieunabhängige rekursive Verbraucherprüfung und Zuständigkeiten aller drei Rollen.",
+      "origin": "Übernommene, vom Nutzer bearbeitete Skillfassung; MIT-Angabe im Frontmatter, historischer Autoren-/Auditverweis nicht zusätzlich belegt.",
+      "changes": "Aktuelle Nutzerfassung; beim Setup den vollständigen Skillbaum unverändert kopieren.",
       "origin_ref": "references/upstream-sources.md#own-lib-versioning",
-      "license_path": "templates/skills/project-lib-versioning/LICENSE",
-      "notice_path": "templates/skills/project-lib-versioning/NOTICE.md",
-      "skill_path": "templates/skills/project-lib-versioning/SKILL.md.template",
+      "license_path": null,
+      "notice_path": "NOTICE.md",
+      "skill_path": "skills/project-lib-versioning/SKILL.md",
       "transport": {
-        "SKILL.md.template": "SKILL.md"
+        "SKILL.md": "SKILL.md"
       }
     },
     "screenshot-to-code": {
@@ -208,13 +195,13 @@
         ]
       },
       "origin": "Kanonisches eigenständiges Paket screenshot-to-code 1.0.0; Max, Mariko (Hermes Agent); MIT mit vollständiger eigener LICENSE.",
-      "changes": "Alle sechs kanonischen Dateien bytegleich; nur Transportumbenennung SKILL.md zu SKILL.md.template.",
+      "changes": "Alle sechs kanonischen Dateien bytegleich; vollständiger Skillbaum ohne Rendering oder Umbenennung.",
       "origin_ref": "references/upstream-sources.md#own-screenshot",
-      "license_path": "templates/skills/screenshot-to-code/LICENSE",
+      "license_path": "skills/screenshot-to-code/LICENSE",
       "notice_path": "NOTICE.md",
-      "skill_path": "templates/skills/screenshot-to-code/SKILL.md.template",
+      "skill_path": "skills/screenshot-to-code/SKILL.md",
       "transport": {
-        "SKILL.md.template": "SKILL.md"
+        "SKILL.md": "SKILL.md"
       },
       "source_sha256": {
         "LICENSE": "c735c7d01894c53577ac7fb8609cd0767c153161ea907f594ade61626ae83498",
@@ -401,8 +388,6 @@
       "recipe_status": "documented",
       "reviewed_revision": "a7158ac2f48ca646b4527341b76f930f2aeff87e",
       "reviewed_release": "v0.12.1",
-      "g2_status": "not-applicable-native-integration",
-      "a01_status": "open-for-cbm",
       "asset_evidence": "static-source-derivation-not-installer-output",
       "codex_skill_target": "<CODEX_HOME>/skills/codebase-memory/SKILL.md",
       "hermes_skill_target": "<ROLE_HOME>/skills/codebase-memory/SKILL.md",

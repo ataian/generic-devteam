@@ -5,7 +5,6 @@ Agent prüft Eigentum/Freigabe, liest Vorlagen und schreibt ausschließlich best
 Ziele. Dieses Modul entscheidet keine Persona-Befugnisse und verifiziert keine
 nativen IDs, Dateiexistenz oder Modellverfügbarkeit.
 """
-from pathlib import PurePosixPath
 import re
 import unicodedata
 
@@ -19,13 +18,6 @@ ROLE_TECHNICAL_FIELDS = {
     "reviewer": set(),
 }
 ROLE_NAMES = {"planner": "PLANER_NAME", "coder": "CODER_NAME", "reviewer": "REVIEWER_NAME"}
-BINDING_FIELDS = {
-    "PLANNER_PROFILE", "CODER_PROFILE", "REVIEWER_PROFILE", "BOARD",
-    "PROJECT_DIR", "CODEX_PROCESS_HOME", "CODEX_HOME", "CODEX_BINARY",
-    "G1_STATUS", "G1_EVIDENCE", "PROJECT_CHANNEL_ID",
-    "PROJECT_CHAT_TYPE", "HUMAN_USER_ID",
-}
-PLANNER_SECTION = "## Nur Planner: Kommunikationsbindung"
 FIELD = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
 
 
@@ -47,17 +39,6 @@ def markdown(value):
     entities = {"&": "&amp;", "<": "&lt;", ">": "&gt;"}
     return "".join(entities[c] if c in entities else
                    "\\" + c if c in "\\`*_{}[]()#+!|." else c for c in value)
-
-
-def substitute(template, values):
-    """Jedes deklarierte Feld genau einmal; keine rekursive Auswertung."""
-    if not isinstance(template, str):
-        raise ValueError("Vorlagentext erforderlich")
-    fields = FIELD.findall(template)
-    rest = FIELD.sub("", template)
-    if set(fields) != set(values) or len(fields) != len(set(fields)) or "{{" in rest or "}}" in rest:
-        raise ValueError("Falsche, doppelte, fehlende oder beschädigte Vorlagenfelder")
-    return FIELD.sub(lambda match: markdown(values[match.group(1)]), template)
 
 
 def role_fields(template, role):
@@ -121,31 +102,3 @@ def render_role(template, values, role):
                 end = match.end()
             result.append(replace(line[end:]))
     return "".join(result)
-
-
-def render_bindings(template, values, role):
-    """Exakten vollständigen Datensatz validieren, Kommunikationsabschnitt begrenzen."""
-    if role not in {"planner", "coder", "reviewer"} or set(values) != BINDING_FIELDS:
-        raise ValueError("Unbekannte Rolle oder unvollständiger Bindungsdatensatz")
-    for value in values.values():
-        plain(value)
-    profiles = [values[f"{r}_PROFILE"] for r in ("PLANNER", "CODER", "REVIEWER")]
-    if len(set(profiles)) != 3:
-        raise ValueError("Drei verschiedene technische Rollenprofile erforderlich")
-    if any(not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", p) for p in profiles):
-        raise ValueError("Ungültige technische Profilkennung; Zielresolver zusätzlich prüfen")
-    for key in ("PROJECT_DIR", "CODEX_PROCESS_HOME", "CODEX_HOME", "CODEX_BINARY", "G1_EVIDENCE"):
-        path = PurePosixPath(values[key])
-        if not path.is_absolute() or ".." in path.parts:
-            raise ValueError("Bestätigter absoluter Zielpfad ohne Traversal erforderlich")
-    if values["CODEX_PROCESS_HOME"] == values["CODEX_HOME"]:
-        raise ValueError("Codex-Prozesshome und Zustand müssen getrennt sein")
-    if values["G1_STATUS"] not in {"open", "verified-native-bound", "requirement-amended"}:
-        raise ValueError("Unbekannter G1-Status")
-    if values["PROJECT_CHAT_TYPE"] not in {"channel", "group"}:
-        raise ValueError("Wakeziel muss ein bestätigter Projektkanal sein")
-    if template.count(PLANNER_SECTION) != 1:
-        raise ValueError("Plannerabschnitt fehlt oder ist doppelt")
-    # Erst gesamten Vertrag prüfen, dann nur den abschließenden Plannerteil entfernen.
-    rendered = substitute(template, values)
-    return rendered if role == "planner" else rendered.split(PLANNER_SECTION, 1)[0]

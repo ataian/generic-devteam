@@ -4,11 +4,11 @@ Dieses Paket führt durch die Einrichtung eines eigenen Planner-, Coder- und
 Reviewerprofils in einem vorhandenen Hermes. Produktive Umsetzung läuft über
 Team-Codex, Koordination über natives Kanban, gemeinsames Wissen über eine neue
 Hindsight-Bank und Kommunikation über den eigenen Mattermost-Bot des Planners.
-Es enthält eigene Rollen-/Skillvorlagen, keine kopierten Fremdinstallationen.
+Es enthält Rollen-SOUL-Vorlagen und fertige eigene Skillpakete, keine kopierten Fremdinstallationen.
 
 Der Repositoryroot ist zugleich der vollständige Skillbaum: [SKILL.md](SKILL.md)
 ist der Einstieg für Hermes, diese README das HOWTO. `references/`, `templates/`
-und `tests/` gehören dazu. Nutzung und weitere Bearbeitung erfolgen in diesem
+und `skills/` gehören dazu. Nutzung und weitere Bearbeitung erfolgen in diesem
 Repository.
 
 **Liefergrenze:** Der geführte Maker, allgemeine Integrationsrezepte und beide
@@ -47,16 +47,18 @@ oder Bauen des Pakets ein Setup auszuführen.
 
 1. Beziehe den **gesamten Skillbaum direkt aus dem Repositoryroot** oder als
    separates Paketarchiv: `SKILL.md`, `README.md`, `manifest.json`, `LICENSE`,
-   `NOTICE.md` sowie `references/`, `templates/` und `tests/`. Git-Metadaten sind
-   kein Bestandteil der Skillinstallation. Herkunft und Lizenz stehen in
+   `NOTICE.md` sowie `references/`, `templates/` und `skills/`. Die Dateiliste steht
+   im Manifest. Git-Metadaten, `.gitignore` und `vortrag/` gehören nicht zur
+   Skillinstallation. Herkunft und Lizenz stehen in
    [NOTICE](NOTICE.md) und [Originalquellen](references/upstream-sources.md).
 2. Ermittle das tatsächliche Home des Hermes-Profils, in dem du den Maker aufrufen
    willst, über die vorhandene Profilkonfiguration. Prüfe vor jedem CLI-Aufruf
    mögliche Bootstrap-/PM-Wirkungen gemäß [Setup](references/setup.md).
 3. Nach Freigabe kopiere diesen vollständigen Baum in dessen
    `skills/generic-devteam/`. Existiert das Ziel, vergleiche zuerst Herkunft und
-   lokale Änderungen; niemals fremde Anpassungen überschreiben. Die eingebetteten
-   `SKILL.md.template` bleiben im Maker unverändert und sind keine aktiven Skills.
+   lokale Änderungen; niemals fremde Anpassungen überschreiben. Die vollständigen
+   eigenen Skillbäume behalten ihre `SKILL.md` und werden beim Teamsetup unverändert
+   an die vorgesehenen Ziele kopiert. Nur die Rollen-SOUL-Vorlagen werden personalisiert.
 4. Prüfe in diesem Profil native Discovery von `generic-devteam`, lade `SKILL.md`
    und `references/setup.md` ausdrücklich. Der bestehende Sitzungskatalog und ein
    neu aufgelöstes Skillpaket sind unterschiedliche Nachweise; keinen globalen

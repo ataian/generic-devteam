@@ -1,6 +1,6 @@
 # Herkunft und Lieferstand
 
-## T6: Statischer Kandidat zur unabhängigen Gesamtprüfung
+## Aktueller Paketumfang
 
 Die eigenen Skillbäume und ihre Begleitdateien sind enthalten. Der exakte
 Bestand steht in [manifest.json](manifest.json), Rollen und Quellen in
@@ -16,9 +16,9 @@ enthalten. CBM umfasst seine offizielle Codex-Integration einschließlich Untera
 Die Funktionsprüfung erfolgt erst beim Zielsetup. Keine fremde
 Runtime oder Originalskillkopie wird in diesem Maker mitexportiert.
 
-## Eigene Texte und G3
+## Eigene Texte und übernommene Skills
 
-Neue Texte und Tests wurden im Auftrag von Max durch Mariko (Hermes Agent) für
+Neue Makertexte wurden im Auftrag von Max durch Mariko (Hermes Agent) für
 Generic Devteam verfasst. Für sie gilt die vollständige [MIT-Lizenz](LICENSE),
 `Copyright (c) 2026 generic-devteam contributors`. Diese Notice bezeichnet die
 neue Paketfassung; sie behauptet keine historische Rechtekette. Paketversion,
@@ -26,23 +26,19 @@ Planversionen und spätere Zielprojektversionen sind unabhängig.
 
 | Anteil | Herkunft und tatsächliche Behandlung |
 |---|---|
-| Paketvertrag, Tests und Dokumentation | Neu aus bestätigtem Auftrag; MIT dieses Pakets. |
-| Drei Rollen-SOUL-Vorlagen | Aktuell: Planner/Coder quellnah aus vorhandenen Rollen-SOULs im ausdrücklich bestätigten Auftrag abgeleitet; Reviewer als maßgebliche Nutzerfassung unverändert integriert. Persönliche Bindungen durch deklarierte Felder ersetzt, genehmigte portable Plannerregel bis drei Budgeterweiterungen erhalten. Frühere T3/T6-Neufassungen sind historischer Lieferstand, nicht die aktuelle Fassung. Kein Export aktiver Profilidentitäten; private Quellen sind keine Testabhängigkeit. |
-| `screenshot-to-code` 1.0.0 | Kanonisches eigenständiges Paket, Autorenfeld `Max, Mariko (Hermes Agent)`. Alle sechs Dateien bytegleich, nur `SKILL.md` als `SKILL.md.template` transportiert. Eigene vollständige [Lizenz](templates/skills/screenshot-to-code/LICENSE) mit `Copyright (c) 2026 screenshot-to-code contributors` unverändert. |
-| `minimal-change-engineering` 0.1.0 | Portable Sammlung fachlich gelesen; deren `Max (drafted) + Joi`-/MIT-Angabe ohne ursprünglichen vollständigen Lizenztext ist keine neue Rechtebehauptung. Bestätigte Regeln eigenständig neu formuliert, Projektprüfungen/Fixtures und Rollen präzisiert. |
-| `brownfield-feature-planning` 0.1.0 | Planungskern neu formuliert, historische Spezialverfahren nur fachlicher Vergleich. Keine historische menschliche Autorenschaft aus Rollenmetadaten abgeleitet. |
-| `plan-versioning-semver` 0.1.0 | Neue Formulierung bestätigter Regeln. Ursprüngliche Lizenz bleibt unbelegt; keine produktgebundene Versions-API-/Changelogpflicht übernommen. |
-| `project-lib-versioning` 0.1.0 | Neue technologieunabhängige Formulierung mit rekursiven Verbrauchern und Rollenpflichten. Historischer Preservation-Audit bleibt unbelegt, kein alter Text übernommen. |
+| Paketvertrag, Textrenderer und Dokumentation | Neu aus bestätigtem Auftrag; MIT dieses Pakets. |
+| Drei Rollen-SOUL-Vorlagen | Planner/Coder quellnah aus vorhandenen Rollen-SOULs im ausdrücklich bestätigten Auftrag abgeleitet; Reviewer als maßgebliche Nutzerfassung integriert. Persönliche Bindungen durch deklarierte Felder ersetzt; die beauftragte Bereinigung der Coder-Modellpolicy ist enthalten. Private Quellen sind keine Paketprüfungsabhängigkeit. |
+| `screenshot-to-code` 1.0.0 | Kanonisches eigenständiges Paket, Autorenfeld `Max, Mariko (Hermes Agent)`. Alle sechs Dateien bytegleich und ohne Transportumbenennung. Eigene vollständige [Lizenz](skills/screenshot-to-code/LICENSE) mit `Copyright (c) 2026 screenshot-to-code contributors` unverändert. |
+| `minimal-change-engineering` 1.0.0 | Übernommene, vom Nutzer bearbeitete Skillfassung. MIT-Angabe im Frontmatter; keine separate Lizenz-/Notice-Datei im Skillbaum. Der historische Autoren-/Auditverweis im Skill ist dadurch nicht zusätzlich belegt. |
+| `brownfield-feature-planning` 1.0.0 | Übernommene und vom Nutzer bearbeitete Fassung mit ihren Referenzen. MIT-Angabe im Frontmatter; keine separate Lizenz-/Notice-Datei im Skillbaum. |
+| `plan-versioning-semver` 1.0.0 | Übernommene, vom Nutzer bearbeitete Skillfassung, Autorenfeld `Mariko`. Kein Lizenzfeld und keine separate Lizenz-/Notice-Datei im Skillbaum. |
+| `project-lib-versioning` 1.0.0 | Übernommene, vom Nutzer bearbeitete Skillfassung. MIT-Angabe im Frontmatter; keine separate Lizenz-/Notice-Datei im Skillbaum. Der historische Autoren-/Auditverweis im Skill ist dadurch nicht zusätzlich belegt. |
 
-**G3 für den T2-Lieferstand:** Screenshot besitzt seinen erhaltenen eigenen
-Lizenztext; die übrigen fünf Fassungen sind neu verfasst und tragen jeweils eine
-vollständige eigene Lizenz und Herkunftsnotice im Skillbaum. Die historischen
-Rechtelücken werden nicht rückwirkend geschlossen. Ein späterer Export anderer
-historischer Textanteile bleibt davon unberührt.
-
-Die aktuelle Rollenherkunft ist die oben benannte quellnahe Ableitung bzw.
-Nutzerfassung, nicht mehr eine unveränderte T3-Neufassung. Die Paketlizenz bleibt
-erhalten; damit wird keine ungeprüfte historische Rechtekette behauptet.
+Die eigenen Skills liegen als fertige Bäume unter `skills/` und werden beim Setup
+einschließlich aller vorhandenen Begleitdateien unverändert kopiert. Die Paketlizenz
+ersetzt keine fehlenden Herkunftsbelege oder separaten Lizenztexte übernommener
+Bestandteile. Diese Notice dokumentiert den tatsächlichen Bestand und behauptet
+keine neue Rechtekette.
 Autorenprüfung und Integrationschecks sind kein unabhängiger Review.
 
 ## Fremdkomponenten und technische Grenzen
@@ -64,9 +60,12 @@ Im Standalone-Checkout zählen `.git/`, `.gitignore` und die Vortragsbeilage
 `own_skills.targets` nennt direkte Zielrollen/Harnesse; Auftragspflichten an Codex
 sind keine zusätzliche Skillinstallation. `status: included` meint vorhandene
 Dateien, nicht aktivierte Fähigkeiten. `skill_path`, `license_path`, `notice_path`
-und `origin_ref` sind paketrootrelativ; die Transportabbildung benennt nur den
-Einstieg um. `source_sha256` beim Screenshot enthält die kanonischen Dateiidentitäten
-vor Transportumbenennung. Der öffentliche Test braucht keinen privaten Quellbaum.
+und `origin_ref` sind paketrootrelativ; `license_path: null` bedeutet, dass kein
+separater Lizenztext im jeweiligen Skillbaum vorhanden ist. `notice_path` verweist
+auf die tatsächliche Herkunftsbeschreibung, nicht auf eine erfundene Begleitdatei.
+Die Transportabbildung eigener Skills erhält `SKILL.md`; kopiert wird immer der
+vollständige Skillbaum ohne Rendering. `source_sha256` beim Screenshot enthält
+die kanonischen Dateiidentitäten. Die Paketprüfung braucht keinen privaten Quellbaum.
 
 `role_templates` enthält genau Planner, Coder und Reviewer; `targets` bindet jede
 Vorlage an ihr eigenes Hermes-Profil. `template_path`, `origin_ref`, `license_path`
