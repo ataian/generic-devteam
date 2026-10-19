@@ -58,13 +58,13 @@ lang wird).
   Spezifikation).
 - README.md Struktur-Block auf die versionierten Dateien aktualisieren.
 
-## Standard: Version-API + CHANGELOG (für alle API-Projekte)
+## Standard: Version-API + CHANGELOG
 
-Seit 2026-08-29 gehört zur Grundausstattung jedes Projekts, das eine API
-anbietet:
+Grundausstattung bei jedem Projekts:
 
 ### 1) Version-API
 
+Nur bei Projekten, die eine API anbieten!
 Ein öffentlicher Endpoint, der die App-Versionsnummer ausliefert — ohne Auth,
 weil die Version für Health-Check/Kompatibilität ohne Key abrufbar sein soll:
 
