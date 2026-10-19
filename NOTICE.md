@@ -52,9 +52,8 @@ mitexportierten Installationen. Ihre konkreten Bezugsstände behalten eigene
 Lizenzen/Notices; unsere MIT-Lizenz lizenziert sie nicht um. Rechercheidentitäten
 in nativen Rezepten sind keine Installationspins oder Runtimegarantien.
 
-G1 bleibt vor betroffener automatischer Dispatchfreigabe ein Halt: ein endliches
-natives Gesamtbudget für Rate-Limit-Wiederholungen ist in den untersuchten Ständen
-nicht belegt. Paketprüfungen ändern diese Voraussetzung nicht.
+Timeout-, Retry- und Rate-Limit-Behandlung werden am tatsächlichen Zielstand
+geprüft; konkrete Einschränkungen und ihre Auswirkungen gehören ins Setup-Protokoll.
 
 ## Dateivertrag
 
@@ -90,51 +89,15 @@ auf relative Skillziele ab; `sha256` bezieht sich auf gelesene Originalbytes.
 `legal_files` sind beim Bezug unverändert beizulegende Rechtstexte. CBM-
 `release_members` ist eine Packagerableitung, kein geprüfter Archivinhalt;
 `asset_evidence` benennt ausdrücklich statische Ableitung statt Installeroutput.
-`g2_status`/`a01_status` bleiben offen. Graphify trägt Apache-2.0 samt MIT-
+Die tatsächliche Codeanalyse-Funktion wird beim Zielsetup geprüft. Graphify trägt Apache-2.0 samt MIT-
 Vorgeschichte/NOTICE, CBM MIT samt Release-THIRD_PARTY_NOTICES; keine Umlizenzierung.
 
 ## Dateibasierte Prüfung
 
-Voraussetzung: Python ab 3.11 mit Standardbibliothek-`tomllib`, `bash` und ein
-bereits verfügbarer sicherer YAML-Parser `ruamel.yaml`. Keine automatische
-Installation durch Tests. Fehlt der Parser,
-den vorhandenen geeigneten Interpreter wählen oder den Prüfblocker offen melden.
-
-Aus dem Repositoryroot oder einem separat exportierten Paketroot:
-
-```sh
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test*.py' -v
-```
-
-Die Tests lesen Paketdateien und parsen YAML sicher sowie Python als AST.
-Zusätzlich importieren sie ausschließlich das reine Stringmodul
-`references/render_text.py` und prüfen dessen Validierung/Maskierung/Ersetzung
-mit synthetischen Daten. Es hat weder Dateizugriff noch einen operativen Einstieg.
-Die reinen Pythonfragmente aus `references/setup.md` werden mit synthetischen
-Daten ausgeführt: echte Recordvorlage per JSON befüllen/rücklesen, Rollen auswählen
-und rendern; Dateitransport nur in Scratch. Keine operativen Setup-/Integrations-
-anweisungen werden ausgeführt; Shellblöcke werden nur
-mit `bash -n` syntaktisch gelesen, JSON-/TOML-Rezepte geparst und deren MCP-/Hookdaten
-geprüft. Die Tests
-prüfen vollständige Bäume, Transport, Rollenmatrix, Links innerhalb jedes
-installierbaren Skills, Herkunft, Screenshotidentität und erklärte Bindungsfelder.
-Rollenchecks vergleichen die vollständige Rollenmenge, tatsächlich vorkommende
-deklarierte Felder, Mehrfachersetzung, Rollenbezüge und Fähigkeitszuordnungen.
-Die Rollen behalten ihre eigenen Strukturen statt eines gemeinsamen Prozesshashes.
-Begrenzte Musterchecks sind keine semantische Vollständigkeitsprüfung oder
-allgemeine Geheimniserkennung. Technische IDs und Projektpfad werden getrennt von
-Anzeigenamen und Markdownmaskierung geprüft; Modell-IDs bleiben außerhalb der SOUL.
-Die synthetischen Handoff-/Ketten-/Planergänzungsfälle sind ausdrücklich
-**Text-/Datenvertragschecks**: Sie prüfen vorgeschriebene Beispielhandlungen,
-keinen nativen Dispatcher, keinen Agenten und keine echte Handoffwirkung.
-T4 ergänzt negative Eingaben und Mutationen operativer Anleitungssätze; das
-belegt nur die Reaktion der Dateiprüfung, nicht Agentenbefolgung. Der getestete
-Textweg wird im geführten Zielsetup verbindlich verwendet; Eigentum, Annahme,
-reales Dateischreiben und effektive Aufnahme bleiben dort gesonderte Prüfungen.
-Syntaxprüfung ist keine Ausführung operativer Quellhelper. Weder Netzwerk, Quellprofile
-noch Hermes/Codex/Dienste sind erforderlich. Kein Bootstrap oder Modell wird
-aufgerufen. Discovery, Setup, Laufzeitverhalten und unabhängige Paketabnahme
-bleiben gesonderte Nachweise. Die [Prüfanleitung](unklar/references/verification.md)
-trennt die einzeln zu bewertenden A-/B-Kriterien, den unabhängigen Gesamtabschlussreview
-und den erst danach zu prüfenden Export. Der ursprüngliche Paketreview und
-Paketexport sind abgeschlossen; neue Änderungen und Exporte erneut prüfen.
+Die [Prüfanleitung](references/verification.md) beschreibt die Prüfung des aktuellen
+Dateibestands, der Links, Skillpakete, Rollenpersonalisierung und Syntax. Reine
+Textprüfungen belegen weder Agentenverhalten noch ein funktionsfähiges Zielteam.
+Die gesonderte Zielprüfung umfasst die eingerichteten Fähigkeiten und einen kleinen
+gemeinsamen Probelauf. Ergebnisse gehören mit geprüftem Stand und kurzem Beleg ins
+Setup-Protokoll. Diese Notice erklärt keinen Review oder Export der aktuellen
+Fassung für abgeschlossen.

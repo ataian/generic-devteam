@@ -14,8 +14,7 @@ Repository.
 **Liefergrenze:** Der geführte Maker, allgemeine Integrationsrezepte und beide
 [Codeanalysewege](references/code-analysis.md) sind als Einrichtungsrezepte dokumentiert,
 mit Originalkomponenten und Zielkontexten. Ihre Laufzeitabnahme erfolgt beim Zielsetup.
-G1 (endliche native Rate-Limit-Gesamtgrenze)
-bleibt ein Halt vor betroffener automatischer Dispatchfreigabe.
+Timeout-, Retry- und Rate-Limit-Grenzen werden am tatsächlichen Zielstand geprüft.
 Statische Pakettests sind keine Betriebsbereitschaft und kein unabhängiger Review.
 
 ## Voraussetzungen
@@ -94,30 +93,12 @@ protokollierte eigene Objekte/Einträge; Datenlöschung braucht eine eigene Frei
 
 ## Öffentliche Paketprüfung — ohne Dienste oder private Quellen
 
-Python ab 3.11 (`tomllib`), bereits verfügbarer sicherer YAML-Parser `ruamel.yaml`
-und `bash` für reine Syntaxprüfung sind nötig. Keine Test-Abhängigkeit wird
-automatisch installiert. Aus diesem Paketroot:
+Die [Prüfanleitung](references/verification.md) enthält zwei Checklisten:
+Paketdateien vor Verwendung und Teamfunktionen nach Einrichtung. Zur Paketprüfung
+gehören Dateibestand, Links, vollständige Skillbäume, SOUL-Personalisierung und
+Syntax. Reine Textprüfungen starten keine Modelle oder Dienste.
 
-```sh
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test*.py' -v
-```
-
-Geprüft werden Dateimenge, Syntax/Frontmatter, Rollenmatrix, Links, Herkunft,
-Screenshotbytes, JSON-/TOML-Rezepte samt MCP-/Hookdaten, Shellsyntax mit `bash -n`
-(ohne Ausführung) und die reine Stringvalidierung/Ersetzung aus
-[render_text.py](references/render_text.py). Dieses Modul hat weder Dateischreiber
-noch Setup-/CLI-Einstieg. Synthetische Daten-/Textfälle samt negativen Mutationen
-sind **keine Agentenverhaltensprüfung**. Es werden keine Hermes-/Codex-Module,
-operativen Helfer, Bootstraproutinen, Modelle oder Dienste gestartet.
-
-Die [Prüfanleitung](unklar/references/verification.md) erklärt alle Checks, synthetischen
-Fälle, isolierten Defektkopien und die getrennten A-/B-Kriterien. Der unabhängige
-Whole-Branch-Review des Paketstands ist abgeschlossen; der anschließende
-Paketexport wurde auf Dateimenge, Commitbytes und ZIP-CRC geprüft. Spätere
-Änderungen benötigen ihre eigene betroffene Prüfung. Die Codeanalyse-Laufzeitabnahme bleibt offen,
-die G1-Budgetanforderung aus A03 ist im untersuchten nativen Stand unerfüllt.
-
-Die spätere Zielabnahme umfasst reale Discovery/Promptaufnahme, persistente Modi,
-Modellcalls und sechs begrenzte Original-Agentdelegationen, gefilterte
-Memoryrequests, Erwähnungs-/Free-Response-/DM-Dialog und den unabhängigen
-Pipelineweg bis zur Planner-Projektkanalnachricht. Offene Kriterien bleiben offen.
+Beim späteren Zielsetup folgen die Funktionsprüfungen aus den Integrationsrezepten
+und ein kleiner gemeinsamer Probelauf bis zum Plannerbericht. Im Setup-Protokoll
+stehen die tatsächlich bestandenen Prüfungen, konkreten Fehler und ungeprüften Punkte.
+Frühere Review- oder Exportergebnisse ersetzen keine Prüfung der aktuellen Fassung.

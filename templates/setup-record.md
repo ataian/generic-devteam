@@ -69,7 +69,7 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 - Freigegebene Installationen / Bootstrap-/PM-/Aktivierungswirkung: offen
 - Dienst-/Modell-/Nachrichten-/Testfreigabe und begrenzter Umfang: offen
 - Erhaltene Schutz-/Freigabeeinstellungen und betroffene gemeinsame Bestände: offen
-- G1: open; konkrete fehlende Gesamtgrenze / Zielrevision / Belegpfad je Rolle: offen
+- Tatsächliche Timeout-/Retry-/Rate-Limit-Behandlung, Grenzen / Zielrevision / offene Probleme: noch ungeprüft
 
 ## Modelle und Codex
 
@@ -122,24 +122,21 @@ Datenlöschung benötigt gesonderte Freigabe.
 
 ## Abnahme nach geprüftem Stand
 
-Ergebnis je Kriterium: offen / bestanden / konkreter Blocker / nicht anwendbar
-mit Begründung. Nie aus Quellenprüfung einen echten Lauf ableiten.
+Gemäß [Prüfanleitung](../references/verification.md) je Prüfung festhalten:
+bestanden / konkreter Fehler / noch ungeprüft. Bei Fehlern Auswirkung und nächste
+Maßnahme nennen. Nicht benötigte Fähigkeiten mit Begründung kennzeichnen.
 
-| ID | Kriterium | Geprüfter Stand | Ergebnis und Belegpfad |
-|---|---|---|---|
-| A01 | Vollständige Ausstattung, Codeanalyse-Funktionsprüfung gesondert | offen | offen |
-| A02 | Portabler Export ohne private Abhängigkeiten | offen | offen |
-| A03 | Rollen-/Modell-/Git-/Freigabekonsistenz, G1 sichtbar | offen | offen |
-| A04 | Statische Qualität und Datenprüfungen | offen | offen |
-| A05 | Anleitung und sichere Wiederaufnahme | offen | offen |
-| A06 | Unabhängiger Review des eingefrorenen Pakets | offen | offen |
-| B01 | Profile, vollständige Promptaufnahme, Discovery und persistente Modi | offen | offen |
-| B02 | Echte Hermes-/Codex-/Hilfsmodellzugänge und Originalpins | offen | offen |
-| B03 | Team-Codex-Artefakt, sechs echte begrenzte Delegationen | offen | offen |
-| B04 | Neue Bank, echte Rollenfilter-/Speichernachweise | offen | offen |
-| B05 | Erwähnung, Free-Response, DM und Wake im Projektkanal | offen | offen |
-| B06 | Getrennte Planannahme → Dispatcher → Codex-Commit → unabhängiger Review → Plannerbericht | offen | offen |
-| B07 | Produktprojekt unberührt, begrenzte Testressourcen und ehrliches Urteil | offen | offen |
+| Prüfung | Geprüfter Stand | Ergebnis und kurzer Beleg |
+|---|---|---|
+| Paket: Dateibestand, Links, vollständige Skills, Personalisierung, Syntax und Konsistenz | offen | noch ungeprüft |
+| Rollen, vollständige SOUL-Aufnahme, Skills und Modi | offen | noch ungeprüft |
+| Modelle und wirksame Reasoning-Stufen | offen | noch ungeprüft |
+| Team-Codex und installierte Helfer | offen | noch ungeprüft |
+| Memory und Rollenfilter | offen | noch ungeprüft |
+| Mattermost: Erwähnung, Free-Response, DM und Planner-Wake | offen | noch ungeprüft |
+| Gewählte Codeanalyse: Index, Aufrufbeziehung und Aktualisierung | offen | noch ungeprüft |
+| Tatsächliche Betriebsgrenzen und Erhalt fremder Zustände | offen | noch ungeprüft |
+| Gemeinsamer Probelauf bis zum Plannerbericht | offen | noch ungeprüft |
 
 - Gesamturteil: Paket geprüft / Zielsetup teilweise / Team technisch geprüft — mit Belegen ausfüllen.
 - Offene Gates / konkret benötigte nächste Freigabe: offen

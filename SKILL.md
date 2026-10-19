@@ -55,9 +55,9 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
    Lade dazu [Integrationen](references/integrations.md),
    [Quellen](references/upstream-sources.md), beide [Codeanalysewege](references/code-analysis.md)
    und [Manifest](manifest.json); richte genau die gewählte Alternative ein.
-5. Halte bei fehlenden Voraussetzungen an der betroffenen Fähigkeit an. Insbesondere
-   bleibt G1 vor automatischer Dispatchfreigabe gesperrt, bis eine endliche native
-   Gesamtgrenze belegt oder die Anforderung ausdrücklich geändert ist.
+5. Halte bei fehlenden Voraussetzungen an der betroffenen Fähigkeit an. Prüfe
+   Timeout-, Retry- und Rate-Limit-Behandlung am tatsächlichen Zielstand und kläre
+   konkrete Probleme vor der betroffenen Nutzung.
    Dokumentierte Rezepte sind keine
    installierten Fähigkeiten; erster Index-/Querytest nur im separaten Testworkspace.
 6. Nach gesonderter Aktivierungs-/Testfreigabe die tatsächlichen Zielkontexte,
@@ -79,8 +79,9 @@ kein planweiter Abschluss, und `queued` ist noch keine Zustellung.
 
 ## Verifikation
 
-Lies jedes angelegte native Objekt und jede Zielausgabe zurück. Die öffentlichen
-[Dateitests](README.md) prüfen Paketdaten und den reinen Textweg, nicht das
-Verhalten eines Agenten. Ohne echte Zielabnahme lautet das Urteil:
-**„Paket geprüft; Setup-Laufzeitabnahme offen.“** G1 und die noch offenen
-Codeanalyse-Funktionsnachweise bleiben dabei ausdrücklich sichtbar.
+Lies jedes angelegte native Objekt und jede Zielausgabe zurück. Die
+[Prüfanleitung](references/verification.md) trennt Paketprüfung, Teamfunktionen
+und gemeinsamen Probelauf. Dateiprüfungen belegen kein Agentenverhalten.
+Sind nur die Paketprüfungen bestanden, lautet das Urteil:
+**„Paket geprüft; Setup-Laufzeitabnahme offen.“** Konkrete Fehler und ungeprüfte
+Fähigkeiten bleiben ausdrücklich sichtbar.

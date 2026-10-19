@@ -26,12 +26,10 @@ bestätigte, nichtgeheime Variablen; keine rohen Nutzereingaben als Shellcode.
    Versionen gemeinsame PM-Eingaben ändern. Hole vor Pluginaufnahme die Freigabe für gemeinsame PM-Wirkungen ein.
    Prüfe Fremdquellen zunächst außerhalb aktiver Discovery. Ist diese Wirkung
    nicht genehmigt, bleiben Quellenprüfung und vorhandene Teilstände erhalten.
-5. Lege G1 zunächst als `open` fest. Prüfe im Ziel-Dispatcher Rate-Limit-Requeue,
-   Fehlerzähler und endliches **Gesamtbudget**. `max_retries`, Cooldown und
-   Per-Run-Timeout genügen nicht; auch kein erfolgreicher beaufsichtigter Durchlauf.
-   G1 hält vor betroffener automatischer Dispatchfreigabe an.
-   Fortsetzung nur mit nachgewiesenem unterstütztem nativen Gesamtbudget oder
-   ausdrücklicher Anforderungsänderung; kein Retryjob, Wrapper oder Corepatch.
+5. Prüfe im tatsächlichen Ziel-Dispatcher Timeout-, Retry- und Rate-Limit-Behandlung
+   einschließlich Requeue, Fehlerzählern und wirksamen Grenzen. Halte konkrete
+   Einschränkungen im Setuprecord fest und kläre deren Auswirkungen vor der
+   betroffenen Nutzung. Ein erfolgreicher kurzer Lauf beweist keine Gesamtgrenze.
 
 **Erfolgssignal:** Versionen, Zuständigkeit, verfügbare Schnittstellen, PM-Wirkung
 und offene Gates sind benannt. Bestehende Schutz-/Freigabeeinstellungen bleiben
@@ -291,7 +289,7 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    Skilldateimenge und Bytes vollständig mit der Quelle.
    Lies insbesondere in der Coder-SOUL die Prozessbindung und Auftragsregel zurück:
    `$caveman` in jedem neuen Auftrag, auch nach Neustart/Resume. Zielpfad und
-   Rücklesebeleg im Setuprecord festhalten. Dies ist noch kein B01-Modusnachweis.
+   Rücklesebeleg im Setuprecord festhalten. Die tatsächliche Moduswirkung folgt in der Funktionsprüfung.
    Prüfe die tatsächliche Codeanalyse-Integration: gewählte Alternative,
    Originalskills und native Aktivierung müssen für alle Rollen und Team-Codex
    erreichbar sein. Keine zweite Alternative und keine bloße Makerreferenz belassen.
@@ -337,8 +335,8 @@ Nutze dabei die aktuelle native Unsubscribe-Syntax und exakte eigene Zeilenident
 fremde Subscriptions anhalten/klären. Der Eventcursor beginnt beim Subscribe,
 also nicht erst nach Abschluss abonnieren.
 
-Vor jeder betroffenen automatischen Dispatchfreigabe G1 und vollständige
-Bindungs-/Kettenrücklese prüfen. Keine manuelle Ersatzpipeline, um G1 zu umgehen.
+Vor automatischer Dispatchfreigabe die tatsächlichen Betriebsgrenzen sowie
+vollständige Bindungs-/Kettenrücklese prüfen und konkrete Probleme klären.
 Erst wenn freigegeben: echten Dispatcher-/Codex-/Reviewweg im separaten Testworkspace
 prüfen; tatsächliche Task/Run/Commit-/Eventdaten, Plannerbearbeitung und veröffentlichte
 Projektkanalnachricht belegen. `queued`/`scheduled` ist nicht zugestellt. Wakes
@@ -367,7 +365,7 @@ benötigte Maßnahme und Erfolgssignal. Folgende Fälle gehören zum Verfahren:
 | Original-Modellpin fehlt | Unveränderte sechs TOMLs und sonstige Einrichtung | Autorisierter geeigneter Zugang; tatsächlicher Call je Helfer | Keine Pins umschreiben, betroffene Fähigkeit offen halten |
 | Persönliche Codex-Skillwurzel wirksam | Persönliche Ausstattung unangetastet | Doppelbindung und echte Workerauflösung korrigieren; Teamroots nachweisen | Nur eigene Prozessbindung/Skillkopien zurücknehmen |
 | Falscher Wake-Owner | Karte blocked, Arbeitsstand erhalten | Eigene Subscription korrekt neu anlegen und nachlesen | Nur exakte zugeordnete Subscription nativ entfernen |
-| G1 offen | Gesamte geprüfte statische Einrichtung | Native endliche Gesamtgrenze oder angenommene Anforderungsänderung | Karten blockiert lassen, keine Retryplattform |
+| Ungeklärte Retry-/Rate-Limit-Grenze | Geprüfte Einrichtung und Arbeitsstand | Tatsächliches Zielverhalten und Auswirkungen klären | Betroffene automatische Arbeit bis zur Klärung zurückhalten |
 
 Erhalte vorhandene Teilstände; ein unerreichbarer Dienst ist kein Auftrag für einen Ersatzserver.
 Vor Rückbau Aktivierung eigener Plugins/Adapter profilbezogen nativ beenden,
@@ -378,9 +376,10 @@ Profile, persönliche Codexdaten, Projektregeln und Graphcaches erhalten.
 Profil-/Board-/Bank-/Kanal-/Sessionlöschung braucht **gesonderte Datenlöschfreigabe**,
 auch wenn die Anlage diesem Setup gehört. Rücklese beweist den Rückweg.
 
-Übergebe Versionen, tatsächlich bestandene A-/B-Kriterien, Belegorte und offene
-Blocker. Bei fehlenden Zielnachweisen bleibt „Paket geprüft; Setup-Laufzeitabnahme
-offen“. Ein technisches Team ist noch kein fachlich eingearbeitetes Projektteam.
+Übergebe Versionen, tatsächlich bestandene Prüfungen gemäß
+[Prüfanleitung](verification.md), Belegorte und konkrete offene Punkte.
+Paketprüfung und Zielabnahme getrennt ausweisen. Ein technisches Team ist noch
+kein fachlich eingearbeitetes Projektteam.
 
 ## Versionsgebundene Quellen
 
