@@ -14,7 +14,6 @@
     "references/setup.md",
     "references/upstream-sources.md",
     "references/verification.md",
-    "templates/model-policy.md",
     "templates/roles/coder.SOUL.md.template",
     "templates/roles/planner.SOUL.md.template",
     "templates/roles/reviewer.SOUL.md.template",
@@ -23,12 +22,6 @@
     "templates/skills/brownfield-feature-planning/NOTICE.md",
     "templates/skills/brownfield-feature-planning/SKILL.md.template",
     "templates/skills/brownfield-feature-planning/references/plan-checklist.md",
-    "templates/skills/devteam-workflow/LICENSE",
-    "templates/skills/devteam-workflow/NOTICE.md",
-    "templates/skills/devteam-workflow/SKILL.md.template",
-    "templates/skills/devteam-workflow/references/native-contracts.md",
-    "templates/skills/devteam-workflow/references/team-bindings.md",
-    "templates/skills/devteam-workflow/templates/ticket.md",
     "templates/skills/minimal-change-engineering/LICENSE",
     "templates/skills/minimal-change-engineering/NOTICE.md",
     "templates/skills/minimal-change-engineering/SKILL.md.template",
@@ -130,26 +123,6 @@
     }
   },
   "own_skills": {
-    "devteam-workflow": {
-      "status": "included",
-      "targets": {
-        "hermes": [
-          "planner",
-          "coder",
-          "reviewer"
-        ]
-      },
-      "codex_instruction_only": true,
-      "origin": "Neue Formulierung bestätigter Teamregeln; historische Planhandoff-, Phasenfortführungs-, Review-Handoff- und Routingverfahren als fachliche Vergleichsbasis.",
-      "changes": "Neu formulierter gemeinsamer Rollenablauf mit eigener nativer Referenz, Bindungsdaten und Ticketvorlage; keine historischen Helper.",
-      "origin_ref": "references/upstream-sources.md#own-workflow",
-      "license_path": "templates/skills/devteam-workflow/LICENSE",
-      "notice_path": "templates/skills/devteam-workflow/NOTICE.md",
-      "skill_path": "templates/skills/devteam-workflow/SKILL.md.template",
-      "transport": {
-        "SKILL.md.template": "SKILL.md"
-      }
-    },
     "brownfield-feature-planning": {
       "status": "included",
       "targets": {

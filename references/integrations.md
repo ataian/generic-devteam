@@ -45,11 +45,12 @@ Installationseffekt klären, keine gleichnamige private Ersatzfassung installier
 
 Später je Rolle Katalog, Hauptskill und alle benötigten Referenzen im tatsächlichen
 Profil laden, Quellpfad/Revision nachweisen. `codex` bleibt unverändert; konkrete
-Teamhomes und Arbeitsgrenzen liefert der installierte `devteam-workflow`.
+Teamhomes und Arbeitsgrenzen stehen in der personalisierten Coder-SOUL und der
+nativen Zielkonfiguration; ihre Einrichtung beschreibt [native-workflow.md](native-workflow.md).
 `sdlc-review` ist eigenständige fachliche Reviewfähigkeit, nicht im Maker nachgebaut.
 
 <a id="team-codex"></a>
-## Team-Codex: Binary, Homes, Anmeldung, Modellpolicy
+## Team-Codex: Binary, Homes, Anmeldung, Modell und Reasoning
 
 Original: [openai/codex](https://github.com/openai/codex),
 [Konfigurationsorte](https://developers.openai.com/codex/config-advanced.md),
@@ -80,10 +81,10 @@ den Coder und den unveränderten Hermes-`codex`-Skill, ohne zusätzlichen Wrappe
 `CODEX_HOME/config.toml` trägt die bestätigte native Modell-/Reasoningauswahl
 (`model`, `model_reasoning_effort`, bei gewählter eigener Providerroute
 `model_provider` samt offiziell unterstützter Definition). Nur vom Zielstand
-unterstützte Werte setzen, vorhandene Einträge gezielt erhalten. Abgleich mit
-`devteam/model-policy.md`; eine Markdownpolicy erzwingt keinen Modellwechsel.
-Höhere freigegebene Routen an konkreten nativen Auswahlwegen festmachen, im echten
-Call belegen; ansonsten vor der betroffenen Hochrisikoarbeit an den Planner.
+unterstützte Werte setzen, vorhandene Einträge gezielt erhalten. Der Coder liest
+das eingerichtete Modell daraus und wählt das Reasoning nach seiner SOUL.
+Höhere Reasoning-Stufen am selben Modell über den unterstützten nativen Aufrufweg
+im echten Call belegen; ansonsten vor der betroffenen Hochrisikoarbeit an den Planner.
 
 Skills gehören nach `CODEX_PROCESS_HOME/.agents/skills/<name>/`, Original-TOMLs
 nach `CODEX_HOME/agents/`. Prüfe im **echten Worker** zusätzlich kompatibles
@@ -159,8 +160,8 @@ und den Konflikt benennen. Kein erfundener YAML-Schlüssel oder Pluginpatch.
 
 Team-Codex liest denselben Default über `hooks/ponytail-config.js`. Übergib für
 **jeden Team-Codex-Aufruf** zusätzlich prozesslokal `PONYTAIL_DEFAULT_MODE=full`
-in der `env`-Präfixliste neben HOME/CODEX_HOME; halte diesen festen Zusatz in der
-Modell-/Risikopolicy unter dem tatsächlichen Codex-Aufrufweg fest. So überschreibt
+in der `env`-Präfixliste neben HOME/CODEX_HOME; die Coder-SOUL enthält diese
+dauerhafte Prozessbindung. So überschreibt
 ein geerbtes XDG-Konfigurationsverzeichnis nicht still den Teamdefault, ohne
 persönliche Dateien zu ändern. Der originale SessionStart-Hook setzt den aktiven
 Modus, `hooks/ponytail-runtime.js` schreibt ihn unter dem tatsächlichen
@@ -189,9 +190,9 @@ erweitern; bestehende Liste zunächst lesen, duplikatfrei mergen und als JSON-Li
 danach `config get skills.auto_load`. Nicht die ganze vorhandene Liste ersetzen.
 Im echten neuen Kontext geladenen Originalhauptskill nachweisen. Team-Codex erhält
 `$caveman` ausdrücklich in **jedem neuen Auftrag**, auch nach Neustart/Resume.
-Diese Pflicht steht dauerhaft in der [lokalen Modell-/Risikopolicy](../unklar/templates/model-policy.md).
-Beim Setup die Klausel mit ausgeben und über MODEL_POLICY_REF im Coderhome rücklesen;
-der installierte Alltagsvertrag darf nicht vom erneuten Laden dieses Makers abhängen.
+Diese Pflicht steht dauerhaft in der [Coder-SOUL](../templates/roles/coder.SOUL.md.template).
+Beim Setup die Klausel in der personalisierten Coder-SOUL rücklesen;
+ihre Anwendung darf nicht vom erneuten Laden dieses Makers abhängen.
 
 Nur Chat wird verkürzt. Code, Dokumentation, Commits, Memory und Sicherheitsklarheit
 bleiben normal verständlich. Planner bleibt normale Sprache. Rückweg entfernt nur
@@ -222,7 +223,7 @@ Pro Datei **drei getrennte Nachweise** führen:
    `developer_instructions`, `model`, `model_reasoning_effort`, weitere Original-
    Felder unverändert. Mit dem Original vergleichen, nicht nur Pins abschreiben.
 2. Native Discovery im tatsächlichen Team-Codex mit dieser Datei und wirksamen
-   Pins. Modellpolicy und Zugang prüfen; eigene Modell-/Reasoningauswahl ersetzt
+   Pins. Native Modellkonfiguration und Zugang prüfen; eigene Modell-/Reasoningauswahl ersetzt
    keinen Originalpin. Provider/Approval/MCP können aus dem Parent kommen, eine
    TOML-Sandboxzeile allein ist keine neue Sicherheitsgarantie.
 3. Nach Testfreigabe **je Helfer ein echter begrenzter Delegationsaufruf** im

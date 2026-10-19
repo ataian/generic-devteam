@@ -24,7 +24,7 @@ Hier wird das **Skill-Paket entwickelt**, nicht bereits ein Team auf diesem Host
 | `skills/` | Eigene Skills, inzwischen von Max überarbeitet. |
 | `references/render_text.py` | Vorhandener Text-Renderer; Passung zu aktuellen Vorlagen und neuem Ablauf noch prüfen. |
 | `unklar/references/` | Alte umfangreiche Setup-, Integrations-, Workflow-, Quellen-, Analyse- und Prüftexte; Klärungsmaterial, keine automatisch verbindliche Bauvorgabe. |
-| `unklar/templates/` | Bisherige `model-policy.md` und `setup-record.md`; Verwendung im neuen Ablauf offen. |
+| `unklar/templates/` | Vorübergehender Altbestand; die Modellpolicy entfällt ohne Nachfolger. Die verwendete Protokollvorlage liegt unter `templates/setup-record.md`. |
 | `README.md`, `manifest.json` | Bestehende Paketbeschreibung; beim beauftragten Neuaufbau mit dem tatsächlichen Ergebnis abgleichen. |
 
 Eigene Skills im Projekt:
@@ -40,9 +40,9 @@ Herkunft: Gordon-Team als Hauptreferenz; Planversionierung aus Picard. Brownfiel
 
 - Zielteam: Planner → Coding-Orchestrator/Codex → unabhängiger Reviewer.
 - Der Skill soll die technische Einrichtung ermöglichen, nicht die fachliche Planung des späteren Projekts übernehmen.
-- Einrichtungsdaten und Modellauswahl dienen dem Installer bzw. der tatsächlichen technischen Konfiguration. Die Rollen brauchen dafür keine zusätzliche `model-policy.md` als Pflichtlektüre. Alte Verweise sind damit noch nicht automatisch bereinigt.
+- Konkrete Modelle stehen in der nativen Konfiguration; Reasoning-Eskalation steht in den SOULs. Planner nutzt das höchste unterstützte Reasoning, Coder/Reviewer erhöhen es nach ihren Rollenregeln am eingerichteten Modell. Die zusätzliche Modellpolicy samt aktiven Setup-/Ladeverweisen entfällt. Die Coder-Vorlage wurde dafür auf ausdrücklichen Auftrag angepasst; Codex-Prozessbindung und Caveman-Auftragsregel stehen direkt dort.
 - Der vorhandene Renderer nimmt Vorlagentext und Werte entgegen und liefert Text zurück. Er liest und schreibt selbst keine Dateien. Speicherung der Antworten, Aufruf und Schreiben der Zieldateien gehören zum neu zu klärenden Installationsablauf.
-- Verschieben nach `unklar/` bedeutet weder Freigabe zur Löschung noch Auftrag, sämtliche alten Regeln wieder einzubauen.
+- `unklar/` ist ausschließlich vorübergehendes Ausgangsmaterial und wird am Ende entfernt. Benötigte Inhalte werden gezielt in neue Dateien überführt; entfallene Inhalte erhalten keinen Nachfolger. Das fertige Paket darf keine Abhängigkeiten auf diesen Ordner haben. Die abschließende Entfernung ist noch nicht ausgeführt.
 
 ## Einstieg
 
@@ -51,4 +51,4 @@ Herkunft: Gordon-Team als Hauptreferenz; Planversionierung aus Picard. Brownfiel
 3. Jeden vorgeschlagenen Schritt am Ziel messen: Was muss tatsächlich vorhanden sein, damit das Team arbeitet? Alte Dokumentmenge und alte Tests begründen keine zusätzlichen Anforderungen.
 4. Erst nach dem jeweiligen Auftrag die betroffenen Paketdateien ändern. Vorlagen, eigene Skills und bestehende Teams bleiben außerhalb dieses Umbaus, soweit Max nichts anderes beauftragt.
 
-**Stand dieser Übergabe:** Nur Übergabe erstellt; Installationsablauf noch nicht neu aufgebaut, kein Team installiert.
+**Aktueller Arbeitsstand:** Quellenübersicht, Codeanalyse und Rollenbindungen liegen neu unter `references/`. Die direkt betroffenen Setup-/Integrationsverweise sind angepasst. Weitere Alttexte, Manifest-Dateiinventar und bisherige Prüf-/Lieferstandsbeschreibungen sind noch schrittweise abzugleichen; keine Gesamtfreigabe des Pakets. `SKILL.md.orig` bleibt unverändert. Kein Team installiert.

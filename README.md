@@ -81,7 +81,7 @@ den geschützten Zielweg; das Protokoll speichert nur Secretort/Prüfstatus.
 ## Ergebnis und Wiederaufnahme
 
 Die Rollen bekommen vollständige eigene Skillbäume, unveränderte Rollenpflichten,
-gerenderte Teambindungen und eine erreichbare Modellpolicy. Im Ziel bezogene
+personalisierte SOULs und native Modell-/Reasoning-Konfiguration. Im Ziel bezogene
 Originalkomponenten werden mit Revision, Dateimenge und Lizenz nachgewiesen.
 Bei Unterbrechung den Maker mit dem privaten Setuprecord wieder aufrufen; er liest
 native Profile, Board und Dienstobjekte erneut und setzt am ersten offenen Gate

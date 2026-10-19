@@ -38,7 +38,7 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
 ## Geführter Ablauf
 
 1. Lade [Setup](references/setup.md) vollständig sowie den
-   [Bindungsvertrag](unklar/references/native-workflow.md). Beginne mit Zielbestand,
+   [Rollenbindungen](references/native-workflow.md). Beginne mit Zielbestand,
    Gateway-/Dispatcherzuständigkeit und gemeinsamen PM-Wirkungen, nicht mit Create.
 2. Frage Projektname/Workspace zuerst; gleiche den absoluten Workspace auf dem
    Zielkonto mit `~/projects/<PROJECT_NAME>` aus der festen Reviewer-Vorlage ab.
@@ -51,7 +51,7 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
    vorhandene Zielidentität vor Anlage; bei Wiederaufnahme native Objekte abgleichen.
 4. Führe die Setupschritte in Reihenfolge aus: Profile/Modellbindung und privater
    Record, Board, Team-Codex/Originalkomponenten, Memory-/Messagingkonfiguration,
-   eigene Bäume/Policy und endgültige Bindungen; danach erst Einzelprüfungen.
+   eigene Skillbäume, personalisierte Rollen und endgültige Bindungen; danach erst Einzelprüfungen.
    Lade dazu [Integrationen](references/integrations.md),
    [Quellen](references/upstream-sources.md), beide [Codeanalysewege](references/code-analysis.md)
    und [Manifest](manifest.json); richte genau die gewählte Alternative ein.

@@ -22,7 +22,7 @@ ROLE_NAMES = {"planner": "PLANER_NAME", "coder": "CODER_NAME", "reviewer": "REVI
 BINDING_FIELDS = {
     "PLANNER_PROFILE", "CODER_PROFILE", "REVIEWER_PROFILE", "BOARD",
     "PROJECT_DIR", "CODEX_PROCESS_HOME", "CODEX_HOME", "CODEX_BINARY",
-    "MODEL_POLICY_REF", "G1_STATUS", "G1_EVIDENCE", "PROJECT_CHANNEL_ID",
+    "G1_STATUS", "G1_EVIDENCE", "PROJECT_CHANNEL_ID",
     "PROJECT_CHAT_TYPE", "HUMAN_USER_ID",
 }
 PLANNER_SECTION = "## Nur Planner: Kommunikationsbindung"
@@ -134,7 +134,7 @@ def render_bindings(template, values, role):
         raise ValueError("Drei verschiedene technische Rollenprofile erforderlich")
     if any(not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", p) for p in profiles):
         raise ValueError("Ungültige technische Profilkennung; Zielresolver zusätzlich prüfen")
-    for key in ("PROJECT_DIR", "CODEX_PROCESS_HOME", "CODEX_HOME", "CODEX_BINARY", "MODEL_POLICY_REF", "G1_EVIDENCE"):
+    for key in ("PROJECT_DIR", "CODEX_PROCESS_HOME", "CODEX_HOME", "CODEX_BINARY", "G1_EVIDENCE"):
         path = PurePosixPath(values[key])
         if not path.is_absolute() or ".." in path.parts:
             raise ValueError("Bestätigter absoluter Zielpfad ohne Traversal erforderlich")

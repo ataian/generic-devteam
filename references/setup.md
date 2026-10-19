@@ -17,7 +17,7 @@ bestätigte, nichtgeheime Variablen; keine rohen Nutzereingaben als Shellcode.
    allein sind kein Beleg für den Dispatcher. Keine neue Daemonplattform anlegen.
 3. Prüfe native Profile, Config set/get, Boards, blocked-first-Erstellung,
    expliziten Reviewer/Handoff, Same-Card-Rückgabe und Wake anhand der installierten
-   Parser/Leser sowie [nativer Referenz](../unklar/references/native-workflow.md). Bei fehlender Syntax
+   Parser/Leser sowie [Rollenbindungen](native-workflow.md). Bei fehlender Syntax
    zuerst aktuelle Docs/Quelltext lesen; erst nach Freigabe CLI/Loader prüfen.
 4. Inventarisiere aktivierte Plugins/Memoryprovider aller gemeinsam betroffenen
    Profile und die PM-Abhängigkeitsgeneration ohne Secretwerte. Normale CLIstarts,
@@ -69,8 +69,8 @@ und echte Pfade zusätzlich prüfen. Anzeigenamen nie als rohe Pfadsegmente verw
 Bestätige rollenbezogene Hermes-Modelle/Provider/unterstützte Denktiefe und Codex
 separat. Die hierbei bestätigte technische Codex-Modell-ID als `CODEX_MODEL`
 wiederverwenden, nicht erneut abfragen oder aus dem Hermes-Modell ableiten.
-Empfehlung: Planner mindestens high, Coder/Reviewer normalerweise medium,
-nur soweit unterstützt. Erfasse erlaubte höhere Stufen und benötigte Hilfsmodelle;
+Planner nutzt das höchste unterstützte Reasoning, Coder/Reviewer normalerweise medium.
+Prüfe höhere Reasoning-Stufen am jeweils eingerichteten Modell und benötigte Hilfsmodelle;
 keinen zweiten Anbieter voraussetzen. Frage genau eine Codeanalyse ab. Bestimme
 Mattermost-Server, eigene Botidentität, Projektkanal und menschlichen Nutzer;
 ermittle die getrennte DM-ID im geführten Kommunikationsschritt.
@@ -125,7 +125,7 @@ protokolliere weitere Änderungen fortlaufend, nicht erst nach allen Integration
 Prüfe unmittelbar nach Create und erneut bei Wiederaufnahme den tatsächlichen Aktivierungsstand:
 Ist das Plannerprofil bereits hot-admittiert, diese frühe Multiplexerwirkung im
 Setuprecord festhalten, nicht erst Abschnitt 7 als Aktivierungsbeginn ausgeben.
-Bis zu vollständigen angenommenen Rollen-/Skill-/Policy-/Bindingdateien und ihrer
+Bis zu vollständigen angenommenen Rollen-/Skilldateien und nativen Bindungen sowie ihrer
 effektiven Aufnahme keine Home-/Dialogoperation oder Aufgabenbearbeitung anstoßen.
 Kann diese Grenze im bestehenden Owner nicht eingehalten werden, Setup anhalten
 und einen freigegebenen profilbezogenen nativen Weg klären; andere Profile nicht
@@ -155,9 +155,9 @@ Planrevision werden bei jedem Auftrag neu gebunden, nicht im Setup erfunden.
 Binde im Coderhome `devteam/codex-home` und `devteam/user-home` anhand
 [Team-Codex-Rezept](integrations.md#team-codex), dann vollständige Original-
 Integrationen bereitstellen. Halte die realen Codex-Binary-/Homewerte für die anschließende
-Bindungsersetzung fest. Originalkomponenten zunächst bereitstellen/konfigurieren;
+Zielprüfung im Setuprecord fest. Originalkomponenten zunächst bereitstellen/konfigurieren;
 die in den Rezepten beschriebenen echten Einzelprüfungen folgen erst nach
-vollständigen eigenen Rollen-/Bindingdateien und ihrer Annahme in Abschnitt 7.
+vollständigen eigenen Rollendateien und ihrer Annahme in Abschnitt 7.
 Lade das vollständige [Codeanalyserezept](code-analysis.md) und verwende genau
 den gewählten Weg für alle drei Hermes-Rollen und Team-Codex. Ziele, vollständige
 Originaldateimengen, Runtime und Lizenzen zurücklesen. Bei CBM gehört die vollständige
@@ -174,14 +174,14 @@ Führe [Hindsight](integrations.md#hindsight) für jede Rolle am vorhandenen Die
 mit derselben bestätigten **neuen** Projektbank aus. Danach folgt ausschließlich
 im Plannerprofil die [geführte Mattermost-Anbindung](integrations.md#mattermost).
 Zunächst Verbindungskonfiguration, Mitgliedschaft, menschliche Zulassung und zwei
-getrennte Kanalidentitäten anhand der Kanalmetadaten für die Bindungsersetzung
+getrennte Kanalidentitäten anhand der Kanalmetadaten für die native Konfiguration
 bestätigen, ohne eine Nachricht an den Planner zu benötigen. Die geführte Mattermost-
 Rezeptphase 8 (Homebindung und Dialogtests) wartet auf die vollständige
 Annahme und Rücklese aus Abschnitt 6 sowie den profilrichtigen Adapternachweis in
 Abschnitt 7. Andere bereits berechtigte Gesprächswege bleiben nutzbar. Kommunikationswerte gehören
 nicht in gemeinsame Projektanweisungen oder die SOULs.
 
-## 6. Eigene Dateien, Policy und getesteter Textweg
+## 6. Eigene Skills, Rollen und Textpersonalisierung
 
 Führe das nach Planneranlage begonnene private Protokoll aus
 [setup-record.md](../templates/setup-record.md) unter dessen `devteam/setup.md` fort.
@@ -220,38 +220,28 @@ confirmed_bindings = record_data["confirmed_bindings"]
 
 Werte gegen den bestätigten Datensatz und bei Resume gegen native Objekte prüfen.
 Unvollständiges/ungültiges JSON oder widersprüchliche Tabellen/Belege halten an.
-Die Pakettests führen nur diese Textfragmente und das folgende Renderfragment mit
-synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
+Diese Textfragmente und das folgende Renderfragment lassen sich mit synthetischen
+Daten prüfen, ohne Zielanlage oder Runtime.
 
-1. Kopiere je `own_skills.targets` im [Manifest](../manifest.json) **den ganzen
-   eigenen Skillbaum** in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
+1. Kopiere gemäß [Quellen- und Rollenmatrix](upstream-sources.md#mitgelieferte-bausteine)
+   **den ganzen eigenen Skillbaum** aus `skills/` in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
    `screenshot-to-code` in seinem Prozess-HOME unter `.agents/skills/`.
-   Nur `SKILL.md.template` wird zu `SKILL.md`. Screenshot bleibt bytegleich.
+   Alle Dateien einschließlich `SKILL.md` behalten Namen und Inhalt unverändert.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.
-2. Erstelle aus [model-policy.md](../unklar/templates/model-policy.md) eine ausgefüllte
-   nichtgeheime Policy je Rollenhome unter `devteam/model-policy.md`. Fülle die
-   tatsächlichen Hermes-/Codex-Auswahlen, erlaubten höheren Routen, Hilfsmodelle,
-   Original-Agentpins und Freigabe-/Prüfbelege aus. Alle Rollen erhalten dieselbe
-   bestätigte Policyrevision, mit lokal erreichbarem Pfad. Die bereits bestätigte
-   Codex-Modell-ID bleibt in technischer Auswahl/Policy, nicht in der SOUL.
-   Vor jedem Aufruf liest der Coder die aktuelle lokale Policy und tatsächliche
-   freigegebene Team-Codex-Konfiguration; bei Widerspruch anhalten. Modelländerungen
-   erfolgen über den vorhandenen Policy-/Konfigurationsweg ohne SOUL-Re-Render;
-   keine private Quellmodellbindung übernehmen oder neue Modellfrage hinzufügen.
-   Unbestätigte Felder bleiben ausdrücklich offen und sperren betroffene Nutzung.
-   Übernimm die feste Team-Codex-Auftragsregel unverändert: `$caveman` ausdrücklich
-   in jedem neuen Auftrag, auch nach Neustart/Resume. Sie gehört in jede ausgegebene
-   lokale Policy, nicht nur in den Makertext oder einen einmaligen Testauftrag.
+2. Prüfe die tatsächlichen Hermes-/Codex-Auswahlen, unterstützten Reasoning-Stufen,
+   Hilfsmodelle und Original-Agentpins in ihrer nativen Konfiguration. Halte
+   Configorte, Freigaben und Funktionsbelege im privaten Setuprecord fest.
+   Die konkrete Codex-Modell-ID bleibt in der technischen Konfiguration;
+   die Coder-SOUL bestimmt die Reasoning-Eskalation und liest das eingerichtete Modell.
+   Prüfe dort auch die dauerhafte Team-Codex-Prozessbindung und die ausdrückliche
+   `$caveman`-Anweisung für jeden neuen Auftrag, einschließlich Neustart/Resume.
    Binde die gewählte Codeanalyse gemäß [Analyserezept](code-analysis.md) über die
    installierten Originalskills und deren native Aktivierung ein. Auswahl, Roots
    und Nachführungsweg im Setup-Protokoll festhalten; alle drei Rollen und Team-Codex
-   erhalten denselben Analyseweg. Dafür keine zusätzliche Modell-/Auftragspolicy anlegen.
-3. Erstelle je Rollenhome `devteam/g1.md`: Zielrevision, geprüfter Retrypfad,
-   Status und konkrete fehlende Voraussetzung; bei Lösung endliches natives
-   Gesamtbudget samt Beleg, bei Anforderungsänderung deren Annahmequelle/Umfang.
-   Keine Statusanhebung aus einem Cooldown. Bindungsfeld `G1_EVIDENCE` zeigt auf
-   diese tatsächlich geschriebene erreichbare Datei.
-4. Verwende **denselben reinen Textweg wie die Pakettests**:
+   erhalten denselben Analyseweg.
+3. Halte den in Abschnitt 1 geprüften Retryzustand mit Zielrevision und konkreten
+   Einschränkungen im Setuprecord fest; vorhandene Freigabegrenzen bleiben bestehen.
+4. Verwende den reinen Textweg für die Rollenpersonalisierung:
    [references/render_text.py](render_text.py). Er liest/schreibt keine Dateien,
    lädt keine Runtime und hat keinen CLI-Einstieg. Lade das Modul im freigegebenen
    Zielsetup über den absoluten Pfad des geprüften Makerpakets (z. B.
@@ -266,21 +256,19 @@ synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
        raise ValueError("Vorlage und deklarierte Rollenfelder widersprechen sich")
    role_values = {field: role_source[field] for field in fields}
    soul_text = render_role(role_template_text, role_values, role)
-   binding_text = render_bindings(binding_template_text, confirmed_bindings, role)
    ```
 
    `confirmed_values` sind die bestätigten Rohwerte aus dem Setuprecord (Namen,
-   Projekt, Bank, rückgelesenes Board und technische Profil-IDs; die für die Policy
+   Projekt, Bank, rückgelesenes Board und technische Profil-IDs; die für die Konfiguration
    gespeicherte Codex-Modell-ID wird nicht als Rollenfeld übergeben);
    `role_manifest` ist der passende Eintrag aus `role_templates`. Fehlende Werte
    stoppen die Ausgabe, keine Leerdefaults und keine neuen IDs erfinden.
    `ROLE_NAME` entspricht stets dem eigenen Anzeigenamen, nie der technischen ID.
-   `role` ist `planner`, `coder` oder `reviewer`; `confirmed_bindings` enthält exakt
-   die 14 Felder aus [team-bindings.md](../templates/skills/devteam-workflow/references/team-bindings.md),
-   einschließlich aller Kommunikationswerte zur Validierung. Das Modul entfernt
-   den vollständigen Nur-Planner-Abschnitt für Coder/Reviewer. Verwende technische
+   `role` ist `planner`, `coder` oder `reviewer`. `confirmed_bindings` dokumentiert
+   die tatsächlich aufgelösten Zielwerte im privaten Record; daraus wird keine
+   zusätzliche Laufzeitdatei erzeugt. Kommunikationswerte bleiben beim Planner. Verwende technische
    Werte unverändert als Daten, nicht die maskierte Markdownfassung als Shellwerte.
-5. Der Textweg validiert den [Rollenfeldvertrag](../unklar/references/native-workflow.md): nichtleere
+5. Der Textweg validiert den [Rollenfeldvertrag](native-workflow.md#2-rollen-souls-personalisieren): nichtleere
    einzeilige Rohwerte, Namen maximal 120 Zeichen, keine Steuer-/Formatzeichen,
    Templateklammern, Einrückung, Backticks, Backslashes oder Fence-Ausbrüche.
    Er ersetzt alle passenden Mehrfachvorkommen genau in einem Durchlauf, ohne
@@ -290,34 +278,30 @@ synthetischen Daten in Scratch aus, keine Zielanlage oder Runtime.
    zusätzliche oder beschädigte Felder sind Fehler. Sämtliche Nichtplatzhalterbytes
    bleiben unverändert; keine zusätzliche Persona oder Prozessneufassung anhängen.
 6. Zeige die personalisierten Rollen zur Annahme. Schreibe erst danach `soul_text`
-   nach `<jeweiliger Rollenhome>/SOUL.md` und `binding_text` nach
-   `<jeweiliger Rollenhome>/skills/devteam-workflow/references/team-bindings.md`.
+   nach `<jeweiliger Rollenhome>/SOUL.md`.
    Bestätige Dateiziel und Eigentum direkt vor dem Schreiben; nutze Dateitools,
    keine Shellinterpolation oder rekursives globales Suchen/Ersetzen. Eine von
    Create frisch erzeugte neutrale SOUL nur nach dokumentiertem Vergleich gezielt
    ersetzen; fremde/geänderte Zieltexte anhalten.
 7. Lies jedes Ziel zurück: exakte Rollenzuordnung, vollständige Ausgabe, keine Restfelder,
-   bytegleiche Übereinstimmung mit `soul_text` und `binding_text`, unveränderte
+   bytegleiche Übereinstimmung mit `soul_text`, unveränderte
    Nichtplatzhalterbytes jeder Rolle, keine Kommunikationswerte in Coder/Reviewer,
    Rollen-/Projekt-/Bank-/Boardwerte und technische IDs gegen den Record,
-   vorhandene zugängliche Policy/G1-Dateien. Vergleiche Skilldateimenge und Bytes
-   mit Quelle, abzüglich exakt der dokumentierten Umbenennung/Bindingersetzung.
-   Öffne insbesondere die über MODEL_POLICY_REF gebundene lokale Policy im Coderhome
-   und lies die tatsächlich geschriebene Auftragsregel zurück: `$caveman` in
-   jedem neuen Auftrag, auch nach Neustart/Resume. Fehlt sie oder zeigt die Bindung
-   auf eine andere Datei, vor Codex-Nutzung korrigieren; Zielpfad/Policyrevision und
+   wirksame native Konfiguration und protokollierte Einschränkungen. Vergleiche
+   Skilldateimenge und Bytes vollständig mit der Quelle.
+   Lies insbesondere in der Coder-SOUL die Prozessbindung und Auftragsregel zurück:
+   `$caveman` in jedem neuen Auftrag, auch nach Neustart/Resume. Zielpfad und
    Rücklesebeleg im Setuprecord festhalten. Dies ist noch kein B01-Modusnachweis.
-   Lies den tatsächlich geschriebenen Codeanalyseabschnitt ebenfalls zurück:
-   gewählte Alternative, Originalskill-Ladepflicht nach Resume und Indexstand-/
-   Corpusprüfung müssen für alle Rollen erreichbar sein; Coder übergibt sie an
-   Team-Codex. Keine zweite Alternative und keine bloße Makerreferenz belassen.
+   Prüfe die tatsächliche Codeanalyse-Integration: gewählte Alternative,
+   Originalskills und native Aktivierung müssen für alle Rollen und Team-Codex
+   erreichbar sein. Keine zweite Alternative und keine bloße Makerreferenz belassen.
    Vor Home-/Dialog-/Aufgabenbearbeitung Loader-/Kontextgrenze am Ziel lesen und **vollständige effektive
    SOUL-Aufnahme** pro Rolle nachweisen; Länge und Dateiexistenz genügen nicht.
    Bei Kürzung halten, keine Rollenpflichten still reduzieren.
 
 ## 7. Einzelprüfungen und Wake vor Ticketfreigabe
 
-Nach vollständigen angenommenen Rollen-/Skill-/Policy-/Bindingdateien die
+Nach vollständigen angenommenen Rollen-/Skilldateien und nativen Bindungen die
 geplanten profilrichtigen Einzelprüfungen aus den Integrationsrezepten ausführen:
 Discovery, vollständige Promptaufnahme, Modelle, persistente Modi und Memory.
 Für die gewählte Analyse die [Funktions-/Updateprüfung](code-analysis.md#funktionspruefung) im
@@ -329,7 +313,7 @@ Hot-Admission ersetzt weder Rollenaufnahme noch Adapternachweis.
 Laufzeitbelege nur im separat freigegebenen
 Umfang; offene Kriterien halten die betroffene Fähigkeit gesperrt.
 
-Alltagsrezepte bleiben im installierten `devteam-workflow`. Für die separat
+Der Arbeitsprozess bleibt in den Rollen-SOULs und installierten Skills. Für die separat
 freigegebene Testkarte wie für spätere Karten: blocked-first anlegen, vollständige
 Kette binden, **vor Freigabe** die native Subscription setzen. `PLANNER`, `BOARD`,
 `TASK` und IDs stammen aus tatsächlichen bestätigten Zielobjekten. Öffentliches
@@ -367,7 +351,7 @@ Lade zuvor die bestätigten Rohwerte und Annahmebelege aus `devteam/setup.md`
 (bzw. dem übergebenen Datensatz vor Planneranlage). Namen/Projekt/Bank/Board
 nicht neu erfragen, technische Profil-IDs und `CODEX_MODEL` nicht neu ableiten.
 Verwende den JSON-Rückleseweg aus Abschnitt 6, keine Markdownmaskierungen als Rohwerte.
-Gleiche native Identitäten, Zielkonto-Home/Workspace, Modellpolicy und die zuletzt
+Gleiche native Identitäten, Zielkonto-Home/Workspace, Modellkonfiguration und die zuletzt
 geschriebenen SOUL-Bytes mit dem Record ab. Bei Drift vor erneutem Rendern oder
 Schreiben klären; nur fehlende Werte bestätigen lassen.
 Der Setuprecord ist Nachweis, keine zweite Zustandsautorität. Nach jedem Fehler
@@ -388,7 +372,7 @@ benötigte Maßnahme und Erfolgssignal. Folgende Fälle gehören zum Verfahren:
 Erhalte vorhandene Teilstände; ein unerreichbarer Dienst ist kein Auftrag für einen Ersatzserver.
 Vor Rückbau Aktivierung eigener Plugins/Adapter profilbezogen nativ beenden,
 wenn nötig und freigegeben. Nur protokollierte eigene `SOUL.md`, Skillkopien,
-`devteam/model-policy.md`, `devteam/g1.md`, Config-/Autoload-/Hookeinträge und
+Config-/Autoload-/Hookeinträge und
 Subscriptions gezielt zurücksetzen. Gemeinsame Binaries, PM-Generationen, andere
 Profile, persönliche Codexdaten, Projektregeln und Graphcaches erhalten.
 Profil-/Board-/Bank-/Kanal-/Sessionlöschung braucht **gesonderte Datenlöschfreigabe**,

@@ -2,15 +2,15 @@
 
 ## T6: Statischer Kandidat zur unabhängigen Gesamtprüfung
 
-Die sechs eigenen Skillbäume und ihre Begleitdateien sind enthalten. Der exakte
+Die eigenen Skillbäume und ihre Begleitdateien sind enthalten. Der exakte
 Bestand steht in [manifest.json](manifest.json), Rollen und Quellen in
-[upstream-sources.md](references/upstream-sources.md). Der installierte Workflow
-enthält seine eigene technische Referenz; er benötigt das Makerpaket nicht mehr.
-Die Makerseite [native-workflow.md](unklar/references/native-workflow.md) beschreibt
+[upstream-sources.md](references/upstream-sources.md). Rollen-SOULs und installierte
+Skills tragen den Arbeitsprozess unabhängig vom Makerpaket.
+Die Makerseite [native-workflow.md](references/native-workflow.md) beschreibt
 Einrichtung und Prüfung der Arbeitsbindungen sowie den Render-/Kontextvertrag
 für die drei enthaltenen Rollen-SOULs. Der [Maker](SKILL.md), das geführte
 [Setup](references/setup.md), allgemeine [Integrationsrezepte](references/integrations.md),
-private Protokoll-/Policyvorlagen und reine Textvalidierung sind enthalten.
+eine private Protokollvorlage und reine Textvalidierung sind enthalten.
 Beide [Codeanalysewege](references/code-analysis.md) sind als Einrichtungsrezepte
 enthalten. CBM umfasst seine offizielle Codex-Integration einschließlich Unteragenten.
 Die Funktionsprüfung erfolgt erst beim Zielsetup. Keine fremde
@@ -33,7 +33,6 @@ Planversionen und spätere Zielprojektversionen sind unabhängig.
 | `brownfield-feature-planning` 0.1.0 | Planungskern neu formuliert, historische Spezialverfahren nur fachlicher Vergleich. Keine historische menschliche Autorenschaft aus Rollenmetadaten abgeleitet. |
 | `plan-versioning-semver` 0.1.0 | Neue Formulierung bestätigter Regeln. Ursprüngliche Lizenz bleibt unbelegt; keine produktgebundene Versions-API-/Changelogpflicht übernommen. |
 | `project-lib-versioning` 0.1.0 | Neue technologieunabhängige Formulierung mit rekursiven Verbrauchern und Rollenpflichten. Historischer Preservation-Audit bleibt unbelegt, kein alter Text übernommen. |
-| `devteam-workflow` 0.1.0 | Neuer gemeinsamer Ablauf aus bestätigten Rollen-/Freigaberegeln und statischer nativer Recherche. Keine alten Helper, Profiltexte, Teamidentitäten oder Sonderfreigaben mitgeliefert. |
 
 **G3 für den T2-Lieferstand:** Screenshot besitzt seinen erhaltenen eigenen
 Lizenztext; die übrigen fünf Fassungen sind neu verfasst und tragen jeweils eine
@@ -77,14 +76,13 @@ Renderziel `SOUL.md` in diesem Profil, nicht eine Aktivierung im Bauprojekt.
 `render_fields` enthält die sortierte eindeutige Menge der tatsächlich vorkommenden
 deklarierten Rollenfelder; Mehrfachvorkommen sind erlaubt. Herkunft, Validierung
 und Kontextgrenzen stehen in der Makerreferenz. Technische Werte stammen aus
-denselben bestätigten Daten wie Workflow und Zielkonfiguration.
+denselben bestätigten Daten wie die Zielkonfiguration.
 
 `upstream_components.subpaths` sind originalrepositoryrelative Pfade; `.` meint
 den Repositoryroot. `recipe_status: pending` ist ein offener Folgeauftrag, kein
 Setupnachweis. `recipe_status: documented` bedeutet ein vorhandenes Rezept,
-nicht dessen erfolgreiche Ausführung. Bindungsfelder der Workflowreferenz und
-die Rollenfelder werden erst beim Zielsetup mit bestätigten Werten gerendert;
-ansonsten bleiben Inhalte unverändert.
+nicht dessen erfolgreiche Ausführung. Nur die Rollenfelder werden beim Zielsetup
+mit bestätigten Werten gerendert; eigene Skillbäume bleiben vollständig unverändert.
 
 Analysemetadaten im Manifest: `reviewed_revision` ist ein Rechercheanker,
 `asset_bundles.source_to_target` bildet die vollständigen Graphify-Originalbäume

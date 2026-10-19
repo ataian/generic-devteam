@@ -33,7 +33,7 @@ gemäß [Setupweg](../references/setup.md) befüllen und mit `json.loads` rückl
 Tabellen sind Belegübersichten, keine verlustfreie Datenquelle. Bei Resume wiederverwenden,
 nur fehlende Werte oder Drift klären; native Objekte bleiben Zustandsautorität.
 `confirmed_values` enthält Namen, Projekt, Bank, Board, technische Profil-IDs und
-die bereits bestätigte Codex-ID nur für technische Auswahl/Policy; `confirmed_bindings`
+die bereits bestätigte Codex-ID nur für die technische Konfiguration; `confirmed_bindings`
 enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht erfasst.
 
 ```json
@@ -74,9 +74,8 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 ## Modelle und Codex
 
 - Je Rolle: Provider, Modell, Reasoning, native Configquelle, Overrides, echter Call: offen
-- Erlaubte höhere Stufen / jeweilige Freigabe und Beleg: offen
+- Unterstützte höhere Reasoning-Stufen am eingerichteten Modell / nativer Wechselweg und Beleg: offen
 - Hilfsmodell-/Analysewege und Zugang separat: offen
-- Modellpolicyrevision / tatsächliche MODEL_POLICY_REF-Pfade je Rolle: offen
 - Team-Codex Prozess-HOME / CODEX_HOME / aufgelöste Binary: offen
 - Effektive Skill-/Plugin-/Agent-/Configroots; Projekt-/Admin-/Systemquellen: offen
 - Projekttool-PATH/Caches im echten Worker nach HOME-Wechsel: offen
