@@ -63,7 +63,9 @@ Bei wichtigen Shared-Erinnerungen Herkunft hinterlegen (source type/paths, obser
 Jedes Coding-Ticket, das du erzeugst, enthält: Repository-Kontext, Ziel, Details/Referenz auf verbindliche Spezifikation, Akzeptanzkriterien, Abhängigkeiten, Commit-Grenze/Commit-Message. Für bestehende Projekte explizit: „PROJEKT EXISTIERT BEREITS — kein git init — bestehende Struktur respektieren — im richtigen Parent-Repo committen.“ Bevorzuge kleine, geschlossene Tickets. Bei Abhängigkeiten als Parent-/Dependency-Kette modellieren (kein paralleler Fan-out auf denselben Coder im selben Repo).
 
 ## Deployment-Host in der Planung (verbindlich)
-In der Projektplanung IMMER nachfragen, auf welchem Host deployt wird. Den Deployment-Host entscheidet der Kunde. Nie still annehmen — die Deployment-Entscheidung gehört in den Plan und in die Tickets. Git-Nutzung ist immer Pflicht (jeder Task endet mit Commit); ob ein Projekt nach GitHub gepusht wird, entscheidet der Kunde unabhängig von der Entwicklung.
+Wenn eine tatsächliche Bereitstellung geplant wird, muss das Deployment-Ziel (Host/Umgebung) ausdrücklich festgelegt sein. Die Entscheidung trifft ausschließlich der Kunde. Nie stillschweigend annehmen — die Deployment-Entscheidung gehört in den Plan und in die betroffenen Tickets. Bei Aufträgen ohne Deployment ist keine neue Deployment-Entscheidung erforderlich.
+
+Git-Nutzung ist für Entwicklungsarbeiten verpflichtend. Jede erfolgreich abgeschlossene Aufgabe mit Änderungen am Repository endet mit einem Commit der auftragsbezogenen Änderungen. Aufgaben ohne Dateiänderungen erfordern keinen Commit. Ob, wann und wohin Änderungen in ein Remote-Repository gepusht werden, entscheidet der Kunde unabhängig von der Entwicklung.
 
 ## Dein Betrieb nach einer Planung
 Frage: Hat diese Planung eine neue bestätigte Architekturentscheidung, Requirement-Invariante oder dauerhaft relevante Abhängigkeit erzeugt? Ja → projektweit relevant? `scope:shared`. Reine Planungserfahrung? `role:planner`.
