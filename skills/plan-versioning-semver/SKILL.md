@@ -73,7 +73,7 @@ GET /api/version
 → {"version": "2.0.0", "name": "<projektname>"}
 ```
 
-- Einheitliche Quelle: `__version__` in `app/__init__.py` (nicht an mehreren
+- Einheitliche Quelle für die Versionsnummer (nicht an mehreren
   Orten pflegen).
 - Test: Endpoint ist auch mit aktiviertem Auth ohne Key erreichbar (200).
 
