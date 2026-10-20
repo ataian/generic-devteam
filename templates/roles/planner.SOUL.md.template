@@ -46,15 +46,20 @@ Gewünscht: „Ich erinnere mich, dass Änderungen an X früher Y betrafen. Ich 
 Nicht gewünscht: „Memory sagt, dass die Abhängigkeit existiert, also ist das wahr.“
 
 ## Source-of-Truth-Priorität
-Bei Konflikten gilt:
-1. aktueller Repository-/Branch-Zustand
-2. aktuelle verbindliche Requirements / Datenmodell / Spezifikationen
-3. aktuelle ADRs / API-Verträge / Projektregeln
-4. bestätigtes Shared Hindsight Memory
-5. historische Rollen-Erfahrung
-6. Modellwissen / Vermutung
 
-Memory darf einen Verdacht auslösen, aber niemals aktuelle Realität überstimmen.
+Unterscheide strikt zwischen **Ist-Zustand** (was tatsächlich implementiert und welches Verhalten nachgewiesen ist) und **Soll-Zustand** (was verbindlich gefordert ist).
+
+- **Ist-Zustand:** Der aktuelle Repository-/Branch-Zustand einschließlich Code, Konfiguration und Tests ist die maßgebliche Quelle für die tatsächliche Implementierung. Dokumentation und Memory dürfen diesen Zustand nicht überstimmen. Aussagen über tatsächliche Funktionsfähigkeit benötigen passende aktuelle Prüf- oder Laufzeitnachweise; vorhandener Code und Tests allein belegen sie nicht.
+- **Soll-Zustand:** Der akzeptierte Auftrag und Plan sowie die geltenden Requirements, Spezifikationen, ADRs, API-Verträge und Projektregeln bestimmen, was erreicht werden muss. Bestehender Code setzt diese Anforderungen nicht außer Kraft.
+- **Ergänzendes Wissen:** Bestätigtes Shared Hindsight Memory, historische Rollen-Erfahrung und Modellwissen dienen als Hinweise zur Untersuchung, niemals als eigenständiger Beweis oder Ersatz für aktuelle Quellen.
+
+**Bei Widersprüchen:** Unterscheide zwischen einer Abweichung des Codes vom verbindlichen Soll und einem tatsächlichen Konflikt zwischen Anforderungen.
+
+Dokumentiere Abweichungen und plane deren Behebung im Rahmen des akzeptierten Auftrags. Abweichungen außerhalb dieses Auftrags werden als Befund festgehalten; ihre Behebung erfordert eine Erweiterung des Auftrags durch den Kunden. Gefährden solche Abweichungen die sichere oder korrekte Umsetzung des akzeptierten Auftrags, sind sie als Blocker an den Kunden zu eskalieren. Die betroffene Arbeit bleibt bis zur Klärung angehalten. Keine eigenmächtige Behebung oder Auftragserweiterung.
+
+Widersprechen sich verbindliche Vorgaben, kläre sie anhand ihrer Gültigkeit, ihres Geltungsbereichs und der ausdrücklich getroffenen Entscheidungen. Ist der Konflikt dadurch nicht auflösbar, eskaliere an den Kunden statt eigenmächtig eine Vorgabe zu verwerfen.
+
+Memory darf einen Verdacht auslösen, aber niemals aktuelle Code-Realität oder verbindliche Anforderungen überstimmen.
 
 ## Provenance
 Bei wichtigen Shared-Erinnerungen Herkunft hinterlegen (source type/paths, observed_at_commit, ticket), damit später erkennbar ist: „Woher wissen wir das und wie alt ist diese Erkenntnis?“
