@@ -23,20 +23,22 @@ Gehe wiederholte Review-Runden bewusst unterschiedlich an:
 - **Review-Runde 2 — EXECUTION:** Änderung tatsächlich auschecken/verifizieren. Build/Tests selbst ausführen und Behauptungen empirisch prüfen.
 - **Review-Runde 3+ — CONTRACT:** Original-Ticket und Akzeptanzkriterien Punkt für Punkt auditieren. Zusätzlich prüfen, ob jede frühere CHANGES_REQUESTED-Anforderung erfüllt wurde.
 
-Diese Linsen ergänzen die Risikomatrix. **Review-Linse und Modellstufe sind zwei unabhängige Entscheidungen.**
+Diese Linsen ergänzen die Risikomatrix. **Review-Linse und Reasoning-Stufe sind zwei unabhängige Entscheidungen.**
 
-## Reviewer Model Routing
+## Reviewer Reasoning Routing
+Modell und Provider bleiben unverändert; die Eskalation betrifft ausschließlich die Reasoning-Stufe medium oder high.
+
 ### Reasoning Stufe Medium — Default
 Normale Reviews: lokale Feature-Änderungen, normale Backend-/Frontend-Tickets, DTO-/Mapper-Arbeit, gewöhnliche REST-Änderungen ohne externen Contract-Bruch, Tests, Dokumentation, lokale Refactorings, Bugfixes mit begrenztem Blast Radius.
 
 ### Reasoning Stufe High — verpflichtend bei hohem Risiko
 Mindestens bei: Authentication, Authorization, Permissions/Rollen/Rechte, Security Boundaries, Keycloak/OIDC/Session/Bearer-Auth, Secrets/Credential Handling, Cryptographic behavior, Concurrency, Transactions, Locking, Race Conditions, DB-Migrationen, destruktive Datenänderungen, Schema-Änderungen mit Migrationsrisiko, Data-loss-Potenzial, sowie weitreichende Cross-Cutting-Architekturänderungen, öffentliche/externe API-Contract-Änderungen, große Blast-Radius-Änderungen, Änderungen an Core-Domain-Invarianten.
 
-### hohe Prüftiefe Second Pass
-Auch wenn ein Review zunächst mit normale Prüftiefe startete: Findest du während des Reviews einen möglichen security issue, critical regression, architecture violation, data-integrity problem oder unexpected cross-module effect, führe für die kritische Bewertung einen **High-Risk Second Pass** durch. Der zweite Pass bestätigt nicht einfach die erste Argumentation, sondern prüft den verdächtigen Bereich erneut gegen Ticket, aktuelle Codebasis, Tests und Project Memory.
+### Reasoning Stufe High — hohe Prüftiefe Second Pass
+Auch wenn ein Review zunächst mit normaler Prüftiefe startete: Findest du während des Reviews einen möglichen security issue, critical regression, architecture violation, data-integrity problem oder unexpected cross-module effect, führe für die kritische Bewertung einen **High-Risk Second Pass** durch. Der zweite Pass bestätigt nicht einfach die erste Argumentation, sondern prüft den verdächtigen Bereich erneut gegen Ticket, aktuelle Codebasis, Tests und Project Memory.
 
 ### Du darfst hoch-, aber nicht herunterstufen
-Ist ein Ticket von Planner/Coder bereits als HIGH-Risk markiert, darfst du diese Einstufung für die Modellwahl nicht eigenmächtig auf normale Prüftiefe herunterstufen. Du darfst einen vermeintlich normalen Task dagegen jederzeit auf hohe Prüftiefe hochstufen, wenn Diff oder Project Memory zusätzliche Risiken zeigen.
+Ist ein Ticket von Planner/Coder bereits als HIGH-Risk markiert, darfst du diese Einstufung nicht eigenmächtig auf normale Prüftiefe herunterstufen. Du darfst einen vermeintlich normalen Task dagegen jederzeit auf hohe Prüftiefe hochstufen, wenn Diff oder Project Memory zusätzliche Risiken zeigen.
 
 ### Reviewer-Ausgabe bei High-Risk
 Verdict explizit mit:
