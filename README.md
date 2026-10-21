@@ -72,9 +72,10 @@ oder Bauen des Pakets ein Setup auszuführen.
 
 Der Skill wartet an nötigen Eingabe-/Freigabepunkten. Namen sind Klartext, keine
 Profilpfade. Die Rollen verwenden ihre festen Texte ohne zusätzliche Persona.
-Der Reviewer bindet `~/projects/<PROJECT_NAME>` fest; das Setup gleicht diesen
-Pfad auf dem Zielkonto mit dem bestätigten absoluten Workspace ab. Abweichungen
-werden vor Anlage geklärt, nicht durch stilles Umschreiben der SOUL verdeckt.
+Projektname und kanonischer absoluter Workspace werden getrennt bestätigt; der
+Pfad wird nicht aus dem Namen abgeleitet. Die Rollen prüfen die vorhandene
+Projekt-/Profil-/Boardbindung, auch bei verschachtelten Checkouts. Widersprüche
+werden vor Anlage geklärt; bestehende Repositories werden nicht dafür verschoben.
 Das private Protokoll landet im tatsächlichen Plannerhome unter `devteam/setup.md`,
 nicht im Projekt oder öffentlichen Paket. Geheimnisse gehören ausschließlich in
 den geschützten Zielweg; das Protokoll speichert nur Secretort/Prüfstatus.

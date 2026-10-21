@@ -40,9 +40,10 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
 1. Lade [Setup](references/setup.md) vollständig sowie den
    [Rollenbindungen](references/native-workflow.md). Beginne mit Zielbestand,
    Gateway-/Dispatcherzuständigkeit und gemeinsamen PM-Wirkungen, nicht mit Create.
-2. Frage Projektname/Workspace zuerst; gleiche den absoluten Workspace auf dem
-   Zielkonto mit `~/projects/<PROJECT_NAME>` aus der festen Reviewer-Vorlage ab.
-   Kläre Abweichungen vor Anlage. Danach Bank, Rollennamen und Board einmal
+2. Frage Projektname und kanonischen absoluten Workspace getrennt; leite den Pfad
+   nicht aus dem Namen ab. Gleiche ihn mit Projektkontext und vorhandenen nativen
+   Profil-/Boardbindungen ab; verschachtelte Checkouts bleiben erhalten.
+   Kläre widersprüchliche Bindungen vor Anlage. Danach Bank, Rollennamen und Board einmal
    bestätigen; rollenfeste Texte ohne Persona-Abfrage verwenden. Bestätige
    technische Kennungen getrennt von Anzeigenamen, Modelle und genau eine
    Codeanalyse und Planner-Kommunikationsziele. Keine erneute Auswahl fester
