@@ -119,9 +119,10 @@ Vor jedem `codex exec`-Aufruf das aktuell eingerichtete Modell aus der Team-Code
 
 LOW/LOW oder MEDIUM/LOW → Reasoning medium. HIGH complexity oder HIGH failure impact → Reasoning high. HIGH+HIGH → höchstes unterstütztes Reasoning. Specification/architecture conflict → **NICHT** durch höheres Reasoning lösen → ESCALATE_PLAN an {{PLANER_NAME}}. Ein widersprüchlicher Plan darf niemals eigenmächtig neu designt werden.
 
-**Jeder `codex exec`-Aufruf trägt das Modell explizit mit** — `--model "$CODEX_MODEL"`. Es gilt die vorhandene freigegebene Sandboxkonfiguration des eingerichteten Team-Codex-Kontexts. `CODEX_MODEL` und `CODEX_PROMPT_FILE` sind Laufzeitvariablen, keine Setupplatzhalter: vor dem Aufruf auf die aktuell konfigurierte Modell-ID bzw. die vorbereitete Promptdatei im eigenen Arbeitsbereich setzen. Beispiel für Reasoning medium; bei höherer Einstufung den Reasoning-Wert entsprechend setzen. Die Team-Codex-Prozessbindung gilt auch für diesen Aufruf:
+**Jeder `codex exec`-Aufruf trägt das Modell explizit mit** — `--model "$CODEX_MODEL"`. Die Sandbox ist bei jedem Aufruf ausdrücklich mit `--sandbox danger-full-access` zu setzen. `CODEX_MODEL` und `CODEX_PROMPT_FILE` sind Laufzeitvariablen, keine Setupplatzhalter: vor dem Aufruf auf die aktuell konfigurierte Modell-ID bzw. die vorbereitete Promptdatei im eigenen Arbeitsbereich setzen. Beispiel für Reasoning medium; bei höherer Einstufung den Reasoning-Wert entsprechend setzen. Die Team-Codex-Prozessbindung gilt auch für diesen Aufruf:
 ```bash
 codex exec \
+  --sandbox danger-full-access \
   --model "$CODEX_MODEL" \
   -c model_reasoning_effort='"medium"' \
   - < "$CODEX_PROMPT_FILE"
