@@ -37,12 +37,14 @@ unverändert. Kein „bereit“, nur weil ein Gatewayprozess lebt.
 
 ## 2. Eingaben und Kollisionsprüfung
 
-Frage zuerst **Projektname und Arbeitsverzeichnis**. Die feste Reviewer-Vorlage
-nennt `~/projects/{{PROJECT_NAME}}`: Löse diesen Pfad mit dem Home des Zielkontos
-und den bestätigten Workspace absolut auf und gleiche beide vor Anlage ab.
-Bei Abweichung anhalten und mit dem Nutzer klären; weder SOUL-Pfad still ändern
-noch widersprüchliche Board-/Profilbindungen anlegen. Projektname ist ein einzelnes
-Pfadsegment ohne Slash, Backslash oder Traversal; Leerzeichen sind zulässig.
+Frage zuerst **Projektname und kanonisches Arbeitsverzeichnis** getrennt. Löse
+den bestätigten Workspace auf dem Zielkonto absolut auf und gleiche ihn vor Anlage
+mit Projektkontext sowie vorhandenen Profil-/Boardbindungen ab. Der Name bestimmt
+nicht den Pfad; auch verschachtelte Checkouts sind zulässig. Bei Widerspruch
+anhalten und mit dem Nutzer klären, kein Repo verschieben und keine abweichenden
+Bindungen still anlegen. Der Renderwert PROJECT_NAME bleibt ein einzelnes Segment
+ohne Slash, Backslash oder Traversal; Leerzeichen sind zulässig. PROJECT_DIR trägt
+unabhängig davon den bestätigten absoluten Workspace für die native Konfiguration.
 Erfasse vorhandene Repositorygrenzen,
 Root- und relevante Bereichs-AGENTS sowie Manifeste/Lockfiles/Build-/Testkonfiguration.
 Der Workspace muss kein Git-Root sein und wird nicht automatisch initialisiert.

@@ -34,7 +34,7 @@ je Rolle die tatsächlich vorkommenden `render_fields`.
 | `PLANER_NAME` | Planner-Anzeigename; Schreibweise mit einem N |
 | `CODER_NAME` | Coder-Anzeigename |
 | `REVIEWER_NAME` | Reviewer-Anzeigename |
-| `PROJECT_NAME` | Projektname als einzelnes Pfadsegment |
+| `PROJECT_NAME` | Projektkennung als einzelnes Segment; bestimmt nicht den Workspace |
 | `HINDSIGHT_BANK_NAME` | Tatsächlich zugeordnete gemeinsame Projektbank |
 | `KANBAN_BOARD_NAME` | Native Boardkennung, nicht der Anzeigetitel |
 | `CODER_PROFILE` | Technische Coderprofilkennung, soweit in der Vorlage vorhanden |
@@ -63,7 +63,7 @@ Profil prüfen; Dateiexistenz allein genügt nicht.
 | Wert | Ziel und Prüfung |
 |---|---|
 | Rollenprofil und Anzeigename | Native Profilregistrierung und passende personalisierte SOUL |
-| Projektworkspace | Profil-`terminal.cwd`, Board-Standardworkspace und Projektpfad der SOUL müssen zusammenpassen |
+| Projektworkspace | Bestätigten kanonischen absoluten Workspace gegen Projektkontext, Profil-`terminal.cwd`, Board-Standardworkspace und späteren Ticketworkspace prüfen; die SOUL verlangt diesen Abgleich |
 | Boardkennung | SOUL und explizite Boardauswahl bei Ticketaktionen; nativen Boardzustand zurücklesen |
 | Projektbank | Native Memorykonfiguration und Bankplatzhalter der SOUL; Rollenfilter funktional prüfen |
 | Hermes-Modell und Reasoning | Native Profilkonfiguration; wirksame Auswahl einschließlich Overrides prüfen |
@@ -71,8 +71,15 @@ Profil prüfen; Dateiexistenz allein genügt nicht.
 | Codeanalyse | Genau eine Alternative gemäß [Analyserezept](code-analysis.md), mit Originalskills und passender nativer Aktivierung |
 | Planner-Kommunikation | Native Plannerkonfiguration und konkrete Wake-Subscription; Projektkanal, DM und Nutzeridentität getrennt halten |
 
-Der feste Projektpfad `~/projects/<PROJECT_NAME>` wird gegen das tatsächliche Home
-des Zielkontos aufgelöst und vor Einrichtung mit dem vereinbarten Workspace verglichen.
+Projektname und kanonischen absoluten Workspace getrennt bestätigen. Die SOULs
+leiten keinen Pfad aus PROJECT_NAME ab, sondern verlangen den Abgleich mit der
+vorhandenen Projekt-/Profil-/Boardbindung; kein zusätzlicher Renderplatzhalter
+oder zweiter Laufzeit-Bindingdatensatz. Den Workspace im bestehenden Setuprecord
+dokumentieren und nativ als terminal.cwd/Board-Standardworkspace binden. Technische
+Plannerprofilkennung aus der bestätigten Zuordnung gegen die native Registrierung
+prüfen und für Klärungs-, Vorschlags- und TIMER-Rückwege zugänglich halten; nicht
+aus dem Anzeigenamen ableiten. Verschachtelte Checkouts und abweichende Git-Roots
+erhalten; bei widersprüchlichen Bindungen vor Anlage anhalten und klären.
 Repository, Branch, Planrevision und Ticket-/Run-/Event-IDs werden erst beim jeweiligen
 Auftrag bestimmt. Sie sind keine vorab zu erfindenden Setupwerte.
 

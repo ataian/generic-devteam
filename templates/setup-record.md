@@ -56,7 +56,7 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 | REVIEWER_PROFILE | offen | offen |
 | CODEX_MODEL (bereits bestätigte Codex-ID) | offen | offen |
 
-- Zielkonto-Home / absolut aufgelöstes `~/projects/<PROJECT_NAME>` / tatsächlicher Workspace / Gleichheitsbeleg oder offene Klärung: offen
+- Zielkonto-Home / unabhängig vom Projektnamen bestätigter kanonischer absoluter Workspace / Abgleich mit Projektkontext und nativen Profil-/Boardbindungen oder offene Klärung: offen
 - ROLE_NAME je Rolle aus PLANER_NAME / CODER_NAME / REVIEWER_NAME: offen
 - Je Rolle: Vorlagenrevision/Hash, deklarierte und tatsächlich vorkommende Felder, gerenderter Solltext/Hash, exaktes SOUL.md-Ziel, Annahme und bytegenaue Rücklese: offen
 
