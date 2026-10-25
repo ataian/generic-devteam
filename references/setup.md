@@ -98,6 +98,40 @@ bei Unterbrechung den nichtgeheimen Datensatz zur Wiederaufnahme übergeben, nic
 unbeauftragt einen neuen Ablageort anlegen. Ein bereits bestätigtes Feld nicht
 erneut erfragen; nur fehlende Werte oder nachgewiesene Konflikte klären.
 
+### Planner für ein bestehendes Coder-/Reviewer-Team nachrüsten
+
+Wird nur die Planerrolle gebraucht (Team arbeitet bereits), gilt derselbe Ablauf mit
+diesen fünf Schritten:
+
+1. Zuerst das Referenzprofil **lesend** prüfen: SOUL, nicht geheime Config-Felder
+   (Modell, Toolsets, Kanban, Memory), relevante Planungsskills und die tatsächliche
+   Review-Übergabe. Zugangsdaten, Sitzungen und komplette Profilbäume weder ausgeben
+   noch kopieren. Danach beim Zielprojekt bestehende Pläne und Projektregeln prüfen.
+2. Gebündelt klären lassen: ein Projekt oder projektübergreifend; nur Pläne oder
+   **erst nach ausdrücklicher Planannahme** auch Tickets; gewünschte Wissensgrenze.
+   Eine Bitte um einen Profilplan ist kein Auftrag, Profile, Boards oder Dienste
+   anzulegen. Den Entwurf im genannten Projektordner ablegen, ohne andere
+   Projektartefakte als Nebenprodukt zu ändern.
+3. Die übertragbaren Prinzipien destillieren (Planer schreibt keinen Code, prüfbare
+   Phasen, Coder-/Reviewer-Grenze, serielle Parent-Kette, native Review-Handoffs).
+   Projektspezifische Hosts, Domänenregeln, fremde Teamnamen, Voll-Skillkataloge und
+   schreibsperrende Toolsettings **nicht blind übernehmen**; ein Planner muss seine
+   Plandateien schreiben können.
+4. Wissensarchitektur separat festlegen. Ein Einprojekt-Team kann eine feste Bank
+   teilen; bei projektübergreifenden Profilen ist eine **Bank je Projekt** eine
+   andere Anforderung. Vor jeder Zusage den aktiven Memory-Provider und die
+   tatsächliche Projekt-/Task-Identität in der Bankauflösung aller beteiligten
+   Profile prüfen; ein Template mit `{workspace}` beweist noch keine projektbezogene
+   Isolation, wenn der übergebene Workspace konstant ist. Bei unbewiesener Zuordnung
+   Pläne und Tickets als Source of Truth verwenden, die Bankanbindung als gesondertes
+   Machbarkeits-/Freigabe-Gate ausweisen und geschützte Memory-Infrastruktur nicht
+   für einen bloßen Entwurf ändern.
+5. Den Entwurf mit Tests versehen: Profil bleibt bis zum gesonderten Startsignal
+   unangelegt; vor Planannahme keine Tickets; nach Annahme nur Coder-Tickets mit
+   Review-Handoff und Parent-Gates; keine zusätzliche Judge-/Promoter-Stufe. Die
+   laufende Teamkonfiguration vor Umsetzung erneut lesen, statt die Referenz als
+   aktuellen Zustand auszugeben.
+
 ## 3. Frische Profile, bestätigte Modelle
 
 `PROFILE`/`DESCRIPTION` stehen jeweils für eine bestätigte neue technische Rolle
