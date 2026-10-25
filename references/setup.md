@@ -346,9 +346,12 @@ also nicht erst nach Abschluss abonnieren.
 
 Vor automatischer Dispatchfreigabe die tatsächlichen Betriebsgrenzen sowie
 vollständige Bindungs-/Kettenrücklese prüfen und konkrete Probleme klären.
-Zur Kettenrücklese gehört der Auto-Decomposer: `hermes config get kanban.auto_decompose`
-muss im dispatchenden Home und in jeder Rollenprofilkopie `false` melden. Andernfalls
-vor der Freigabe setzen und zurücklesen:
+Zur Kettenrücklese gehört die Kanban-Automatik: `kanban.auto_decompose` muss im
+dispatchenden Home **und** in jeder Profilkopie `false` melden. Der Nachweis ist
+nicht `config get` allein, sondern der Resolver des Dispatchers mit dem Interpreter
+des Gateways (Abschnitt 5 in
+[Kanban-Automatik](kanban-block-triage-escalation.md)). Andernfalls vor der Freigabe
+setzen und zurücklesen:
 
 ```sh
 hermes config set kanban.auto_decompose false
@@ -356,11 +359,11 @@ hermes -p "$ROLE" config set kanban.auto_decompose false
 hermes config get kanban.auto_decompose
 ```
 
-Sonst verwandelt ein zweimal gleichartig blockierter Vorgang die genehmigte Kette
-ungefragt in eine neue Kartengruppe mit Parent-Kanten auf die laufende Karte und
-blockiert damit den Fortschritt. `triage` ist eine Spalte für bewusst abgelegte
-Karten; ein automatischer Eintrag dort ist ein Befund, kein Arbeitsschritt. Der Beleg
-gehört in den Record.
+Kein Gateway-Neustart nötig: der Wert wird in jedem Tick frisch gelesen. Sonst
+verwandelt ein zweimal gleichartig blockierter Vorgang die genehmigte Kette ungefragt
+in eine neue Kartengruppe mit Parent-Kanten auf die laufende Karte und blockiert damit
+den Fortschritt. `triage` ist eine Spalte für bewusst abgelegte Karten; ein
+automatischer Eintrag dort ist ein Befund, kein Arbeitsschritt. Belege in den Record.
 
 Erst wenn freigegeben: echten Dispatcher-/Codex-/Reviewweg im separaten Testworkspace
 prüfen; tatsächliche Task/Run/Commit-/Eventdaten, Plannerbearbeitung und veröffentlichte

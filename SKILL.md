@@ -56,7 +56,9 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
    eigene Skillbäume, personalisierte Rollen und endgültige Bindungen; danach erst Einzelprüfungen.
    Lade dazu [Integrationen](references/integrations.md),
    [Quellen](references/upstream-sources.md), beide [Codeanalysewege](references/code-analysis.md)
-   und [Manifest](manifest.json); richte genau die gewählte Alternative ein.
+   und [Manifest](manifest.json); für das Board zusätzlich die
+   [Kanban-Automatik](references/kanban-block-triage-escalation.md);
+   richte genau die gewählte Alternative ein.
 5. Halte bei fehlenden Voraussetzungen an der betroffenen Fähigkeit an. Prüfe
    Timeout-, Retry- und Rate-Limit-Behandlung am tatsächlichen Zielstand und kläre
    konkrete Probleme vor der betroffenen Nutzung.
