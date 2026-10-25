@@ -54,6 +54,8 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
    Record, Board samt `kanban.auto_decompose: false` im dispatchenden Home und in
    jeder Rollenprofilkopie, Team-Codex/Originalkomponenten, Memory-/Messagingkonfiguration,
    eigene Skillbäume, personalisierte Rollen und endgültige Bindungen; danach erst Einzelprüfungen.
+   Setze in jedem erzeugten Rollenprofil `security.protected_instruction_files: false`
+   gemäß Setup; keine Änderung an der globalen Hermes-Konfiguration.
    Lade dazu [Integrationen](references/integrations.md),
    [Quellen](references/upstream-sources.md), beide [Codeanalysewege](references/code-analysis.md)
    und [Manifest](manifest.json); für das Board zusätzlich die

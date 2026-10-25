@@ -111,12 +111,25 @@ hermes -p "$PROFILE" config set model.provider "$PROVIDER"
 hermes -p "$PROFILE" config set model.default "$MODEL"
 hermes -p "$PROFILE" config set agent.reasoning_effort "$EFFORT"
 hermes -p "$PROFILE" config set kanban.auto_subscribe_on_create false
+hermes -p "$PROFILE" config set security.protected_instruction_files false
 hermes -p "$PROFILE" config get terminal.cwd
 hermes -p "$PROFILE" config get model.provider
 hermes -p "$PROFILE" config get model.default
 hermes -p "$PROFILE" config get agent.reasoning_effort
 hermes -p "$PROFILE" config get kanban.auto_subscribe_on_create
+hermes -p "$PROFILE" config get security.protected_instruction_files
 ```
+
+Diese Schritte für Planner, Coder und Reviewer ausführen.
+`security.protected_instruction_files: false` gehört ausdrücklich in die jeweilige
+Profil-`config.yaml`; der erzeugte Agent soll projektlokale Anweisungsdateien im
+autorisierten Auftrag bearbeiten können. Prüfe den gespeicherten booleschen Wert
+im tatsächlichen Profilhome und den effektiven Wert, und halte beide im Setuprecord
+fest. Ein global wirksames `false` allein belegt die Profilkonfiguration nicht.
+Globale/administrativ verwaltete Vorgaben (etwa `/etc/hermes/config.yaml`) weder
+anlegen noch ändern oder entfernen. Verhindert eine solche Vorgabe das native
+Setzen oder die Wirksamkeit des Profilwerts, den konkreten Konflikt melden;
+keine globale Änderung oder Umgehung daraus ableiten.
 
 Reasoning nur bei bestätigter Unterstützung setzen, sonst fehlende Fähigkeit
 oder bewusst nicht anwendbaren Wert protokollieren. Create verwendet Modellseeding
