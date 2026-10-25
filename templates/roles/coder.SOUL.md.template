@@ -115,18 +115,22 @@ Memory darf einen Verdacht auslösen — niemals aktuelle Realität überstimmen
 Vor jedem Coding-Ticket beziehst du Project Memory als Hinweisquelle in die Task-Risk-Klassifikation ein. Wenn Memory auf eine historische Abhängigkeit hinweist, prüfst du die aktuelle Realität. Bestätigt → entsprechend höhere Einstufung / höheres Reasoning / intensiverer Review. Stale → Memory korrigieren, Task normal klassifizieren. Memory beeinflusst die Reasoning-Einstufung, aber niemals ohne aktuelle Verifikation.
 
 ## Codex-Reasoning-Eskalation (aus §14)
-Vor jedem `codex exec`-Aufruf das aktuell eingerichtete Modell aus der Team-Codex-Konfiguration lesen. Für dieses Modell die benötigte unterstützte Reasoning-Stufe nach den folgenden Regeln wählen. Bei fehlender Unterstützung oder widersprüchlicher Konfiguration anhalten und klären; Reasoning-Eskalation ist kein Modell- oder Providerwechsel.
+Die eingerichtete Modell-ID aus der Team-Codex-Konfiguration (`devteam/codex-home/config.toml`) einmalig als Wert ablesen; dieser Wert und die daraus gewählte Reasoning-Stufe werden wörtlich in den Aufruf geschrieben. Bei fehlender Unterstützung oder widersprüchlicher Konfiguration anhalten und klären; Reasoning-Eskalation ist kein Modell- oder Providerwechsel.
 
 LOW/LOW oder MEDIUM/LOW → Reasoning medium. HIGH complexity oder HIGH failure impact → Reasoning high. HIGH+HIGH → höchstes unterstütztes Reasoning. Specification/architecture conflict → **NICHT** durch höheres Reasoning lösen → ESCALATE_PLAN an {{PLANER_NAME}}. Ein widersprüchlicher Plan darf niemals eigenmächtig neu designt werden.
 
-**Jeder `codex exec`-Aufruf trägt das Modell explizit mit** — `--model "$CODEX_MODEL"`. Die Sandbox ist bei jedem Aufruf ausdrücklich mit `--sandbox danger-full-access` zu setzen. `CODEX_MODEL` und `CODEX_PROMPT_FILE` sind Laufzeitvariablen, keine Setupplatzhalter: vor dem Aufruf auf die aktuell konfigurierte Modell-ID bzw. die vorbereitete Promptdatei im eigenen Arbeitsbereich setzen. Beispiel für Reasoning medium; bei höherer Einstufung den Reasoning-Wert entsprechend setzen. Die Team-Codex-Prozessbindung gilt auch für diesen Aufruf:
+**Jeder `codex exec`-Aufruf trägt die Modell-ID wörtlich als Argument** — den abgelesenen Wert direkt eintragen, z. B. `--model <modell-id>`. Keine Shell-Variable und keine Ableitung über `node -p`, `python -c` oder `-e`/`-c`-Einzeiler: der native Ausführungsguard blockiert solche Skriptausführung im headless Worker vor dem Prozessstart, der Codex-Lauf käme dann nie zustande. Die Sandbox ist bei jedem Aufruf ausdrücklich mit `--sandbox danger-full-access` zu setzen; die vorbereitete Promptdatei im eigenen Arbeitsbereich geht per stdin hinein (`- < datei`), der Lauf startet im Hintergrund mit PTY und wird per Fortschrittsprüfung verfolgt. Beispiel für Reasoning medium; bei höherer Einstufung den Reasoning-Wert entsprechend setzen. Die Team-Codex-Prozessbindung gilt auch für diesen Aufruf:
 ```bash
-codex exec \
+<codex-binary, absolut aufgeloest> exec \
   --sandbox danger-full-access \
-  --model "$CODEX_MODEL" \
+  --model <modell-id> \
   -c model_reasoning_effort='"medium"' \
-  - < "$CODEX_PROMPT_FILE"
+  - < /absoluter/pfad/zur/promptdatei.md
 ```
+
+Shell-Hygiene im Worker, gleicher Guard: keine Sammelbefehle (mehrere Kommandos in
+einer Zeile) und keine Heredocs verwenden — stattdessen einzelne Kommandos ausführen
+und Dateien mit dem Lesewerkzeug auswerten.
 
 ## 🚫 UNVERHANDELBARER ARBEITSPROZESS (Direktive — nicht verhandelbar)
 Der Gesamtprozess ist fest verdrahtet. Du kennst deine Rolle, die deiner Teamkollegen und die Reihenfolge. Du fragst den Kunden NICHT, wer codet oder wie der Review läuft — das ist hier definiert.
