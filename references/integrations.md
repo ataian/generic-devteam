@@ -394,6 +394,12 @@ aufzulisten. Bei anderer Oberfläche aktuellen offiziellen UI-Weg prüfen.
    komplettes Config-/Env-Dump. Kanal-Allowlist greift vor Mention; DMs umgehen
    Kanalprüfung, **nicht** menschliche Autorisierung. Fehlender Leser ist ein
    Setupblocker, keine Erlaubnis zu schwächeren Regeln.
+   Prüfe auch zusätzliche Zulassungswege im Plannerprofil, insbesondere
+   `extra.group_allowed_chats`, Botfreigaben und globale Allow-all-/Benutzergrants:
+   Sie dürfen die bestätigte Kanal-/Benutzerbegrenzung nicht erweitern. Eine
+   Kanalmitgliedschaft oder Mattermost-Kanalberechtigung allein ist keine
+   Benutzerfreigabe des Planners. Bei einer wirksamen zusätzlichen Freigabe vor
+   Aktivierung den Widerspruch klären und die Zielkonfiguration gezielt korrigieren.
 8. Erst nach vollständigen angenommenen Rollen-/Binding-/Policydateien und
    konkreter Aktivierungsfreigabe den bestehenden vorgesehenen Multi-Profile-
    Gateway nutzen und das richtige Plannerprofil/Adapterrouting nachweisen.
@@ -411,6 +417,15 @@ aufzulisten. Bei anderer Oberfläche aktuellen offiziellen UI-Weg prüfen.
    zuerst `@botname` im Projektkanal senden, warte auf echte Antwort. Dann zweite
    Nachricht **ohne Erwähnung**, danach DM-Dialog. Fehlende Antwort hält den Schritt
    offen: Identität, Mitgliedschaft, IDs, Zulassung, Verbindung/Overrides prüfen.
+   Prüfe zusätzlich gegen die effektive Zielkonfiguration an den nativen
+   Eingangsprüfungen: bestätigter Nutzer im freigegebenen Projektkanal zugelassen;
+   nicht freigegebener Nutzer oder Bot im selben Kanal abgewiesen; bestätigter
+   Nutzer in einem nicht freigegebenen Kanal abgewiesen. Für die Ablehnungsfälle
+   synthetische Eingangsereignisse ohne Modellstart verwenden; keine fremden
+   Konten, Kanalmitgliedschaften oder Rechte anlegen oder ändern. Eine Ablehnung
+   muss aus Kanal-/Benutzerautorisierung folgen, nicht bloß aus fehlender Erwähnung.
+   Kann der native Prüfweg nicht sicher ausgeübt werden, diesen Prüfschritt offen
+   benennen; erfolgreiche erlaubte Gespräche belegen keine Ablehnung fremder Nutzer.
 9. Die separate native Ticket-Wakebindung aus [Setup](setup.md) vor Ticketfreigabe
    anlegen und im freigegebenen Pipelineweg bis zur echten Planner-Kanalnachricht
    nachweisen. Homeziel allein beweist das nicht. Keine eigenen Threads, Registry
