@@ -51,7 +51,8 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
 3. Verwende die [private Protokollvorlage](templates/setup-record.md). Prüfe jede
    vorhandene Zielidentität vor Anlage; bei Wiederaufnahme native Objekte abgleichen.
 4. Führe die Setupschritte in Reihenfolge aus: Profile/Modellbindung und privater
-   Record, Board, Team-Codex/Originalkomponenten, Memory-/Messagingkonfiguration,
+   Record, Board samt `kanban.auto_decompose: false` im dispatchenden Home und in
+   jeder Rollenprofilkopie, Team-Codex/Originalkomponenten, Memory-/Messagingkonfiguration,
    eigene Skillbäume, personalisierte Rollen und endgültige Bindungen; danach erst Einzelprüfungen.
    Lade dazu [Integrationen](references/integrations.md),
    [Quellen](references/upstream-sources.md), beide [Codeanalysewege](references/code-analysis.md)
