@@ -92,6 +92,24 @@ Rendezvousbereich berücksichtigen; ein anderes `HOME` oder `CODEX_HOME` isolier
 keinen eigenen CBM-Daemon. Alle Verbraucher müssen denselben kompatiblen Runtime-
 und Cachekontext erreichen. Bestehende gemeinsame Runtime nicht beiläufig aktualisieren.
 
+Ein abweichendes Prozess-`HOME` ändert den **abgeleiteten** Default-Cache: mit dem
+Team-Codex-`HOME` leitet der Client `<team-home>/.cache/codebase-memory-mcp` ab,
+während der laufende Account-Daemon `<owner-home>/.cache/codebase-memory-mcp` nutzt.
+Der Start bricht dann für jedes Tool mit
+`… the active account daemon uses a different cache directory (active cache <hash>;
+requested cache <hash>)` ab (Exit 1), obwohl derselbe Aufruf im Elternkontext
+funktioniert. Die beiden Kennungen im Fehlertext sind die SHA256 der jeweiligen Pfade —
+damit lässt sich die Wurzel belegen statt raten. Deshalb gehört in das Environment
+**jedes** beauftragten Codex-Prozesses zusätzlich
+`CBM_CACHE_DIR=<Cacheverzeichnis des Account-Daemons>` als Literal, neben dem
+bestehenden `HOME`/`CODEX_HOME`-Kontext. Die MCP-Konfiguration führt
+`env_vars=["CBM_CACHE_DIR","CBM_RUNTIME_DIR"]` und reicht damit nur durch, was in der
+Workerumgebung gesetzt ist; fehlt der Wert dort, greift der `HOME`-Default und der
+Start scheitert. Kein Daemonstopp/-restart, kein zweiter Cache, keine
+Cache-/Indexlöschung, keine Rechteänderung, kein globaler `export`. Die Warnung
+`daemon.private_dir_group_writable_ancestor mode=0775` erscheint auch in
+funktionierenden Kontexten und ist nicht die Ursache.
+
 ### 2. Offizielle Clientintegration ausführen
 
 Die vollständige Originalintegration verwenden, **einschließlich der CBM-eigenen
@@ -139,10 +157,14 @@ Zielauflösung vor Ausführung abgleichen.
   Andere MCP-Einträge, Hooks, Anweisungen und die VoltAgent-Helfer müssen erhalten sein.
 - Tatsächlichen Session-/MCP-CWD auf das jeweilige Repository binden. Der Installer
   legt mit Profilhome und Binarypfad noch keinen Analyse-Root fest.
-- Falls `CBM_CACHE_DIR` oder `CBM_RUNTIME_DIR` verwendet werden, ihre Werte bei MCP
-  **und Hooks** prüfen. Codex reicht sie über `env_vars` aus der Workerumgebung
-  weiter; Hermes braucht bei abweichenden Defaults eine passende MCP-`env`-Bindung.
-  Den tatsächlichen Worker prüfen, nicht nur die Umgebung des Installationsbefehls.
+- `CBM_CACHE_DIR` und `CBM_RUNTIME_DIR` sind Pflichtprüfpunkte bei MCP **und** Hooks,
+  nicht nur bei abweichender Konfiguration: Codex reicht sie über `env_vars` aus der
+  Workerumgebung weiter; fehlt der Wert dort, leitet der Client ihn aus dem
+  abweichenden Team-`HOME` ab und verweigert den Start (Abschnitt 1). Hermes braucht
+  bei abweichenden Defaults eine passende MCP-`env`-Bindung. Den tatsächlichen Worker
+  prüfen, nicht nur die Umgebung des Installationsbefehls: belegt ist die Bindung erst,
+  wenn `list_projects` und `index_status` **im echten Client-Kontext** selbst Exit 0
+  liefern — ein erfolgreicher Lauf im Elternkontext beweist sie nicht.
 - Erforderliche Zielanpassungen über die unterstützte native Konfiguration vornehmen;
   siehe [Hermes MCP](https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp)
   und [Shellhooks](https://hermes-agent.nousresearch.com/docs/user-guide/features/hooks#shell-hooks).
