@@ -165,6 +165,24 @@ Dieselbe Binary aus demselben Verzeichnis aufrufen: `--skip-binary` allein verhi
 nicht jeden Zielbinarykonflikt. Ohne pauschales `--force` arbeiten; vorhandene
 angepasste Skill-/Agentdateien vergleichen und Konflikte gezielt klären.
 
+**Direkt danach den kanonischen CBM-Cache in die erzeugte Team-`config.toml` schreiben**
+— als Pflichtteil der Einrichtung, nicht als Nachtrag, und **vor** der Hook-Zustimmung
+(Begründung in Abschnitt 1):
+
+```toml
+[mcp_servers.codebase-memory-mcp]
+command = "<CBM_BIN_DIR>/codebase-memory-mcp"
+args = []
+env_vars = ["CBM_RUNTIME_DIR"]
+
+[mcp_servers.codebase-memory-mcp.env]
+CBM_CACHE_DIR = "<Cacheverzeichnis des Account-Daemons>"
+```
+
+Ohne diesen Literalwert leitet der Client den Cache aus dem abweichenden Team-`HOME`
+ab und verweigert jeden Aufruf. Alle Teams tragen **dieselbe** Wurzel — den einen
+accountweiten Cache.
+
 Die Aufrufform ist am offiziellen CBM-Stand
 [v0.12.1, `src/cli/cli.c`](https://github.com/DeusData/codebase-memory-mcp/blob/v0.12.1/src/cli/cli.c)
 quellseitig geprüft, kein Versionszwang. Bei anderer Zielversion Optionen und
@@ -231,7 +249,8 @@ def probe_entry():
 
 1. In allen drei Hermes-Rollen und im echten Team-Codex-Kontext den ausgewählten
    Originalskill laden und die jeweilige Runtime bzw. MCP-Verbindung nachweisen.
-   Bei CBM zusätzlich Hooks und Discovery der CBM-Unteragenten prüfen.
+   Bei CBM zusätzlich belegen, dass die statische Cache-Bindung aus der
+   Team-`config.toml` greift, sowie Hooks und Discovery der CBM-Unteragenten prüfen.
 2. Testrepository indexieren und die Beziehung `probe_entry` → `probe_leaf`
    tatsächlich abfragen, nicht nur beide Symbolnamen suchen.
 3. Eine Funktion `probe_added` ergänzen und von `probe_entry` aufrufen lassen.

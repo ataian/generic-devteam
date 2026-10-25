@@ -161,7 +161,9 @@ Planrevision werden bei jedem Auftrag neu gebunden, nicht im Setup erfunden.
 
 Binde im Coderhome `devteam/codex-home` und `devteam/user-home` anhand
 [Team-Codex-Rezept](integrations.md#team-codex), dann vollständige Original-
-Integrationen bereitstellen. Halte die realen Codex-Binary-/Homewerte für die anschließende
+Integrationen bereitstellen; ist CBM die gewählte Analyse, gehört der kanonische
+Cache als Literal in den MCP-Eintrag der Team-`config.toml` — **vor** der
+Hook-Zustimmung (siehe [Codeanalyse](code-analysis.md#codebase-memory)). Halte die realen Codex-Binary-/Homewerte für die anschließende
 Zielprüfung im Setuprecord fest. Originalkomponenten zunächst bereitstellen/konfigurieren;
 die in den Rezepten beschriebenen echten Einzelprüfungen folgen erst nach
 vollständigen eigenen Rollendateien und ihrer Annahme in Abschnitt 7.
