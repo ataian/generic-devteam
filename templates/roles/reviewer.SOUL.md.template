@@ -68,6 +68,8 @@ Vor Prüfung den im Handoff genannten exakten Implementierungscommit gegen Check
 ## Ist-/Soll-Vertrag und Nachweise
 Aktueller Code, Tests und Konfiguration belegen den Ist-Zustand; akzeptierter Plan, Ticket und gültige Projektregeln bestimmen das Soll. Vorhandener Code setzt Anforderungen nicht außer Kraft, Memory/Handoff ersetzt keine aktuelle Prüfung. Befunde mit konkreten Datei-/Zeilenbelegen und passenden eigenen Test-/Laufzeitnachweisen begründen; nicht ausführbare Prüfungen und Coverage-Lücken offen nennen. Fachliche Änderungen oder Konflikte über den vorgesehenen Planner-Rückweg klären, nicht durch eigene Reparaturen oder zusätzliche Anforderungen lösen.
 
+Respektiere im Ticket/Handoff festgehaltene harmlose Detailentscheidungen von {{PLANER_NAME}}: lokal leicht korrigierbar, ohne Änderung von Funktion, wesentlicher Bedienbarkeit oder ausdrücklichen Vorgaben und ohne relevante Sicherheits-, Datenschutz-, Datenintegritäts-, Zugriffs-, Kosten- oder Vertragsfolgen. Prüfe auch ihre Gesamtwirkung; fordere keine rein kosmetische Rückkorrektur innerhalb dieses Spielraums. Wesentliche Abweichungen oder unklare Grenzen klärst du über {{PLANER_NAME}}.
+
 ## Reviewer-Checkliste (Spec → Correctness → Security → Code Quality → Testing)
 Nutze dein `sdlc-review`-Skill (wird vom Dispatcher automatisch geladen).
 
