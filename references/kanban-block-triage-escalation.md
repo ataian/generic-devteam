@@ -23,8 +23,8 @@ Erreichen von `BLOCK_RECURRENCE_LIMIT` den Status `triage` mit Event
 
 ## 2. Warum `triage` die gefährliche Spalte ist
 
-Der Gateway-Dispatcher läuft `auto_decompose_tick()` **vor** dem Dispatch, in jedem
-Tick, über **alle** Boards, nimmt bis zu `auto_decompose_per_tick` Karten aus
+Bei aktiviertem Auto-Decomposer läuft `auto_decompose_tick()` **vor** dem Dispatch,
+in jedem Tick, über **alle** Boards, nimmt bis zu `auto_decompose_per_tick` Karten aus
 `triage` und ruft den Decomposer mit `author="auto-decomposer"`. Eine Eskalation,
 die in `triage` landet, erzeugt damit Karten und Parent-Kanten auf einem Plan, für
 den niemand eine Änderung freigegeben hat. Die Spalte für menschliche Aufmerksamkeit
@@ -39,17 +39,20 @@ Fehler, und sie ist der Grund für die Maßnahme in Abschnitt 3.
 | Das **Routing** nach `triage` verhindern | existiert nicht | — |
 | Opt-out pro Board | existiert nicht | `boards/<slug>/board.json` trägt Slug, Name, Beschreibung, Icon, Farbe, default_workdir, project_id, created_at, archived — keine Orchestrierungseinstellungen |
 
-Bei `false` bleibt eine Karte, die `triage` erreicht, einfach liegen; bewusst dort
-abgelegte Karten müssen manuell zerlegt werden (`hermes kanban --board <slug>
-decompose <tid>` oder der Detail-Drawer im Dashboard). Das Dashboard schreibt
-dieselben globalen Keys — es gibt keine lokale Variante, die man anbieten könnte.
+Bei `false` bleibt eine Karte, die `triage` erreicht, ohne automatische Zerlegung
+liegen. Der Planner klärt die Blockursache innerhalb seines Mandats und koordiniert
+die weitere Bearbeitung nach den bestehenden Rollen- und Freigaberegeln. Der Status
+allein ist kein Zerlegungsauftrag. Nur für eine ausdrücklich beauftragte Zerlegung
+gibt es den manuellen Weg (`hermes kanban --board <slug> decompose <tid>` oder den
+Detail-Drawer im Dashboard). Das Dashboard schreibt dieselben globalen Keys — es
+gibt keine lokale Variante, die man anbieten könnte.
 
 ## 4. Was `false` garantiert und was nicht
 
-- **Nichts tritt an seine Stelle.** Der Tick ruft `auto_decompose_tick()` nur bei
-  aktivem Flag; einen automatischen Specifier-Lauf gibt es nicht. Aus sind die
-  einzigen Wege aus `triage` manuell (`decompose` / `specify`) — die
-  Diagnose-Wortwahl im Quellcode sagt das wörtlich.
+- **Kein automatischer Ersatz.** Der Tick ruft `auto_decompose_tick()` nur bei
+  aktivem Flag; einen automatischen Specifier-Lauf gibt es nicht. Die manuellen
+  Funktionen `decompose` / `specify` sind kein vorgeschriebener Weg zur Klärung
+  eines wiederholten Blocks; diese übernimmt der Planner.
 - **Reichweite ist das Hermes-Home, nicht die Maschine und nicht der Verbund.** Pro
   Home läuft ein Gateway und liest dessen `config.yaml`. Eine Profilkopie des Keys
   ist ruhend, solange unter diesem Profil kein Gateway läuft — entweder mitgesetzt

@@ -364,8 +364,9 @@ hermes config get kanban.auto_decompose
 Kein Gateway-Neustart nötig: der Wert wird in jedem Tick frisch gelesen. Sonst
 verwandelt ein zweimal gleichartig blockierter Vorgang die genehmigte Kette ungefragt
 in eine neue Kartengruppe mit Parent-Kanten auf die laufende Karte und blockiert damit
-den Fortschritt. `triage` ist eine Spalte für bewusst abgelegte Karten; ein
-automatischer Eintrag dort ist ein Befund, kein Arbeitsschritt. Belege in den Record.
+den Fortschritt. Auch bei `false` kann die native Block-Eskalation Karten automatisch
+nach `triage` verschieben. Der Planner klärt deren Ursache innerhalb seines Mandats;
+der Status allein beauftragt weder eine Zerlegung noch neue Tickets. Belege in den Record.
 
 Erst wenn freigegeben: echten Dispatcher-/Codex-/Reviewweg im separaten Testworkspace
 prüfen; tatsächliche Task/Run/Commit-/Eventdaten, Plannerbearbeitung und veröffentlichte

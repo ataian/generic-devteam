@@ -49,7 +49,7 @@ in [Setup](setup.md), [Rollenbindungen](native-workflow.md) und
 | Mattermost | Planner antwortet auf Erwähnung, ohne Erwähnung gemäß Konfiguration und im DM; Wake erreicht den richtigen Projektkanal und wird vom Planner bearbeitet. Native Eingangsprüfungen weisen nicht freigegebene Nutzer/Bots im Projektkanal und Nachrichten des bestätigten Nutzers in nicht freigegebenen Kanälen ab; zusätzliche kanalweite/globale Grants erweitern die bestätigte Freigabe nicht. Ablehnungsfälle gemäß [Integrationen](integrations.md) ohne Modellstart prüfen. |
 | Codeanalyse | Die gewählte Alternative besteht die [Index-/Relations-/Aktualisierungsprüfung](code-analysis.md#funktionspruefung). |
 | Betriebsgrenzen | Tatsächliche Timeout-, Retry- und Rate-Limit-Behandlung sowie relevante Grenzen sind bekannt. Konkrete Probleme vor der betroffenen Nutzung klären. |
-| Board-Automatik | Der Resolver des Dispatchers liefert `(False, N)` im dispatchenden Home und in jeder Rollenprofilkopie; `triage` enthält nur bewusst dort abgelegte Karten. Details in der [Kanban-Automatik](../references/kanban-block-triage-escalation.md). |
+| Board-Automatik | Der Resolver des Dispatchers liefert `(False, N)` im dispatchenden Home und in jeder Rollenprofilkopie; der Auto-Decomposer erzeugt keine neuen Karten oder Parent-Kanten. Automatisch nach `triage` verschobene Karten klärt der Planner innerhalb seines Mandats; ihr Status allein ist kein Zerlegungsauftrag. Details in der [Kanban-Automatik](../references/kanban-block-triage-escalation.md). |
 
 Vorhandene fremde Profile, persönliche Codex-Ausstattung und Produktdaten bleiben
 erhalten. Ein gespeicherter Konfigurationswert beweist noch keine wirksame Fähigkeit.
