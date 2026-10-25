@@ -20,7 +20,7 @@ if set(batch) != set(expected_task_ids):
     raise ValueError("Persisted batch does not contain the exact intended targets")
 ```
 
-This reload reads an existing artifact; it is not permission to rerun a denied command through Python or another tool.
+This raw-file reload requires an authorized Python execution context; it does not authorize bypassing denied access or actions. An otherwise permitted native read remains available when only the command form was unsuitable.
 
 Reusable read-only recipe (replace board and task arguments with verified identifiers; keep dynamic values as argument-array elements):
 

@@ -108,7 +108,7 @@ Use only when the bounded change of verification responsibility is accepted. The
 | Limits | Preserved gates, errors, denied operations, untested points and exact authorized cleanup performed. |
 | Assessment | Ordering implementer's interpretation or independent reviewer's own recheck assessment; distinguish it from the operator's execution report. |
 
-Keep secrets out of test orders, evidence, model prompts and board artifacts. Record a denied operation as a stop with its actual boundary; do not substitute another tool or rewrite the command to bypass the approval. Separate method approval, artifact availability, operator execution, final-commit verification and independent reviewer acceptance in every handoff.
+Keep secrets out of test orders, evidence, model prompts and board artifacts. Record the rejection and its actual boundary; do not bypass denied access or actions. Rejection of an unsuitable command form does not forbid an otherwise authorized read with a native read tool. Separate method approval, artifact availability, operator execution, final-commit verification and independent reviewer acceptance in every handoff.
 
 ## 3. Design safe mutation and recovery
 
