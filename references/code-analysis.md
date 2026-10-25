@@ -99,16 +99,42 @@ Der Start bricht dann für jedes Tool mit
 `… the active account daemon uses a different cache directory (active cache <hash>;
 requested cache <hash>)` ab (Exit 1), obwohl derselbe Aufruf im Elternkontext
 funktioniert. Die beiden Kennungen im Fehlertext sind die SHA256 der jeweiligen Pfade —
-damit lässt sich die Wurzel belegen statt raten. Deshalb gehört in das Environment
-**jedes** beauftragten Codex-Prozesses zusätzlich
-`CBM_CACHE_DIR=<Cacheverzeichnis des Account-Daemons>` als Literal, neben dem
-bestehenden `HOME`/`CODEX_HOME`-Kontext. Die MCP-Konfiguration führt
-`env_vars=["CBM_CACHE_DIR","CBM_RUNTIME_DIR"]` und reicht damit nur durch, was in der
-Workerumgebung gesetzt ist; fehlt der Wert dort, greift der `HOME`-Default und der
-Start scheitert. Kein Daemonstopp/-restart, kein zweiter Cache, keine
-Cache-/Indexlöschung, keine Rechteänderung, kein globaler `export`. Die Warnung
-`daemon.private_dir_group_writable_ancestor mode=0775` erscheint auch in
-funktionierenden Kontexten und ist nicht die Ursache.
+damit lässt sich die Wurzel belegen statt raten.
+
+**Dauerhaft richtig ist die Bindung in der Team-Codex-Konfiguration, nicht im Aufruf.**
+Jede Rolle hat ihr eigenes `devteam/codex-home/config.toml`; dort wird der MCP-Server
+deklariert, und dort gehört der kanonische Cache **statisch** hinein — als Literal, nicht
+als Durchreichen aus der Prozessumgebung:
+
+```toml
+[mcp_servers.codebase-memory-mcp]
+command = "…/codebase-memory-mcp"
+args = []
+env_vars = ["CBM_RUNTIME_DIR"]
+
+[mcp_servers.codebase-memory-mcp.env]
+CBM_CACHE_DIR = "<Cacheverzeichnis des Account-Daemons>"
+```
+
+`env` trägt Literalwerte (genau so schreibt `codex mcp add --env KEY=VALUE` sie), `env_vars`
+reicht nur durch, was der Aufrufer in seiner Umgebung hat; beide sind Geschwister im selben
+Eintrag und stehen nebeneinander. `CBM_CACHE_DIR` gehört nur in `env` und nicht zusätzlich in
+`env_vars` — die Vorrangregel bei Doppelung ist nicht belegt, also nicht darauf bauen. Die
+Konfigurationsdatei wird über `CODEX_HOME` gefunden, nicht über `HOME`: die Bindung gilt damit
+**pro Team/Rolle**, unabhängig davon, unter welchem Prozess-`HOME` der Lauf startet. Alle Teams
+binden **dieselbe** Wurzel; es gibt genau einen Account-Daemon, also auch nur eine richtige.
+Damit braucht kein Coder-Lauf die Zeile im `env`-Präfix.
+
+**Reihenfolge:** den Eintrag schreiben, **bevor** die Hook-Zustimmung erteilt wird. Die
+`[hooks.state.…]`-Vertrauenshashes binden auf den Dateiinhalt; ein nachträglich geändertes
+`config.toml` macht sie ungültig und erzwingt eine erneute Bestätigung über `/hooks`.
+
+Fällt die Bindung in einem Lauf trotzdem aus (fremde oder unvollständige Konfiguration), ist
+ein prozesslokales `CBM_CACHE_DIR` im `env`-Präfix ein Notbehelf für diesen einen Lauf — keine
+Einrichtung und kein Ersatz für den Eintrag. Kein Daemonstopp/-restart, kein zweiter Cache,
+keine Cache-/Indexlöschung, keine Rechteänderung, kein globaler `export`. Die Warnung
+`daemon.private_dir_group_writable_ancestor mode=0775` erscheint auch in funktionierenden
+Kontexten und ist nicht die Ursache.
 
 ### 2. Offizielle Clientintegration ausführen
 
@@ -157,11 +183,11 @@ Zielauflösung vor Ausführung abgleichen.
   Andere MCP-Einträge, Hooks, Anweisungen und die VoltAgent-Helfer müssen erhalten sein.
 - Tatsächlichen Session-/MCP-CWD auf das jeweilige Repository binden. Der Installer
   legt mit Profilhome und Binarypfad noch keinen Analyse-Root fest.
-- `CBM_CACHE_DIR` und `CBM_RUNTIME_DIR` sind Pflichtprüfpunkte bei MCP **und** Hooks,
-  nicht nur bei abweichender Konfiguration: Codex reicht sie über `env_vars` aus der
-  Workerumgebung weiter; fehlt der Wert dort, leitet der Client ihn aus dem
-  abweichenden Team-`HOME` ab und verweigert den Start (Abschnitt 1). Hermes braucht
-  bei abweichenden Defaults eine passende MCP-`env`-Bindung. Den tatsächlichen Worker
+- `CBM_CACHE_DIR` ist ein Pflichtprüfpunkt der Team-Codex-Konfiguration: er muss als
+  Literal in `[mcp_servers.….env]` stehen (Abschnitt 1), nicht nur in `env_vars`
+  durchgereicht werden. Fehlt er, leitet der Client ihn aus dem abweichenden Team-`HOME`
+  ab und verweigert den Start. Bei MCP **und** Hooks prüfen; Hermes braucht bei
+  abweichenden Defaults eine passende MCP-`env`-Bindung. Den tatsächlichen Client
   prüfen, nicht nur die Umgebung des Installationsbefehls: belegt ist die Bindung erst,
   wenn `list_projects` und `index_status` **im echten Client-Kontext** selbst Exit 0
   liefern — ein erfolgreicher Lauf im Elternkontext beweist sie nicht.
