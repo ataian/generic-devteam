@@ -110,20 +110,23 @@ als Durchreichen aus der Prozessumgebung:
 [mcp_servers.codebase-memory-mcp]
 command = "…/codebase-memory-mcp"
 args = []
-env_vars = ["CBM_RUNTIME_DIR"]
 
 [mcp_servers.codebase-memory-mcp.env]
 CBM_CACHE_DIR = "<Cacheverzeichnis des Account-Daemons>"
 ```
 
-`env` trägt Literalwerte (genau so schreibt `codex mcp add --env KEY=VALUE` sie), `env_vars`
-reicht nur durch, was der Aufrufer in seiner Umgebung hat; beide sind Geschwister im selben
-Eintrag und stehen nebeneinander. `CBM_CACHE_DIR` gehört nur in `env` und nicht zusätzlich in
-`env_vars` — die Vorrangregel bei Doppelung ist nicht belegt, also nicht darauf bauen. Die
-Konfigurationsdatei wird über `CODEX_HOME` gefunden, nicht über `HOME`: die Bindung gilt damit
-**pro Team/Rolle**, unabhängig davon, unter welchem Prozess-`HOME` der Lauf startet. Alle Teams
-binden **dieselbe** Wurzel; es gibt genau einen Account-Daemon, also auch nur eine richtige.
-Damit braucht kein Coder-Lauf die Zeile im `env`-Präfix.
+`env` trägt Literalwerte (genau so schreibt `codex mcp add --env KEY=VALUE` sie); `env_vars`
+reicht dagegen nur durch, was der Aufrufer in seiner Umgebung hat, und gehört deshalb **nicht**
+in diesen Eintrag: eine deklarierte, aber nirgends gesetzte Variable bleibt leer und erzeugt in
+`codex doctor` eine MCP-Warnung, die wie ein Defekt aussieht. Beide Schlüssel sind Geschwister
+im selben Eintrag, falls später doch ein Wert aus der Laufumgebung kommen soll; für CBM kommt
+heute keiner daher — der Daemon-Socket liegt uid-basiert unter `/tmp/cbm-daemon-<uid>`, nicht
+unter `HOME`, und braucht keine Bindung. `CBM_CACHE_DIR` gehört ausschließlich in `env` — die
+Vorrangregel bei Doppelung ist nicht belegt, also nicht darauf bauen. Die Konfigurationsdatei
+wird über `CODEX_HOME` gefunden, nicht über `HOME`: die Bindung gilt damit **pro Team/Rolle**,
+unabhängig davon, unter welchem Prozess-`HOME` der Lauf startet. Alle Teams binden **dieselbe**
+Wurzel; es gibt genau einen Account-Daemon, also auch nur eine richtige. Damit braucht kein
+Coder-Lauf die Zeile im `env`-Präfix.
 
 **Reihenfolge:** den Eintrag schreiben, **bevor** die Hook-Zustimmung erteilt wird. Die
 `[hooks.state.…]`-Vertrauenshashes binden auf den Dateiinhalt; ein nachträglich geändertes
@@ -173,7 +176,6 @@ angepasste Skill-/Agentdateien vergleichen und Konflikte gezielt klären.
 [mcp_servers.codebase-memory-mcp]
 command = "<CBM_BIN_DIR>/codebase-memory-mcp"
 args = []
-env_vars = ["CBM_RUNTIME_DIR"]
 
 [mcp_servers.codebase-memory-mcp.env]
 CBM_CACHE_DIR = "<Cacheverzeichnis des Account-Daemons>"
@@ -181,7 +183,8 @@ CBM_CACHE_DIR = "<Cacheverzeichnis des Account-Daemons>"
 
 Ohne diesen Literalwert leitet der Client den Cache aus dem abweichenden Team-`HOME`
 ab und verweigert jeden Aufruf. Alle Teams tragen **dieselbe** Wurzel — den einen
-accountweiten Cache.
+accountweiten Cache. Keine `env_vars`-Zeile ergänzen: sie bliebe leer und würde in
+`codex doctor` als MCP-Warnung erscheinen.
 
 Die Aufrufform ist am offiziellen CBM-Stand
 [v0.12.1, `src/cli/cli.c`](https://github.com/DeusData/codebase-memory-mcp/blob/v0.12.1/src/cli/cli.c)
@@ -202,8 +205,8 @@ Zielauflösung vor Ausführung abgleichen.
 - Tatsächlichen Session-/MCP-CWD auf das jeweilige Repository binden. Der Installer
   legt mit Profilhome und Binarypfad noch keinen Analyse-Root fest.
 - `CBM_CACHE_DIR` ist ein Pflichtprüfpunkt der Team-Codex-Konfiguration: er muss als
-  Literal in `[mcp_servers.….env]` stehen (Abschnitt 1), nicht nur in `env_vars`
-  durchgereicht werden. Fehlt er, leitet der Client ihn aus dem abweichenden Team-`HOME`
+  Literal in `[mcp_servers.….env]` stehen (Abschnitt 1), nicht aus der Prozessumgebung
+  erwartet werden. Fehlt er, leitet der Client ihn aus dem abweichenden Team-`HOME`
   ab und verweigert den Start. Bei MCP **und** Hooks prüfen; Hermes braucht bei
   abweichenden Defaults eine passende MCP-`env`-Bindung. Den tatsächlichen Client
   prüfen, nicht nur die Umgebung des Installationsbefehls: belegt ist die Bindung erst,
