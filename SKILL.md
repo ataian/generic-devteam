@@ -76,7 +76,11 @@ selbst ein normaler CLI-Bootstrap können gemeinsame Dependencyarbeit auslösen.
 Ein neues Profil ist trotz Neuanlage nicht zwingend modellkonfigurationsleer.
 Team-Codex-Homes sind Arbeitszustand, keine OS-Sandbox. Eine SOUL-Erwähnung beweist
 weder Skill-Discovery noch vollständige Promptaufnahme. Ein zugestellter Wake ist
-kein planweiter Abschluss, und `queued` ist noch keine Zustellung.
+kein planweiter Abschluss, und `queued` ist noch keine Zustellung. Ein aktiver
+Auto-Decomposer (`kanban.auto_decompose: true`) macht aus einer zweimal gleichartig
+blockierten Karte ungefragt neue Karten samt Parent-Kanten und zerlegt damit die
+genehmigte Kette; der Wert gehört vor jeder Kette im dispatchenden Home und in den
+Rollenprofilen auf `false` und rückgelesen.
 
 ## Verifikation
 

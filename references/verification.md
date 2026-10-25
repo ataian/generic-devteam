@@ -49,6 +49,7 @@ in [Setup](setup.md), [Rollenbindungen](native-workflow.md) und
 | Mattermost | Planner antwortet auf Erwähnung, ohne Erwähnung gemäß Konfiguration und im DM; Wake erreicht den richtigen Projektkanal und wird vom Planner bearbeitet. |
 | Codeanalyse | Die gewählte Alternative besteht die [Index-/Relations-/Aktualisierungsprüfung](code-analysis.md#funktionspruefung). |
 | Betriebsgrenzen | Tatsächliche Timeout-, Retry- und Rate-Limit-Behandlung sowie relevante Grenzen sind bekannt. Konkrete Probleme vor der betroffenen Nutzung klären. |
+| Board-Automatik | `kanban.auto_decompose` meldet im dispatchenden Home und in den Rollenprofilen `false`; `triage` enthält nur bewusst dort abgelegte Karten. |
 
 Vorhandene fremde Profile, persönliche Codex-Ausstattung und Produktdaten bleiben
 erhalten. Ein gespeicherter Konfigurationswert beweist noch keine wirksame Fähigkeit.

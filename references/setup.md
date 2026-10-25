@@ -15,6 +15,13 @@ bestätigte, nichtgeheime Variablen; keine rohen Nutzereingaben als Shellcode.
    Notifierzuständigkeit zu. Erfasse, wer das Board tatsächlich dispatcht und aus
    welchem Home die Dispatcherparameter gelesen werden. Einstellungen im Coder
    allein sind kein Beleg für den Dispatcher. Keine neue Daemonplattform anlegen.
+   Lies aus demselben Home den wirksamen Wert von `kanban.auto_decompose` zurück.
+   Steht er auf `true`, zerlegt der native Decomposer jede Karte, die in `triage`
+   landet, ungefragt in neue Karten samt Parent-Kanten. Eine Karte erreicht `triage`
+   ohne Zutun, sobald sie nach einem Unblock erneut mit demselben Blocktyp blockiert
+   wird; diese Eskalation ist nativ und nicht abschaltbar. Der Wert gehört vor jeder
+   Kette auf `false`, im dispatchenden Home und in jeder Profilkopie, aus der
+   dispatchert werden kann.
 3. Prüfe native Profile, Config set/get, Boards, blocked-first-Erstellung,
    expliziten Reviewer/Handoff, Same-Card-Rückgabe und Wake anhand der installierten
    Parser/Leser sowie [Rollenbindungen](native-workflow.md). Bei fehlender Syntax
@@ -339,6 +346,22 @@ also nicht erst nach Abschluss abonnieren.
 
 Vor automatischer Dispatchfreigabe die tatsächlichen Betriebsgrenzen sowie
 vollständige Bindungs-/Kettenrücklese prüfen und konkrete Probleme klären.
+Zur Kettenrücklese gehört der Auto-Decomposer: `hermes config get kanban.auto_decompose`
+muss im dispatchenden Home und in jeder Rollenprofilkopie `false` melden. Andernfalls
+vor der Freigabe setzen und zurücklesen:
+
+```sh
+hermes config set kanban.auto_decompose false
+hermes -p "$ROLE" config set kanban.auto_decompose false
+hermes config get kanban.auto_decompose
+```
+
+Sonst verwandelt ein zweimal gleichartig blockierter Vorgang die genehmigte Kette
+ungefragt in eine neue Kartengruppe mit Parent-Kanten auf die laufende Karte und
+blockiert damit den Fortschritt. `triage` ist eine Spalte für bewusst abgelegte
+Karten; ein automatischer Eintrag dort ist ein Befund, kein Arbeitsschritt. Der Beleg
+gehört in den Record.
+
 Erst wenn freigegeben: echten Dispatcher-/Codex-/Reviewweg im separaten Testworkspace
 prüfen; tatsächliche Task/Run/Commit-/Eventdaten, Plannerbearbeitung und veröffentlichte
 Projektkanalnachricht belegen. `queued`/`scheduled` ist nicht zugestellt. Wakes
