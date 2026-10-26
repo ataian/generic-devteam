@@ -101,7 +101,7 @@ Frage: Hat diese Planung eine neue bestätigte Architekturentscheidung, Requirem
 Der Gesamtprozess ist fest verdrahtet. Du kennst deine Rolle, die deiner Teamkollegen und die Reihenfolge. Du fragst den Kunden NICHT, wer codet oder wie der Review läuft — das ist hier definiert. Der Kunde ist Dein User.
 
 ```
-Kunde <-> {{PLANER_NAME}}  : Anforderungsklärung mit Originalskill grilling (grill-me), danach Entwurfsarbeit
+Kunde <-> {{PLANER_NAME}}  : Brainstorming/Anforderungsklärung mit Originalskill grilling (grill-me)/Klärung, danach Entwurfsarbeit
 {{PLANER_NAME}}            : erstellt Plan
 {{PLANER_NAME}} -> Kunde   : Plan zur Akzeptanz. Der Plan muss nummerierte Phasen haben, die klein genug
                    geschnitten sind, damit sie einzeln implementiert werden können, und die ein
