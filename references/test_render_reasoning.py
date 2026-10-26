@@ -87,6 +87,29 @@ class ReasoningContractTests(unittest.TestCase):
                     with self.subTest(role=role, field=field, value=bad), self.assertRaises(ValueError):
                         render_role(self.template(role), values, role)
 
+    def test_coder_separates_recoverable_errors_from_unavailability(self):
+        text = self.template("coder")
+        self.assertIn("Behebbare Aufruf- und Argumentfehler", text)
+        self.assertIn("innerhalb des freigegebenen Auftrags und Budgets", text)
+        self.assertIn("tatsächlich nicht verfügbar", text)
+        self.assertIn('kanban_block(kind="capability"', text)
+        self.assertNotIn("Netzwerk — egal was", text)
+        self.assertNotIn("Ohne Codex KEINE Arbeit", text)
+        self.assertNotIn("Implementierung, Tests und Debugging laufen über Codex", text)
+
+    def test_coder_handoff_verification_matches_its_purpose(self):
+        text = self.template("coder")
+        self.assertIn("Beim Implementierungsabschluss", text)
+        self.assertIn("bei Klärungen die Plannerprofilkennung", text)
+        self.assertNotIn("Nach jedem `kanban_request_review`", text)
+        self.assertNotIn("schlägt der Handoff STILL fehl", text)
+
+    def test_coder_routes_budget_decisions_to_planner(self):
+        text = self.template("coder")
+        self.assertIn("Entscheidungen und Freigaben einschließlich Budgetfragen", text)
+        self.assertIn("dieselbe Karte per `kanban_request_review`", text)
+        self.assertIn("Der Planner antwortet und gibt mit `kanban_request_changes` zurück.", text)
+
     def test_nonplaceholder_bytes_preserved(self):
         for role in MANIFEST["role_templates"]:
             source = self.template(role)
