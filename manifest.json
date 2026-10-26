@@ -282,6 +282,21 @@
       "recipe_ref": "references/integrations.md#superpowers",
       "recipe_status": "documented"
     },
+    "grill-me": {
+      "original_repo": "https://github.com/mattpocock/skills",
+      "subpaths": [
+        "skills/productivity/grill-me",
+        "skills/productivity/grilling",
+        "LICENSE"
+      ],
+      "targets": {
+        "hermes": [
+          "planner"
+        ]
+      },
+      "recipe_ref": "references/integrations.md#grill-me",
+      "recipe_status": "documented"
+    },
     "hindsight": {
       "original_repo": "https://github.com/vectorize-io/hindsight",
       "subpaths": [

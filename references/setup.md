@@ -205,6 +205,11 @@ nicht in gemeinsame Projektanweisungen oder die SOULs.
 
 ## 6. Eigene Skills, Rollen und Textpersonalisierung
 
+Stelle im Planner vor der Rollenannahme die Originalskills
+[grill-me und grilling](integrations.md#grill-me) vollständig bereit, zusätzlich
+zu [Superpowers](integrations.md#superpowers). Beide gehören zur festen
+Planner-Ausstattung; Quelle und Zielprüfung im Setuprecord erfassen.
+
 Führe das nach Planneranlage begonnene private Protokoll aus
 [setup-record.md](../templates/setup-record.md) unter dessen `devteam/setup.md` fort.
 Verzeichnis nur für den Besitzer (0700), Record 0600; nicht im Produktprojekt,
@@ -311,6 +316,9 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    Rollen-/Projekt-/Bank-/Boardwerte und technische IDs gegen den Record,
    wirksame native Konfiguration und protokollierte Einschränkungen. Vergleiche
    Skilldateimenge und Bytes vollständig mit der Quelle.
+   Lies in der Planner-SOUL die Ladepflicht für `grilling`, dessen Vorrang im
+   Interviewabschnitt und die getrennte Planannahme zurück. Beide Originalskills
+   müssen im Plannerhome vollständig vorliegen; Makerverweise allein genügen nicht.
    Lies insbesondere in der Coder-SOUL die Prozessbindung und Auftragsregel zurück:
    `$caveman` in jedem neuen Auftrag, auch nach Neustart/Resume. Zielpfad und
    Rücklesebeleg im Setuprecord festhalten. Die tatsächliche Moduswirkung folgt in der Funktionsprüfung.

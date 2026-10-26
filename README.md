@@ -85,6 +85,10 @@ den geschützten Zielweg; das Protokoll speichert nur Secretort/Prüfstatus.
 Die Rollen bekommen vollständige eigene Skillbäume, unveränderte Rollenpflichten,
 personalisierte SOULs und native Modell-/Reasoning-Konfiguration. Im Ziel bezogene
 Originalkomponenten werden mit Revision, Dateimenge und Lizenz nachgewiesen.
+Für neue Planungen erhält der Planner die Originalskills `grill-me` und `grilling`
+von Matt Pocock. Seine SOUL verlangt `grilling` für die Anforderungsklärung;
+Interview, Entwurfsarbeit und ausdrückliche Planannahme bleiben getrennt.
+Bezug und Prüfung stehen im [Integrationsrezept](references/integrations.md#grill-me).
 Bei Unterbrechung den Maker mit dem privaten Setuprecord wieder aufrufen; er liest
 native Profile, Board und Dienstobjekte erneut und setzt am ersten offenen Gate
 fort. Kein blindes Wiederholen von Create, Login, Bank- oder Kanalanlage.

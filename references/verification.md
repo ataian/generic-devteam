@@ -28,6 +28,12 @@ Vorhandene geeignete Prüfwerkzeuge verwenden; fehlende Voraussetzungen konkret 
   zur Recordverarbeitung und Personalisierung mit synthetischen Daten prüfen.
 - [ ] **Inhalt:** Setup, Rollenmatrix und Integrationsrezepte passen zusammen.
   Keine Zugangsdaten oder unbeabsichtigten privaten Zielbindungen im Lieferumfang.
+- [ ] **Planner-Interview:** Manifest und Bezugsrezept enthalten beide Originalskills
+  `grill-me` und `grilling` ausschließlich für den Planner, samt vollständigen
+  Begleitdateien und Lizenz. Die Planner-SOUL verlangt das Laden von `grilling`
+  vor neuen Plänen, regelt den Vorrang gegenüber anderen Frageregeln und erhält
+  technische Delegation sowie ausdrückliche Planannahme. Setup und Protokoll
+  prüfen Verfügbarkeit und tatsächliche Nutzung getrennt.
 
 Vorhandene Pakettests können diese Prüfung unterstützen. Maßgeblich sind ihre
 wirklichen Prüfinhalte und Ergebnisse; eine frühere Testbeschreibung oder ein
@@ -43,6 +49,7 @@ in [Setup](setup.md), [Rollenbindungen](native-workflow.md) und
 | Prüfung | Erfolgssignal |
 |---|---|
 | Rollen und Skills | Richtige Profile, vollständige SOUL-Aufnahme, benötigte Skills tatsächlich geladen; vorgesehene Modi funktionieren auch in einem neuen Kontext. |
+| Planner-Interview | Beide Originalskillbäume samt Lizenz bytegleich zur protokollierten Quelle; `grilling` im Planner nativ gefunden und vollständig geladen, ausdrücklicher `grill-me`-Aufruf lädt `grilling`. Die SOUL-Ladepflicht ist im neuen Kontext/Resume wirksam; fachliches Verhalten separat im gemeinsamen Probelauf prüfen. |
 | Modelle und Reasoning | Echte begrenzte Aufrufe verwenden die eingerichteten Modelle. Planner nutzt das höchste unterstützte Reasoning; höhere Stufen für Coder/Reviewer funktionieren gemäß SOUL. |
 | Team-Codex | Prozesshomes, Konfiguration und Skillroots stimmen im tatsächlichen Worker; Codex erzeugt ein geprüftes Testartefakt. Installierte Helfer gemäß Integrationsrezept funktional prüfen. |
 | Memory | Gemeinsame Projektbank und Rollenfilter funktionieren beim Speichern und Abrufen; nur freigegebene synthetische Testinhalte verwenden. |
@@ -59,7 +66,16 @@ erhalten. Ein gespeicherter Konfigurationswert beweist noch keine wirksame Fähi
 
 Ein kleiner harmloser Auftrag im separaten Testrepository genügt:
 
-1. Planner erstellt einen kurzen Plan; der Nutzer nimmt ihn ausdrücklich an.
+1. Beginne mit einem kurzen Brief, der zwei voneinander unabhängige offene
+   Produktentscheidungen und eine davon abhängige Folgeentscheidung enthält.
+   Planner lädt selbständig `grilling` und fragt die unabhängigen Entscheidungen
+   in derselben Runde jeweils mit Empfehlung ab. Die abhängige Frage stellt er
+   erst nach Klärung ihrer Voraussetzung; aus dem Testrepository ermittelbare
+   Fakten recherchiert er selbst.
+   Bestätigte Antworten bleiben bei Wiederaufnahme erhalten. Erst nach bestätigtem
+   gemeinsamen Verständnis erstellt er den kurzen Plan; der Nutzer nimmt ihn
+   ausdrücklich an. Vor dieser Planannahme entstehen keine Tickets. Skillladebeleg
+   und Dialogverlauf festhalten; bloße Dateiexistenz besteht diesen Test nicht.
 2. Planner erzeugt daraus ein Ticket; der native Dispatcher übergibt es dem Coder.
 3. Coder lässt Codex das Testartefakt erzeugen, prüft es und erstellt den vorgesehenen Commit.
 4. Coder übergibt dieselbe Karte an den unabhängigen Reviewer; dieser prüft das Ergebnis.

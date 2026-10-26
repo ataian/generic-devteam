@@ -114,6 +114,44 @@ Bei fehlenden Pfaden/Versionskonflikt Teilstand erhalten und klären, keine eige
 Pluginpfadpatches. Rückweg: nur eigene Plannerregistrierung nativ deaktivieren/
 entfernen, ursprüngliche fremde Plugin-/PM-Bestände bewahren.
 
+<a id="grill-me"></a>
+## grill-me / grilling — nur Planner
+
+Original: [mattpocock/skills](https://github.com/mattpocock/skills). Beide Skills sind
+Pflichtausstattung für die Planungsphase, keine zusätzliche Setupauswahl.
+
+1. Beim Zielsetup den aktuellen geeigneten Originalstand außerhalb aktiver Discovery
+   beziehen und statisch prüfen. Die vollständigen Bäume `skills/productivity/grill-me/`
+   und `skills/productivity/grilling/` aus derselben Revision erfassen, einschließlich
+   `agents/openai.yaml` und aller weiteren zum Bezugsstand gehörenden Begleitdateien.
+   Den Verweis von `grill-me` auf `grilling` und dessen weitere Abhängigkeiten prüfen;
+   bei geändertem Umfang den konkreten Konflikt klären statt eine Ersatzfassung zu schreiben.
+2. Nach Ziel-/Kollisionsprüfung und Setupfreigabe beide Bäume unverändert nach
+   `<tatsächlich aufgelöster Plannerhome>/skills/grill-me/` beziehungsweise
+   `skills/grilling/` kopieren. Die Original-`LICENSE` aus dem Repositoryroot jedem
+   Zielbaum beilegen; weitere geltende Notices erhalten. Keine Übernahme des gesamten
+   Skillkatalogs, keine zusätzliche Plugin-/Nodeinstallation und keine Ausführung des
+   Upstream-Setupskills. Quelle, aufgelöste Revision, vollständige Dateimengen/Hashes
+   und eigene Zielpfade im Setuprecord festhalten. Vorhandene lokale Anpassungen
+   nicht überschreiben; geeignete bytegleiche Bestände wiederverwenden.
+3. Der Originaleinstieg `grill-me` trägt `disable-model-invocation: true` und ruft
+   `grilling` auf. Metadaten und Text unverändert erhalten. Die Planner-SOUL verlangt
+   daher für die automatische Planungsphase direkt `skill_view(name="grilling")`;
+   bei ausdrücklichem Nutzeraufruf von `grill-me` entspricht dessen „Skill tool“ in
+   Hermes ebenfalls `skill_view`. Kein eigenes Wrapper-Skill und keine Abhängigkeit
+   auf den Maker im späteren Plannerdialog.
+4. Dateimengen und Bytes gegen die ausgewählte Quelle vergleichen, die beigefügten
+   Rechtstexte separat abgleichen. Nach Rollenannahme im tatsächlichen Plannerkontext
+   Discovery und vollständiges Laden von `grilling` sowie den ausdrücklichen Aufruf
+   von `grill-me` mit Übergang zu `grilling` prüfen. Die Ladepflicht und den Vorrang
+   für den Interviewabschnitt aus der gerenderten SOUL zurücklesen; auch einen neuen
+   Kontext beziehungsweise Resume berücksichtigen. Funktionsnachweis erst im
+   freigegebenen [Planungsprobelauf](verification.md#3-ein-gemeinsamer-probelauf).
+
+Rückweg nur für die protokollierten eigenen Skillziele: vorherige eigene Stände
+wiederherstellen; Entfernen neu angelegter Dateien nur mit der geltenden
+Löschfreigabe. Fremde Skills, andere Profile und globale Konfiguration erhalten.
+
 <a id="ponytail"></a>
 ## Ponytail — Coder und Team-Codex separat
 

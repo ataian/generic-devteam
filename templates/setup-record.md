@@ -130,6 +130,7 @@ Maßnahme nennen. Nicht benötigte Fähigkeiten mit Begründung kennzeichnen.
 |---|---|---|
 | Paket: Dateibestand, Links, vollständige Skills, Personalisierung, Syntax und Konsistenz | offen | noch ungeprüft |
 | Rollen, vollständige SOUL-Aufnahme, Skills und Modi | offen | noch ungeprüft |
+| Planner-Interview: Originale grill-me/grilling samt Begleitdateien/Lizenz, Bytevergleich, native Discovery/Laden, SOUL-Pflicht und Planungsdialog im neuen Kontext/Resume | offen | noch ungeprüft |
 | Modelle und wirksame Reasoning-Stufen | offen | noch ungeprüft |
 | Team-Codex und installierte Helfer | offen | noch ungeprüft |
 | Memory und Rollenfilter | offen | noch ungeprüft |
