@@ -45,7 +45,10 @@ Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
    Profil-/Boardbindungen ab; verschachtelte Checkouts bleiben erhalten.
    Kläre widersprüchliche Bindungen vor Anlage. Danach Bank, Rollennamen und Board einmal
    bestätigen; rollenfeste Texte ohne Persona-Abfrage verwenden. Bestätige
-   technische Kennungen getrennt von Anzeigenamen, Modelle und genau eine
+   technische Kennungen getrennt von Anzeigenamen, Modelle samt festen Reasoning-Stufen
+   für Planner/Hermes-Coder sowie Standard und erlaubter Obergrenze für Reviewer/Team-Codex.
+   Frage die Obergrenzen ausdrücklich ab; technische Unterstützung ist keine Freigabe.
+   Bestätige genau eine
    Codeanalyse und Planner-Kommunikationsziele. Keine erneute Auswahl fester
    Rollen, Modi oder Komponenten. Lasse den konkreten Änderungsumfang freigeben.
 3. Verwende die [private Protokollvorlage](templates/setup-record.md). Prüfe jede

@@ -14,8 +14,8 @@ ROLE_FIELDS = {
 }
 ROLE_TECHNICAL_FIELDS = {
     "planner": {"CODER_PROFILE", "REVIEWER_PROFILE"},
-    "coder": {"REVIEWER_PROFILE"},
-    "reviewer": set(),
+    "coder": {"REVIEWER_PROFILE", "CODEX_REASONING_DEFAULT", "CODEX_REASONING_MAX"},
+    "reviewer": {"ROLE_REASONING_DEFAULT", "ROLE_REASONING_HIGH"},
 }
 ROLE_NAMES = {"planner": "PLANER_NAME", "coder": "CODER_NAME", "reviewer": "REVIEWER_NAME"}
 FIELD = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
@@ -69,6 +69,8 @@ def render_role(template, values, role):
             raise ValueError("Unsichere Code-/Fencezeichen im Rollenwert")
         if key.endswith("_PROFILE") and not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", value):
             raise ValueError("Ungültige technische Profilkennung")
+        if "_REASONING_" in key and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", value):
+            raise ValueError("Reasoningwert muss ein einzelner sicherer nativer Wert sein")
         if key in {"HINDSIGHT_BANK_NAME", "KANBAN_BOARD_NAME"}:
             if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.:/-]*", value):
                 raise ValueError("Unsichere technische Kennung")

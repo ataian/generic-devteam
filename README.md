@@ -23,7 +23,9 @@ Statische Pakettests sind keine Betriebsbereitschaft und kein unabhängiger Revi
 - Bereits erreichbare Mattermost-/Hindsight-Dienste, berechtigte Zugänge und ein
   geeigneter Modellanbieter. Hermes- und Codex-Anmeldung werden separat geprüft.
 - Projektname/Workspace, Rollennamen, bestätigte neue Bank und Boardkennung,
-  konkrete Modellwahl und genau eine Analysewahl (`codebase-memory` oder `graphify`).
+  konkrete Modellwahl, feste Reasoning-Stufen für Planner/Hermes-Coder sowie
+  ausdrücklich bestätigte Standard-/Maximalstufen für Reviewer/Team-Codex und
+  genau eine Analysewahl (`codebase-memory` oder `graphify`).
 - Freigabe der tatsächlichen lokalen Installationen, gemeinsamen PM-Wirkungen und
   Aktivierung. Keine Server-/Benutzer-/Daemonbereitstellung durch diesen Maker.
 

@@ -82,9 +82,12 @@ den Coder und den unveränderten Hermes-`codex`-Skill, ohne zusätzlichen Wrappe
 (`model`, `model_reasoning_effort`, bei gewählter eigener Providerroute
 `model_provider` samt offiziell unterstützter Definition). Nur vom Zielstand
 unterstützte Werte setzen, vorhandene Einträge gezielt erhalten. Der Coder liest
-das eingerichtete Modell daraus und wählt das Reasoning nach seiner SOUL.
-Höhere Reasoning-Stufen am selben Modell über den unterstützten nativen Aufrufweg
-im echten Call belegen; ansonsten vor der betroffenen Hochrisikoarbeit an den Planner.
+das eingerichtete Modell daraus; `model_reasoning_effort` erhält den bestätigten
+`CODEX_REASONING_DEFAULT`. Die Coder-SOUL enthält zusätzlich `CODEX_REASONING_MAX`.
+Ein Configdefault begrenzt CLI-Overrides nicht. Nur erlaubte höhere Stufen am selben
+Modell über den unterstützten nativen Aufrufweg im echten Call belegen; ansonsten
+vor der betroffenen Hochrisikoarbeit an den Planner. Keine neue technische
+Maximalwert-Config erfinden; die Obergrenze ist hier eine Rollenregel.
 
 Skills gehören nach `CODEX_PROCESS_HOME/.agents/skills/<name>/`, Original-TOMLs
 nach `CODEX_HOME/agents/`. Prüfe im **echten Worker** zusätzlich kompatibles
@@ -260,7 +263,10 @@ Pro Datei **drei getrennte Nachweise** führen:
 1. Vollständige Originalbytes/Revision/Hash, TOML parsebar, Name,
    `developer_instructions`, `model`, `model_reasoning_effort`, weitere Original-
    Felder unverändert. Mit dem Original vergleichen, nicht nur Pins abschreiben.
-2. Native Discovery im tatsächlichen Team-Codex mit dieser Datei und wirksamen
+2. Vor Nutzung Original-Reasoningpins gegen die bestätigten Grenzen prüfen; bei
+   anderer Modell-/Providersemantik die Zuordnung ausdrücklich klären. Unvereinbare
+   Pins erhalten, betroffene Delegation bis zur Nutzerentscheidung nicht starten.
+   Native Discovery im tatsächlichen Team-Codex mit dieser Datei und wirksamen
    Pins. Native Modellkonfiguration und Zugang prüfen; eigene Modell-/Reasoningauswahl ersetzt
    keinen Originalpin. Provider/Approval/MCP können aus dem Parent kommen, eine
    TOML-Sandboxzeile allein ist keine neue Sicherheitsgarantie.

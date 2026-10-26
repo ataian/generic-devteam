@@ -39,6 +39,8 @@ je Rolle die tatsächlich vorkommenden `render_fields`.
 | `KANBAN_BOARD_NAME` | Native Boardkennung, nicht der Anzeigetitel |
 | `CODER_PROFILE` | Technische Coderprofilkennung, soweit in der Vorlage vorhanden |
 | `REVIEWER_PROFILE` | Technische Reviewerprofilkennung, soweit in der Vorlage vorhanden |
+| `CODEX_REASONING_DEFAULT` / `CODEX_REASONING_MAX` | Bestätigter Team-Codex-Standard und erlaubte Obergrenze; nur Coder-Vorlage |
+| `ROLE_REASONING_DEFAULT` / `ROLE_REASONING_HIGH` | Bestätigter Reviewer-Standard und höchste erlaubte Prüfstufe; nur Reviewer-Vorlage |
 
 Anzeigenamen und technische Kennungen getrennt halten. Alle Mehrfachvorkommen
 aus demselben bestätigten Datensatz ersetzen. Der eigene Anzeigename liefert
@@ -83,11 +85,14 @@ erhalten; bei widersprüchlichen Bindungen vor Anlage anhalten und klären.
 Repository, Branch, Planrevision und Ticket-/Run-/Event-IDs werden erst beim jeweiligen
 Auftrag bestimmt. Sie sind keine vorab zu erfindenden Setupwerte.
 
-Konkrete Modelle stehen in der nativen Konfiguration. Der Planner verwendet das
-höchste unterstützte Reasoning; Coder und Reviewer folgen den Reasoning-Regeln ihrer
-SOUL beim eingerichteten Modell. Beim Setup den tatsächlichen Wechsel auf höhere
-Denktiefe prüfen. Fehlende Unterstützung ist ein konkreter Blocker, kein Anlass für
-einen stillen Modell- oder Providerwechsel.
+Konkrete Modelle und feste Planner-/Hermes-Coder-Stufen stehen in der nativen
+Konfiguration. Reviewer und Team-Codex erhalten die bestätigten Standard-/Maximalwerte
+wörtlich in ihren Rollen-SOULs. Beim Setup nur Wechsel innerhalb der erlaubten
+Grenzen prüfen, einschließlich CLI-/Session-Overrides und Helferpins. Der Renderer
+prüft sichere Einzelwerte, nicht Modellunterstützung oder Stufenrangfolge; diese
+werden gemäß Setup vor dem Rendern geprüft. Fehlende Unterstützung oder Freigabe
+ist ein konkreter Blocker, kein Anlass für einen stillen Modell-/Providerwechsel
+oder eine höhere Stufe. Die Rollenregel ist keine technische Ausführungssperre.
 
 Kommunikationszugänge und Kanalbindungen bleiben beim Planner. Geheimnisse gehören
 in geschützte native Zugangswege. Der private [Setuprecord](../templates/setup-record.md)

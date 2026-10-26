@@ -76,9 +76,23 @@ und echte Pfade zusätzlich prüfen. Anzeigenamen nie als rohe Pfadsegmente verw
 Bestätige rollenbezogene Hermes-Modelle/Provider/unterstützte Denktiefe und Codex
 separat. Die hierbei bestätigte technische Codex-Modell-ID als `CODEX_MODEL`
 wiederverwenden, nicht erneut abfragen oder aus dem Hermes-Modell ableiten.
-Planner nutzt das höchste unterstützte Reasoning, Coder/Reviewer normalerweise medium.
-Prüfe höhere Reasoning-Stufen am jeweils eingerichteten Modell und benötigte Hilfsmodelle;
-keinen zweiten Anbieter voraussetzen. Frage genau eine Codeanalyse ab. Bestimme
+Frage ausdrücklich: **„Welche maximale Reasoning-Stufe darf das Team verwenden?“**
+Biete nur am gewählten Modell/Provider nachgewiesene native Werte an, keine feste
+Modellwahl oder allgemeingültige Stufenrangfolge. Bestätige für Planner und
+Hermes-Coder jeweils die feste Stufe (`PLANNER_REASONING`, `CODER_REASONING`).
+Für Reviewer bestätige Standard (`ROLE_REASONING_DEFAULT`) und höchste erlaubte
+Prüfstufe (`ROLE_REASONING_HIGH`), für Team-Codex Standard (`CODEX_REASONING_DEFAULT`)
+und Obergrenze (`CODEX_REASONING_MAX`). Ein gemeinsamer Nutzerwert darf auf diese
+Wege übertragen werden, wenn seine Geltung eindeutig bestätigt und er jeweils
+unterstützt ist; sonst Abweichungen getrennt klären. Standard darf die jeweilige
+Obergrenze nicht überschreiten. Fehlende Werte vor Anlage klären, nicht aus
+„höchstes unterstützt“ ableiten. Ein Default ist keine technische Begrenzung.
+Prüfe Hilfsmodelle und Original-Helferpins gegen die für sie bestätigte Grenze;
+bei anderer Stufensemantik die Zuordnung klären, nicht vom Elternmodell ableiten.
+Unvereinbare Pins unverändert lassen und die betroffene Nutzung bis zur Klärung
+zurückhalten. Nicht einstellbares Reasoning ausdrücklich mit dem Nutzer klären;
+keinen erfundenen Wert an eine native Schnittstelle übergeben.
+Keinen zweiten Anbieter voraussetzen. Frage genau eine Codeanalyse ab. Bestimme
 Mattermost-Server, eigene Botidentität, Projektkanal und menschlichen Nutzer;
 ermittle die getrennte DM-ID im geführten Kommunikationsschritt.
 
@@ -120,7 +134,9 @@ hermes -p "$PROFILE" config get kanban.auto_subscribe_on_create
 hermes -p "$PROFILE" config get security.protected_instruction_files
 ```
 
-Diese Schritte für Planner, Coder und Reviewer ausführen.
+Diese Schritte für Planner, Coder und Reviewer ausführen. `EFFORT` ist jeweils
+`PLANNER_REASONING`, `CODER_REASONING` oder `ROLE_REASONING_DEFAULT` aus dem
+bestätigten Datensatz; der Planner läuft fest auf seiner gewählten Stufe.
 `security.protected_instruction_files: false` gehört ausdrücklich in die jeweilige
 Profil-`config.yaml`; der erzeugte Agent soll projektlokale Anweisungsdateien im
 autorisierten Auftrag bearbeiten können. Prüfe den gespeicherten booleschen Wert
@@ -256,10 +272,10 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    Alle Dateien einschließlich `SKILL.md` behalten Namen und Inhalt unverändert.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.
 2. Prüfe die tatsächlichen Hermes-/Codex-Auswahlen, unterstützten Reasoning-Stufen,
-   Hilfsmodelle und Original-Agentpins in ihrer nativen Konfiguration. Halte
+   erlaubten Obergrenzen, Hilfsmodelle und Original-Agentpins in ihrer nativen Konfiguration. Halte
    Configorte, Freigaben und Funktionsbelege im privaten Setuprecord fest.
    Die konkrete Codex-Modell-ID bleibt in der technischen Konfiguration;
-   die Coder-SOUL bestimmt die Reasoning-Eskalation und liest das eingerichtete Modell.
+   die Coder-SOUL enthält Standard/Obergrenze als konkrete Renderwerte und liest das eingerichtete Modell.
    Prüfe dort auch die dauerhafte Team-Codex-Prozessbindung und die ausdrückliche
    `$caveman`-Anweisung für jeden neuen Auftrag, einschließlich Neustart/Resume.
    Binde die gewählte Codeanalyse gemäß [Analyserezept](code-analysis.md) über die
@@ -286,8 +302,9 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    ```
 
    `confirmed_values` sind die bestätigten Rohwerte aus dem Setuprecord (Namen,
-   Projekt, Bank, rückgelesenes Board und technische Profil-IDs; die für die Konfiguration
-   gespeicherte Codex-Modell-ID wird nicht als Rollenfeld übergeben);
+   Projekt, Bank, rückgelesenes Board, technische Profil-IDs und die vier Reasoning-
+   Renderwerte aus Abschnitt 2; feste Planner-/Hermes-Coder-Stufen sowie die für die Konfiguration
+   gespeicherte Codex-Modell-ID werden nicht als Rollenfelder übergeben);
    `role_manifest` ist der passende Eintrag aus `role_templates`. Fehlende Werte
    stoppen die Ausgabe, keine Leerdefaults und keine neuen IDs erfinden.
    `ROLE_NAME` entspricht stets dem eigenen Anzeigenamen, nie der technischen ID.

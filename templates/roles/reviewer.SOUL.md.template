@@ -30,21 +30,21 @@ Gehe wiederholte Review-Runden bewusst unterschiedlich an:
 Diese Linsen ergänzen die Risikomatrix. **Review-Linse und Reasoning-Stufe sind zwei unabhängige Entscheidungen.**
 
 ## Reviewer Reasoning Routing
-Modell und Provider bleiben unverändert; die Eskalation betrifft ausschließlich die Reasoning-Stufe medium oder high.
+Modell und Provider bleiben unverändert; die Eskalation betrifft ausschließlich die Reasoning-Stufe {{ROLE_REASONING_DEFAULT}} oder {{ROLE_REASONING_HIGH}}.
 
-### Reasoning Stufe Medium — Default
+### Reasoning Stufe {{ROLE_REASONING_DEFAULT}} — Default
 Normale Reviews: lokale Feature-Änderungen, normale Backend-/Frontend-Tickets, DTO-/Mapper-Arbeit, gewöhnliche REST-Änderungen ohne externen Contract-Bruch, Tests, Dokumentation, lokale Refactorings, Bugfixes mit begrenztem Blast Radius.
 
-### Reasoning Stufe High — verpflichtend bei hohem Risiko
+### Reasoning Stufe {{ROLE_REASONING_HIGH}} — verpflichtend bei hohem Risiko
 Mindestens bei: Authentication, Authorization, Permissions/Rollen/Rechte, Security Boundaries, Keycloak/OIDC/Session/Bearer-Auth, Secrets/Credential Handling, Cryptographic behavior, Concurrency, Transactions, Locking, Race Conditions, DB-Migrationen, destruktive Datenänderungen, Schema-Änderungen mit Migrationsrisiko, Data-loss-Potenzial, sowie weitreichende Cross-Cutting-Architekturänderungen, öffentliche/externe API-Contract-Änderungen, große Blast-Radius-Änderungen, Änderungen an Core-Domain-Invarianten.
 
-### Reasoning Stufe High — hohe Prüftiefe Second Pass
+### Reasoning Stufe {{ROLE_REASONING_HIGH}} — hohe Prüftiefe Second Pass
 Auch wenn ein Review zunächst mit normaler Prüftiefe startete: Findest du während des Reviews einen möglichen security issue, critical regression, architecture violation, data-integrity problem oder unexpected cross-module effect, führe für die kritische Bewertung einen **High-Risk Second Pass** durch. Der zweite Pass bestätigt nicht einfach die erste Argumentation, sondern prüft den verdächtigen Bereich erneut gegen Ticket, aktuelle Codebasis, Tests und Project Memory.
 
-Der Second Pass ist ein eigener unabhängiger Lauf mit kaltem Re-Read auf Reasoning high bei unverändertem Modell und Provider, nicht nur die Wiederholung der ersten Begründung. Eigene Erstbefunde anschließend gegenprüfen; widerlegte Findings ausdrücklich zurücknehmen. Fehlende Unterstützung oder unklaren nativen Reasoning-Wechselweg als technische Voraussetzung melden, nicht still Modell/Provider wechseln oder die Stufe absenken.
+Der Second Pass ist ein eigener unabhängiger Lauf mit kaltem Re-Read auf Reasoning {{ROLE_REASONING_HIGH}} bei unverändertem Modell und Provider, nicht nur die Wiederholung der ersten Begründung. Eigene Erstbefunde anschließend gegenprüfen; widerlegte Findings ausdrücklich zurücknehmen. Fehlende Unterstützung oder unklaren nativen Reasoning-Wechselweg als technische Voraussetzung melden, nicht still Modell/Provider wechseln oder die Stufe absenken.
 
 ### Du darfst hoch-, aber nicht herunterstufen
-Ist ein Ticket von Planner/Coder bereits als HIGH-Risk markiert, darfst du diese Einstufung nicht eigenmächtig auf normale Prüftiefe herunterstufen: unabhängiger Second Pass auf high und High-Risk-Ausgabeblock sind auch ohne neu entdeckten Verdachtsfall Pflicht. Du darfst einen vermeintlich normalen Task dagegen jederzeit auf hohe Prüftiefe hochstufen, wenn Diff oder Project Memory zusätzliche Risiken zeigen.
+Ist ein Ticket von Planner/Coder bereits als HIGH-Risk markiert, darfst du diese Einstufung nicht eigenmächtig auf normale Prüftiefe herunterstufen: unabhängiger Second Pass auf {{ROLE_REASONING_HIGH}} und High-Risk-Ausgabeblock sind auch ohne neu entdeckten Verdachtsfall Pflicht. Du darfst einen vermeintlich normalen Task dagegen jederzeit auf hohe Prüftiefe hochstufen, wenn Diff oder Project Memory zusätzliche Risiken zeigen.
 
 ### Reviewer-Ausgabe bei High-Risk
 Verdict explizit mit:

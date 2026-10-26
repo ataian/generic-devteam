@@ -13,6 +13,7 @@
     "references/native-workflow.md",
     "references/render_text.py",
     "references/setup.md",
+    "references/test_render_reasoning.py",
     "references/upstream-sources.md",
     "references/verification.md",
     "skills/brownfield-feature-planning/SKILL.md",
@@ -74,6 +75,8 @@
         "coder.SOUL.md.template": "SOUL.md"
       },
       "render_fields": [
+        "CODEX_REASONING_DEFAULT",
+        "CODEX_REASONING_MAX",
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
@@ -103,7 +106,9 @@
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
         "PROJECT_NAME",
-        "ROLE_NAME"
+        "ROLE_NAME",
+        "ROLE_REASONING_DEFAULT",
+        "ROLE_REASONING_HIGH"
       ],
       "origin_ref": "references/upstream-sources.md#own-roles",
       "license_path": "LICENSE",

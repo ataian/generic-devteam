@@ -32,8 +32,9 @@ einzigen JSON-Block speichern, nicht seine Markdownmaskierung. Mit `json.dumps`
 gemäß [Setupweg](../references/setup.md) befüllen und mit `json.loads` rücklesen;
 Tabellen sind Belegübersichten, keine verlustfreie Datenquelle. Bei Resume wiederverwenden,
 nur fehlende Werte oder Drift klären; native Objekte bleiben Zustandsautorität.
-`confirmed_values` enthält Namen, Projekt, Bank, Board, technische Profil-IDs und
-die bereits bestätigte Codex-ID nur für die technische Konfiguration; `confirmed_bindings`
+`confirmed_values` enthält Namen, Projekt, Bank, Board, technische Profil-IDs,
+die vier Reasoning-Renderwerte sowie feste Planner-/Hermes-Coder-Stufen und die
+bereits bestätigte Codex-ID nur für die technische Konfiguration; `confirmed_bindings`
 enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht erfasst.
 
 ```json
@@ -55,6 +56,12 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 | CODER_PROFILE | offen | offen |
 | REVIEWER_PROFILE | offen | offen |
 | CODEX_MODEL (bereits bestätigte Codex-ID) | offen | offen |
+| PLANNER_REASONING (feste native Stufe, kein Rollenfeld) | offen | offen |
+| CODER_REASONING (feste Hermes-Stufe, kein Rollenfeld) | offen | offen |
+| CODEX_REASONING_DEFAULT | offen | offen |
+| CODEX_REASONING_MAX (erlaubte Obergrenze) | offen | offen |
+| ROLE_REASONING_DEFAULT (Reviewer) | offen | offen |
+| ROLE_REASONING_HIGH (höchste erlaubte Reviewer-Prüfstufe) | offen | offen |
 
 - Zielkonto-Home / unabhängig vom Projektnamen bestätigter kanonischer absoluter Workspace / Abgleich mit Projektkontext und nativen Profil-/Boardbindungen oder offene Klärung: offen
 - ROLE_NAME je Rolle aus PLANER_NAME / CODER_NAME / REVIEWER_NAME: offen
@@ -74,7 +81,8 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 ## Modelle und Codex
 
 - Je Rolle: Provider, Modell, Reasoning, native Configquelle, Overrides, echter Call: offen
-- Unterstützte höhere Reasoning-Stufen am eingerichteten Modell / nativer Wechselweg und Beleg: offen
+- Unterstützte Stufen je Modell/Provider und Rangfolge / ausdrücklich bestätigte Grenzen / Standard nicht über Obergrenze / nativer Wechselweg und Beleg: offen
+- Helferpins und gegebenenfalls abweichende Stufensemantik / bestätigte Zuordnung zur Grenze / Konflikte vor Nutzung geklärt: offen
 - Hilfsmodell-/Analysewege und Zugang separat: offen
 - Team-Codex Prozess-HOME / CODEX_HOME / aufgelöste Binary: offen
 - Effektive Skill-/Plugin-/Agent-/Configroots; Projekt-/Admin-/Systemquellen: offen
@@ -131,7 +139,7 @@ Maßnahme nennen. Nicht benötigte Fähigkeiten mit Begründung kennzeichnen.
 | Paket: Dateibestand, Links, vollständige Skills, Personalisierung, Syntax und Konsistenz | offen | noch ungeprüft |
 | Rollen, vollständige SOUL-Aufnahme, Skills und Modi | offen | noch ungeprüft |
 | Planner-Interview: Originale grill-me/grilling samt Begleitdateien/Lizenz, Bytevergleich, native Discovery/Laden, SOUL-Pflicht und Planungsdialog im neuen Kontext/Resume | offen | noch ungeprüft |
-| Modelle und wirksame Reasoning-Stufen | offen | noch ungeprüft |
+| Modelle und wirksame Reasoning-Stufen einschließlich Grenzprüfung bei HIGH+HIGH, Resume und Helferdelegation | offen | noch ungeprüft |
 | Team-Codex und installierte Helfer | offen | noch ungeprüft |
 | Memory und Rollenfilter | offen | noch ungeprüft |
 | Mattermost: Erwähnung, Free-Response, DM und Planner-Wake | offen | noch ungeprüft |

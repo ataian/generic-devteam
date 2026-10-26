@@ -117,14 +117,18 @@ Vor jedem Coding-Ticket beziehst du Project Memory als Hinweisquelle in die Task
 ## Codex-Reasoning-Eskalation (aus §14)
 Die eingerichtete Modell-ID aus der Team-Codex-Konfiguration (`devteam/codex-home/config.toml`) einmalig als Wert ablesen; dieser Wert und die daraus gewählte Reasoning-Stufe werden wörtlich in den Aufruf geschrieben. Bei fehlender Unterstützung oder widersprüchlicher Konfiguration anhalten und klären; Reasoning-Eskalation ist kein Modell- oder Providerwechsel.
 
-LOW/LOW oder MEDIUM/LOW → Reasoning medium. HIGH complexity oder HIGH failure impact → Reasoning high. HIGH+HIGH → höchstes unterstütztes Reasoning. Specification/architecture conflict → **NICHT** durch höheres Reasoning lösen → ESCALATE_PLAN an {{PLANER_NAME}}. Ein widersprüchlicher Plan darf niemals eigenmächtig neu designt werden.
+Team-Codex: Standard `{{CODEX_REASONING_DEFAULT}}`, Obergrenze `{{CODEX_REASONING_MAX}}`.
 
-**Jeder `codex exec`-Aufruf trägt die Modell-ID wörtlich als Argument** — den abgelesenen Wert direkt eintragen, z. B. `--model <modell-id>`. Keine Shell-Variable und keine Ableitung über `node -p`, `python -c` oder `-e`/`-c`-Einzeiler: der native Ausführungsguard blockiert solche Skriptausführung im headless Worker vor dem Prozessstart, der Codex-Lauf käme dann nie zustande. Die Sandbox ist bei jedem Aufruf ausdrücklich mit `--sandbox danger-full-access` zu setzen; die vorbereitete Promptdatei im eigenen Arbeitsbereich geht per stdin hinein (`- < datei`), der Lauf startet im Hintergrund mit PTY und wird per Fortschrittsprüfung verfolgt. Beispiel für Reasoning medium; bei höherer Einstufung den Reasoning-Wert entsprechend setzen. Die Team-Codex-Prozessbindung gilt auch für diesen Aufruf:
+LOW/LOW oder MEDIUM/LOW → Reasoning {{CODEX_REASONING_DEFAULT}}. HIGH complexity oder HIGH failure impact → Reasoning höchstens {{CODEX_REASONING_MAX}}. HIGH+HIGH → Reasoning {{CODEX_REASONING_MAX}}. Diese Grenzen gelten auch für Retries, Resume und delegierte Helfer; widersprechende Helferpins vor Nutzung klären, nicht umschreiben. Nur der Nutzer darf die Grenzen erhöhen.
+
+Specification/architecture conflict → **NICHT** durch höheres Reasoning lösen → ESCALATE_PLAN an {{PLANER_NAME}}. Ein widersprüchlicher Plan darf niemals eigenmächtig neu designt werden.
+
+**Jeder `codex exec`-Aufruf trägt die Modell-ID wörtlich als Argument** — den abgelesenen Wert direkt eintragen, z. B. `--model <modell-id>`. Keine Shell-Variable und keine Ableitung über `node -p`, `python -c` oder `-e`/`-c`-Einzeiler: der native Ausführungsguard blockiert solche Skriptausführung im headless Worker vor dem Prozessstart, der Codex-Lauf käme dann nie zustande. Die Sandbox ist bei jedem Aufruf ausdrücklich mit `--sandbox danger-full-access` zu setzen; die vorbereitete Promptdatei im eigenen Arbeitsbereich geht per stdin hinein (`- < datei`), der Lauf startet im Hintergrund mit PTY und wird per Fortschrittsprüfung verfolgt. Beispiel für Reasoning {{CODEX_REASONING_DEFAULT}}; bei höherer Einstufung höchstens {{CODEX_REASONING_MAX}} setzen. Die Team-Codex-Prozessbindung gilt auch für diesen Aufruf:
 ```bash
 <codex-binary, absolut aufgeloest> exec \
   --sandbox danger-full-access \
   --model <modell-id> \
-  -c model_reasoning_effort='"medium"' \
+  -c model_reasoning_effort='"{{CODEX_REASONING_DEFAULT}}"' \
   - < /absoluter/pfad/zur/promptdatei.md
 ```
 

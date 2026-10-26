@@ -23,6 +23,10 @@ Vorhandene geeignete Prüfwerkzeuge verwenden; fehlende Voraussetzungen konkret 
   Vorlagen. Mit synthetischen Werten über [render_text.py](render_text.py) prüfen:
   alle Platzhalter ersetzt, übriger Inhalt erhalten, technische Kennungen nicht mit
   Anzeigenamen verwechselt; fehlende oder ungültige Werte werden abgewiesen.
+- [ ] **Reasoning-Vertrag:** Pflichtfrage und bestätigte Standard-/Maximalwerte sind
+  in Setup/Record enthalten; Coder-/Reviewer-Vorlagen rendern konkrete Werte auch
+  in Aufruf, Überschriften und Second Pass. Fehlende Werte halten an. Offline-Test:
+  `python3 -B references/test_render_reasoning.py` aus dem Paketroot; keine Modellcalls.
 - [ ] **Syntax:** JSON und vorhandene YAML-/TOML-Daten mit passenden Parsern prüfen,
   Pythonbeispiele als Syntaxbaum, Shellbeispiele mit `bash -n`. Reine Textfragmente
   zur Recordverarbeitung und Personalisierung mit synthetischen Daten prüfen.
@@ -50,7 +54,7 @@ in [Setup](setup.md), [Rollenbindungen](native-workflow.md) und
 |---|---|
 | Rollen und Skills | Richtige Profile, vollständige SOUL-Aufnahme, benötigte Skills tatsächlich geladen; vorgesehene Modi funktionieren auch in einem neuen Kontext. |
 | Planner-Interview | Beide Originalskillbäume samt Lizenz bytegleich zur protokollierten Quelle; `grilling` im Planner nativ gefunden und vollständig geladen, ausdrücklicher `grill-me`-Aufruf lädt `grilling`. Die SOUL-Ladepflicht ist im neuen Kontext/Resume wirksam; fachliches Verhalten separat im gemeinsamen Probelauf prüfen. |
-| Modelle und Reasoning | Echte begrenzte Aufrufe verwenden die eingerichteten Modelle. Planner nutzt das höchste unterstützte Reasoning; höhere Stufen für Coder/Reviewer funktionieren gemäß SOUL. |
+| Modelle und Reasoning | Echte begrenzte Aufrufe verwenden die bestätigten Modelle/Stufen. Planner läuft auf seiner festen Stufe; Reviewer und Team-Codex bleiben innerhalb ihrer bestätigten Grenzen. HIGH+HIGH, Second Pass, Retry/Resume und Helferpins gegen gerenderte SOUL und tatsächliche Aufruf-/Requestwerte prüfen. Einen oberhalb der Grenze vorgeschlagenen Aufruf vor Ausführung zurückweisen lassen, nicht probeweise absenden. Rollenregel und etwaige technische Durchsetzung getrennt belegen. |
 | Team-Codex | Prozesshomes, Konfiguration und Skillroots stimmen im tatsächlichen Worker; Codex erzeugt ein geprüftes Testartefakt. Installierte Helfer gemäß Integrationsrezept funktional prüfen. |
 | Memory | Gemeinsame Projektbank und Rollenfilter funktionieren beim Speichern und Abrufen; nur freigegebene synthetische Testinhalte verwenden. |
 | Mattermost | Planner antwortet auf Erwähnung, ohne Erwähnung gemäß Konfiguration und im DM; Wake erreicht den richtigen Projektkanal und wird vom Planner bearbeitet. Native Eingangsprüfungen weisen nicht freigegebene Nutzer/Bots im Projektkanal und Nachrichten des bestätigten Nutzers in nicht freigegebenen Kanälen ab; zusätzliche kanalweite/globale Grants erweitern die bestätigte Freigabe nicht. Ablehnungsfälle gemäß [Integrationen](integrations.md) ohne Modellstart prüfen. |
