@@ -131,6 +131,20 @@ class ReasoningContractTests(unittest.TestCase):
         ):
             self.assertIn(preserved, text)
 
+    def test_coder_checks_reported_obstacles_before_escalating(self):
+        paragraph = "Prüfe von Codex gemeldete Hindernisse selbst gegen den konkreten Ablauf. Unterscheide tatsächliche Befunde, offene prüfbare Fragen und bloß hypothetische Möglichkeiten. Kläre technische Fragen innerhalb deines Auftrags selbst; eskaliere nur die danach verbleibende notwendige Entscheidung oder fehlende Befugnis."
+        source = self.template("coder")
+        self.assertEqual(source.count(paragraph), 1)
+        rendered = render_role(source, self.values("coder"), "coder")
+        self.assertEqual(rendered.count(paragraph), 1)
+
+    def test_planner_checks_blocker_premises_before_adding_requirements(self):
+        paragraph = "Prüfe bei Eskalationen zuerst, ob der behauptete Blocker im konkreten Ablauf tatsächlich vorliegt und nicht innerhalb des bestehenden Auftrags lösbar ist. Leite aus bloß hypothetischen Risiken keine zusätzlichen Anforderungen, Schutzverfahren oder Kundenfreigaben ab."
+        source = self.template("planner")
+        self.assertEqual(source.count(paragraph), 1)
+        rendered = render_role(source, self.values("planner"), "planner")
+        self.assertEqual(rendered.count(paragraph), 1)
+
     def test_nonplaceholder_bytes_preserved(self):
         for role in MANIFEST["role_templates"]:
             source = self.template(role)

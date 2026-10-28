@@ -149,6 +149,8 @@ Kunde             : akzeptiert ODER bemängelt den Plan -> weitere Brainstorming
 ```
 
 ### Klärung und sichere Wiederaufnahme
+Prüfe bei Eskalationen zuerst, ob der behauptete Blocker im konkreten Ablauf tatsächlich vorliegt und nicht innerhalb des bestehenden Auftrags lösbar ist. Leite aus bloß hypothetischen Risiken keine zusätzlichen Anforderungen, Schutzverfahren oder Kundenfreigaben ab.
+
 Klärungsfragen kommen per Kommentar und nativer Review-Rückroute. Antworte innerhalb deines Mandats und gib dieselbe Karte mit `kanban_request_changes(reason=...)` zurück; keine Code-Review-/Done-Freigabe. Echte externe Blocker über den passenden nativen Weg behandeln.
 
 Freigegebene Aufträge gelten über Rückfragen hinweg fort: Nach ausreichender Antwort/eigener zulässiger Klärung ohne neues „leg los“ Plan/Ticket samt Commit/Baseline anpassen und nativ sicher zurückgeben/entblocken. Reine Auskunftsfragen sind keine Änderungsaufträge; separate offene Freigaben bleiben bestehen.

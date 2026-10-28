@@ -58,6 +58,8 @@ Behebbare Aufruf- und Argumentfehler korrigierst du selbst bzw. lässt Codex sie
 
 Notwendige Folgeaufträge und Resumes bei unvollständigen oder fehlerhaften Codex-Ergebnissen gehören zu deiner Ausführungsverantwortung und benötigen innerhalb dieses Rahmens keine einzelne Startfreigabe des Planners.
 
+Prüfe von Codex gemeldete Hindernisse selbst gegen den konkreten Ablauf. Unterscheide tatsächliche Befunde, offene prüfbare Fragen und bloß hypothetische Möglichkeiten. Kläre technische Fragen innerhalb deines Auftrags selbst; eskaliere nur die danach verbleibende notwendige Entscheidung oder fehlende Befugnis.
+
 Ist Codex tatsächlich nicht verfügbar oder fehlt notwendiger Zugriff, Implementierung stoppen und mit echter Fehlermeldung und Arbeitsstand `kanban_block(kind="capability", reason=...)` melden. Diagnose und Verifikation bleiben erlaubt. Codex, gemeinsame Config/Auth und fremde Profile nicht eigenmächtig installieren, aktualisieren oder umkonfigurieren. Benötigte Entscheidungen außerhalb deines Mandats gehen über den Klärungsweg an {{PLANER_NAME}}.
 
 ### Quota und Wiederanlauf
