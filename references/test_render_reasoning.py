@@ -90,7 +90,10 @@ class ReasoningContractTests(unittest.TestCase):
     def test_coder_separates_recoverable_errors_from_unavailability(self):
         text = self.template("coder")
         self.assertIn("Behebbare Aufruf- und Argumentfehler", text)
-        self.assertIn("innerhalb des freigegebenen Auftrags und Budgets", text)
+        self.assertIn("innerhalb des freigegebenen Auftrags.", text)
+        self.assertNotIn("und Budgets", text)
+        self.assertNotIn("ausdrücklich vereinbarter Kosten- oder Zeitgrenzen", text)
+        self.assertIn("Notwendige Folgeaufträge und Resumes bei unvollständigen oder fehlerhaften Codex-Ergebnissen gehören zu deiner Ausführungsverantwortung und benötigen innerhalb dieses Rahmens keine einzelne Startfreigabe des Planners.", text)
         self.assertIn("tatsächlich nicht verfügbar", text)
         self.assertIn('kanban_block(kind="capability"', text)
         self.assertNotIn("Netzwerk — egal was", text)
@@ -104,11 +107,29 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertNotIn("Nach jedem `kanban_request_review`", text)
         self.assertNotIn("schlägt der Handoff STILL fehl", text)
 
-    def test_coder_routes_budget_decisions_to_planner(self):
+    def test_coder_routes_decisions_outside_its_mandate_to_planner(self):
         text = self.template("coder")
-        self.assertIn("Entscheidungen und Freigaben einschließlich Budgetfragen", text)
+        self.assertIn("Benötigte Entscheidungen außerhalb deines Mandats gehen über den Klärungsweg", text)
+        self.assertIn("Entscheidungen und Freigaben, nicht für selbst lösbare technische Fragen", text)
+        self.assertNotIn("Budgetfragen", text)
+        self.assertNotIn("Budgetfreigaben", text)
         self.assertIn("dieselbe Karte per `kanban_request_review`", text)
         self.assertIn("Der Planner antwortet und gibt mit `kanban_request_changes` zurück.", text)
+
+    def test_planner_preserves_safeguards_without_budget_counter(self):
+        text = self.template("planner")
+        self.assertIn("### Fortschritt und Eskalationsgrenzen", text)
+        for obsolete in ("drei konservative Erweiterungen", "Budgeterweiterung", "Budgetausnahme", "ungenutztes Budget"):
+            self.assertNotIn(obsolete, text)
+        self.assertIn("Bei ausbleibendem Fortschritt oder unverhältnismäßiger Kleinarbeit die Ursache und den gewählten Lösungsweg prüfen, statt unverändert weiterzuarbeiten.", text)
+        for preserved in (
+            "Zusätzliche visuelle Korrekturen nur für belegte Abweichungen",
+            "Scope, fachlich ungeklärte Anforderungen, Qualitäts-/Securitygates",
+            "Prüfe bei Werkzeugproblemen zuerst",
+            "Native Laufzeit-/Circuit-Breaker-/Triage-Sicherungen nicht umgehen",
+            "## Zielorientierung und wirtschaftliches Arbeiten",
+        ):
+            self.assertIn(preserved, text)
 
     def test_nonplaceholder_bytes_preserved(self):
         for role in MANIFEST["role_templates"]:
