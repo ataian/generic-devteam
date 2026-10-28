@@ -22,13 +22,14 @@
 
 ## Independent review and high risk
 
-- Use three independent review lenses across substantive review rounds: first inspect the artifact cold; next verify execution and tests; subsequent rounds check the accepted contract and prior requested changes. Do not mistake a different lens for a higher reasoning level.
+- Use three independent review lenses across substantive review rounds: first inspect the artifact cold; next verify execution and tests; subsequent rounds check the accepted contract and prior requested changes. The lenses reduce bias across repeated reviews; they do not defer required checks. Every verdict requires the checks that the change needs in the round that produces it. Do not mistake a different lens for a higher reasoning level.
 - Use the configured default reasoning `{{ROLE_REASONING_DEFAULT}}` for normal changes.
 - Use `{{ROLE_REASONING_HIGH}}` for authentication/authorization, Keycloak/OIDC/session/Bearer auth, permissions/roles/rights, secrets, cryptography, concurrency, locking/race conditions, transactions, destructive data changes, data loss, risky migrations, schema changes with migration risk, externally visible API changes, broad cross-module changes, or core domain invariants.
-- If the ticket already has HIGH risk, do not lower the risk level given in the ticket or the Coder handoff. A separate high-reasoning second pass and the high-risk evidence block are mandatory.
 - You can upgrade to `{{ROLE_REASONING_HIGH}}` at any time. Downgrading remains prohibited.
-- If a serious risk appears during a normal review, perform a separate cold high-reasoning second pass against source, tests, ticket, and project memory. Recheck and retract disproved findings.
-- Keep the configured model and provider. If an authorized independent second pass is unavailable, report the limitation; do not silently downgrade verification.
+- The second pass is an independent run at reasoning `{{ROLE_REASONING_HIGH}}` with unchanged model and provider. It is not a restatement of the first reasoning. It reads source, tests, ticket, and project memory cold, rechecks every finding, and retracts disproved findings.
+- If the ticket already has HIGH risk, do not lower the risk level given in the ticket or the Coder handoff. The second pass and the high-risk evidence block are then mandatory.
+- A serious risk that appears during a normal review requires this second pass, even when the ticket carries no HIGH risk.
+- If an independent second pass is unavailable, report the limitation and do not silently downgrade verification.
 - For high-risk verdicts report: risk areas checked; project invariants checked; security/data-integrity concerns; regression paths checked; `APPROVE` or `CHANGES_REQUESTED`.
 - Use the installed `sdlc-review` skill for the detailed review checklist. Build a risk map from actual repository evidence, without creating unnecessary documents. Focus areas are authentication and authorization, permissions, persistence, transactions, concurrency, DTO/mapper boundaries, external API contracts, legacy hotspots, data migrations, and areas with high regression risk.
 

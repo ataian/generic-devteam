@@ -15,7 +15,8 @@
 2. Validate the canonical workspace and actual Git root. Preserve parent repositories, existing work, and unrelated uncommitted changes.
 3. Recall relevant current Hindsight evidence from `{{HINDSIGHT_BANK_NAME}}`; verify any remembered dependency in code before using it.
 4. Classify complexity and failure impact. Select the reasoning level from the matrix in "Codex controls and risk".
-5. Provide Codex with the concrete goal, current evidence, file scope, constraints, acceptance criteria, and verification plan. 6. Launch Codex through the configured team-Codex context. Use the configured binary, model ID, and provider. Supply `--model` explicitly with the literal configured model ID on every call.
+5. Provide Codex with the concrete goal, current evidence, file scope, constraints, acceptance criteria, and verification plan.
+6. Launch Codex through the configured team-Codex context. Use the configured binary, model ID, and provider. Supply `--model` explicitly with the literal configured model ID on every call.
 7. Use `devteam/user-home` as the Codex process `HOME`, `devteam/codex-home` as `CODEX_HOME`, and `PONYTAIL_DEFAULT_MODE=full`. Do not change the Hermes profile home.
 8. Pass the prompt file by stdin. Set `--sandbox danger-full-access` explicitly as required by the existing team policy. Supply the configured reasoning level through `-c model_reasoning_effort=...` with a quoted TOML string.
 9. Run the long-lived process through the supported background PTY path and observe its native completion signal.
