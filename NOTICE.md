@@ -27,7 +27,7 @@ Planversionen und spätere Zielprojektversionen sind unabhängig.
 | Anteil | Herkunft und tatsächliche Behandlung |
 |---|---|
 | Paketvertrag, Textrenderer und Dokumentation | Neu aus bestätigtem Auftrag; MIT dieses Pakets. |
-| Drei Rollen-SOUL-Vorlagen | Planner/Coder quellnah aus vorhandenen Rollen-SOULs im ausdrücklich bestätigten Auftrag abgeleitet; Reviewer als maßgebliche Nutzerfassung integriert. Persönliche Bindungen durch deklarierte Felder ersetzt; die beauftragte Bereinigung der Coder-Modellpolicy ist enthalten. Private Quellen sind keine Paketprüfungsabhängigkeit. |
+| Drei Rollen-SOUL-Vorlagen | Aus vorhandenen Rollen-SOULs im ausdrücklich bestätigten Auftrag abgeleitet und danach revidiert zu einem knappen englischen Regeltext; Reviewer als maßgebliche Nutzerfassung integriert. Persönliche Bindungen durch deklarierte Felder ersetzt; die beauftragte Bereinigung der Coder-Modellpolicy ist enthalten. Private Quellen sind keine Paketprüfungsabhängigkeit. |
 | `screenshot-to-code` 1.0.0 | Kanonisches eigenständiges Paket, Autorenfeld `Max, Mariko (Hermes Agent)`. Alle sechs Dateien bytegleich und ohne Transportumbenennung. Eigene vollständige [Lizenz](skills/screenshot-to-code/LICENSE) mit `Copyright (c) 2026 screenshot-to-code contributors` unverändert. |
 | `minimal-change-engineering` 1.0.0 | Übernommene, vom Nutzer bearbeitete Skillfassung. MIT-Angabe im Frontmatter; keine separate Lizenz-/Notice-Datei im Skillbaum. Der historische Autoren-/Auditverweis im Skill ist dadurch nicht zusätzlich belegt. |
 | `brownfield-feature-planning` 1.0.0 | Übernommene und vom Nutzer bearbeitete Fassung mit ihren Referenzen. MIT-Angabe im Frontmatter; keine separate Lizenz-/Notice-Datei im Skillbaum. |

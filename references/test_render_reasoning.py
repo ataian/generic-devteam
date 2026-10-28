@@ -48,27 +48,27 @@ class ReasoningContractTests(unittest.TestCase):
     def test_codex_routing_and_cli_use_concrete_values(self):
         result = render_role(self.template("coder"), self.values("coder", "low", "high"), "coder")
         for text in [
-            'Team-Codex: Standard `low`, Obergrenze `high`.',
-            'LOW/LOW oder MEDIUM/LOW → Reasoning low.',
-            'HIGH complexity oder HIGH failure impact → Reasoning höchstens high.',
-            'HIGH+HIGH → Reasoning high.',
+            "below HIGH, use `low`.",
+            "HIGH complexity with HIGH impact uses `high`.",
+            "These limits also apply to retries, resumes, and delegated helpers.",
             'model_reasoning_effort=\'"low"\'',
         ]:
             self.assertTrue(text in result, text)
-        self.assertNotIn("höchstes unterstütztes Reasoning", result)
+        self.assertNotIn("if the worker guard prohibits them", result)
+        self.assertNotIn("{{", result)
 
-    def test_reviewer_headings_and_second_pass_use_concrete_values(self):
+    def test_reviewer_uses_concrete_values_and_an_independent_second_pass(self):
         result = render_role(self.template("reviewer"), self.values("reviewer", "low", "medium"), "reviewer")
         for text in [
-            '### Reasoning Stufe low — Default',
-            '### Reasoning Stufe medium — verpflichtend bei hohem Risiko',
-            '### Reasoning Stufe medium — hohe Prüftiefe Second Pass',
-            'Re-Read auf Reasoning medium',
-            'unabhängiger Second Pass auf medium',
+            "Use the configured default reasoning `low` for normal changes.",
+            "You can upgrade to `medium` at any time.",
+            "A required second pass is a separate run at reasoning `medium` with the unchanged model and provider.",
+            "Do not restate the first reasoning.",
+            "Perform the second pass and produce the high-risk evidence block.",
         ]:
             self.assertTrue(text in result, text)
-        self.assertNotIn("Reasoning high", result)
-        self.assertNotIn("bestätigten Obergrenze", result)
+        self.assertNotIn("{{", result)
+        self.assertNotIn("Reasoning Stufe", result)
 
     def test_native_tokens_are_not_fixed_to_one_provider(self):
         for default, maximum in [("medium", "high"), ("low", "xhigh"), ("1024", "4096")]:
@@ -89,61 +89,61 @@ class ReasoningContractTests(unittest.TestCase):
 
     def test_coder_separates_recoverable_errors_from_unavailability(self):
         text = self.template("coder")
-        self.assertIn("Behebbare Aufruf- und Argumentfehler", text)
-        self.assertIn("innerhalb des freigegebenen Auftrags.", text)
-        self.assertNotIn("und Budgets", text)
-        self.assertNotIn("ausdrücklich vereinbarter Kosten- oder Zeitgrenzen", text)
-        self.assertIn("Notwendige Folgeaufträge und Resumes bei unvollständigen oder fehlerhaften Codex-Ergebnissen gehören zu deiner Ausführungsverantwortung und benötigen innerhalb dieses Rahmens keine einzelne Startfreigabe des Planners.", text)
-        self.assertIn("tatsächlich nicht verfügbar", text)
+        self.assertIn("Resolve recoverable command argument errors and incomplete runs through corrected Codex calls.", text)
+        self.assertIn("Continue work after recoverable Codex failures within the same accepted ticket.", text)
+        self.assertIn("If Codex is unavailable or required access fails, stop implementation.", text)
         self.assertIn('kanban_block(kind="capability"', text)
+        self.assertNotIn("und Budgets", text)
         self.assertNotIn("Netzwerk — egal was", text)
         self.assertNotIn("Ohne Codex KEINE Arbeit", text)
-        self.assertNotIn("Implementierung, Tests und Debugging laufen über Codex", text)
 
-    def test_coder_handoff_verification_matches_its_purpose(self):
+    def test_coder_handoff_names_commit_evidence_risk_and_reasoning(self):
         text = self.template("coder")
-        self.assertIn("Beim Implementierungsabschluss", text)
-        self.assertIn("bei Klärungen die Plannerprofilkennung", text)
+        self.assertIn('kanban_request_review(summary=..., reviewer="{{REVIEWER_PROFILE}}")', text)
+        self.assertIn("the exact implementation commit, the verification evidence, the risk class, and the reasoning level used", text)
+        self.assertIn("Never use `kanban_complete` to close your own implementation.", text)
+        self.assertIn("Read back the Kanban status and reviewer assignment.", text)
         self.assertNotIn("Nach jedem `kanban_request_review`", text)
-        self.assertNotIn("schlägt der Handoff STILL fehl", text)
 
     def test_coder_routes_decisions_outside_its_mandate_to_planner(self):
         text = self.template("coder")
-        self.assertIn("Benötigte Entscheidungen außerhalb deines Mandats gehen über den Klärungsweg", text)
-        self.assertIn("Entscheidungen und Freigaben, nicht für selbst lösbare technische Fragen", text)
+        self.assertIn("Route the same task to the verified Planner profile through native `kanban_request_review`.", text)
+        self.assertIn("The Planner profile identifier comes from the setup record", text)
+        self.assertIn("Resume after `kanban_request_changes` and reread the baseline.", text)
         self.assertNotIn("Budgetfragen", text)
         self.assertNotIn("Budgetfreigaben", text)
-        self.assertIn("dieselbe Karte per `kanban_request_review`", text)
-        self.assertIn("Der Planner antwortet und gibt mit `kanban_request_changes` zurück.", text)
 
-    def test_planner_preserves_safeguards_without_budget_counter(self):
+    def test_planner_preserves_scope_safeguards_without_budget_counter(self):
         text = self.template("planner")
-        self.assertIn("### Fortschritt und Eskalationsgrenzen", text)
         for obsolete in ("drei konservative Erweiterungen", "Budgeterweiterung", "Budgetausnahme", "ungenutztes Budget"):
             self.assertNotIn(obsolete, text)
-        self.assertIn("Bei ausbleibendem Fortschritt oder unverhältnismäßiger Kleinarbeit die Ursache und den gewählten Lösungsweg prüfen, statt unverändert weiterzuarbeiten.", text)
         for preserved in (
-            "Zusätzliche visuelle Korrekturen nur für belegte Abweichungen",
-            "Scope, fachlich ungeklärte Anforderungen, Qualitäts-/Securitygates",
-            "Prüfe bei Werkzeugproblemen zuerst",
-            "Native Laufzeit-/Circuit-Breaker-/Triage-Sicherungen nicht umgehen",
-            "## Zielorientierung und wirtschaftliches Arbeiten",
+            "Limit changes to the accepted goal.",
+            "Do not derive requirements from merely hypothetical risks.",
+            "Do not mute escalation or review messages to keep the project channel quiet.",
+            "Do not reinitialize or nest Git in an existing repository.",
+            "`grilling` takes precedence for requirement clarification.",
+            "Board: `{{KANBAN_BOARD_NAME}}`",
         ):
             self.assertIn(preserved, text)
 
     def test_coder_checks_reported_obstacles_before_escalating(self):
-        paragraph = "Prüfe von Codex gemeldete Hindernisse selbst gegen den konkreten Ablauf. Unterscheide tatsächliche Befunde, offene prüfbare Fragen und bloß hypothetische Möglichkeiten. Kläre technische Fragen innerhalb deines Auftrags selbst; eskaliere nur die danach verbleibende notwendige Entscheidung oder fehlende Befugnis."
+        paragraph = "Check each obstacle that Codex reports against the concrete flow yourself. Separate a confirmed finding, an open verifiable question, and a hypothetical possibility."
         source = self.template("coder")
         self.assertEqual(source.count(paragraph), 1)
         rendered = render_role(source, self.values("coder"), "coder")
         self.assertEqual(rendered.count(paragraph), 1)
 
     def test_planner_checks_blocker_premises_before_adding_requirements(self):
-        paragraph = "Prüfe bei Eskalationen zuerst, ob der behauptete Blocker im konkreten Ablauf tatsächlich vorliegt und nicht innerhalb des bestehenden Auftrags lösbar ist. Leite aus bloß hypothetischen Risiken keine zusätzlichen Anforderungen, Schutzverfahren oder Kundenfreigaben ab."
+        paragraph = "Confirm a real blocker before escalation. Resolve local technical or harmless details within the accepted scope."
         source = self.template("planner")
         self.assertEqual(source.count(paragraph), 1)
         rendered = render_role(source, self.values("planner"), "planner")
         self.assertEqual(rendered.count(paragraph), 1)
+
+    def test_caveman_style_is_scoped_to_the_coder(self):
+        self.assertIn("$caveman", self.template("coder"))
+        self.assertNotIn("caveman", self.template("reviewer"))
 
     def test_nonplaceholder_bytes_preserved(self):
         for role in MANIFEST["role_templates"]:

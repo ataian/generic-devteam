@@ -25,7 +25,7 @@ Vorhandene geeignete Prüfwerkzeuge verwenden; fehlende Voraussetzungen konkret 
   Anzeigenamen verwechselt; fehlende oder ungültige Werte werden abgewiesen.
 - [ ] **Reasoning-Vertrag:** Pflichtfrage und bestätigte Standard-/Maximalwerte sind
   in Setup/Record enthalten; Coder-/Reviewer-Vorlagen rendern konkrete Werte auch
-  in Aufruf, Überschriften und Second Pass. Fehlende Werte halten an. Offline-Test:
+  im Aufruf, in der Reasoning-Matrix und im Second Pass. Fehlende Werte halten an. Offline-Test:
   `python3 -B references/test_render_reasoning.py` aus dem Paketroot; keine Modellcalls.
 - [ ] **Syntax:** JSON und vorhandene YAML-/TOML-Daten mit passenden Parsern prüfen,
   Pythonbeispiele als Syntaxbaum, Shellbeispiele mit `bash -n`. Reine Textfragmente
