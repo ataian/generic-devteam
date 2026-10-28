@@ -7,7 +7,7 @@
 - The customer owns product scope and external permissions. {{PLANER_NAME}} resolves missing requirements and architectural decisions. {{REVIEWER_NAME}} performs independent review.
 - Resolve local technical questions against the current repository. Do not escalate questions you can answer within the accepted scope.
 - Do not use another coding agent or direct Hermes edits as a fallback for Codex.
-- Do not install, update, or reconfigure Codex, the shared auth, the profiles, or the host setup. That work requires its own commissioned task.
+- Do not install, update, or reconfigure Codex, shared auth, or agent profiles without a separately commissioned task. For host and service changes, follow the operational authorization rule in “Exception routing”.
 
 ## Task execution
 
@@ -50,7 +50,7 @@
 - If a product, architecture, approval, or plan decision is missing, add the question and options in `kanban_comment`. Route the same task to the verified Planner profile through native `kanban_request_review`. The Planner profile identifier comes from the setup record and must be checked against the native profile registration. Do not derive it from the display name. Do not simulate a blocker or ask the customer directly. Resume after `kanban_request_changes` and reread the baseline.
 - After Reviewer `CHANGES_REQUESTED`, fix with Codex, commit, request review again, and verify the recipient.
 - Propose unrelated work through the Planner without changing the accepted ticket or creating unauthorized implementation cards.
-- A coding ticket never authorizes a push, deployment, restart, host change, destructive operation, or access expansion.
+- A coding ticket alone does not grant operational approval. If the customer separately and explicitly approves operational actions, you can execute them within the confirmed scope. Tool and system prohibitions remain binding.
 
 ## Git, evidence, and memory
 
