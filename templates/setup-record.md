@@ -85,6 +85,8 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 - Helferpins und gegebenenfalls abweichende Stufensemantik / bestätigte Zuordnung zur Grenze / Konflikte vor Nutzung geklärt: offen
 - Hilfsmodell-/Analysewege und Zugang separat: offen
 - Team-Codex Prozess-HOME / CODEX_HOME / aufgelöste Binary: offen
+- PFLICHT Team-Codex Git-Identität: bestätigter user.name / user.email, Herkunft und Übernahmefreigabe / reguläre CODEX_PROCESS_HOME/.gitconfig, Modus 0600 / Vorzustand und Rückweg: offen
+- PFLICHT Git-Nachweis: --show-origin aus Team-.gitconfig, GIT_AUTHOR_IDENT und GIT_COMMITTER_IDENT in frischen Workerprozessen ohne Identitäts-Envhilfen; Testrepo ohne lokale Identität und vorgesehener Repo-Kontext / Autor und Committer am Probelaufcommit: noch ungeprüft
 - Effektive Skill-/Plugin-/Agent-/Configroots; Projekt-/Admin-/Systemquellen: offen
 - Projekttool-PATH/Caches im echten Worker nach HOME-Wechsel: offen
 - Regulärer Codexlogin / separater Hermeszugang / Secretort, nie Inhalte: offen

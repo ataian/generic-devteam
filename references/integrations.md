@@ -64,7 +64,62 @@ Im tatsächlich aufgelösten Coderhome zwei eindeutig diesem Team zugeordnete
 Verzeichnisse anlegen: `devteam/codex-home` und `devteam/user-home`.
 `CODEX_HOME` zeigt auf ersteres, `CODEX_PROCESS_HOME` auf letzteres.
 Nur der Codex-Prozess erhält HOME und CODEX_HOME; der Hermes-Prozess behält sein Profilhome.
-Keine globale Shell-/Service-Env ändern. Grundform für jeden Team-Codex-Aufruf:
+Keine globale Shell-/Service-Env ändern.
+
+### Git-Identität im Team-Prozess-HOME (Pflicht vor dem ersten Auftrag)
+
+Git liest seine Benutzerkonfiguration relativ zu `HOME`, nicht zu `CODEX_HOME`.
+Ein frisches `devteam/user-home` übernimmt deshalb die persönliche `.gitconfig`
+nicht. Codexlogin und GitHub-Zugriff ersetzen keine Git-Autor-/Committeridentität.
+
+1. Die bereits ausdrücklich bestätigte Commitidentität aus dem Setupauftrag oder
+   einem bekannten autorisierten Git-Kontext samt Herkunft übernehmen. Nur wenn
+   Name/E-Mail oder die Erlaubnis zur Übernahme fehlen, diese klären. Keine Identität
+   aus Profilnamen, Login, Commit-Historie oder Beispieldaten erfinden.
+2. Pflichtziel ist eine eigene reguläre Datei `$CODEX_PROCESS_HOME/.gitconfig`
+   mit `user.name` und `user.email`. Vor Anlage Eigentum, Symlinks und Bestand
+   prüfen. Eine passende vorhandene Datei wiederverwenden; bei Abweichungen erst
+   klären und vor einer genehmigten gezielten Änderung den Vorzustand sichern.
+   Keine vollständige persönliche `.gitconfig`, Includes, Credentials oder
+   Credentialhelper kopieren/verlinken. Persönliche und Repo-Konfiguration erhalten.
+3. Bei **noch nicht vorhandenem**, geprüftem Ziel die bestätigten Werte als
+   `GIT_USER_NAME` und `GIT_USER_EMAIL` verwenden (nichtleere einzeilige Rohwerte):
+
+   ```sh
+   (umask 077
+    git config --file "$CODEX_PROCESS_HOME/.gitconfig" user.name "$GIT_USER_NAME" &&
+    git config --file "$CODEX_PROCESS_HOME/.gitconfig" user.email "$GIT_USER_EMAIL")
+   ```
+
+   Beide Schreibaufrufe müssen gelingen. Dateiinhalt gezielt rücklesen und Modus
+   0600 prüfen. Keine Identitätsvariablen als dauerhaften Ersatz verwenden: sie
+   fehlen sonst beim nächsten Start oder vorgeschalteten Git-Preflight wieder.
+4. Nach Rollenannahme im tatsächlichen Worker in einem separaten Testrepository
+   **ohne lokale Git-Identität** und danach im vorgesehenen Repo-Kontext prüfen.
+   Für jeden der folgenden Git-Leseaufrufe dieselbe Prozessbindung verwenden:
+
+   ```sh
+   env -u GIT_AUTHOR_NAME -u GIT_AUTHOR_EMAIL -u GIT_COMMITTER_NAME -u GIT_COMMITTER_EMAIL \
+     HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" \
+     git -C "$TEST_REPO" config --show-origin --get-regexp '^user\.(name|email)$'
+   env -u GIT_AUTHOR_NAME -u GIT_AUTHOR_EMAIL -u GIT_COMMITTER_NAME -u GIT_COMMITTER_EMAIL \
+     HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" \
+     git -C "$TEST_REPO" var GIT_AUTHOR_IDENT
+   env -u GIT_AUTHOR_NAME -u GIT_AUTHOR_EMAIL -u GIT_COMMITTER_NAME -u GIT_COMMITTER_EMAIL \
+     HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" \
+     git -C "$TEST_REPO" var GIT_COMMITTER_IDENT
+   ```
+
+   Erfolg: Quelle ist die Team-`.gitconfig`, Autor **und** Committer entsprechen
+   exakt den bestätigten Werten; alle Aufrufe Exit 0. Geerbte `GIT_CONFIG_*`-,
+   XDG-, Include- und Repo-Overrides bei abweichender Auflösung klären, nicht
+   global entfernen oder durch Test-Overrides verdecken. Nach dem echten
+   Probelaufcommit beide Identitäten mit `git show -s --format='%an <%ae>%n%cn <%ce>'`
+   rücklesen. Bei Wiederaufnahme erneut prüfen. Fehlende Datei, Herkunft oder
+   Identitätsnachweise halten die Team-Codex-Freigabe an; im privaten Setuprecord
+   Werte, Herkunft, Pfad und Belege festhalten.
+
+Grundform für jeden Team-Codex-Aufruf:
 
 ```sh
 env HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" PONYTAIL_DEFAULT_MODE=full "$CODEX_BINARY" login --device-auth
