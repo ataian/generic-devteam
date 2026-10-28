@@ -278,12 +278,15 @@ Original-`LICENSE`, `LICENSE-MIT`, `NOTICE` erhalten. Der recherchierte Original
 Alias `full` wird auf `caveman` abgebildet (`src/hooks/caveman-config.js`). Aktuellen
 Dateibaum/Mapping bestätigen; kein zusätzliches CLI-/Proxy-/Routingprodukt.
 
-Nach `<Coderhome>/skills/caveman/`, `<Reviewerhome>/skills/caveman/` und
-`<CODEX_PROCESS_HOME>/.agents/skills/caveman/` mit vollständigen Begleitdateien
-bereitstellen. Für beide Hermesrollen `skills.auto_load` gezielt um `caveman`
-erweitern; bestehende Liste zunächst lesen, duplikatfrei mergen und als JSON-Liste
-über `hermes -p "$PROFILE" config set skills.auto_load "$AUTO_LOAD_JSON"` setzen,
+Nach `<Coderhome>/skills/caveman/` und `<CODEX_PROCESS_HOME>/.agents/skills/caveman/`
+mit vollständigen Begleitdateien bereitstellen. Nur für das Coderprofil
+`skills.auto_load` gezielt um `caveman` erweitern; bestehende Liste zunächst lesen,
+duplikatfrei mergen und als JSON-Liste über
+`hermes -p "$PROFILE" config set skills.auto_load "$AUTO_LOAD_JSON"` setzen,
 danach `config get skills.auto_load`. Nicht die ganze vorhandene Liste ersetzen.
+Das Reviewerprofil erhält weder die Skillkopie noch den Autoload-Eintrag; seine
+SOUL verlangt sachliche Klartextbefunde, damit Reviewbefunde nicht durch
+Kürzung mehrdeutig werden.
 Im echten neuen Kontext geladenen Originalhauptskill nachweisen. Team-Codex erhält
 `$caveman` ausdrücklich in **jedem neuen Auftrag**, auch nach Neustart/Resume.
 Diese Pflicht steht dauerhaft in der [Coder-SOUL](../templates/roles/coder.SOUL.md.template).

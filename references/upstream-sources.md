@@ -47,7 +47,7 @@ Notice-Dateien erhalten, auch wenn sie oberhalb eines ausgewählten Unterbaums l
 | <a id="grill-me"></a>grill-me / grilling | [mattpocock/skills](https://github.com/mattpocock/skills) | Vollständige Bäume `skills/productivity/grill-me` und `skills/productivity/grilling` einschließlich `agents/`, benötigter Referenzen und MIT-`LICENSE` aus dem Repositoryroot | Hermes-Planner |
 | <a id="hindsight"></a>Hindsight-Integration | [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) | Vollständiges `hindsight-integrations/hermes`; vorhandenen Hindsight-Dienst anbinden | Alle Hermes-Rollen |
 | <a id="ponytail"></a>Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Vollständiges Repository mit Hermes-Plugin, `.codex-plugin/plugin.json`, Skills und Hooks | Hermes-Coder und Team-Codex |
-| <a id="caveman"></a>Caveman | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Vollständiges `skills/caveman` für den Chatstil, nicht das zusätzliche CLI-/Proxyprodukt | Hermes-Coder, Hermes-Reviewer und Team-Codex |
+| <a id="caveman"></a>Caveman | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Vollständiges `skills/caveman` für den Chatstil, nicht das zusätzliche CLI-/Proxyprodukt | Hermes-Coder und Team-Codex |
 | <a id="find-skills"></a>find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) | Vollständiges `skills/find-skills` | Team-Codex |
 | <a id="codex-agents"></a>Codex-Custom-Agents | [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents) | Die unten aufgeführten Originaldateien | Team-Codex |
 
