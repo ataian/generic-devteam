@@ -103,7 +103,11 @@ hermes config get kanban.auto_decompose                     # beide Formen zurü
   angekommene Schreiben. `(True, N)` heißt: der Dispatcher liest etwas anderes als
   die Datei sagt.
 
-## 6. Wenn es trotzdem passiert ist: unerwünschten Fan-out zusammenführen
+## 6. Vorhandene Karte nach geklärtem Block aus `triage` zurückholen
+
+Der mitgelieferte Planner-Skill enthält [Kanban triage recovery](../skills/brownfield-feature-planning/references/kanban-triage-recovery.md): deterministischer nativer Rückweg ohne Neuspezifikation, Review-Sonderfall, unveränderter Blockzähler und klare Freigabe-/Claimgrenzen. Beim Setup wird der vollständige Skillbaum an den Planner kopiert. Makeränderungen aktualisieren keine bestehenden Profile; ein Live-Rollout ist ein eigener beauftragter Schritt.
+
+## 7. Wenn es trotzdem passiert ist: unerwünschten Fan-out zusammenführen
 
 1. Wurzel lesen: Status, `parents`, `children`, Events (`block_loop_detected` trägt
    `kind`/`recurrences`/`limit`) und je Kind `created_by` — `auto-decomposer`
@@ -119,7 +123,7 @@ hermes config get kanban.auto_decompose                     # beide Formen zurü
    `promote`/`unblock` gehören nicht dazu.
 6. Den tatsächlich gelesenen Graphzustand berichten, nicht den beabsichtigten.
 
-## 7. Nie den Kernel patchen
+## 8. Nie den Kernel patchen
 
 Die Installation ist ein Git-Checkout, den der Updater ersetzt, und Updates kommen
 laufend. Eine gepatchte Konstante oder ein von Hand ergänzter Config-Key ist beim

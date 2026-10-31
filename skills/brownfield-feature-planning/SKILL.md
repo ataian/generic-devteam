@@ -12,6 +12,8 @@ metadata:
 
 # Brownfield feature planning
 
+When an existing Kanban card enters `triage` after repeated blocks, or `unblock`/`promote` refuse recovery, load [Kanban triage recovery](references/kanban-triage-recovery.md) before declaring it unrescuable. Resolve the real cause and preserve the existing assignment, dependencies, review provenance and counters; this procedure supplies no new operational approval.
+
 For evidence-backed project reviews, load [Bounded project retrospectives](references/project-retrospectives.md). Preserve original scope history and distinguish proposed process improvements from authorized execution.
 
 ## When to Use
