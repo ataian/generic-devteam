@@ -7,9 +7,9 @@
 - Git repository root: `/home/joi/projects/generic-devteam`.
 - Historical inspected planning baseline: `a44d15e3aad77b891fa5c95ebeba49a780e4525e`, then on `develop`, package `1.1.4`.
 - Required current working branch: `fix/makerscope`. Max moved the planning commits onto this branch and selected it for the implementation work. Verify this branch before edits and commits; do not switch back to `develop` or merge without a separate instruction.
-- Mattermost project channel: not yet established for this planning assignment.
-- Mattermost channel ID: unknown; do not infer it from a generated team's configuration.
-- Hermes Kanban board/project mapping: unresolved. No board named `generic-devteam` was present in the board inventory read on 2026-11-01.
+- Mattermost project channel: Max selected the established project-notification channel on 2026-11-01; use its exact ID below.
+- Mattermost channel ID: `pd8fjzdqi7rz5czss5sofsgcdr`. Use `chat_type=channel`, `delivery_mode=notify+wake`, and notifier profile `kirk` for each implementation ticket. Do not add a Desktop subscription.
+- Hermes Kanban board: `generic-devteam`, created with Max's authorization on 2026-11-01. Its verified default workspace is `/home/joi/projects/generic-devteam`. No separate Hermes Project ID is assigned.
 
 ## Current assignment
 
@@ -25,8 +25,8 @@ After the two implementation phases and reviews, pause for Max's practical setup
 Keep this file and the planning artifacts until that trial and separate cleanup authorization. The planned final cleanup removes temporary local context/planning files from the tracked tree, not Git history or functional Maker/update assets.
 
 Read [the accepted design specification](docs/specs/2026-11-01-maker-setup-scope-design.md) and [the approved implementation plan](docs/PLAN_1.0.0_Generic-Devteam.md) for the exact scope and evidence.
-Implementation tickets for Phases 1–2 are authorized after routing is resolved. Live-team changes, practical trial execution, cleanup, publication, and deployment are not authorized by this approval.
-Resolve board and communication routing before creating implementation tasks.
+Implementation tickets for Phases 1–2 are authorized with the routing above. Live-team changes, practical trial execution, cleanup, publication, and deployment are not authorized by this approval.
+Verify ticket routing, subscriptions, and the serial dependency chain before releasing Phase 1.
 
 ## Repository rules
 

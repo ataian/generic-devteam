@@ -194,7 +194,7 @@ Planning-document-only changes do not need another multi-minute aggregate run. C
 ## 6. Approval, routing, and completion
 
 - Max's approval on 2026-11-01 authorizes implementation of Phases 1–2 against content baseline `696418f81aa005db13a9036fa479dd19424c5880`. It does not release the practical trial, Phase 3, live rollout, or publication.
-- Before tickets, commit the accepted plan/approval record and resolve the explicit project board and communication mapping. `HERMES.md` currently records them as unresolved; do not borrow a generated team's board or the active default board.
+- Before tickets, commit the accepted plan/approval record and project routing. Max selected board `generic-devteam` and Mattermost channel `pd8fjzdqi7rz5czss5sofsgcdr` on 2026-11-01. Use `chat_type=channel`, `notify+wake`, and notifier `kirk`; do not add a Desktop subscription or use the active default board. Verify these bindings on each ticket before release.
 - After implementation approval, create only the two Phase 1–2 tickets for `scotty`, secured initially, with Phase 1 → Phase 2 as the exact parent chain. Put the canonical workspace, required branch `fix/makerscope`, committed plan path/hash, and change-scoped TAS requirement in both tickets. Require Julia to review the phase's new and revised texts against TAS without expanding into unchanged text.
 - Read back routing, subscriptions where applicable, workspace, scope, and parent chain before release. Julia's same-card review completion gates Phase 2. Do not dispatch manually.
 - Do not create a separate coding task for an external launcher rollout or existing-team update without its separate authorization.
