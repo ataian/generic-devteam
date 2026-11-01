@@ -411,6 +411,138 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual([item['status'] for item in found], ['failed', 'recorded'])
         self.assertEqual(found[1]['team_id'], 'fixture-team')
 
+    def test_nested_coder_codex_home_supports_init_plan_apply(self):
+        old = Path(self.roles['team-codex']['home'])
+        nested = Path(self.roles['coder']['home']) / 'devteam/user-home'
+        nested.parent.mkdir(mode=0o700)
+        shutil.move(str(old), nested)
+        self.roles['team-codex']['home'] = str(nested)
+        self.initialize()
+        self.change('skills/screenshot-to-code/SKILL.md')
+        result = u.apply(self.home, self.proposal(), decision='proceed', review='checked nested layout')
+        self.assertEqual(result['status'], 'applied')
+        self.assertIn('New upstream instruction.', (nested / '.agents/skills/screenshot-to-code/SKILL.md').read_text())
+
+    def test_nested_codex_home_cannot_overlap_managed_skill_area(self):
+        nested = Path(self.roles['coder']['home']) / 'skills/codex-home'
+        nested.mkdir(parents=True)
+        self.roles['team-codex']['home'] = str(nested)
+        with self.assertRaisesRegex(ValueError, 'collid|overlap|Overlapping'):
+            self.initialize()
+
+    def test_missing_managed_files_block_apply_without_advancing_record(self):
+        self.initialize()
+        before = (self.state / 'installation.json').read_bytes()
+        self.change('skills/minimal-change-engineering/SKILL.md')
+        for relative in ('SOUL.md', 'skills/brownfield-feature-planning/SKILL.md'):
+            with self.subTest(relative=relative):
+                target = self.home / relative
+                saved = target.read_bytes()
+                target.unlink()
+                plan = self.proposal()
+                self.assertIn(str(target), json.loads(plan.read_text())['conflicts'])
+                with self.assertRaises(ValueError):
+                    u.apply(self.home, plan, decision='proceed', review='checked')
+                self.assertFalse(target.exists())
+                self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+                target.write_bytes(saved)
+
+    def test_present_empty_file_is_not_a_missing_file(self):
+        self.initialize()
+        target = self.home / 'SOUL.md'
+        target.write_bytes(b'')
+        self.change()
+        plan = self.proposal()
+        self.assertNotIn(str(target), json.loads(plan.read_text())['conflicts'])
+        u.apply(self.home, plan, decision='proceed', review='checked deliberate empty local file')
+        self.assertEqual(target.read_bytes(), b'')
+
+    def test_updates_preserve_local_modes_and_private_state(self):
+        self.initialize()
+        target = self.home / 'skills/brownfield-feature-planning/SKILL.md'
+        target.chmod(0o640)
+        self.change()
+        plan = self.proposal()
+        result = u.apply(self.home, plan, decision='proceed', review='checked')
+        self.assertEqual(target.stat().st_mode & 0o7777, 0o640)
+        for path in self.state.rglob('*'):
+            if path.is_file() and path.name != 'setup.md':
+                self.assertEqual(path.stat().st_mode & 0o7777, 0o600, str(path))
+        u.rollback(self.home, Path(result['run']), decision='proceed')
+        self.assertEqual(target.stat().st_mode & 0o7777, 0o640)
+        self.assertNotIn('New upstream instruction.', target.read_text())
+
+    def test_new_executable_helper_uses_owner_only_mode_and_runs(self):
+        self.initialize()
+        source = self.repo / 'skills/brownfield-feature-planning/references/new.sh'
+        source.write_text('#!/bin/sh\nprintf "helper-ok\\n"\n')
+        source.chmod(0o755)
+        plain = source.with_name('new.txt')
+        plain.write_text('plain\n')
+        self.commit('add executable helper')
+        result = u.apply(self.home, self.proposal(), decision='proceed', review='checked helper')
+        target = self.home / source.relative_to(self.repo)
+        self.assertEqual(target.stat().st_mode & 0o7777, 0o700)
+        self.assertEqual(target.with_name('new.txt').stat().st_mode & 0o7777, 0o600)
+        self.assertEqual(subprocess.check_output([str(target)], text=True), 'helper-ok\n')
+        restored = u.rollback(self.home, Path(result['run']), decision='proceed')
+        self.assertIn(str(target), restored['retained_additions'])
+        self.assertEqual(target.stat().st_mode & 0o7777, 0o700)
+
+    def test_mode_drift_after_plan_blocks_apply(self):
+        self.initialize()
+        self.change()
+        plan = self.proposal()
+        target = self.home / 'skills/brownfield-feature-planning/SKILL.md'
+        target.chmod(0o711)
+        before = (self.state / 'installation.json').read_bytes()
+        with self.assertRaises(ValueError):
+            u.apply(self.home, plan, decision='proceed', review='checked')
+        self.assertEqual(target.stat().st_mode & 0o7777, 0o711)
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+
+    def test_rollback_refuses_mode_changes_after_update(self):
+        self.initialize()
+        self.change()
+        result = u.apply(self.home, self.proposal(), decision='proceed', review='checked')
+        target = self.home / 'skills/brownfield-feature-planning/SKILL.md'
+        target.chmod(0o711)
+        with self.assertRaisesRegex(ValueError, 'changed since update'):
+            u.rollback(self.home, Path(result['run']), decision='proceed')
+        self.assertEqual(target.stat().st_mode & 0o7777, 0o711)
+
+    def test_malformed_records_fail_per_home_and_discovery_continues(self):
+        record = self.initialize()
+        marker = self.state / 'installation.json'
+        other = Path(self.roles['reviewer']['home'])
+        (other / 'devteam').mkdir(mode=0o700)
+        (other / 'devteam/setup.md').write_text('existing setup marker')
+        invalid = [[], None, 'record', {}, dict(record, roles=[]),
+                   dict(record, roles=dict(self.roles, coder=[])),
+                   dict(record, roles=dict(self.roles, coder={'id': [], 'home': 7})),
+                   dict(record, managed={}), dict(record, managed=[None]),
+                   dict(record, managed=[dict(record['managed'][0], baseline=[])]),
+                   dict(record, confirmed_values=[]), dict(record, maker_commit=[])]
+        for value in invalid:
+            with self.subTest(record=value):
+                marker.write_text(json.dumps(value))
+                found = u.discover([{'home': str(self.home)}, {'home': str(other)}])
+                self.assertEqual([item['status'] for item in found], ['failed', 'unrecorded'])
+                self.assertEqual(found[0]['home'], str(self.home))
+                self.assertTrue(found[0]['error'])
+                with self.assertRaises(ValueError):
+                    u.load_record(self.home)
+
+    def test_malformed_inventory_entries_do_not_hide_valid_team(self):
+        self.initialize()
+        for item in (None, [], 'home', {}, {'home': None}, {'home': []}, {'home': 7}):
+            with self.subTest(item=item):
+                found = u.discover([item, {'home': str(self.home)}])
+                self.assertEqual([entry['status'] for entry in found], ['failed', 'recorded'])
+        for inventory in (None, {}, 'homes'):
+            with self.subTest(inventory=inventory), self.assertRaises(ValueError):
+                u.discover(inventory)
+
     def test_discovery_uses_supplied_native_homes_not_names(self):
         self.initialize()
         found = u.discover([{'id': 'unexpected', 'home': str(self.home)}, {'id': 'coder', 'home': self.roles['coder']['home']}])

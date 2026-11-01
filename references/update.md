@@ -76,6 +76,11 @@ It stores pristine personalized Maker output separately in `baselines/<sha256>`.
 It does not use the locally modified target as the Maker baseline.
 The private directories use mode 0700.
 The private records, proposals, baselines, and backups use mode 0600.
+Content updates preserve existing local target modes; they do not migrate permissions.
+New regular target files use mode 0600.
+New skill helpers with Git mode `100755` use mode 0700, without group or other access.
+The proposal binds target modes as well as bytes.
+Application and rollback check both before advancing the installation record.
 
 ## Record an existing team
 
@@ -179,9 +184,9 @@ Process other independent teams even if one team is skipped or fails.
 Report each team's actual result instead of a global current-version claim.
 
 Application rebuilds the proposal from its exact Git revision before writing.
-It rechecks target hashes, installation metadata, and visible activity before the write batch.
+It rechecks target hashes and modes, installation metadata, and visible activity before the write batch.
 It backs up every target and the old installation record before the first target write.
-It verifies exact target bytes before advancing installation metadata.
+It verifies exact target bytes and modes before advancing installation metadata.
 Metadata replacement is atomic per file.
 The whole update is not an atomic multi-file transaction or an external process lock.
 An active external writer can still race between checks and replacement.
@@ -203,7 +208,7 @@ python3 -B references/update_team.py rollback --home /actual/planner-home \
   --run /actual/planner-home/devteam/runs/RUN --activity-decision proceed
 ```
 
-Rollback checks the exact recorded before/after hashes.
+Rollback checks the exact recorded before/after hashes and modes.
 It refuses to overwrite work made after the update.
 It restores backed-up bytes and modes before restoring the old installation record.
 It reads the restored files back.

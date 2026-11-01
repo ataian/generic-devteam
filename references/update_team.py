@@ -74,6 +74,8 @@ def legacy_baseline(repo):
 
 
 def safe_relative(value):
+    if not isinstance(value, str):
+        raise ValueError('Expected relative path string')
     path = PurePosixPath(value)
     if not value or path.is_absolute() or any(x in ('', '.', '..') for x in value.split('/')) or '\\' in value:
         raise ValueError('Unsafe relative path: ' + str(value))
@@ -113,6 +115,11 @@ def required_read(path):
 def fingerprint(path):
     data = read(path)
     return digest(data) if data is not None else None
+
+
+def file_mode(path):
+    path = guarded(path)
+    return stat.S_IMODE(path.stat().st_mode) if path.exists() else None
 
 
 def private_dir(path):
@@ -166,21 +173,27 @@ def atomic(path, data, expected, mode=0o600):
             os.unlink(temporary)  # Only this invocation's temporary file.
 
 
-def blob(repo, commit, source):
+def source_mode(repo, commit, source):
     safe_relative(source)
-    spec = commit + ':' + source
     mode = git(repo, 'ls-tree', commit, '--', source).decode().split(' ', 1)[0]
     if mode not in ('100644', '100755'):
         raise ValueError('Source is missing, symlink or non-regular: ' + source)
-    return git(repo, 'show', spec)
+    return 0o700 if mode == '100755' else 0o600
+
+
+def blob(repo, commit, source):
+    source_mode(repo, commit, source)
+    return git(repo, 'show', commit + ':' + source)
 
 
 def check_roles(roles, home=None):
-    if not {'planner', 'coder', 'reviewer'} <= set(roles) or set(roles) - {'planner', 'coder', 'reviewer', 'team-codex'}:
+    if not isinstance(roles, dict) or not {'planner', 'coder', 'reviewer'} <= set(roles) or set(roles) - {'planner', 'coder', 'reviewer', 'team-codex'}:
         raise ValueError('Expected actual role IDs and homes')
     homes, ids = set(), set()
     for role, item in roles.items():
-        if set(item) != {'id', 'home'} or not re.fullmatch(r'[a-z0-9][a-z0-9_-]{0,63}', item['id']):
+        if (not isinstance(item, dict) or set(item) != {'id', 'home'}
+                or not isinstance(item['id'], str) or not isinstance(item['home'], str)
+                or not re.fullmatch(r'[a-z0-9][a-z0-9_-]{0,63}', item['id'])):
             raise ValueError('Invalid role binding: ' + role)
         path = guarded(item['home'])
         if str(path) != item['home'] or not path.is_dir() or path.stat().st_uid != os.getuid():
@@ -189,10 +202,23 @@ def check_roles(roles, home=None):
             raise ValueError('Duplicate role ID/home')
         homes.add(path)
         ids.add(item['id'])
-    for a in homes:
-        for b in homes:
-            if a != b and a in b.parents:
+    for role, item in roles.items():
+        a = Path(item['home'])
+        for other, binding in roles.items():
+            b = Path(binding['home'])
+            if a in b.parents and (role, other) != ('coder', 'team-codex'):
                 raise ValueError('Overlapping role homes')
+    # The regular Codex HOME is inside coder/devteam/user-home. Compare
+    # managed areas, not the whole homes, before allowing that nesting.
+    areas = []
+    for role, item in roles.items():
+        root = Path(item['home'])
+        areas.extend([root / '.agents/skills'] if role == 'team-codex'
+                     else [root / 'SOUL.md', root / 'skills'])
+    for index, a in enumerate(areas):
+        for b in areas[index + 1:]:
+            if a == b or a in b.parents or b in a.parents:
+                raise ValueError('Managed target areas collide/overlap')
     if home is not None and str(home) != roles['planner']['home']:
         raise ValueError('Planner home mismatch')
 
@@ -210,7 +236,7 @@ def desired(repo, commit, roles, values, souls_only=False):
         raw = dict(values, ROLE_NAME=values[ROLE_NAMES[role]])
         content = render_role(template, {key: raw[key] for key in fields}, role).encode()
         result.append({'role': role, 'source': source, 'target': str(Path(roles[role]['home']) / 'SOUL.md'),
-                       'transform': 'render-role-v1', 'content': content})
+                       'transform': 'render-role-v1', 'content': content, 'mode': 0o600})
     if not souls_only:
         for name, skill in manifest['own_skills'].items():
             safe_relative(name)
@@ -227,7 +253,8 @@ def desired(repo, commit, roles, values, souls_only=False):
                     for source in sources:
                         target = Path(roles[role]['home']) / ('.agents' if harness == 'codex' else '') / source
                         result.append({'role': role, 'source': source, 'target': str(target),
-                                       'transform': 'copy-v1', 'content': blob(repo, commit, source)})
+                                       'transform': 'copy-v1', 'content': blob(repo, commit, source),
+                                       'mode': source_mode(repo, commit, source)})
     targets = [entry['target'] for entry in result]
     if len(targets) != len(set(targets)):
         raise ValueError('Duplicate managed target')
@@ -256,7 +283,8 @@ def setup_data(state):
     if text.count('```json\n') != 1:
         raise ValueError('Expected one setup JSON block')
     data = json.loads(text.split('```json\n', 1)[1].split('\n```', 1)[0])
-    if not isinstance(data['confirmed_values'], dict) or not isinstance(data['confirmed_bindings'], dict):
+    if (not isinstance(data, dict) or not isinstance(data.get('confirmed_values'), dict)
+            or not isinstance(data.get('confirmed_bindings'), dict)):
         raise ValueError('Missing confirmed setup data')
     return data
 
@@ -296,6 +324,7 @@ def initialize(repo, home, team_id, roles=None, legacy=False, base_commit=None, 
               'managed': []}
     for entry in entries:
         content = entry.pop('content')
+        entry.pop('mode')  # Delivery policy is not the installed local mode.
         record['managed'].append(dict(entry, baseline=store_baseline(state, content), installed_hash=fingerprint(entry['target'])))
     atomic(state / 'installation.json', json_bytes(record), None)
     return record
@@ -308,20 +337,49 @@ def load_record(home):
     if raw is None or path.stat().st_mode & 0o077:
         raise ValueError('Private installation record required')
     record = json.loads(raw)
-    if record['schema'] != SCHEMA:
+    if not isinstance(record, dict):
+        raise ValueError('Installation record must be an object')
+    if type(record.get('schema')) is not int or record['schema'] != SCHEMA:
         raise ValueError('Unsupported installation schema')
-    check_roles(record['roles'], home)
+    for key, pattern in (('team_id', r'[A-Za-z0-9][A-Za-z0-9_.-]{0,119}'),
+                         ('maker_commit', r'[0-9a-f]{40}'),
+                         ('maker_version', r'(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)')):
+        if not isinstance(record.get(key), str) or not re.fullmatch(pattern, record[key]):
+            raise ValueError('Invalid installation field: ' + key)
+    check_roles(record.get('roles'), home)
+    if (not isinstance(record.get('confirmed_values'), dict)
+            or not all(isinstance(value, str) for value in record['confirmed_values'].values())
+            or not isinstance(record.get('confirmed_bindings'), dict)
+            or type(record.get('legacy_skills_unknown')) is not bool):
+        raise ValueError('Invalid installation setup data')
+    if not isinstance(record.get('managed'), list):
+        raise ValueError('Invalid managed inventory: expected array')
+    for entry in record['managed']:
+        fields = ('role', 'source', 'target', 'transform', 'baseline', 'installed_hash')
+        if not isinstance(entry, dict) or not all(isinstance(entry.get(key), str) for key in fields):
+            raise ValueError('Invalid managed inventory entry')
+        if (entry['role'] not in record['roles'] or entry['transform'] not in ('render-role-v1', 'copy-v1')
+                or not re.fullmatch(r'[0-9a-f]{64}', entry['baseline'])
+                or not re.fullmatch(r'[0-9a-f]{64}', entry['installed_hash'])):
+            raise ValueError('Invalid managed inventory binding/hash')
+        safe_relative(entry['source'])
+        guarded(entry['target'])
     return state, raw, record
 
 
 def discover(native_homes):
     """Consume native profile-home output, never infer a home from an ID."""
+    if not isinstance(native_homes, list):
+        raise ValueError('Native home inventory must be an array')
     results, seen = [], set()
     for item in native_homes:
         try:
+            if not isinstance(item, dict) or not isinstance(item.get('home'), str):
+                raise ValueError('Native home entry must be an object with a home string')
             home = guarded(item['home'])
         except (ValueError, KeyError, OSError) as error:
-            results.append({'home': item.get('home'), 'status': 'failed', 'error': str(error)})
+            results.append({'home': item.get('home') if isinstance(item, dict) else None,
+                            'status': 'failed', 'error': str(error)})
             continue
         marker = home / 'devteam/installation.json'
         if home in seen:
@@ -339,11 +397,13 @@ def discover(native_homes):
 
 
 def merge(base, local, new):
+    if local is None:
+        return None, True
     if local == base or local == new:
         return new, False
     if new == base:
         return local, False
-    if local is None or base is None:
+    if base is None:
         return local, True
     if any(b'\0' in data for data in (base, local, new)):
         return local, True
@@ -420,6 +480,9 @@ def prepare(repo, home, ref='HEAD'):
         previous = stored.get(target)
         base = read(state / 'baselines' / previous['baseline']) if previous else None
         local = read(target)
+        before_mode = file_mode(target)
+        if before_mode is not None:
+            entry['mode'] = before_mode
         new = entry.pop('content')
         if previous is None:
             merged, conflict = (new, False) if local is None or local == new else (local, True)
@@ -427,7 +490,7 @@ def prepare(repo, home, ref='HEAD'):
             merged, conflict = merge(base, local, new)
         if conflict:
             conflicts.append(target)
-        entries.append(dict(entry, before_hash=digest(local) if local is not None else None,
+        entries.append(dict(entry, before_hash=digest(local) if local is not None else None, before_mode=before_mode,
                             baseline=digest(new), new_base=encoded(new), merged=encoded(merged or b''), conflict=conflict))
     obsolete = sorted(set(stored) - new_targets)
     proposal = {'schema': SCHEMA, 'team_id': old['team_id'], 'home': str(home), 'repo': str(Path(repo).resolve()),
@@ -485,13 +548,14 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
     atomic(run / 'installation.before.json', raw, None)
     for index, entry in enumerate(proposal['entries']):
         before = read(entry['target'])
-        if (digest(before) if before is not None else None) != entry['before_hash']:
+        if ((digest(before) if before is not None else None) != entry['before_hash']
+                or file_mode(entry['target']) != entry['before_mode']):
             raise ValueError('Target changed during backup: ' + entry['target'])
         if before is not None:
             atomic(backup / str(index), before, None)
         journal['files'].append({'target': entry['target'], 'before_hash': entry['before_hash'],
                                  'after_hash': digest(decoded(entry['merged'])), 'backup': str(index),
-                                 'mode': stat.S_IMODE(Path(entry['target']).stat().st_mode) if before is not None else 0o600})
+                                 'mode': entry['before_mode'], 'after_mode': entry['mode']})
     atomic(run / 'result.json', json_bytes(journal), None)
     try:
         observed = require_decision(old['roles'], decision)
@@ -499,7 +563,7 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
         if fingerprint(state / 'installation.json') != proposal['record_hash']:
             raise ValueError('Installation changed before write')
         for entry in proposal['entries']:
-            if fingerprint(entry['target']) != entry['before_hash']:
+            if fingerprint(entry['target']) != entry['before_hash'] or file_mode(entry['target']) != entry['before_mode']:
                 raise ValueError('Target changed before write: ' + entry['target'])
         managed = []
         for entry in proposal['entries']:
@@ -507,12 +571,12 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
             if digest(new) != entry['baseline']:
                 raise ValueError('New baseline checksum mismatch')
             if digest(merged) != entry['before_hash']:
-                atomic(entry['target'], merged, entry['before_hash'])
+                atomic(entry['target'], merged, entry['before_hash'], entry['mode'])
             baseline = store_baseline(state, new)
             managed.append({key: entry[key] for key in ('role', 'source', 'target', 'transform')} |
                            {'baseline': baseline, 'installed_hash': digest(merged)})
-        for entry in managed:
-            if fingerprint(entry['target']) != entry['installed_hash']:
+        for entry in proposal['entries']:
+            if fingerprint(entry['target']) != digest(decoded(entry['merged'])) or file_mode(entry['target']) != entry['mode']:
                 raise ValueError('Final target readback mismatch: ' + entry['target'])
         updated = dict(old, maker_commit=proposal['maker_commit'], maker_version=proposal['maker_version'],
                        managed=managed, last_run=str(run), retained_obsolete=proposal['obsolete'])
@@ -573,7 +637,8 @@ def rollback(home, run, decision=None):
             raise ValueError('Invalid rollback target')
         safe_relative(entry['backup'])
         actual = fingerprint(target)
-        if actual not in (entry['before_hash'], entry['after_hash']):
+        if (actual, file_mode(target)) not in ((entry['before_hash'], entry['mode'] if entry['before_hash'] is not None else None),
+                                             (entry['after_hash'], entry.get('after_mode', entry['mode']))):
             raise ValueError('Target changed since update: ' + target)
         if entry['before_hash'] is not None and fingerprint(run / 'backup' / entry['backup']) != entry['before_hash']:
             raise ValueError('Corrupt rollback backup')
@@ -583,14 +648,15 @@ def rollback(home, run, decision=None):
     for entry in journal['files']:
         target = entry['target']
         actual = fingerprint(target)
-        if actual not in (entry['before_hash'], entry['after_hash']):
+        if (actual, file_mode(target)) not in ((entry['before_hash'], entry['mode'] if entry['before_hash'] is not None else None),
+                                             (entry['after_hash'], entry.get('after_mode', entry['mode']))):
             raise ValueError('Target changed before rollback: ' + target)
         if entry['before_hash'] is None:
             if actual is not None:
                 retained.append(target)  # Do not delete additions without separate approval.
-        elif actual != entry['before_hash']:
+        elif actual != entry['before_hash'] or file_mode(target) != entry['mode']:
             atomic(target, read(run / 'backup' / entry['backup']), actual, entry['mode'])
-        if entry['before_hash'] is not None and fingerprint(target) != entry['before_hash']:
+        if entry['before_hash'] is not None and (fingerprint(target) != entry['before_hash'] or file_mode(target) != entry['mode']):
             raise ValueError('Rollback readback failed: ' + target)
     atomic(state / 'installation.json', before, digest(current_raw))
     result = {'status': 'rolled-back', 'team_id': current['team_id'], 'retained_additions': retained, 'activity': observed}
