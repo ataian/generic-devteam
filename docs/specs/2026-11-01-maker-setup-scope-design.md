@@ -8,6 +8,7 @@
 - Max approved the design direction in the planning conversation: preserve the generated team's capabilities and quality; remove development research and behavioral qualification from ordinary team setup.
 - Max explicitly requires useful setup records and the existing versioned installation/update mechanism to remain intact.
 - Max accepted this written specification as presented in commit `0694e651df32dbe7d5187d6d4105fb2b91819b0c` and authorized preparation of the implementation plan. The subsequent implementation plan still requires separate approval before execution.
+- Max subsequently specified an upfront setup interview and a separate sequence of implementation, his practical setup trial, then explicitly released repository cleanup. The sections below include these requested additions.
 - No implementation, team rollout, profile change, push, release, or deployment is authorized by this document.
 
 ## 1. Outcome
@@ -65,8 +66,8 @@ Do not introduce a prerequisite certification pipeline, new registry, installer 
 
 ## 4. Ordinary setup flow
 
-1. Reuse confirmed team values. Ask only for missing consequential choices. Identify required available dependencies and target collisions.
-2. Confirm the concrete change and activation scope. Retain separate authorization for secrets, shared configuration, and external identity actions where required.
+1. Complete an upfront setup interview before installation. Reuse confirmed values and read available environment facts. Group independent questions; resolve dependent choices during the same preparation stage. Identify required available dependencies and target collisions.
+2. Present the complete confirmed parameters, concrete change/activation scope, and any unavoidable later interaction. Obtain the start decision only after all foreseeable user choices are resolved. Retain separate authorization for secrets, shared configuration, and external identity actions where required.
 3. Create/configure profiles. Deliver personalized roles and complete required assets. Bind Codex, code analysis, board/workspace, communication, and Hindsight according to the existing recipes.
 4. Read back the created objects, effective settings, delivered files, modes, and generated bindings. Reuse evidence from the setup step; do not repeat it as a separate general test campaign.
 5. Save the versioned installation baseline through the existing updater initialization path. Record verified completion or exact remaining setup blockers.
@@ -75,6 +76,36 @@ Do not add a coding task, agent conversation, synthetic memory content, or test 
 Keep genuine initial communication binding actions if the established interface needs them; do not expand them into agent-behavior tests.
 Check loader/discovery/configuration through an available established readback when needed to establish delivery. Do not inspect loader implementations anew.
 Treat an effective centrally managed setting as satisfied when it meets the required behavior. Do not require a duplicate profile entry or override an administrative restriction for formal compliance.
+
+### Upfront input contract
+
+Collect all foreseeable user decisions before profile creation, asset installation, bank/board creation, or activation.
+Cover project/workspace, role names and technical IDs, models and reasoning limits, Codex Git identity, bank/board names, analysis choice, communication identity/targets/authorized users, access method, and the proposed change scope.
+Resolve facts through the existing supported read-only paths instead of asking the user to transcribe discoverable values.
+Do not infer permission from discovery. Confirm identity reuse and consequential choices explicitly.
+Use a compact setup-specific interview, not a mandatory new interview skill or a general product-requirements workshop.
+Persist the nonsecret confirmed dataset through the existing record contract. Before the Planner home exists, use the existing pre-profile setup dataset and handoff mechanism; do not create another configuration store.
+Do not start partial installation while a foreseeable choice remains unanswered.
+Distinguish user choices from generated IDs and technical outputs. Read generated values back when they exist; do not ask the user to invent them upfront.
+Prepare protected authentication and external account/channel prerequisites before installation where the supported workflow permits it.
+Never collect credentials or authentication codes in chat or setup JSON.
+If a protected login, native approval, or `/sethome` action requires an already-created target, disclose that exact interaction during preparation and perform it at the necessary point. Do not promise unattended installation or bypass the control.
+After installation starts, ask only about a newly discovered conflict/failure, a user-requested change, a genuinely newly knowable decision, or a disclosed technically deferred action.
+A late question about an already foreseeable name, model, identity, or setup choice is a Maker workflow defect, not a normal step.
+
+### Practical trial before repository cleanup
+
+Keep the current planning/context material during the two implementation phases and Max's subsequent practical trial.
+After their reviews, pause for Max to try the exact latest reviewed revision and assess setup duration, required attention, and the result.
+Do not launch this trial automatically or convert it into a recurring test required from future Maker users.
+Use a brief observation of total duration, user-wait time where observable, late questions and their causes, and the actual setup result. Do not build a benchmark system or promise a speedup before measurement.
+Use the repository README entry for that trial, not the old installed launcher. Identify this checkout as the temporary development context; do not claim final clean-clone portability yet.
+Keep cleanup as a separately gated later phase. Phase 2 review completion alone does not release it.
+After the trial and Max's cleanup authorization, remove temporary project-local instructions and planning artifacts from the current repository tree, rather than merely excluding them from a package manifest.
+The candidates include root `HERMES.md`, this specification, the implementation plan, and the local launcher-handoff document. Finalize the exact removal set against the tested tree before deletion.
+Preserve functional Maker files, portable authoring rules, required tests, licenses, runtime references, and update helpers/state contracts. Do not delete a file only because development used it.
+Preserve Git history and source revisions needed by updates. Cleanup means removal from the final tracked tree, not history rewriting.
+Verify the cleaned README entry from a different checkout path without local project instructions or the installed launcher. Keep this portability check separate from another full team installation.
 
 ## 5. Setup record and update compatibility
 

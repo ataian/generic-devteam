@@ -18,6 +18,9 @@ Preserve the generated team's capabilities, quality boundaries, setup records, a
 Remove recurring Maker-development research and behavioral qualification from normal team creation.
 Max accepted the written specification in its substantive form from commit `0694e651df32dbe7d5187d6d4105fb2b91819b0c` and authorized implementation planning.
 The implementation plan remains a draft and requires separate approval before execution.
+Max requires all foreseeable setup choices to be resolved in a grouped interview before installation starts. Later questions are limited to new problems/decisions or technically deferred actions disclosed upfront.
+After the two implementation phases and reviews, pause for Max's practical setup trial. Do not begin cleanup automatically.
+Keep this file and the planning artifacts until that trial and separate cleanup authorization. The planned final cleanup removes temporary local context/planning files from the tracked tree, not Git history or functional Maker/update assets.
 
 Read [the accepted design specification](docs/specs/2026-11-01-maker-setup-scope-design.md) and [the implementation plan draft](docs/PLAN_1.0.0_Generic-Devteam.md) for the exact scope and evidence.
 No implementation tasks or live-team changes have been authorized by this planning step.
