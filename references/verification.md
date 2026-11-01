@@ -1,135 +1,38 @@
-# Paketprüfung und Funktionsprüfung des Teams
+# Setup-output verification
 
-Korrekte Paketdateien und ein funktionierendes Team sind zwei getrennte Ergebnisse.
-Prüfe jeweils den aktuellen Stand und dokumentiere nur tatsächlich ausgeführte
-Prüfungen. Frühere Reviews oder erfolgreiche Einzeltests gelten nicht automatisch
-für eine geänderte Fassung.
+Use this checklist for an authorized team setup after delivery and configuration.
+Reuse exact evidence captured by each setup step; do not repeat successful steps as a test campaign.
+Read only the selected analysis branch and preserve confirmed values.
 
-## 1. Paket vor Verwendung prüfen
+## Required outputs
 
-Diese Prüfungen benötigen weder eine Teaminstallation noch Modell- oder Dienstaufrufe.
-Vorhandene geeignete Prüfwerkzeuge verwenden; fehlende Voraussetzungen konkret benennen.
+- Profiles: compare actual native IDs, ownership, canonical homes, workspace/board bindings and personalized SOUL bytes with the confirmed dataset and rendered output. Read back full SOUL loading through the established interface; file existence alone is insufficient.
+- Skills/components: compare complete assigned trees, companion/legal files and bytes with the selected recorded source/revision. Verify native discovery/loading through established interfaces. Keep all own skill bytes unchanged except the bound recovery launcher.
+- Models: read back actual native model/provider IDs, fixed Planner/Hermes-Coder reasoning, Reviewer/Team-Codex default/max policy, effective overrides and six original helper pins. Confirm supported levels/access availability without model calls. Do not silently switch model/provider.
+- Team-Codex: read back actual binary, separate process HOME and CODEX_HOME, config/skill roots, protected access status, Ponytail binding and Caveman per-task clause. Verify the own regular mode-0600 `.gitconfig`, source and effective author/committer identity under the bound process environment using [the concrete recipe](integrations.md#team-codex). Do not create artifacts or commits.
+- Hindsight: check existing service availability, confirmed bank identity/ownership and effective provider, per-role profile JSON, tags/match semantics and override sources under [Hindsight](integrations.md#hindsight). Do not create synthetic memories or test consolidation.
+- Analysis: read back exactly one complete integration for all assigned consumers under [Code analysis](code-analysis.md). For CBM include all native subagents and the account cache literal in TOML `env` before hook approval. For Graphify include both complete supporting reference bundles. Verify established connection/configuration status without index/query/update experiments.
+- Communication: read back Planner-only bot/team/channel membership, exact human/channel/DM IDs, effective permission settings and activation/adapter ownership under [Mattermost](integrations.md#mattermost). Perform the disclosed genuine DM `/sethome` and read back the exact DM Home without an extra Home thread. Do not require reply or authorization-event matrices.
+- Board: compare actual board ID/default workspace/DB and dispatcher/notifier ownership. Use the [known resolver](kanban-block-triage-escalation.md) with the active gateway PM interpreter for effective `kanban.auto_decompose=false`. Accept a correct central value; do not repair graphs or create test cards. Retain the later operational subscription recipe without creating a subscription to an invented task.
+- Protection: verify effective `security.protected_instruction_files=false` and its management source for each selected role. Accept a correct centrally managed value without a duplicate override. Report real restrictions without bypassing them.
+- Recovery: compare installed generic script bytes and generated launcher bytes against `bind_recovery.render_launcher`, mode 0700, interpreter, DB, script and Planner ID. Keep task ID as the sole runtime argument; do not invoke a recovery transition.
 
-- [ ] **Dateibestand:** Die Dateiliste in [manifest.json](../manifest.json) stimmt
-  mit dem vorgesehenen Lieferumfang überein. Rollen, eigene Skills und benötigte
-  Begleitdateien sind vorhanden; Arbeitsunterlagen gehören nicht zur Installation.
-- [ ] **Verweise:** Relative Links und Zielanker funktionieren. Jeder kopierte
-  Skill ist mit seinen eigenen Referenzen unabhängig vom Maker nutzbar. Das fertige
-  Paket hat keine Abhängigkeiten auf den vorübergehenden Altbestand.
-- [ ] **Vollständige Skills:** Dateimenge, Zielrollen und Lizenz-/Notice-Dateien
-  stimmen mit der [Quellenübersicht](upstream-sources.md) überein.
-  Compare all copied skill bytes with the source except the recovery launcher.
-  Compare that launcher with the bound Maker output.
-- [ ] **SOUL-Personalisierung:** Die Rollenfelder aus dem Manifest passen zu den
-  Vorlagen. Mit synthetischen Werten über [render_text.py](render_text.py) prüfen:
-  alle Platzhalter ersetzt, übriger Inhalt erhalten, technische Kennungen nicht mit
-  Anzeigenamen verwechselt; fehlende oder ungültige Werte werden abgewiesen.
-- [ ] **Reasoning-Vertrag:** Pflichtfrage und bestätigte Standard-/Maximalwerte sind
-  in Setup/Record enthalten; Coder-/Reviewer-Vorlagen rendern konkrete Werte auch
-  im Aufruf, in der Reasoning-Matrix und im Second Pass. Fehlende Werte halten an. Offline-Test:
-  `python3 -B references/test_render_reasoning.py` aus dem Paketroot; keine Modellcalls.
-- [ ] **Syntax:** JSON und vorhandene YAML-/TOML-Daten mit passenden Parsern prüfen,
-  Pythonbeispiele als Syntaxbaum, Shellbeispiele mit `bash -n`. Reine Textfragmente
-  zur Recordverarbeitung und Personalisierung mit synthetischen Daten prüfen.
-- [ ] **Inhalt:** Setup, Rollenmatrix und Integrationsrezepte passen zusammen.
-  Keine Zugangsdaten oder unbeabsichtigten privaten Zielbindungen im Lieferumfang.
-- [ ] **Planner-Interview:** Manifest und Bezugsrezept enthalten beide Originalskills
-  `grill-me` und `grilling` ausschließlich für den Planner, samt vollständigen
-  Begleitdateien und Lizenz. Die Planner-SOUL verlangt das Laden von `grilling`
-  vor neuen Plänen, regelt den Vorrang gegenüber anderen Frageregeln und erhält
-  technische Delegation sowie ausdrückliche Planannahme. Setup und Protokoll
-  prüfen Verfügbarkeit und tatsächliche Nutzung getrennt.
+## Baseline and completion
 
-Vorhandene Pakettests können diese Prüfung unterstützen. Maßgeblich sind ihre
-wirklichen Prüfinhalte und Ergebnisse; eine frühere Testbeschreibung oder ein
-Testlauf ohne gefundene Tests ist kein Nachweis.
+Follow [Record a new team](update.md#record-a-new-team) only after all required outputs and recovery binding pass.
+Read back the private single setup JSON, `installation.json`, complete managed mappings, transform identifiers and pristine personalized `baselines/<sha256>` bytes.
+Record package SemVer and exact Maker commit separately, with baseline provenance and actual role homes.
+Use the real process HOME for `team-codex`.
+Keep private state directories at 0700 and files at 0600.
+Keep proposals, backups and journals when the actual update operation requires them.
 
-## Updater verification
+Use **Team configured; setup outputs verified** only after required outputs and the baseline are complete.
+Otherwise state the exact incomplete binding, preserved progress, next action and required authorization.
+A missing shared prerequisite is an operator issue, not an automatic install/repair task.
+On resume, read confirmed JSON and relevant native objects; continue only the incomplete step.
+Correct stale prose without repeating confirmed choices or creates.
 
-Run `python3 -B -m unittest discover -s references -p 'test_*.py'` for the offline updater and renderer contracts.
-Check that `SKILL.md` and `manifest.json` declare the same package SemVer.
-For a newly recorded team, read back the exact commit, version, actual role homes, and complete managed mappings.
-Compare stored pristine baselines with personalized Maker output, not local edits.
-For an applied update, read back its target files, installation record, and result journal.
-For a rollback, read back restored bytes and metadata before reporting restoration.
-Follow [Team updates](update.md) for semantic review, activity decisions, dependencies, and retained files.
-Keep file verification separate from agent behavior and runtime acceptance.
-
-## Recovery script verification
-
-Run `python3 -B -m unittest discover -s references -p 'test_triage_recovery.py'` with the installed Hermes Python.
-Run `python3 -B -m unittest discover -s references -p 'test_bound_recovery.py'` for Maker generation, quoting and setup-independent invocation.
-Use only synthetic SQLite boards under the scratch directory.
-Report skipped native-transition tests if a delegation guard denies writes.
-Do not bypass the guard to obtain a passing transition.
-Check that the complete planner skill copy includes `scripts/recover_triage.py` with unchanged bytes.
-Read back `confirmed_bindings.triage_recovery` and the bound invocation in the private setup record.
-The Maker performs this audit check, not the planner at recovery time.
-Compare installed `scripts/recover-triage` against `bind_recovery.render_launcher` and mode 0700.
-Check that its task ID is the only runtime input.
-Compare its interpreter, script, DB and planner profile with the confirmed dispatcher and role identities.
-Keep the task ID unbound until recovery time.
-Do not repeat the native recovery test chain for each team setup or create an extra test card.
-Treat file delivery and invocation binding as separate from a successful live recovery.
-
-## 2. Team nach Einrichtung prüfen
-
-Erst im beauftragten Zielsetup mit bestätigten Rollen, Diensten, Modellzugängen,
-Nachrichtenzielen und begrenztem Testumfang ausführen. Die konkreten Schritte stehen
-in [Setup](setup.md), [Rollenbindungen](native-workflow.md) und
-[Integrationen](integrations.md); hier wird nur das Ergebnis zusammengeführt.
-
-| Prüfung | Erfolgssignal |
-|---|---|
-| Rollen und Skills | Richtige Profile, vollständige SOUL-Aufnahme, benötigte Skills tatsächlich geladen; vorgesehene Modi funktionieren auch in einem neuen Kontext. |
-| Planner-Interview | Beide Originalskillbäume samt Lizenz bytegleich zur protokollierten Quelle; `grilling` im Planner nativ gefunden und vollständig geladen, ausdrücklicher `grill-me`-Aufruf lädt `grilling`. Die SOUL-Ladepflicht ist im neuen Kontext/Resume wirksam; fachliches Verhalten separat im gemeinsamen Probelauf prüfen. |
-| Modelle und Reasoning | Echte begrenzte Aufrufe verwenden die bestätigten Modelle/Stufen. Planner läuft auf seiner festen Stufe; Reviewer und Team-Codex bleiben innerhalb ihrer bestätigten Grenzen. HIGH+HIGH, Second Pass, Retry/Resume und Helferpins gegen gerenderte SOUL und tatsächliche Aufruf-/Requestwerte prüfen. Einen oberhalb der Grenze vorgeschlagenen Aufruf vor Ausführung zurückweisen lassen, nicht probeweise absenden. Rollenregel und etwaige technische Durchsetzung getrennt belegen. |
-| Team-Codex | Prozesshomes, Konfiguration und Skillroots stimmen im tatsächlichen Worker; Codex erzeugt ein geprüftes Testartefakt. Installierte Helfer gemäß Integrationsrezept funktional prüfen. |
-| Team-Codex Git-Identität (Pflichtgate) | Eigene reguläre `CODEX_PROCESS_HOME/.gitconfig` (0600) mit bestätigtem `user.name`/`user.email` gemäß [Team-Codex-Rezept](integrations.md#team-codex). Herkunft mit `--show-origin` und Autor/Committer mit `git var GIT_AUTHOR_IDENT` / `GIT_COMMITTER_IDENT` im echten Worker nachweisen: frische Prozesse mit Team-HOME/CODEX_HOME, ohne die vier Identitäts-Envhilfen, zunächst Testrepo ohne lokale Identität, danach vorgesehener Repo-Kontext. Beide Werte auch am Probelaufcommit prüfen; bei fehlendem oder abweichendem Nachweis keine Team-Codex-Freigabe. |
-| Memory | Gemeinsame Projektbank und Rollenfilter funktionieren beim Speichern und Abrufen; nur freigegebene synthetische Testinhalte verwenden. |
-| Mattermost | Planner antwortet auf Erwähnung, ohne Erwähnung gemäß Konfiguration und im DM; Wake erreicht den richtigen Projektkanal und wird vom Planner bearbeitet. Native Eingangsprüfungen weisen nicht freigegebene Nutzer/Bots im Projektkanal und Nachrichten des bestätigten Nutzers in nicht freigegebenen Kanälen ab; zusätzliche kanalweite/globale Grants erweitern die bestätigte Freigabe nicht. Ablehnungsfälle gemäß [Integrationen](integrations.md) ohne Modellstart prüfen. |
-| Codeanalyse | Die gewählte Alternative besteht die [Index-/Relations-/Aktualisierungsprüfung](code-analysis.md#funktionspruefung). |
-| Profilbezogener Anweisungsdateischutz | In jedem erzeugten Planner-, Coder- und Reviewerprofil steht `security.protected_instruction_files` ausdrücklich als boolesches `false` in der jeweiligen `config.yaml`; der effektive Leser liefert ebenfalls `false`. Gespeicherten und effektiven Wert je Profil im Setuprecord belegen; ein globales `false` allein genügt nicht. Globale/administrative Konfiguration unverändert, etwaige Verwaltungskonflikte offen ausgewiesen. |
-| Betriebsgrenzen | Tatsächliche Timeout-, Retry- und Rate-Limit-Behandlung sowie relevante Grenzen sind bekannt. Konkrete Probleme vor der betroffenen Nutzung klären. |
-| Board-Automatik | Der Resolver des Dispatchers liefert `(False, N)` im dispatchenden Home und in jeder Rollenprofilkopie; der Auto-Decomposer erzeugt keine neuen Karten oder Parent-Kanten. Automatisch nach `triage` verschobene Karten klärt der Planner innerhalb seines Mandats; ihr Status allein ist kein Zerlegungsauftrag. Details in der [Kanban-Automatik](../references/kanban-block-triage-escalation.md). |
-
-Vorhandene fremde Profile, persönliche Codex-Ausstattung und Produktdaten bleiben
-erhalten. Ein gespeicherter Konfigurationswert beweist noch keine wirksame Fähigkeit.
-
-## 3. Ein gemeinsamer Probelauf
-
-Ein kleiner harmloser Auftrag im separaten Testrepository genügt:
-
-1. Beginne mit einem kurzen Brief, der zwei voneinander unabhängige offene
-   Produktentscheidungen und eine davon abhängige Folgeentscheidung enthält.
-   Planner lädt selbständig `grilling` und fragt die unabhängigen Entscheidungen
-   in derselben Runde jeweils mit Empfehlung ab. Die abhängige Frage stellt er
-   erst nach Klärung ihrer Voraussetzung; aus dem Testrepository ermittelbare
-   Fakten recherchiert er selbst.
-   Bestätigte Antworten bleiben bei Wiederaufnahme erhalten. Erst nach bestätigtem
-   gemeinsamen Verständnis erstellt er den kurzen Plan; der Nutzer nimmt ihn
-   ausdrücklich an. Vor dieser Planannahme entstehen keine Tickets. Skillladebeleg
-   und Dialogverlauf festhalten; bloße Dateiexistenz besteht diesen Test nicht.
-2. Planner erzeugt daraus ein Ticket; der native Dispatcher übergibt es dem Coder.
-3. Coder lässt Codex das Testartefakt erzeugen, prüft es und erstellt den vorgesehenen Commit.
-4. Coder übergibt dieselbe Karte an den unabhängigen Reviewer; dieser prüft das Ergebnis.
-5. Nach erfolgreichem Review bearbeitet der Planner den tatsächlichen Wake und
-   berichtet im vereinbarten Projektkanal.
-
-Ticket, Commit und Nachricht müssen zum selben Testauftrag gehören. Vorhandene
-Einzelnachweise können aus diesem Lauf stammen; keine unnötige doppelte Ausführung.
-Ein künstlicher Fehler- oder Reviewrücklauf ist für diesen Probelauf nicht nötig.
-
-## 4. Ergebnis festhalten
-
-Im privaten [Setup-Protokoll](../templates/setup-record.md) je Prüfung notieren:
-**geprüfter Stand · bestanden / konkreter Fehler / noch ungeprüft · kurzer Beleg**.
-Bei einem Fehler dessen Auswirkung und die nächste notwendige Maßnahme nennen.
-
-- **Paket geprüft:** Die Dateiprüfungen sind bestanden; keine Aussage über ein Zielteam.
-- **Zielsetup teilweise geprüft:** Erfolgreiche Fähigkeiten und offene Punkte einzeln benennen.
-- **Team technisch geprüft:** Die benötigten Fähigkeiten und der gemeinsame Probelauf
-  sind tatsächlich bestanden. Fachliches Projekt-Onboarding folgt als eigener Auftrag.
-
-Nach Änderungen nur die davon betroffenen Prüfungen und nötigen Integrationswege
-wiederholen. Veröffentlichung, Commit-Freigabe und Paketexport sind separate Aufgaben.
+Setup verifies configuration, availability and delivered outputs. It does not qualify live agent behavior or project readiness.
+Do not retain excluded source/SDK research, behavioral experiments, or general timeout/retry/rate-limit investigations as pending setup gates.
+For a requested file update, preserve the [update contract](update.md), including semantic review, activity/dependency decisions, local edits, legacy unknown baselines, journals and guarded rollback.
+Report `applied`, `skipped`, `failed` and retained files per team; a file update does not prove runtime reload.

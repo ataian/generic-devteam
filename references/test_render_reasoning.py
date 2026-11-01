@@ -88,6 +88,9 @@ class ReasoningContractTests(unittest.TestCase):
             "below HIGH, use `low`.",
             "HIGH complexity with HIGH impact uses `high`.",
             "These limits also apply to retries, resumes, and delegated helpers.",
+            "Supply the reasoning level selected for this task under the existing matrix",
+            "Default-level example with a quoted TOML string:",
+            "For a higher selected level, pass that selected value instead.",
             'model_reasoning_effort=\'"low"\'',
         ]:
             self.assertTrue(text in result, text)

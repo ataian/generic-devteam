@@ -18,7 +18,7 @@
 5. Provide Codex with the concrete goal, current evidence, file scope, constraints, acceptance criteria, and verification plan.
 6. Launch Codex through the configured team-Codex context. Use the configured binary, model ID, and provider. Supply `--model` explicitly with the literal configured model ID on every call.
 7. Use `devteam/user-home` as the Codex process `HOME`, `devteam/codex-home` as `CODEX_HOME`, and `PONYTAIL_DEFAULT_MODE=full`. Do not change the Hermes profile home.
-8. Pass the prompt file by stdin. Set `--sandbox danger-full-access` explicitly as required by the existing team policy. Supply the configured reasoning level through `-c model_reasoning_effort=...` with a quoted TOML string.
+8. Pass the prompt file by stdin. Set `--sandbox danger-full-access` explicitly as required by the existing team policy. Supply the reasoning level selected for this task under the existing matrix through `-c model_reasoning_effort=...` with a quoted TOML string.
 9. Run the long-lived process through the supported background PTY path and observe its native completion signal.
 10. Inspect the actual diff, task scope, test/build/runtime results, and working tree after Codex completes. Do not treat Codex's completion message as proof.
 11. Check each obstacle that Codex reports against the concrete flow yourself. Separate a confirmed finding, an open verifiable question, and a hypothetical possibility. Answer the technical question inside the prompt and escalate only the remaining decision or missing authority.
@@ -31,7 +31,7 @@
 
 - Use the model from the shared Team-Codex configuration. Escalate reasoning only, not model or provider.
 - Reasoning matrix: below HIGH, use `{{CODEX_REASONING_DEFAULT}}`. HIGH complexity or HIGH impact allows up to `{{CODEX_REASONING_MAX}}`. HIGH complexity with HIGH impact uses `{{CODEX_REASONING_MAX}}`.
-- Pass the level as a quoted TOML string: `-c model_reasoning_effort='"{{CODEX_REASONING_DEFAULT}}"'`. Without the quotes the level is not applied.
+- Default-level example with a quoted TOML string: `-c model_reasoning_effort='"{{CODEX_REASONING_DEFAULT}}"'`. For a higher selected level, pass that selected value instead. Without the quotes the level is not applied.
 - These limits also apply to retries, resumes, and delegated helpers. Only the customer may raise them.
 - A specification conflict goes to the Planner. Higher reasoning does not authorize new product decisions.
 - Write the model ID as a literal argument. Do not derive it with shell variables or inline Node/Python. Do not use command chains or heredocs. The worker guard blocks these before the process starts.

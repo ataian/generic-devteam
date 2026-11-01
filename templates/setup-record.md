@@ -111,6 +111,6 @@ Keep private state directories at 0700 and files at 0600.
 
 Advance installation metadata only after successful target verification.
 Preserve the three-way comparison, local-edit/conflict safeguards, conservative legacy handling, and guarded rollback.
-Report setup completion as **Team configured; setup outputs verified.** only when the required setup readbacks pass.
+Report setup completion as **Team configured; setup outputs verified** only when required setup readbacks and the versioned installation baseline are complete.
 Report remaining setup blockers precisely.
 Do not leave excluded research or behavioral experiments as pending setup gates.

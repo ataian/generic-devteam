@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Richte ein natives Hermes-Projektteam unter Linux ein.
-version: 1.1.4
+version: 1.1.5
 author: Max
 license: MIT
 platforms: [linux]
@@ -13,96 +13,41 @@ metadata:
 
 # Generic Devteam
 
-Geführte technische Einrichtung von Planner → Coding-Orchestrator/Codex →
-unabhängigem Reviewer in einer vorhandenen Hermes-Installation. Du führst den
-Nutzer linear durch bestätigte Eingaben, native Einrichtung und getrennte
-Nachweise. Du baust weder einen Installerframework noch einen zweiten Dispatcher.
+Configure a Planner, Coder/Team-Codex, and independent Reviewer in an existing Linux Hermes installation.
+This Maker is a prose setup recipe, not an installer framework or a second dispatcher.
+Use the user's or project's language for user-facing conversation.
 
-## Wann verwenden
+## Triggers and boundaries
 
-- Der Nutzer beauftragt ausdrücklich ein neues Projektteam oder die Wiederaufnahme
-  seiner begonnenen Einrichtung.
-- Bei Paketautorenschaft/Review nur Dateien prüfen. Das Lesen dieses Skills erteilt
-  keine Installation, Aktivierung, Dienst- oder Modellfreigabe.
-- Fachliche Projektplanung folgt später als eigener Auftrag.
+Use this entry for an explicitly requested new team or interrupted setup.
+For requested existing-team file updates, read [Team updates](references/update.md); reuse confirmed values without a new interview.
+Package authoring or review authorizes file work only, not installation or activation.
+Keep product planning and project onboarding as later explicit tasks.
 
-## Existing team updates
+Require available Hermes, Mattermost, Hindsight, Codex, the selected analysis runtime, and suitable model access.
+Use established supported interfaces and available component sources.
+Report a missing or incompatible prerequisite for the affected step; do not research, install, upgrade, or repair shared runtimes.
+Preserve ownership, local edits, native protection, and independent review boundaries.
+Keep secrets in protected native input/storage paths, outside chat, arguments, records, and Git.
 
-If the user asks to check and apply Maker changes, read [Team updates](references/update.md).
-Use the existing private setup values and installation evidence.
-Do not repeat the setup interview.
-Keep updates user-triggered.
-Do not treat a Maker source change as permission for live rollout.
+## Setup sequence
 
-## Voraussetzungen
+1. Read [Setup](references/setup.md) and [Role bindings](references/native-workflow.md) completely.
+   Complete the grouped preparation interview and required availability/collision checks before any profile, file, bank, board, or activation write.
+   Reuse confirmed facts and choices; derive new profile IDs under the exact setup rule.
+2. Present all confirmed parameters, targets, installations, shared PM effects, activation scope, and disclosed target-dependent login, hook approval, and `/sethome` actions.
+   Obtain the start decision only after all foreseeable choices are resolved.
+3. Execute the authorized concrete recipes from [Integrations](references/integrations.md), [Sources](references/upstream-sources.md), [Manifest](manifest.json), and [Board configuration](references/kanban-block-triage-escalation.md).
+   Read only the chosen branch of [Code analysis](references/code-analysis.md) as work instructions.
+   Copy complete assigned skills, personalize roles, and bind recovery through the existing helpers.
+   Accept an already correct effective central protection setting without a duplicate override.
+4. Read back actual objects, effective configuration, files, modes, discovery, and generated bindings under [Setup-output verification](references/verification.md).
+   Reuse each step's evidence. Perform the genuine Planner `/sethome` action at its disclosed technical point.
+   Do not run synthetic memory, helper, communication, coding/review, or indexing experiments.
+5. Save the private [setup record](templates/setup-record.md) and versioned installation baseline through the existing updater initialization path.
+   Report **Team configured; setup outputs verified** only after required outputs and baseline are complete.
+   Otherwise report the exact incomplete binding and next action.
 
-Linux, vorhandenes funktionsfähiges Hermes im bestehenden Benutzerkonto,
-erreichbares Mattermost und Hindsight, autorisierte Modellzugänge. Ein geeigneter
-Anbieter genügt; Hermes, Codex, Hilfsmodelle und Original-Agentpins separat prüfen.
-Benötigte Werkzeuge folgen dem tatsächlichen Zielprojekt. Native Schutz- und
-Freigabeeinstellungen bleiben erhalten. Geheimnisse nur über geschützte native
-Eingabewege; keine Tokenwerte in Chat, Argumenten, Protokoll oder Git.
-
-## Geführter Ablauf
-
-1. Lade [Setup](references/setup.md) vollständig sowie den
-   [Rollenbindungen](references/native-workflow.md). Beginne mit Zielbestand,
-   Gateway-/Dispatcherzuständigkeit und gemeinsamen PM-Wirkungen, nicht mit Create.
-2. Frage Projektname und kanonischen absoluten Workspace getrennt; leite den Pfad
-   nicht aus dem Namen ab. Gleiche ihn mit Projektkontext und vorhandenen nativen
-   Profil-/Boardbindungen ab; verschachtelte Checkouts bleiben erhalten.
-   Kläre widersprüchliche Bindungen vor Anlage. Danach Bank, Rollennamen und Board einmal
-   bestätigen; rollenfeste Texte ohne Persona-Abfrage verwenden. Bestätige
-   technische Kennungen getrennt von Anzeigenamen, Modelle samt festen Reasoning-Stufen
-   für Planner/Hermes-Coder sowie Standard und erlaubter Obergrenze für Reviewer/Team-Codex.
-   Frage die Obergrenzen ausdrücklich ab; technische Unterstützung ist keine Freigabe.
-   Bestätige genau eine
-   Codeanalyse und Planner-Kommunikationsziele. Keine erneute Auswahl fester
-   Rollen, Modi oder Komponenten. Lasse den konkreten Änderungsumfang freigeben.
-3. Verwende die [private Protokollvorlage](templates/setup-record.md). Prüfe jede
-   vorhandene Zielidentität vor Anlage; bei Wiederaufnahme native Objekte abgleichen.
-4. Führe die Setupschritte in Reihenfolge aus: Profile/Modellbindung und privater
-   Record, Board samt `kanban.auto_decompose: false` im dispatchenden Home und in
-   jeder Rollenprofilkopie, Team-Codex/Originalkomponenten, Memory-/Messagingkonfiguration,
-   eigene Skillbäume, personalisierte Rollen und endgültige Bindungen; danach erst Einzelprüfungen.
-   Setze in jedem erzeugten Rollenprofil `security.protected_instruction_files: false`
-   gemäß Setup; keine Änderung an der globalen Hermes-Konfiguration.
-   Lade dazu [Integrationen](references/integrations.md),
-   [Quellen](references/upstream-sources.md), beide [Codeanalysewege](references/code-analysis.md)
-   und [Manifest](manifest.json); für das Board zusätzlich die
-   [Kanban-Automatik](references/kanban-block-triage-escalation.md);
-   richte genau die gewählte Alternative ein.
-5. Halte bei fehlenden Voraussetzungen an der betroffenen Fähigkeit an. Prüfe
-   Timeout-, Retry- und Rate-Limit-Behandlung am tatsächlichen Zielstand und kläre
-   konkrete Probleme vor der betroffenen Nutzung.
-   Dokumentierte Rezepte sind keine
-   installierten Fähigkeiten; erster Index-/Querytest nur im separaten Testworkspace.
-6. Nach gesonderter Aktivierungs-/Testfreigabe die tatsächlichen Zielkontexte,
-   Modellwege, Modi, Memoryrequests, normalen Kanal-/DM-Dialog und Planner-Wake
-   prüfen. Kleiner unabhängiger Pipelineweg in separatem Testworkspace, niemals
-   beiläufig im Produktprojekt. Ergebnisse mit Belegen im Protokoll festhalten.
-7. Übergebe eingerichtete Bindungen, Versionen, offene Voraussetzungen und den
-   nächsten sicheren Schritt. Empfiehl anschließend einen konkreten ersten
-   Planungsauftrag an den Planner; starte kein automatisches Projekt-Onboarding.
-
-## Fallstricke
-
-Profilanlage kann einen laufenden Multiplexer informieren. Pluginaufnahme und
-selbst ein normaler CLI-Bootstrap können gemeinsame Dependencyarbeit auslösen.
-Ein neues Profil ist trotz Neuanlage nicht zwingend modellkonfigurationsleer.
-Team-Codex-Homes sind Arbeitszustand, keine OS-Sandbox. Eine SOUL-Erwähnung beweist
-weder Skill-Discovery noch vollständige Promptaufnahme. Ein zugestellter Wake ist
-kein planweiter Abschluss, und `queued` ist noch keine Zustellung. Ein aktiver
-Auto-Decomposer (`kanban.auto_decompose: true`) macht aus einer zweimal gleichartig
-blockierten Karte ungefragt neue Karten samt Parent-Kanten und zerlegt damit die
-genehmigte Kette; der Wert gehört vor jeder Kette im dispatchenden Home und in den
-Rollenprofilen auf `false` und rückgelesen.
-
-## Verifikation
-
-Lies jedes angelegte native Objekt und jede Zielausgabe zurück. Die
-[Prüfanleitung](references/verification.md) trennt Paketprüfung, Teamfunktionen
-und gemeinsamen Probelauf. Dateiprüfungen belegen kein Agentenverhalten.
-Sind nur die Paketprüfungen bestanden, lautet das Urteil:
-**„Paket geprüft; Setup-Laufzeitabnahme offen.“** Konkrete Fehler und ungeprüfte
-Fähigkeiten bleiben ausdrücklich sichtbar.
+Setup readbacks establish configuration and delivery, not live agent behavior or project readiness.
+Excluded behavioral experiments are outside setup scope, not pending completion gates.
+Offer a first planning task to the Planner after handoff; do not start it automatically.

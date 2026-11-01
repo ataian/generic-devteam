@@ -256,12 +256,9 @@ A rollback receipt proves file restoration, not reloaded agent behavior.
 
 ## Verify and hand off
 
-Run the package tests in an isolated development checkout:
-
-```sh
-python3 -B -m unittest discover -s references -p 'test_*.py'
-git diff --check
-```
+Package regression belongs to explicit Maker development/review, not each file update or initialization.
+Do not repeat removed behavioral experiments or treat them as pending setup gates.
+Preserve the operational dependency-decision gate when recipes or component metadata change, including changes that remove tests.
 
 For an authorized target update, read back the exact installation record, result journal, and changed targets.
 Report package version and commit separately.

@@ -8,18 +8,15 @@ des Makerpakets.
 
 ## Gemeinsame Vorbereitung
 
-1. Vorhandene Runtime, Version, Skills und Integrationen prüfen; passenden Bestand
-   wiederverwenden. Bei neuem Bezug einen konkreten offiziellen Release-/Quellstand
-   wählen, Integrität prüfen und im privaten Setup-Protokoll festhalten.
-2. Absolute Hermes-Rollenhomes sowie `CODEX_HOME` und `CODEX_PROCESS_HOME` aus dem
-   [Team-Codex-Rezept](integrations.md#team-codex) übernehmen. Symlinks und vorhandene
-   Zieldateien prüfen; betroffene Konfiguration vor Änderungen sichern.
-3. Repositoryroots, erlaubten Analyseumfang und Index-/Ausgabeorte festlegen.
-   Ein Workspace mit mehreren Repositories ist nicht automatisch ein gemeinsamer
-   Index. Geheimnisse und fachliche Daten gehören nicht in den Analyseumfang.
-4. Installations- und Aktivierungsumfang bestätigen. Zunächst einen separaten
-   Testworkspace verwenden; Session-CWD und gegebenenfalls MCP-CWD vor Aktivierung
-   darauf binden. Produktrepositories erst beim späteren Projektauftrag aktivieren.
+1. Check the selected existing runtime, version, skills and integration availability through established interfaces.
+   If the common runtime is missing/incompatible, report the prerequisite; do not install or repair it.
+2. Reuse confirmed absolute role homes, `CODEX_HOME`, `CODEX_PROCESS_HOME` and target ownership from preparation.
+   Preserve symlinks/local edits and back up affected own configuration before authorized changes.
+3. Consume the confirmed repository/corpus scope, roots, cache/output locations and optional watcher decision.
+   Keep multiple repositories separate. Do not index secrets or project content during setup.
+4. Use the agreed profile-local installation and activation scope.
+   Disclose target-dependent hook approval during preparation; execute it only after final configuration.
+   Do not create a test workspace or run index/query/update experiments.
 
 Die folgenden Pfade und Optionen beim Zielsetup mit der gewählten Version abgleichen.
 Vorhandene Projektregeln, fremde Profile und persönliche Codex-Konfiguration bleiben
@@ -31,14 +28,9 @@ klären; bei Teilfehlern den tatsächlichen Zustand lesen statt blind erneut ins
 
 ### 1. Runtime und vollständige Skills bereitstellen
 
-Passende vorhandene Graphify-Runtime und ihren Python-Interpreter verwenden. Fehlt
-sie, das offizielle Paket `graphifyy` nach Freigabe installieren; dessen Manifest
-bestimmt Python-Version und Abhängigkeiten. Beispiel mit vorhandenem `uv` und der
-zuvor geprüften Version in `GRAPHIFY_VERSION`:
-
-```sh
-uv tool install "graphifyy==$GRAPHIFY_VERSION"
-```
+Use the compatible existing Graphify runtime and its actual Python interpreter.
+If unavailable, report `graphifyy` and the required compatible runtime as prerequisites.
+Do not run `uv tool install` or qualify a shared runtime during setup.
 
 Runtime und Skilldateien müssen zusammenpassen. Aus demselben Bezugsstand die
 vollständigen Originalbäume nach folgender Zuordnung kopieren:
@@ -54,38 +46,25 @@ Die Hermes-Zuordnung zur claw-Variante ergibt sich aus Graphifys `graphify/insta
 Dessen allgemeiner Installer kann persönliche Standardhomes und Projektanweisungen
 beschreiben; für diese profilbezogene Skillablage deshalb die expliziten Ziele nutzen.
 
-### 2. Aktivieren und verwenden
+### 2. Bind and read back
 
-- In jeder Hermes-Rolle den installierten Skill `graphify` laden, in Team-Codex
-  `$graphify` verwenden. Auch nach Resume muss der richtige Skillbaum aufgelöst werden.
-- Die vorhandenen Rollen-/Skillanweisungen nutzen; keine zusätzliche Modellpolicy
-  oder parallele Rollenregel für die Codeanalyse anlegen.
-- Aufbau als Auftrag an den geladenen Originalskill: `/graphify <CORPUS>`.
-  Das ist eine Skillanweisung, kein gleichnamiger Shellbefehl.
-- Danach gemäß installierter `references/query.md` abfragen, beispielsweise
-  `graphify query "<vorhandenes Symbol oder Aufrufbeziehung>"`.
-- Änderungen über `/graphify <CORPUS> --update` und die installierte
-  `references/update.md` nachführen. Vorhandene aktuelle Ergebnisse wiederverwenden;
-  erneutes Clustering allein ersetzt keine Aktualisierung des Quellbestands.
-
-Ausgabe-CWD, Corpus und Interpreter müssen zusammengehören. Bei mehreren Repositories
-getrennte Graphausgaben führen; Zusammenführung und erneute Aktualisierung gemäß
-`references/github-and-merge.md`. Watcher nur bei vereinbartem Bedarf nach
-`references/add-watch.md` einrichten. Für den normalen Skill-/CLI-Weg ist kein
-zusätzlicher MCP-Dienst erforderlich. Semantische Dokument-/Bildanalyse kann
-Modellverarbeitung auslösen; deren Datenumfang und Anbieter müssen freigegeben sein.
+Verify native discovery/loading of the original `graphify` skill in each assigned harness.
+Bind the confirmed output CWD, corpus and runtime interpreter without generating a graph.
+For multiple repositories retain separate output locations.
+No additional MCP service is required for the normal skill/CLI route.
+Do not add a watcher unless its need and effects were confirmed during preparation.
+Keep the complete original query, update, export, hook and merge references for later operational tasks.
+Later `/graphify <CORPUS>`, `graphify query ...`, and `/graphify <CORPUS> --update` belong to an explicitly authorized project task.
+Semantic document/image processing requires its own approved data/provider scope.
 
 <a id="codebase-memory"></a>
 ## Codebase-memory-mcp (CBM)
 
 ### 1. Gemeinsame Runtime bereitstellen
 
-Eine geeignete vorhandene Originalbinary wiederverwenden. Fehlt sie, das passende
-offizielle Linux-Releasearchiv für Architektur und System beziehen, Prüfsumme und
-verfügbare Herkunftsnachweise prüfen und nach Freigabe die Binary im vereinbarten
-Benutzer-Binverzeichnis bereitstellen. `LICENSE` und `THIRD_PARTY_NOTICES.md` aus
-dem Releasearchiv aufbewahren. Der Runtimebezug und die folgende Clientkonfiguration
-sind getrennte Schritte; ein ungeprüfter Shellinstaller ist dafür nicht nötig.
+Use the compatible existing original binary and record its exact path/version.
+If unavailable, report the missing runtime to the operator; do not download/install/repair it.
+Retain its `LICENSE` and `THIRD_PARTY_NOTICES.md` provenance and use the existing runtime for profile-local client integration.
 
 CBM verwendet einen accountweit koordinierten Daemon. Vorhandenen Build, Cache und
 Rendezvousbereich berücksichtigen; ein anderes `HOME` oder `CODEX_HOME` isoliert
@@ -101,10 +80,9 @@ requested cache <hash>)` ab (Exit 1), obwohl derselbe Aufruf im Elternkontext
 funktioniert. Die beiden Kennungen im Fehlertext sind die SHA256 der jeweiligen Pfade —
 damit lässt sich die Wurzel belegen statt raten.
 
-**Dauerhaft richtig ist die Bindung in der Team-Codex-Konfiguration, nicht im Aufruf.**
-Jede Rolle hat ihr eigenes `devteam/codex-home/config.toml`; dort wird der MCP-Server
-deklariert, und dort gehört der kanonische Cache **statisch** hinein — als Literal, nicht
-als Durchreichen aus der Prozessumgebung:
+Bind the cache in the Team-Codex configuration, not in per-call environment overrides.
+Team-Codex has its own `devteam/codex-home/config.toml`.
+Declare the MCP server and canonical account cache there as a static literal:
 
 ```toml
 [mcp_servers.codebase-memory-mcp]
@@ -204,67 +182,32 @@ Zielauflösung vor Ausführung abgleichen.
   Andere MCP-Einträge, Hooks, Anweisungen und die VoltAgent-Helfer müssen erhalten sein.
 - Tatsächlichen Session-/MCP-CWD auf das jeweilige Repository binden. Der Installer
   legt mit Profilhome und Binarypfad noch keinen Analyse-Root fest.
-- `CBM_CACHE_DIR` ist ein Pflichtprüfpunkt der Team-Codex-Konfiguration: er muss als
-  Literal in `[mcp_servers.….env]` stehen (Abschnitt 1), nicht aus der Prozessumgebung
-  erwartet werden. Fehlt er, leitet der Client ihn aus dem abweichenden Team-`HOME`
-  ab und verweigert den Start. Bei MCP **und** Hooks prüfen; Hermes braucht bei
-  abweichenden Defaults eine passende MCP-`env`-Bindung. Den tatsächlichen Client
-  prüfen, nicht nur die Umgebung des Installationsbefehls: belegt ist die Bindung erst,
-  wenn `list_projects` und `index_status` **im echten Client-Kontext** selbst Exit 0
-  liefern — ein erfolgreicher Lauf im Elternkontext beweist sie nicht.
+- Read back the `CBM_CACHE_DIR` literal in the team TOML `[mcp_servers.codebase-memory-mcp.env]` for MCP and hook configuration.
+  Do not rely on caller environment inheritance. Bind Hermes MCP `env` too if its derived default differs from the shared account cache.
+  Read back actual native connection/configuration status in the bound context through the established non-indexing interface.
+  Do not create projects or run index/query/update experiments.
 - Erforderliche Zielanpassungen über die unterstützte native Konfiguration vornehmen;
   siehe [Hermes MCP](https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp)
   und [Shellhooks](https://hermes-agent.nousresearch.com/docs/user-guide/features/hooks#shell-hooks).
   Original-Hookkommandos beibehalten; keine eigenen Indexierungshooks ergänzen.
-- Native Hookzustimmung im jeweiligen Zielkontext einholen; bei Codex über `/hooks`.
-  Anschließend tatsächliche Kontextaufnahme prüfen. Installierte Definitionen sind
-  noch kein ausgeführter Hook.
+- Obtain the disclosed native hook approval in the selected target context; Codex uses `/hooks`.
+  Read back approval and configuration state after the final cache/configuration write.
+  Do not start a worker to test hook behavior; definitions and approval do not prove execution.
 
-### 4. Index aufbauen und aktuell halten
+### 4. Later project operation
 
-Den installierten Originalskill `codebase-memory` in Hermes bzw. `$codebase-memory`
-in Team-Codex laden. Über `list_projects` die tatsächliche Rootzuordnung ermitteln;
-fehlenden Index mit `index_repository` für den freigegebenen Repositoryroot aufbauen.
-Asynchrone Arbeit begrenzt bis zum Endstatus verfolgen. Mit `index_status` Bereitschaft,
-Root, Indexstand und Watcherzustand prüfen, dann mit dem aktuellen Toolschema abfragen.
-
-Der native Watcher führt Änderungen für registrierte aktive MCP-Projektsitzungen
-nach. Einen aktuellen Index weiterverwenden; keine zusätzlichen Reindex-Aufträge
-pro Codex-Aufruf, Nachricht, Commit oder Reviewübergabe einbauen. Nach Änderungen
-bzw. Branchwechseln Aktualität prüfen und nur bei tatsächlichem Bedarf den nativen
-Updateweg nutzen. Bei mehreren Repositories jede Root separat zuordnen und ihre
-Beobachtung prüfen. Ein einmaliger Indexlauf beweist keinen dauerhaft aktiven Watcher.
+Deliver the complete original `codebase-memory` skill and its references.
+Later authorized project tasks use its native `list_projects`, `index_repository`, `index_status`, query and watcher/update paths.
+Do not require indexing, graph relationships, incremental updates or watcher experiments to complete setup.
+Do not add repeated reindexing on each call, message, commit, or review handoff.
 
 <a id="funktionspruefung"></a>
-## Kurze Funktionsprüfung im Zielsetup
+## Setup output boundary
 
-Nach der Setup-Aktivierungsfreigabe ein kleines Repository im separaten
-Testworkspace verwenden. Beispielinhalt für `probe.py`:
-
-```python
-def probe_leaf():
-    return 1
-
-
-def probe_entry():
-    return probe_leaf()
-```
-
-1. In allen drei Hermes-Rollen und im echten Team-Codex-Kontext den ausgewählten
-   Originalskill laden und die jeweilige Runtime bzw. MCP-Verbindung nachweisen.
-   Bei CBM zusätzlich belegen, dass die statische Cache-Bindung aus der
-   Team-`config.toml` greift, sowie Hooks und Discovery der CBM-Unteragenten prüfen.
-2. Testrepository indexieren und die Beziehung `probe_entry` → `probe_leaf`
-   tatsächlich abfragen, nicht nur beide Symbolnamen suchen.
-3. Eine Funktion `probe_added` ergänzen und von `probe_entry` aufrufen lassen.
-   Graphify nativ aktualisieren bzw. bei CBM die automatische Nachführung prüfen;
-   anschließend auch diese neue Aufrufbeziehung abfragen.
-4. Root, geprüften Dateistand, Ergebnis und etwaige Coverage-Lücken im Setup-Protokoll
-   festhalten. Fremde Konfigurationen mit dem Vorherzustand vergleichen.
-
-Fehlende Graphbeziehungen beweisen keine fehlenden Abhängigkeiten. Wichtige Befunde
-am Quelltext prüfen. Bei Fehlern die konkrete betroffene Fähigkeit offenlassen;
-keinen stillen Wechsel zur anderen Analysealternative vornehmen.
+Read back the chosen integration, complete file set, native discovery, runtime/MCP command,
+CWD/roots, cache literal, hooks and approval state.
+A readback proves configuration/delivery, not graph accuracy or live hook behavior.
+Report an actual failed binding precisely; do not silently switch alternatives.
 
 ## Wiederaufnahme, Updates und Rückweg
 

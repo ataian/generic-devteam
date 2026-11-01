@@ -13,8 +13,7 @@ für die drei enthaltenen Rollen-SOULs. Der [Maker](SKILL.md), das geführte
 eine private Protokollvorlage und reine Textvalidierung sind enthalten.
 Beide [Codeanalysewege](references/code-analysis.md) sind als Einrichtungsrezepte
 enthalten. CBM umfasst seine offizielle Codex-Integration einschließlich Unteragenten.
-Die Funktionsprüfung erfolgt erst beim Zielsetup. Keine fremde
-Runtime oder Originalskillkopie wird in diesem Maker mitexportiert.
+Normal setup verifies configuration, file delivery and the versioned installation baseline. Live behavior is not guaranteed. No external runtime or original upstream skill copy is exported in this Maker.
 
 ## Eigene Texte und übernommene Skills
 
@@ -48,15 +47,13 @@ mitexportierten Installationen. Ihre konkreten Bezugsstände behalten eigene
 Lizenzen/Notices; unsere MIT-Lizenz lizenziert sie nicht um. Rechercheidentitäten
 in nativen Rezepten sind keine Installationspins oder Runtimegarantien.
 
-Timeout-, Retry- und Rate-Limit-Behandlung werden am tatsächlichen Zielstand
-geprüft; konkrete Einschränkungen und ihre Auswirkungen gehören ins Setup-Protokoll.
+The manifest stage `setup-recipe` describes a recipe package, not qualified live-team behavior. General timeout/retry/rate-limit investigation and synthetic behavioral experiments are outside normal setup scope.
 
 ## Dateivertrag
 
 `files` ist die sortierte, duplikatfreie Liste aller regulären Paketdateien außer
 `manifest.json`. Symlinks, Bytecode und interne Evidenz gehören nicht hinein.
-Im Standalone-Checkout zählen `.git/`, `.gitignore` und die Vortragsbeilage
-`vortrag/` nicht zum Skillpaket; alle übrigen Dateien werden vollständig geprüft.
+Exclude repository-only `docs/`, `HERMES.md`, `.git/`, `.gitignore`, and `vortrag/` from package accounting and installation. Check the remaining package file inventory completely.
 `own_skills.targets` nennt direkte Zielrollen/Harnesse; Auftragspflichten an Codex
 sind keine zusätzliche Skillinstallation. `status: included` meint vorhandene
 Dateien, nicht aktivierte Fähigkeiten. `skill_path`, `license_path`, `notice_path`
@@ -90,15 +87,13 @@ auf relative Skillziele ab; `sha256` bezieht sich auf gelesene Originalbytes.
 `legal_files` sind beim Bezug unverändert beizulegende Rechtstexte. CBM-
 `release_members` ist eine Packagerableitung, kein geprüfter Archivinhalt;
 `asset_evidence` benennt ausdrücklich statische Ableitung statt Installeroutput.
-Die tatsächliche Codeanalyse-Funktion wird beim Zielsetup geprüft. Graphify trägt Apache-2.0 samt MIT-
-Vorgeschichte/NOTICE, CBM MIT samt Release-THIRD_PARTY_NOTICES; keine Umlizenzierung.
+Code-analysis setup checks installed assets, bindings and connection/configuration readbacks, without an artificial index/query/update project. Graphify retains Apache-2.0 and its MIT history/NOTICE; CBM retains MIT and release THIRD_PARTY_NOTICES. No relicensing is implied.
 
-## Dateibasierte Prüfung
+## Verification boundary
 
-Die [Prüfanleitung](references/verification.md) beschreibt die Prüfung des aktuellen
-Dateibestands, der Links, Skillpakete, Rollenpersonalisierung und Syntax. Reine
-Textprüfungen belegen weder Agentenverhalten noch ein funktionsfähiges Zielteam.
-Die gesonderte Zielprüfung umfasst die eingerichteten Fähigkeiten und einen kleinen
-gemeinsamen Probelauf. Ergebnisse gehören mit geprüftem Stand und kurzem Beleg ins
-Setup-Protokoll. Diese Notice erklärt keinen Review oder Export der aktuellen
-Fassung für abgeschlossen.
+[Setup-output verification](references/verification.md) covers actual setup files, effective configuration,
+availability, generated bindings and the versioned installation baseline.
+Report **Team configured; setup outputs verified** only when those outputs are complete.
+Configuration and file evidence do not prove live behavior or project readiness.
+[Development verification](references/development-verification.md) is separately triggered by Maker authoring/review or commissioned qualification.
+This notice does not claim an independent review, live rollout, or export of the current revision.

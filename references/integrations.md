@@ -1,47 +1,31 @@
-# Originalintegrationen im bestätigten Zielkontext
+# Original integrations in the confirmed target context
 
-Alle Befehle sind **spätere Rezepte**, keine Bau-/Testaktionen. Vorher Bestand,
-Zielpfade, native Leser und Freigaben aus [Setup](setup.md) prüfen. Pro Quelle
-aktuellen geeigneten Originalstand auflösen, Revision/Release, vollständige
-Dateimenge, Hashes, Lizenz/Notice und Zielharness im privaten Setuprecord erfassen.
-Historische Researchrevisionen sind keine Installationsvorgabe. Fremdcode zunächst
-statisch prüfen; Installer, Hooks, PM-Aufnahme und echte Calls gesondert genehmigen.
-Keine Dateien aus privaten Quellprofilen kopieren und keine Fremdplugins reparieren.
+Execute these recipes only during an authorized setup.
+Consume the complete preparation dataset from [Setup](setup.md); do not reopen confirmed choices.
+Use established available sources and compatible installed components, without a newest-upstream search.
+Record source/revision, complete file inventory/hashes, licenses/notices, targets and exact readbacks.
+Historical research anchors are provenance, not installation pins or behavioral evidence.
+Check ownership and preserve local edits before writes.
+Obtain authorized profile-local installation, hook and shared PM effects before activation.
+If a common runtime is missing or incompatible, report the concrete prerequisite and operator action.
+Do not install, upgrade, repair or investigate shared runtimes as part of ordinary setup.
+Do not copy private profile components or invent replacement plugins.
 
 <a id="project-tools"></a>
-## Projektwerkzeuge aus dem tatsächlichen Projekt
+## Project tools
 
-Lies pro Repository Root-/Bereichs-AGENTS, Manifeste, Lockfiles, Wrapper und Build-/
-Testkonfiguration. Erfasse je Fähigkeit Quellpfad/Revision, Constraint, Aufruf-CWD,
-Aufrufweg, tatsächliche Binary-/Paketauflösung und Prüfstatus. Unterschiedliche
-Stacks und mehrere Repos unter einem Workspace mit Leerzeichen bleiben eigenständig.
-Produktbibliotheken sind keine global zu installierenden Entwicklungswerkzeuge.
-
-Trenne Host-Runtimes/Grundwerkzeuge von projektlokalen Runnern, Buildplugins,
-Prozessoren/Generatoren, Lintern/Formattern, Testbibliotheken und Testdiensten.
-Wrapper und `packageManager` gehen einer geratenen globalen Toolliste vor.
-DevHours ist nur eine Referenz für diese **Kategorien**, keine universelle Java-/
-Node-/pnpm-/PostgreSQL-/Browserpflicht und keine Voraussetzung für den Export.
-Fehlende Zielconstraints offenlegen, nicht `latest` oder Referenzversionen einsetzen.
-
-Passenden Bestand wiederverwenden. Downloads durch Wrapper/Corepack, frozen
-Installationen, Buildskripte, Browserbezug und Dockerzugriff können schreiben oder
-Code ausführen; dafür konkreten Scope genehmigen lassen. Keine pauschale Freigabe
-aller Installationsskripte. Prüfen und Formatieren unterscheiden; Zielprojekt-
-Testreihenfolge einschließlich vorgelagerter Generierung respektieren. Worker-
-CWD/PATH, nötiges JAVA_HOME oder andere toolbezogene Pfade, Caches/Berechtigungen
-im realen Coder-, Reviewer- und Codexkontext nachweisen. Eine Adminshell ist kein
-Workerbeleg. Projekt-AGENTS bleiben unverändert; keine Produktanalyse beim Setup.
+Keep confirmed workspace and repository boundaries, including nested checkouts and multiple repositories.
+Read project instructions only as needed to establish binding and ownership.
+Do not install build dependencies or qualify project toolchains during team setup.
+Project preparation belongs to a later explicit project task.
 
 <a id="hermes-base"></a>
 ## Vorhandene Hermes-Basisskills
 
 Original: [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent).
-Für den Coder den vollständigen Distributionsbaum `skills/autonomous-ai-agents/codex`,
-für den Reviewer `skills/devops/sdlc-review` auflösen; vorhandene Distribution und
-kanonische Lizenz-/Begleitdateien wiederverwenden. Unterpfade am tatsächlichen
-Stand bestätigen. Fehlen sie, aktuellen offiziellen Distributionsbezug mit
-Installationseffekt klären, keine gleichnamige private Ersatzfassung installieren.
+Resolve the complete distribution tree `skills/autonomous-ai-agents/codex` for Coder and `skills/devops/sdlc-review` for Reviewer.
+Reuse the existing distribution and its canonical license/companion files; verify the actual subpaths.
+If assets are missing, report the prerequisite without repairing the shared distribution or installing a private replacement.
 
 Später je Rolle Katalog, Hauptskill und alle benötigten Referenzen im tatsächlichen
 Profil laden, Quellpfad/Revision nachweisen. `codex` bleibt unverändert; konkrete
@@ -56,9 +40,8 @@ Original: [openai/codex](https://github.com/openai/codex),
 [Konfigurationsorte](https://developers.openai.com/codex/config-advanced.md),
 [Skills](https://developers.openai.com/codex/skills.md),
 [Authentifizierung](https://developers.openai.com/codex/auth.md).
-Geeignete vorhandene Binary wiederverwenden, tatsächlichen absoluten Binarypfad
-auflösen und dokumentieren; bei Fehlen aktuellen offiziellen Bezug prüfen und
-gezielt genehmigen lassen. Kein eigener Codex je Hermes-Rolle.
+Reuse a suitable existing binary. Resolve and record its actual absolute path.
+If absent, report the shared prerequisite; do not install another runtime or a separate Codex per role.
 
 Im tatsächlich aufgelösten Coderhome zwei eindeutig diesem Team zugeordnete
 Verzeichnisse anlegen: `devteam/codex-home` und `devteam/user-home`.
@@ -94,30 +77,29 @@ nicht. Codexlogin und GitHub-Zugriff ersetzen keine Git-Autor-/Committeridentit�
    Beide Schreibaufrufe müssen gelingen. Dateiinhalt gezielt rücklesen und Modus
    0600 prüfen. Keine Identitätsvariablen als dauerhaften Ersatz verwenden: sie
    fehlen sonst beim nächsten Start oder vorgeschalteten Git-Preflight wieder.
-4. Nach Rollenannahme im tatsächlichen Worker in einem separaten Testrepository
-   **ohne lokale Git-Identität** und danach im vorgesehenen Repo-Kontext prüfen.
-   Für jeden der folgenden Git-Leseaufrufe dieselbe Prozessbindung verwenden:
+4. Read back the team file and effective Git identity under the actual bound process environment.
+   Use an existing authorized repository context, or the team process home when no repository exists.
+   Set `IDENTITY_CWD` to that confirmed existing path; do not create a test repository.
+   Use the same process binding for every readback:
 
    ```sh
    env -u GIT_AUTHOR_NAME -u GIT_AUTHOR_EMAIL -u GIT_COMMITTER_NAME -u GIT_COMMITTER_EMAIL \
      HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" \
-     git -C "$TEST_REPO" config --show-origin --get-regexp '^user\.(name|email)$'
+     git -C "$IDENTITY_CWD" config --show-origin --get-regexp '^user\.(name|email)$'
    env -u GIT_AUTHOR_NAME -u GIT_AUTHOR_EMAIL -u GIT_COMMITTER_NAME -u GIT_COMMITTER_EMAIL \
      HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" \
-     git -C "$TEST_REPO" var GIT_AUTHOR_IDENT
+     git -C "$IDENTITY_CWD" var GIT_AUTHOR_IDENT
    env -u GIT_AUTHOR_NAME -u GIT_AUTHOR_EMAIL -u GIT_COMMITTER_NAME -u GIT_COMMITTER_EMAIL \
      HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" \
-     git -C "$TEST_REPO" var GIT_COMMITTER_IDENT
+     git -C "$IDENTITY_CWD" var GIT_COMMITTER_IDENT
    ```
 
-   Erfolg: Quelle ist die Team-`.gitconfig`, Autor **und** Committer entsprechen
-   exakt den bestätigten Werten; alle Aufrufe Exit 0. Geerbte `GIT_CONFIG_*`-,
-   XDG-, Include- und Repo-Overrides bei abweichender Auflösung klären, nicht
-   global entfernen oder durch Test-Overrides verdecken. Nach dem echten
-   Probelaufcommit beide Identitäten mit `git show -s --format='%an <%ae>%n%cn <%ce>'`
-   rücklesen. Bei Wiederaufnahme erneut prüfen. Fehlende Datei, Herkunft oder
-   Identitätsnachweise halten die Team-Codex-Freigabe an; im privaten Setuprecord
-   Werte, Herkunft, Pfad und Belege festhalten.
+   Require the own regular team `.gitconfig` at mode 0600 with the exact confirmed identity.
+   Verify source and both effective author/committer values without making a commit.
+   Resolve inherited `GIT_CONFIG_*`, XDG, include, or repository overrides if they conflict.
+   Do not remove global configuration or hide conflicts with identity environment overrides.
+   On resume, reuse confirmed identity and read back the affected binding.
+   Record provenance, path, mode and results privately; a failed binding keeps Team-Codex setup incomplete.
 
 Grundform für jeden Team-Codex-Aufruf:
 
@@ -131,27 +113,19 @@ verwenden. Nutzer durch den geschützten Login führen, keine Tokens in Chat,
 Argumente oder Protokolle übernehmen. Hermesauth beweist keinen Codexzugang;
 keine pauschale Authdateikopie und kein Authproxy.
 
-Jeder spätere Codexauftrag bekommt dieselbe prozesslokale Doppelbindung durch
-den Coder und den unveränderten Hermes-`codex`-Skill, ohne zusätzlichen Wrapper.
-`CODEX_HOME/config.toml` trägt die bestätigte native Modell-/Reasoningauswahl
-(`model`, `model_reasoning_effort`, bei gewählter eigener Providerroute
-`model_provider` samt offiziell unterstützter Definition). Nur vom Zielstand
-unterstützte Werte setzen, vorhandene Einträge gezielt erhalten. Der Coder liest
-das eingerichtete Modell daraus; `model_reasoning_effort` erhält den bestätigten
-`CODEX_REASONING_DEFAULT`. Die Coder-SOUL enthält zusätzlich `CODEX_REASONING_MAX`.
-Ein Configdefault begrenzt CLI-Overrides nicht. Nur erlaubte höhere Stufen am selben
-Modell über den unterstützten nativen Aufrufweg im echten Call belegen; ansonsten
-vor der betroffenen Hochrisikoarbeit an den Planner. Keine neue technische
-Maximalwert-Config erfinden; die Obergrenze ist hier eine Rollenregel.
+Use the same process-local HOME/CODEX_HOME binding for every later Codex task through the unchanged Hermes `codex` skill.
+Do not add another wrapper.
+Set `CODEX_HOME/config.toml` to the confirmed native `model` and `model_reasoning_effort`.
+If a custom provider route was confirmed, retain its supported `model_provider` and definition.
+Preserve unrelated entries. The Coder reads the configured model; reasoning defaults to `CODEX_REASONING_DEFAULT`.
+Keep `CODEX_REASONING_MAX` in the existing Coder SOUL policy, without a new technical maximum key.
+A default does not limit CLI overrides. Check supported levels and access through native availability/configuration readbacks, without higher-reasoning experiments.
 
-Skills gehören nach `CODEX_PROCESS_HOME/.agents/skills/<name>/`, Original-TOMLs
-nach `CODEX_HOME/agents/`. Prüfe im **echten Worker** zusätzlich kompatibles
-`CODEX_HOME/skills`, Projekt-/Ancestor-`.agents/skills`, Projektkonfiguration,
-Admin-/Systemquellen und geerbte Overrides. Doppeltes HOME reduziert persönliche
-Skills, ist aber keine Sandbox oder Garantie gegen alle anderen Quellen. Erhalte
-persönliche Codexdateien und dokumentiere effektive Skill-/Config-/Pluginroots.
-Pfade für projektbezogene Tools nach HOME-Wechsel bewusst prüfen; nicht kompletten
-persönlichen Zustand zur „Reparatur“ kopieren.
+Place skills at `CODEX_PROCESS_HOME/.agents/skills/<name>/` and original TOMLs at `CODEX_HOME/agents/`.
+Read back effective config/skill roots, including compatible `CODEX_HOME/skills`, project/ancestor `.agents/skills`, project configuration, admin/system sources and inherited overrides.
+Separate homes reduce personal skill inheritance; they are not a sandbox.
+Preserve personal Codex files and project tool paths after the HOME change.
+Do not copy personal state to repair a binding.
 
 <a id="superpowers"></a>
 ## Superpowers — nur Planner
@@ -178,12 +152,10 @@ entfernen, ursprüngliche fremde Plugin-/PM-Bestände bewahren.
 Original: [mattpocock/skills](https://github.com/mattpocock/skills). Beide Skills sind
 Pflichtausstattung für die Planungsphase, keine zusätzliche Setupauswahl.
 
-1. Beim Zielsetup den aktuellen geeigneten Originalstand außerhalb aktiver Discovery
-   beziehen und statisch prüfen. Die vollständigen Bäume `skills/productivity/grill-me/`
-   und `skills/productivity/grilling/` aus derselben Revision erfassen, einschließlich
-   `agents/openai.yaml` und aller weiteren zum Bezugsstand gehörenden Begleitdateien.
-   Den Verweis von `grill-me` auf `grilling` und dessen weitere Abhängigkeiten prüfen;
-   bei geändertem Umfang den konkreten Konflikt klären statt eine Ersatzfassung zu schreiben.
+1. Use the established available original source outside active discovery.
+   Check complete assets and provenance without searching for the newest upstream revision.
+   Keep `skills/productivity/grill-me/` and `skills/productivity/grilling/` from the same revision, including `agents/openai.yaml` and all companion files.
+   Check required skill references for delivery completeness. Report a changed or missing asset contract instead of inventing a replacement.
 2. Nach Ziel-/Kollisionsprüfung und Setupfreigabe beide Bäume unverändert nach
    `<tatsächlich aufgelöster Plannerhome>/skills/grill-me/` beziehungsweise
    `skills/grilling/` kopieren. Die Original-`LICENSE` aus dem Repositoryroot jedem
@@ -198,13 +170,10 @@ Pflichtausstattung für die Planungsphase, keine zusätzliche Setupauswahl.
    bei ausdrücklichem Nutzeraufruf von `grill-me` entspricht dessen „Skill tool“ in
    Hermes ebenfalls `skill_view`. Kein eigenes Wrapper-Skill und keine Abhängigkeit
    auf den Maker im späteren Plannerdialog.
-4. Dateimengen und Bytes gegen die ausgewählte Quelle vergleichen, die beigefügten
-   Rechtstexte separat abgleichen. Nach Rollenannahme im tatsächlichen Plannerkontext
-   Discovery und vollständiges Laden von `grilling` sowie den ausdrücklichen Aufruf
-   von `grill-me` mit Übergang zu `grilling` prüfen. Die Ladepflicht und den Vorrang
-   für den Interviewabschnitt aus der gerenderten SOUL zurücklesen; auch einen neuen
-   Kontext beziehungsweise Resume berücksichtigen. Funktionsnachweis erst im
-   freigegebenen [Planungsprobelauf](verification.md#3-ein-gemeinsamer-probelauf).
+4. Compare complete file sets and bytes with the selected source, including legal files.
+   Verify native discovery and complete loading through established readbacks after role delivery.
+   Read back the `grilling` load requirement and interview precedence in the personalized Planner SOUL.
+   Do not run a planning interview, explicit skill invocation experiment, or resume conversation during setup.
 
 Rückweg nur für die protokollierten eigenen Skillziele: vorherige eigene Stände
 wiederherstellen; Entfernen neu angelegter Dateien nur mit der geltenden
@@ -246,13 +215,12 @@ Slashwechsel ist prozesslokal. Konkreter Originalleser in `__init__.py`:
 `$XDG_CONFIG_HOME/ponytail/config.json` (falls gesetzt), sonst
 `$HOME/.config/ponytail/config.json` → eingebautes `full`.
 Prüfe diese Quellen im tatsächlichen Coder-Prozess, ohne dessen HOME zu verändern.
-Ist kein abweichender Override wirksam, den eingebauten persistenten Default
-verwenden und frisch gestarteten Coder samt injiziertem `full` belegen. Bei
-abweichendem gemeinsamem Override: keine globale Userdefault-Änderung als
-Setupnebenwirkung. Nur eine am Ziel nachgewiesene profilbezogene native
-Prozesskonfiguration für `PONYTAIL_DEFAULT_MODE=full` nach konkreter Freigabe
-verwenden; fehlt ein solcher Weg im geteilten Owner, diese Fähigkeit blockieren
-und den Konflikt benennen. Kein erfundener YAML-Schlüssel oder Pluginpatch.
+If no conflicting override is effective, use the built-in persistent default and read back its configuration.
+Do not start a conversation to prove injection.
+If a shared override conflicts, do not change global user defaults as a setup side effect.
+Use only the supported authorized profile-local process binding for `PONYTAIL_DEFAULT_MODE=full`.
+If the shared owner cannot supply that binding, report the concrete capability conflict.
+Do not invent a YAML key or patch the plugin.
 
 Team-Codex liest denselben Default über `hooks/ponytail-config.js`. Übergib für
 **jeden Team-Codex-Aufruf** zusätzlich prozesslokal `PONYTAIL_DEFAULT_MODE=full`
@@ -263,9 +231,7 @@ persönliche Dateien zu ändern. Der originale SessionStart-Hook setzt den aktiv
 Modus, `hooks/ponytail-runtime.js` schreibt ihn unter dem tatsächlichen
 `PLUGIN_DATA` nach `.ponytail-active` (gegebenenfalls zusätzlich projektbezogen).
 `/ponytail full` ist der originale Moduswechsel, nicht allein der Persistenzbeleg.
-Prüfe neuen tatsächlichen Worker/Gatewayprozess und Team-Codex inklusive
-Resume/Child: persistenter Datensatz und injizierter Modus sind getrennte Belege.
-Ein `full`-Wort in SOUL genügt nicht.
+Read back native plugin/hook registration, default sources, process binding and any existing mode record. Do not start worker, resume, or child experiments. A SOUL word alone does not establish plugin configuration.
 Rückweg: eigene Pluginregistrierung/Hookfreigabe und zugeordnete Modusdateien
 gezielt zurücknehmen; keine gemeinsamen Runtimes oder persönlichen Plugins löschen.
 
@@ -287,24 +253,21 @@ danach `config get skills.auto_load`. Nicht die ganze vorhandene Liste ersetzen.
 Das Reviewerprofil erhält weder die Skillkopie noch den Autoload-Eintrag; seine
 SOUL verlangt sachliche Klartextbefunde, damit Reviewbefunde nicht durch
 Kürzung mehrdeutig werden.
-Im echten neuen Kontext geladenen Originalhauptskill nachweisen. Team-Codex erhält
-`$caveman` ausdrücklich in **jedem neuen Auftrag**, auch nach Neustart/Resume.
-Diese Pflicht steht dauerhaft in der [Coder-SOUL](../templates/roles/coder.SOUL.md.template).
-Beim Setup die Klausel in der personalisierten Coder-SOUL rücklesen;
-ihre Anwendung darf nicht vom erneuten Laden dieses Makers abhängen.
+Verify native discovery/loading without a style conversation.
+Team-Codex receives `$caveman` in every new task, including restart/resume.
+Read back that durable clause in the personalized [Coder SOUL](../templates/roles/coder.SOUL.md.template).
+Do not make its later use depend on reloading this Maker.
 
 Nur Chat wird verkürzt. Code, Dokumentation, Commits, Memory und Sicherheitsklarheit
 bleiben normal verständlich. Planner bleibt normale Sprache. Rückweg entfernt nur
 die eigenen identifizierten Skillkopien und den eigenen Autoload-Eintrag.
 
 <a id="find-skills"></a>
-Original [vercel-labs/skills](https://github.com/vercel-labs/skills): vollständiges
-`skills/find-skills/` (recherchiert genau `SKILL.md`) und MIT-`LICENSE` nach
-`<CODEX_PROCESS_HOME>/.agents/skills/find-skills/`. Aktuelle Begleitdateimenge
-erneut prüfen, nicht nur eine URL kopieren. Native Discovery/geladener Skill und
-später eine genehmigte Suche über den Originalskill belegen. `npx skills` kann
-Paketbezug auslösen; Suchergebnis und Installationsfreigabe bleiben getrennt.
-Ergänzungsvorschläge gehen über Coder zum Planner, nicht automatisch installieren.
+Original [vercel-labs/skills](https://github.com/vercel-labs/skills): copy complete `skills/find-skills/` and MIT `LICENSE` to `<CODEX_PROCESS_HOME>/.agents/skills/find-skills/`.
+Compare the complete companion set with the selected source and verify native discovery/loading.
+Do not run a synthetic search during setup.
+Later `npx skills` use can download packages; search results do not authorize installation.
+Route component suggestions through Coder to Planner instead of installing automatically.
 
 <a id="codex-agents"></a>
 ## Sechs unveränderte Original-Agent-TOMLs
@@ -328,10 +291,9 @@ Pro Datei **drei getrennte Nachweise** führen:
    Pins. Native Modellkonfiguration und Zugang prüfen; eigene Modell-/Reasoningauswahl ersetzt
    keinen Originalpin. Provider/Approval/MCP können aus dem Parent kommen, eine
    TOML-Sandboxzeile allein ist keine neue Sicherheitsgarantie.
-3. Nach Testfreigabe **je Helfer ein echter begrenzter Delegationsaufruf** im
-   separaten Testworkspace mit engem Auftrag/Schreibscope, tatsächlichem Modell,
-   Ergebnis und Nachweis. Kein umfassender fachlicher Benchmark. Ein Katalogeintrag
-   oder Elterncall genügt nicht. Kein Helfer ersetzt unabhängigen Hermesreview.
+3. Read back the exact installed helper inventory and native configuration/access availability.
+   Do not delegate to every helper or generate test artifacts during setup.
+   No helper replaces the independent Hermes Reviewer.
 
 Fehlt ein Original-Modellpin im gewählten Zugang, halte die betroffene Pflichtfähigkeit offen und erhalte die Originaldatei.
 Planner benennt fehlende Verfügbarkeit und den nötigen autorisierten Zugang;
@@ -352,13 +314,12 @@ hermes -p "$PROFILE" memory setup
 hermes -p "$PROFILE" config get memory.provider
 ```
 
-Geführt **vorhandenen** Dienst (`local_external`) wählen, bestätigte neue gemeinsame
-Projektbank binden, `memory.provider=hindsight` rücklesen. Bei Wiederaufnahme
-vorhandene eigene Bank statt einer Doppelbank verwenden. Native Setupfelder und
-tatsächliche Bankidentität prüfen; kein Embedded-Server als Ersatz. Aktueller
-recherchierter Katalogadapter 1.2.3 verlangt Hermes >=0.21.4, Python >=3.11 sowie
-`hindsight-client>=0.10.1,<1` und `hindsight-embed>=0.10.1,<1`; das sind Quellenbefunde,
-keine vorab genehmigte Installation. Zielkatalog und gemeinsame PM-Wirkung prüfen.
+Use the confirmed existing service (`local_external`) and create or reuse the explicitly authorized shared project bank.
+Read back `memory.provider=hindsight`, native setup fields and actual bank identity.
+Reuse the existing own bank on resume; do not provision an embedded server.
+The researched adapter 1.2.3 required Hermes >=0.21.4, Python >=3.11, `hindsight-client>=0.10.1,<1` and `hindsight-embed>=0.10.1,<1`.
+These are historical source facts, not an installation mandate.
+Use the established compatible catalog adapter and the authorized profile-local integration/PM scope.
 
 Der Originaladapter liest profilbezogen `<Rollenhome>/hindsight/config.json`,
 dann legacy geteilte Konfiguration, dann Envfallback. Erstelle/merge deshalb nach
@@ -394,23 +355,16 @@ oder diese JSON-Vorlage. Prüfe konkurrierende `apiKey`/`api_key`, Banktemplates
 Legacy-/Env-/CWD-Bankdiscovery und effektive Bankauswahl ohne Secrets auszugeben.
 Explizite Rollenfelder und Bank müssen tatsächlich beim Verbraucher ankommen.
 
-Leser am verwendeten Adapter prüfen: `_load_config`, Providerinitialisierung,
-`_build_retain_kwargs`, `_recall`, `_reflect`, `_do_recall`, `_tool_reflect`.
-Recall muss `tags`/`tags_match` und gewählte Typen, Retain die Tags und
-`observation_scopes`, Reflect **eigene** `reflect_tags`/`reflect_tags_match` an
-`areflect` weitergeben. Recallfilter werden nicht automatisch auf Reflect vererbt.
-SDK/Server müssen die Originalfelder unterstützen. `per_tag` erhält Rollen-
-Konsolidierung, `any_strict` schließt ungetaggte Treffer aus; eine globale
-ungetaggte Observation ist nicht `scope:shared`-Wissen. Tags sind keine ACL.
+Check service availability and bank ownership through the established service interface.
+Read back `memory.provider`, the profile JSON, effective bank, role tags and override sources without secrets.
+Do not inspect adapter functions or research SDK forwarding during setup.
+Keep `recall_prefetch_method=recall`; preserve separate reflect tags and match semantics.
+`per_tag` preserves role consolidation; `any_strict` excludes untagged matches.
+An untagged observation is not `scope:shared` knowledge. Tags are not ACLs.
+Promoting confirmed shared knowledge later remains an operational role task, not setup prepopulation.
+Do not perform retain/recall/reflect, synthetic conversation, or consolidation experiments.
+A missing/incompatible supported configuration is a concrete setup limitation, not permission for a plugin fix.
 
-**Spätere begrenzte Abnahme:** nur autorisierte Testdaten in der eigenen Bank;
-gezielt eigene Rolle, andere Rolle, Shared und ungetaggt unterscheiden. Pro Rolle
-Konfiguration → echte Requestfelder → gespeicherte Tags/Retainintervall zwei Turns
-→ Recallresultate → konsolidierte Ergebnisse getrennt belegen. Bestätigtes
-projektweites Wissen bewusst mit `scope:shared` fördern; keine Wissensvorbefüllung.
-Reflect (explizit **und** Prefetch) erst nach nachgewiesener Rollenfilterweitergabe
-nutzen. Bis dahin Prefetch auf `recall` belassen und nur gefilterten Recall verwenden.
-Kein eigener Pluginfix. Bankweite Directives sind nicht durch Tags voll isoliert.
 Rückweg: eigenes Memorybinding nativ deaktivieren/gezielt zurücksetzen; eigene
 JSON-Feldänderungen zurücknehmen. Bankinhalte bleiben ohne Löschfreigabe erhalten.
 
@@ -422,24 +376,25 @@ Quellen: [Hermes Memory Providers](https://hermes-agent.nousresearch.com/docs/us
 <a id="mattermost"></a>
 ## Mattermost geführt — ausschließlich Planner
 
-Maßgeblich: [offizielle Hermes-Anleitung](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/mattermost)
-und Zielversion. Führe diese Schritte mit Wartepunkten durch, statt nur Variablen
-aufzulisten. Bei anderer Oberfläche aktuellen offiziellen UI-Weg prüfen.
+Use the established [Hermes Mattermost recipe](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/mattermost) for the supported target version.
+Consume the preparation decisions and perform only the disclosed target-dependent interactions later.
+If the installed interface is incompatible, report that concrete recipe limitation instead of recurring source/UI research.
 
-1. Bestätige Server und vorgesehenes Team. Führe den Nutzer zur Kanalanlage in
-   seiner Oberfläche, bei Wiederaufnahme zum zugeordneten vorhandenen Projektkanal.
-   Über Kanalname → **View Info** echte Kanal-ID ermitteln; Name/Slug ist kein
-   Ersatz. Typ und Teamzuordnung zurücklesen (öffentlich O / privat P).
+1. Reuse the confirmed server/team and create-versus-reuse decisions.
+   Guide authorized channel creation in the user's UI, or reuse the recorded own channel.
+   Resolve the actual channel ID through channel name → **View Info**; name/slug is not an ID.
+   Read back team and type (public O / private P).
 2. Bei fehlender eigener Botidentität: Admin muss nötigenfalls System Console →
    Integrations → Bot Accounts → Enable Bot Account Creation freigeben. Nutzer
    über Menü → Integrations → Bot Accounts → Add Bot Account führen. Eigener
    Planner-Bot, Rolle **Member** genügt; keine Adminrechte für den Bot verlangen.
    Token direkt geschützt sichern lassen, niemals in Chat abfragen. Bestehenden
    eindeutig diesem Setup zugeordneten Bot erhalten.
-3. Bot ins richtige Team und über Kanalname → **Add Members** in den Projektkanal
-   aufnehmen; echte Bot-ID/Username und Mitgliedschaft prüfen. Menschliche User-ID
-   über Avatar → Profile ermitteln und ausdrücklich bestätigen, nicht Bot-ID oder
-   Anzeigename. Weitere Nutzer nur nach ausdrücklicher Zulassung.
+3. Add the bot to the confirmed team and project channel through channel name → **Add Members**.
+   Verify actual bot ID/username and membership.
+   Resolve the human User ID through Avatar → Profile and match the already authorized identity.
+   Do not confuse human ID with bot ID or display name, or reopen a confirmed choice.
+   Add only users explicitly authorized during preparation.
 4. `hermes -p "$PLANNER" gateway setup` aufrufen, Mattermost auswählen, Nutzer
    Server/Bot-Token über den nativen geschützten Eingabeweg eingeben lassen.
    Alternativ legt der Nutzer den Token direkt in die aufgelöste private Planner-
@@ -487,52 +442,31 @@ aufzulisten. Bei anderer Oberfläche aktuellen offiziellen UI-Weg prüfen.
    festhalten; in dieser Konfigurationsphase keine Home-Nachricht senden.
    Native Wizardroute für die Konfiguration verwenden, nicht pauschal nichtgeheime
    Einstellungen in `.env` duplizieren. Home setzen und rücklesen folgt in Phase 8.
-7. Prüfe die effektive Auflösung gegen Leser: Adapter `extra` gegenüber
-   `MATTERMOST_REQUIRE_MENTION`, `MATTERMOST_FREE_RESPONSE_CHANNELS`,
-   `MATTERMOST_ALLOWED_CHANNELS`, `MATTERMOST_REPLY_MODE`; URL/Token über
-   `_url_and_token`, Nutzer über native Gatewayautorisierung, Home über
-   Gateway-Konfigurationsresolver. Hier den Home-Leser prüfen; den gespeicherten
-   Homezielwert erst nach dem Setzen in Phase 8 rücklesen. Konkurrierende Werte gezielt klären, kein
-   komplettes Config-/Env-Dump. Kanal-Allowlist greift vor Mention; DMs umgehen
-   Kanalprüfung, **nicht** menschliche Autorisierung. Fehlender Leser ist ein
-   Setupblocker, keine Erlaubnis zu schwächeren Regeln.
-   Prüfe auch zusätzliche Zulassungswege im Plannerprofil, insbesondere
-   `extra.group_allowed_chats`, Botfreigaben und globale Allow-all-/Benutzergrants:
-   Sie dürfen die bestätigte Kanal-/Benutzerbegrenzung nicht erweitern. Eine
-   Kanalmitgliedschaft oder Mattermost-Kanalberechtigung allein ist keine
-   Benutzerfreigabe des Planners. Bei einer wirksamen zusätzlichen Freigabe vor
-   Aktivierung den Widerspruch klären und die Zielkonfiguration gezielt korrigieren.
-8. Erst nach vollständigen angenommenen Rollen-/Binding-/Policydateien und
-   konkreter Aktivierungsfreigabe den bestehenden vorgesehenen Multi-Profile-
-   Gateway nutzen und das richtige Plannerprofil/Adapterrouting nachweisen.
-   Unterstützte profilbezogene Aufnahme/Start verwenden; keinen zweiten Besitzer,
-   globale Migration oder zentralen Restart als Standard auslösen. Bei bereits
-   durch Create hot-admittiertem Planner den protokollierten frühen Aktivierungsstand
-   berücksichtigen: vollständige effektive Aufnahme der angenommenen Rollen und
-   aktuelles Adapterrouting erneut belegen, nicht einen ersten Start behaupten.
-   Erst dann den Nutzer im getrennten Mensch–Bot-DM `/sethome` senden lassen;
-   dieser Slashbefehl benötigt ein MessageEvent des laufenden Planneradapters.
-   Den tatsächlich gespeicherten Homekanal zurücklesen: `MATTERMOST_HOME_CHANNEL`
-   bzw. die native Homebindung muss die anhand der Metadaten bestätigte DM-ID sein,
-   ohne zusätzliche Home-Threadbindung. Keine Projekt-ID als Homefallback.
-   Bei fehlendem Adapter-/Homebeleg hier halten. Danach lass den Nutzer
-   zuerst `@botname` im Projektkanal senden, warte auf echte Antwort. Dann zweite
-   Nachricht **ohne Erwähnung**, danach DM-Dialog. Fehlende Antwort hält den Schritt
-   offen: Identität, Mitgliedschaft, IDs, Zulassung, Verbindung/Overrides prüfen.
-   Prüfe zusätzlich gegen die effektive Zielkonfiguration an den nativen
-   Eingangsprüfungen: bestätigter Nutzer im freigegebenen Projektkanal zugelassen;
-   nicht freigegebener Nutzer oder Bot im selben Kanal abgewiesen; bestätigter
-   Nutzer in einem nicht freigegebenen Kanal abgewiesen. Für die Ablehnungsfälle
-   synthetische Eingangsereignisse ohne Modellstart verwenden; keine fremden
-   Konten, Kanalmitgliedschaften oder Rechte anlegen oder ändern. Eine Ablehnung
-   muss aus Kanal-/Benutzerautorisierung folgen, nicht bloß aus fehlender Erwähnung.
-   Kann der native Prüfweg nicht sicher ausgeübt werden, diesen Prüfschritt offen
-   benennen; erfolgreiche erlaubte Gespräche belegen keine Ablehnung fremder Nutzer.
-9. Die separate native Ticket-Wakebindung aus [Setup](setup.md) vor Ticketfreigabe
-   anlegen und im freigegebenen Pipelineweg bis zur echten Planner-Kanalnachricht
-   nachweisen. Homeziel allein beweist das nicht. Keine eigenen Threads, Registry
-   oder zusätzliche Statuskanäle. Direkte Gespräche bleiben an ihrem berechtigten
-   Zugang; der Projektkanal ist Ziel asynchroner Taskberichte, kein Gesprächszwang.
+7. Read back effective configuration and its supported source precedence:
+   adapter `extra` versus `MATTERMOST_REQUIRE_MENTION`, `MATTERMOST_FREE_RESPONSE_CHANNELS`,
+   `MATTERMOST_ALLOWED_CHANNELS`, `MATTERMOST_REPLY_MODE`; protected URL/token availability,
+   native gateway user authorization and Home configuration.
+   Resolve conflicting values without config/environment dumps or recurring reader-source inspection.
+   Channel allowlisting precedes mention handling; DMs bypass channel checks, not human authorization.
+   Check additional grants, including `extra.group_allowed_chats`, bot access and global allow-all/user grants.
+   They must not extend the confirmed channel/user permissions.
+   Membership alone is not Planner authorization. Resolve a real conflict before activation.
+   Do not weaken permissions or use synthetic authorization events to complete setup.
+8. Use the existing authorized multi-profile gateway only after complete accepted role/binding/policy delivery.
+   Read back the intended Planner profile, full context loading and adapter routing before the disclosed Home action.
+   Use supported profile-local admission/activation without a second owner, global migration or central restart.
+   If Create already hot-admitted the Planner, record that early effect and verify current routing/context; do not claim a first start.
+   Then ask the authorized human to send `/sethome` in the separate human–bot DM.
+   This native command requires a MessageEvent from the running Planner adapter.
+   Read back `MATTERMOST_HOME_CHANNEL` or the native Home binding: it must equal the metadata-confirmed DM ID without an extra Home thread.
+   Do not use the project channel ID as a Home fallback.
+   If adapter or Home readback is missing, keep this binding incomplete.
+   Do not run mention/free-response/DM reply matrices, synthetic rejection cases, or artificial wake chains.
+9. Keep the later normal task [subscription recipe](setup.md#later-normal-task-subscriptions).
+   It applies to authorized operational tasks, not a setup test card.
+   Home binding does not establish task delivery. Do not claim live wake behavior from configuration.
+   Keep direct conversations at their authorized access path and asynchronous reports in the project channel.
+   Do not introduce extra status channels, threads, or a registry.
 
 Rückweg: nur eigene Planner-Adapteraktivierung und dokumentierte Config-/Home-/
 Allowliständerungen zurücknehmen; Tokenrotation nur gezielt nach Nutzerauftrag.
@@ -542,13 +476,11 @@ keine historische besondere Thread-Abnahme hinzufügen.
 
 ## Codeanalyse und Quellenstand
 
-Die Wahl zwischen `codebase-memory` und `graphify` bleibt verbindlich.
-[Codeanalyse](code-analysis.md) enthält beide Einrichtungswege mit Originalkomponenten,
-Runtime-/Zielkontexten, Aktivierung, Index-/Query-/Updateprüfung und Rückwegen.
-Genau den gewählten Weg auf alle drei Hermes-Rollen und Team-Codex anwenden.
-Bei CBM die offizielle Codex-Integration einschließlich ihrer Unteragenten einrichten;
-die sechs VoltAgent-Helfer bleiben daneben erhalten. Einrichtung und Funktion im
-Teamkontext prüfen. Quellen stehen im [Bezugsquellenverzeichnis](upstream-sources.md).
+Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to all three Hermes roles and Team-Codex.
+Read only that branch of [Code analysis](code-analysis.md) as setup instructions.
+For CBM deliver the complete official Codex subagents alongside the unchanged six VoltAgent helpers.
+Verify setup targets, native discovery and connection/configuration readbacks without analysis experiments.
+Keep provenance in [Sources](upstream-sources.md).
 
 Statische Recherche vom 18.10.2026: Superpowers `bb92a77741419a4ab5f06e711a283343f1ada0c3`,
 Ponytail `09c434ab73ca43761c5d8b0c5d341926c2fba710`, Caveman
