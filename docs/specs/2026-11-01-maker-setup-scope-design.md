@@ -40,7 +40,7 @@ Preserve:
 
 Do not simplify role quality requirements to reduce setup work.
 Do not remove a component solely because its current setup recipe contains excessive tests.
-Keep role templates, skill payloads, render transforms, and helper behavior unchanged unless a concrete setup-scope conflict or the requested Coder reasoning bound requires a targeted correction. Preserve backward compatibility for existing recorded teams.
+Keep role templates, skill payloads, render transforms, and helper behavior unchanged except for concrete setup-scope corrections and the Codex-call wording clarification below. Preserve backward compatibility for existing recorded teams.
 Do not turn this revision into a general rewrite of the team's working methods.
 
 ## 3. Responsibility boundary
@@ -105,7 +105,7 @@ Offer these model/reasoning defaults together at the beginning:
 | Role | Model family | Default reasoning | Allowed maximum |
 |---|---|---|---|
 | Planner | Sol | high | high; fixed high by default |
-| Hermes Coder | Sol | medium | high |
+| Hermes Coder | Sol | medium | Fixed medium; no separate escalation range |
 | Reviewer | Sol | medium | high |
 | Team-Codex | Sol | medium | high |
 
@@ -113,7 +113,11 @@ Let the user accept the set once or change individual choices before installatio
 Treat `sol-high` and `sol-medium` as user-facing model/reasoning combinations, not native model identifiers.
 Resolve Sol to the actual supported model/provider identifier for each target and record that identifier separately from reasoning. Use established availability/configuration interfaces, not a new model experiment.
 If the model or levels are unavailable, raise the concrete conflict during preparation; do not silently select another family, provider, or greater reasoning level.
-Keep Hermes Coder reasoning separate from Team-Codex reasoning. Configure the Coder's own default and persist its own allowed maximum in its installed role context; a Codex-only bound does not satisfy this requirement.
+Keep Hermes Coder reasoning separate from Team-Codex reasoning. Max confirmed that the Hermes Coder itself stays at Sol/medium; it selects the reasoning level for each Codex task.
+Preserve the existing Coder risk matrix: use the Codex default below HIGH complexity and HIGH impact; either HIGH permits up to the maximum; HIGH complexity together with HIGH impact requires the maximum. With the proposed defaults, these levels are medium and high.
+Keep the existing bounded retry/review escalation rules. Escalate reasoning only; do not switch the configured model or provider.
+Keep the Codex default in native configuration and the allowed maximum in the existing Coder role rule. Do not add a technical maximum setting or a separate Hermes-Coder maximum field.
+Clarify the Codex launch instruction to pass the reasoning level selected for the task. Do not make its command example imply that every call must use the default.
 Do not treat an allowed maximum as a command to run everything at that level or claim a prompt rule is a technical enforcement mechanism.
 Preserve existing confirmed model choices and limits during team updates. Never inject the new defaults into an old team as an unrequested policy change.
 
@@ -184,11 +188,11 @@ Keep any runtime migration separate from file-update permission.
 - `references/integrations.md`, `references/code-analysis.md`, `references/kanban-block-triage-escalation.md`: separate necessary configuration from component research, operation, and test scenarios.
 - `references/verification.md`: make ordinary setup checks explicit. Keep useful Maker development checks in a separately triggered development reference, not a mandatory setup reference.
 - `templates/setup-record.md`: simplify human-maintained evidence while preserving the JSON/update contract.
-- `references/update.md`: keep update guarantees; document confirmed adoption of the new Coder limit without resetting existing choices.
-- `references/render_text.py`, `references/update_team.py`: add only the Coder maximum field and compatible adoption from confirmed setup evidence. Preserve exact-source checks and old rendering behavior.
+- `references/update.md`: keep update guarantees; correct only references or scope wording affected by this revision.
+- `references/render_text.py`, `references/update_team.py`: preserve existing fields, rendering behavior, compatibility checks, and update algorithms. The clarified Codex selection requires no extension.
 - `manifest.json`: preserve component assignments and transforms; align file references and stage wording with actual evidence. Do not label unperformed runtime acceptance as passed.
 - `references/test_*.py`: retain existing development tests; add only a focused missing regression for a changed contract.
-- `templates/roles/coder.SOUL.md.template`: add the Coder's own reasoning boundary, separate from Codex. Keep the default and model ID in native configuration, not duplicated in the SOUL.
+- `templates/roles/coder.SOUL.md.template`: clarify that each Codex call passes the reasoning level selected for its task. Preserve the existing matrix, default/maximum fields, and model/provider restriction.
 - Other files in `templates/roles/` and `skills/`: audit setup backlinks. Do not broadly rewrite role instructions or copy test duties into generated teams.
 
 Classify affected instructions as KEEP, MOVE, MERGE, REMOVE, or REVIEW under the repository TAS standard.
@@ -212,7 +216,7 @@ These checks belong to Maker revision work, not to each future team setup.
 5. Review normal setup, missing dependency, collision, interrupted setup, and existing-team update against the revised instructions. Ensure each has a bounded next action rather than an automatic research/repair expansion.
 6. Check links, manifest consistency, and TAS for changed instructions. Keep package tests separate from claims about installed live teams.
 7. Walk the name derivation, collision, combined-default acceptance, override, and unavailable-model cases before installation. Verify that valid derived IDs need no separate question.
-8. Verify distinct Coder/Codex limits and safe rendering. Exercise the old-team update with confirmed and missing Coder limits; preserve local edits, native settings, and unsupported-renderer refusal.
+8. Verify that the fixed Hermes-Coder reasoning and task-selected Codex reasoning remain distinct. Use the existing renderer regression and instruction review to check the matrix and explicit call parameter. Keep role fields and updater compatibility unchanged; do not launch a live Codex experiment for this check.
 
 Do not add a benchmark platform or an arbitrary promised setup duration.
 Any separately authorized practical Maker trial is one-time revision evidence. Do not turn it into a standard future setup gate.
