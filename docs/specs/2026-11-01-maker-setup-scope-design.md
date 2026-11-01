@@ -7,9 +7,9 @@
 - Inspected source: `a44d15e3aad77b891fa5c95ebeba49a780e4525e`, branch `develop`, Maker package `1.1.4`.
 - Max approved the design direction in the planning conversation: preserve the generated team's capabilities and quality; remove development research and behavioral qualification from ordinary team setup.
 - Max explicitly requires useful setup records and the existing versioned installation/update mechanism to remain intact.
-- Max accepted this written specification as presented in commit `0694e651df32dbe7d5187d6d4105fb2b91819b0c` and authorized preparation of the implementation plan. The subsequent implementation plan still requires separate approval before execution.
+- Max accepted this written specification as presented in commit `0694e651df32dbe7d5187d6d4105fb2b91819b0c` and authorized preparation of the implementation plan. On 2026-11-01, Max approved Phases 1–2 of that plan at content baseline `696418f81aa005db13a9036fa479dd19424c5880`, including the subsequent confirmed requirements.
 - Max subsequently specified an upfront setup interview and a separate sequence of implementation, his practical setup trial, then explicitly released repository cleanup. The sections below include these requested additions.
-- No implementation, team rollout, profile change, push, release, or deployment is authorized by this document.
+- Phases 1–2 are implementation-approved through the linked plan. Team rollout, profile changes, practical trial execution, cleanup, push, release, and deployment remain separately gated.
 
 ## 1. Outcome
 

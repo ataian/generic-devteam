@@ -2,7 +2,7 @@
 
 > **Execution:** Scotty implements through Codex. Julia reviews each phase on the same ticket through `kanban_request_review(reviewer="julia")`. Kirk coordinates. Do not create separate review tickets, extra coding agents, or an additional LLM judge.
 
-**Status:** Draft for Max's implementation approval. The original design specification is accepted. This draft includes Max's subsequent interview, name-derived ID, model-default, and post-trial cleanup requirements. No implementation or cleanup is released by this document.
+**Status:** Max approved Phases 1–2 for implementation on 2026-11-01, with content baseline `696418f81aa005db13a9036fa479dd19424c5880`. This approval includes the interview, name-derived IDs, clarified model defaults, and post-trial cleanup sequence. Resolve project routing before ticket creation. Phase 3 remains unreleased pending Max's practical trial and separate cleanup authorization. This approval record changes no implementation scope or acceptance criteria.
 **Goal:** Preserve the equipped team's capabilities and update safety while removing recurring research and behavioral qualification from ordinary setup.
 **Architecture:** Keep the existing prose-driven Maker, templates, helpers, and file updater. Simplify the record without changing its consumer contract, then replace the normal setup/readback contract consistently across entry points and references. Keep development verification outside the normal setup path.
 **Tech stack:** Markdown/TAS instructions, JSON manifest/private records, existing Python helpers and unittest fixtures, local Git.
@@ -11,7 +11,7 @@
 **Implementation baseline:** Maker `1.1.4`, code/package commit `a44d15e3aad77b891fa5c95ebeba49a780e4525e`; the planning commits do not change that package.
 **Required working branch:** `fix/makerscope`, selected by Max and already containing the planning commits. Use this branch for planning updates, Phases 1–2, and the later authorized cleanup. Verify the branch before edits and commits. Do not switch back to `develop`, merge, or publish without a separate instruction.
 **Plan version:** `1.0.0`, the first SemVer-named implementation plan in this repository. Do not renumber historical unversioned planning material.
-**Target package version after Phase 2:** `1.1.5`, one PATCH under `AGENTS.md` for the compatible recipe/documentation revision. Max's clarification retains the existing task-level Codex reasoning selection; it adds no Hermes-Coder maximum or renderer/updater functionality. Set both package version fields at Phase 2 completion, not per intermediate commit. Assess the later cleanup version separately against the then-tested release. If the starting package changes before execution, Kirk reconciles the baseline and version before work starts. The unapproved plan remains version `1.0.0` while this draft is refined.
+**Target package version after Phase 2:** `1.1.5`, one PATCH under `AGENTS.md` for the compatible recipe/documentation revision. Max's clarification retains the existing task-level Codex reasoning selection; it adds no Hermes-Coder maximum or renderer/updater functionality. Set both package version fields at Phase 2 completion, not per intermediate commit. Assess the later cleanup version separately against the then-tested release. If the starting package changes before execution, Kirk reconciles the baseline and version before work starts. The plan remains version `1.0.0`; recording approval does not change its version.
 
 ## 1. Global constraints
 
@@ -193,7 +193,7 @@ Planning-document-only changes do not need another multi-minute aggregate run. C
 
 ## 6. Approval, routing, and completion
 
-- The accepted spec authorizes this plan's preparation, not implementation.
+- Max's approval on 2026-11-01 authorizes implementation of Phases 1–2 against content baseline `696418f81aa005db13a9036fa479dd19424c5880`. It does not release the practical trial, Phase 3, live rollout, or publication.
 - Before tickets, commit the accepted plan/approval record and resolve the explicit project board and communication mapping. `HERMES.md` currently records them as unresolved; do not borrow a generated team's board or the active default board.
 - After implementation approval, create only the two Phase 1–2 tickets for `scotty`, secured initially, with Phase 1 → Phase 2 as the exact parent chain. Put the canonical workspace, required branch `fix/makerscope`, committed plan path/hash, and change-scoped TAS requirement in both tickets. Require Julia to review the phase's new and revised texts against TAS without expanding into unchanged text.
 - Read back routing, subscriptions where applicable, workspace, scope, and parent chain before release. Julia's same-card review completion gates Phase 2. Do not dispatch manually.

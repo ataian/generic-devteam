@@ -17,15 +17,15 @@ Max assigned Kirk the planning of a narrower Maker setup responsibility.
 Preserve the generated team's capabilities, quality boundaries, setup records, and existing versioned update support.
 Remove recurring Maker-development research and behavioral qualification from normal team creation.
 Max accepted the written specification in its substantive form from commit `0694e651df32dbe7d5187d6d4105fb2b91819b0c` and authorized implementation planning.
-The implementation plan remains a draft and requires separate approval before execution.
+Max approved plan `docs/PLAN_1.0.0_Generic-Devteam.md` for implementation of Phases 1–2 on 2026-11-01. The accepted content is in commit `696418f81aa005db13a9036fa479dd19424c5880`. Phase 3 remains separately gated after Max's practical trial.
 Max requires all foreseeable setup choices to be resolved in a grouped interview before installation starts. Later questions are limited to new problems/decisions or technically deferred actions disclosed upfront.
 For new profiles, derive a native-compatible lowercase ID from the display name (`Kirk` → `kirk`); ask separately only for conflicts. Preserve existing IDs on resume/update.
 Offer the requested defaults as one set: Planner Sol/high; Hermes Coder fixed Sol/medium; Reviewer and Team-Codex Sol/medium with maximum high. The Coder selects Codex reasoning per task under the existing risk matrix, without changing model or provider. Do not add a separate Coder maximum or extend renderer/updater fields. Resolve native model IDs separately and preserve confirmed overrides.
 After the two implementation phases and reviews, pause for Max's practical setup trial. Do not begin cleanup automatically.
 Keep this file and the planning artifacts until that trial and separate cleanup authorization. The planned final cleanup removes temporary local context/planning files from the tracked tree, not Git history or functional Maker/update assets.
 
-Read [the accepted design specification](docs/specs/2026-11-01-maker-setup-scope-design.md) and [the implementation plan draft](docs/PLAN_1.0.0_Generic-Devteam.md) for the exact scope and evidence.
-No implementation tasks or live-team changes have been authorized by this planning step.
+Read [the accepted design specification](docs/specs/2026-11-01-maker-setup-scope-design.md) and [the approved implementation plan](docs/PLAN_1.0.0_Generic-Devteam.md) for the exact scope and evidence.
+Implementation tickets for Phases 1–2 are authorized after routing is resolved. Live-team changes, practical trial execution, cleanup, publication, and deployment are not authorized by this approval.
 Resolve board and communication routing before creating implementation tasks.
 
 ## Repository rules
