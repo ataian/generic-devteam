@@ -59,8 +59,10 @@ oder Bauen des Pakets ein Setup auszuführen.
 3. Nach Freigabe kopiere diesen vollständigen Baum in dessen
    `skills/generic-devteam/`. Existiert das Ziel, vergleiche zuerst Herkunft und
    lokale Änderungen; niemals fremde Anpassungen überschreiben. Die vollständigen
-   eigenen Skillbäume behalten ihre `SKILL.md` und werden beim Teamsetup unverändert
-   an die vorgesehenen Ziele kopiert. Nur die Rollen-SOUL-Vorlagen werden personalisiert.
+   eigenen Skillbäume behalten ihre `SKILL.md`.
+   Copy complete skill trees to their assigned targets.
+   Personalize role templates and bind only the recovery launcher through the Maker setup step.
+   Keep all other skill bytes unchanged.
 4. Prüfe in diesem Profil native Discovery von `generic-devteam`, lade `SKILL.md`
    und `references/setup.md` ausdrücklich. Der bestehende Sitzungskatalog und ein
    neu aufgelöstes Skillpaket sind unterschiedliche Nachweise; keinen globalen

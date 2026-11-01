@@ -5,20 +5,24 @@ ihren Zielen zu und beschreibt die Personalisierung der Rollen. Der laufende
 Arbeitsprozess und die Reasoning-Eskalation stehen in den Rollen-SOULs; fachliche
 Anleitungen bleiben in den jeweils installierten Skills.
 
-## 1. Eigene Skills unverändert kopieren
+## 1. Copy complete skills and bind the recovery launcher
 
 Die [Quellenübersicht](upstream-sources.md#mitgelieferte-bausteine) nennt die
 mitgelieferten Skillbäume und ihre Zielrollen. Je Ziel den vollständigen Baum aus
 `skills/` einschließlich Referenzen, Skripten und vorhandenen Lizenz-/Notice-Dateien
-kopieren. `SKILL.md` bleibt `SKILL.md`; Inhalte werden weder gerendert noch umbenannt.
+kopieren. `SKILL.md` bleibt `SKILL.md`.
+Bind only `brownfield-feature-planning/scripts/recover-triage` through the Maker's [recovery binding step](setup.md#bind-the-planner-recovery-invocation).
+Keep all other skill bytes unchanged.
 
 - Hermes: `<tatsächlich aufgelöster Rollenhome>/skills/<Skillname>/`.
 - Team-Codex: `<CODEX_PROCESS_HOME>/.agents/skills/<Skillname>/` gemäß Rollenmatrix.
 - Vorhandene Ziele auf Eigentum und Änderungen prüfen; bei Konflikten anhalten.
-- Dateimenge und Bytes vergleichen, danach Discovery und Laden im Zielharness prüfen.
+- Compare the complete file set and bytes, using the bound Maker output for the recovery launcher.
+- Check discovery and loading in the target harness after the comparison.
 
-Die kopierten Pakete müssen ohne das Makerpaket funktionieren. Es wird kein
-zusätzlicher gemeinsamer Workflowskill und keine generierte Bindingdatei benötigt.
+Keep installed skills usable without the Maker package or setup record.
+Deliver the bound callable launcher inside the existing planner skill tree.
+Do not add a separate runtime configuration file or workflow skill.
 
 ## 2. Rollen-SOULs personalisieren
 

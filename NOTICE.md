@@ -79,8 +79,10 @@ denselben bestätigten Daten wie die Zielkonfiguration.
 `upstream_components.subpaths` sind originalrepositoryrelative Pfade; `.` meint
 den Repositoryroot. `recipe_status: pending` ist ein offener Folgeauftrag, kein
 Setupnachweis. `recipe_status: documented` bedeutet ein vorhandenes Rezept,
-nicht dessen erfolgreiche Ausführung. Nur die Rollenfelder werden beim Zielsetup
-mit bestätigten Werten gerendert; eigene Skillbäume bleiben vollständig unverändert.
+nicht dessen erfolgreiche Ausführung.
+Render role fields from confirmed setup values.
+Bind only the recovery launcher through `references/bind_recovery.py`.
+Keep all other skill bytes unchanged.
 
 Analysemetadaten im Manifest: `reviewed_revision` ist ein Rechercheanker,
 `asset_bundles.source_to_target` bildet die vollständigen Graphify-Originalbäume

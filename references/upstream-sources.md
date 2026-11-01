@@ -7,9 +7,9 @@ Codex-Arbeitskontext; „alle Hermes-Rollen“ meint Planner, Coder und Reviewer
 
 ## Mitgelieferte Bausteine
 
-Die eigenen Skills sind fertige Pakete: den jeweiligen vollständigen Baum aus
-`skills/` unverändert kopieren, einschließlich Begleitdateien. Keine
-Template-Verarbeitung und keine Umbenennung ihrer `SKILL.md`.
+Copy each complete skill tree from `skills/`, including companion files.
+Keep all skill names and bytes unchanged except `brownfield-feature-planning/scripts/recover-triage`.
+Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the-planner-recovery-invocation).
 
 | Skill / lokale Quelle | Ziel |
 |---|---|

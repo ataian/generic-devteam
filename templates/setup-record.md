@@ -87,18 +87,21 @@ Do not interpret this record as rollout permission.
 
 ## Planner triage recovery invocation
 
-Save the confirmed `python`, `script`, `db` and `planner_profile` values under
+The Maker records the confirmed `python`, `script`, `db` and `planner_profile` values under
 `confirmed_bindings.triage_recovery` in the existing JSON block.
 Use the verified dispatcher interpreter.
 Use the installed planner script path.
 Bind the DB to the confirmed board and actual dispatcher resolver.
 Reuse the confirmed technical planner profile ID.
-Save the shell-quoted command prefix with `--task-id "$TASK_ID"` below.
-Keep the task ID as the runtime argument.
+Generate the bound launcher with `references/bind_recovery.py` after copying the complete skill tree.
+Save the shell-quoted installed launcher path below.
+Keep the task ID as its only runtime argument.
+Keep this record as Maker audit evidence, not as a planner runtime dependency.
 Do not treat this binding as operation approval or a semantic API check.
 
 - Bound invocation and board/dispatcher readback evidence: pending.
 - Installed script byte comparison against the Maker: pending.
+- Bound launcher hash, mode 0700 and comparison against the deterministic Maker output: pending.
 
 ## Native Zuständigkeit und Freigaben
 

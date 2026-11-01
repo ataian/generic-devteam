@@ -1,0 +1,7 @@
+#!/bin/sh
+# Maker binds this launcher before delivery. Only the task ID is a runtime input.
+if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+    printf '%s\n' 'Usage: recover-triage TASK_ID' >&2
+    exit 2
+fi
+exec {{python}} {{script}} --db {{db}} --planner-profile {{planner_profile}} --task-id="$1"

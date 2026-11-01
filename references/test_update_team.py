@@ -31,8 +31,9 @@ class UpdaterTests(unittest.TestCase):
         self.base = self.git('rev-parse', 'HEAD').strip()
         self.roles = {}
         for role in ['planner', 'coder', 'reviewer', 'team-codex']:
-            home = self.root / role
-            home.mkdir(mode=0o700)
+            home = (self.root / 'coder/devteam/user-home' if role == 'team-codex'
+                    else self.root / role)
+            home.mkdir(mode=0o700, parents=True)
             self.roles[role] = {'id': 'fixture-' + role, 'home': str(home)}
         self.home = Path(self.roles['planner']['home'])
         self.state = self.home / 'devteam'
@@ -43,13 +44,19 @@ class UpdaterTests(unittest.TestCase):
             'CODEX_REASONING_DEFAULT', 'CODEX_REASONING_MAX', 'ROLE_REASONING_DEFAULT', 'ROLE_REASONING_HIGH']}
         values['CODER_PROFILE'] = self.roles['coder']['id']
         values['REVIEWER_PROFILE'] = self.roles['reviewer']['id']
-        record = {'confirmed_values': values, 'confirmed_bindings': {'board': 'sample'}}
+        self.bindings = {'board': 'sample', 'roles': self.roles, 'triage_recovery': {
+            'python': '/synthetic/python',
+            'script': str(self.home / 'skills/brownfield-feature-planning/scripts/recover_triage.py'),
+            'db': str(self.root / "board with 'quotes'.db"),
+            'planner_profile': self.roles['planner']['id']}}
+        record = {'confirmed_values': values, 'confirmed_bindings': self.bindings}
         (self.state / 'setup.md').write_text('```json\n' + json.dumps(record) + '\n```\n')
         (self.state / 'setup.md').chmod(0o600)
-        for entry in u.desired(self.repo, self.base, self.roles, values):
+        for entry in u.desired(self.repo, self.base, self.roles, values, bindings=self.bindings):
             path = Path(entry['target'])
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(entry['content'])
+            path.chmod(entry['mode'])
 
     def git(self, *args):
         return subprocess.check_output(['git', '-C', str(self.repo), *args], text=True)
@@ -69,6 +76,65 @@ class UpdaterTests(unittest.TestCase):
     def proposal(self):
         return u.prepare(self.repo, self.home, 'HEAD')
 
+    def test_bound_launcher_is_regenerated_and_binding_survives_updates(self):
+        source = 'skills/brownfield-feature-planning/scripts/recover-triage'
+        entries = u.desired(self.repo, self.base, self.roles,
+                            json.loads((self.state / 'setup.md').read_text().split('```json\n')[1].split('\n```')[0])['confirmed_values'],
+                            bindings=self.bindings)
+        launcher = next((entry for entry in entries if entry['source'] == source), None)
+        self.assertIsNotNone(launcher, 'Bound launcher must be delivered with the complete skill')
+        self.assertEqual(launcher['transform'], 'bound-recovery-v1')
+        target = Path(launcher['target'])
+        target.write_bytes(launcher['content'])
+        target.chmod(0o700)
+        self.initialize()
+        (self.state / 'setup.md').rename(self.state / 'audit-only.md')
+        self.change(source, '\n# New launcher revision\n')
+        plan = self.proposal()
+        self.assertFalse(json.loads(plan.read_text())['conflicts'])
+        result = u.apply(self.home, plan, decision='proceed', review='Checked bound launcher')
+        self.assertEqual(result['status'], 'applied')
+        self.assertTrue(target.read_text().endswith('# New launcher revision\n'))
+
+        self.assertIn('/synthetic/python', target.read_text())
+        self.assertEqual(target.stat().st_mode & 0o777, 0o700)
+        record = json.loads((self.state / 'installation.json').read_text())
+        self.assertEqual(record['confirmed_bindings'], self.bindings)
+        entry = next(x for x in record['managed'] if x['source'] == source)
+        self.assertEqual(entry['transform'], 'bound-recovery-v1')
+        self.assertEqual((self.state / 'baselines' / entry['baseline']).read_bytes(), target.read_bytes())
+        self.change(source, '# Another revision\n')
+        self.assertFalse(json.loads(self.proposal().read_text())['conflicts'])
+
+    def test_old_copy_installation_adopts_bound_launcher_from_maker_setup(self):
+        source = 'skills/brownfield-feature-planning/scripts/recover-triage'
+        template = (self.repo / source).read_bytes()
+        manifest = json.loads((self.repo / 'manifest.json').read_text())
+        del manifest['recovery_launcher']
+        (self.repo / 'manifest.json').write_text(json.dumps(manifest))
+        self.git('rm', source)
+        self.commit('old generic copy installation')
+        (self.home / source).unlink()
+        setup = json.loads((self.state / 'setup.md').read_text().split('```json\n')[1].split('\n```')[0])
+        del setup['confirmed_bindings']['triage_recovery']
+        (self.state / 'setup.md').write_text('```json\n' + json.dumps(setup) + '\n```\n')
+        self.initialize()
+        setup['confirmed_bindings']['triage_recovery'] = self.bindings['triage_recovery']
+        (self.state / 'setup.md').write_text('```json\n' + json.dumps(setup) + '\n```\n')
+        manifest['recovery_launcher'] = source
+        (self.repo / 'manifest.json').write_text(json.dumps(manifest))
+        (self.repo / source).write_bytes(template)
+        self.commit('add bound launcher')
+        plan = self.proposal()
+        result = u.apply(self.home, plan, decision='proceed', review='Checked Maker binding adoption')
+        self.assertEqual(result['status'], 'applied')
+        record = json.loads((self.state / 'installation.json').read_text())
+        self.assertEqual(record['confirmed_bindings']['triage_recovery'], self.bindings['triage_recovery'])
+        self.assertIn('/synthetic/python', (self.home / source).read_text())
+        self.assertEqual((self.home / source).stat().st_mode & 0o777, 0o700)
+        (self.state / 'setup.md').rename(self.state / 'audit-only.md')
+        self.assertFalse(json.loads(self.proposal().read_text())['conflicts'])
+
     def test_legacy_safepoint_reports_user_provenance_not_history(self):
         original = Path(__file__).resolve().parents[1]
         result = u.legacy_baseline(original)
@@ -81,6 +147,19 @@ class UpdaterTests(unittest.TestCase):
         record = self.initialize()
         mapped = {(x['role'], x['source']) for x in record['managed']}
         self.assertIn(('planner', 'skills/brownfield-feature-planning/references/kanban-triage-recovery.md'), mapped)
+        manifest = json.loads((self.repo / 'manifest.json').read_text())
+        expected_skills = set()
+        for name, skill in manifest['own_skills'].items():
+            for harness, roles in skill['targets'].items():
+                for role in roles:
+                    for path in (self.repo / 'skills' / name).rglob('*'):
+                        if path.is_file():
+                            expected_skills.add((role, path.relative_to(self.repo).as_posix()))
+        self.assertEqual({(x['role'], x['source']) for x in record['managed']
+                          if x['source'].startswith('skills/')}, expected_skills)
+        launcher = next(x for x in record['managed'] if x['source'].endswith('/recover-triage'))
+        self.assertEqual(launcher['transform'], 'bound-recovery-v1')
+        self.assertNotEqual(Path(launcher['target']).read_bytes(), (self.repo / launcher['source']).read_bytes())
         script_source = 'skills/brownfield-feature-planning/scripts/recover_triage.py'
         script = next(x for x in record['managed'] if x['source'] == script_source)
         self.assertEqual(script['role'], 'planner')
@@ -438,11 +517,8 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(found[1]['team_id'], 'fixture-team')
 
     def test_nested_coder_codex_home_supports_init_plan_apply(self):
-        old = Path(self.roles['team-codex']['home'])
         nested = Path(self.roles['coder']['home']) / 'devteam/user-home'
-        nested.parent.mkdir(mode=0o700)
-        shutil.move(str(old), nested)
-        self.roles['team-codex']['home'] = str(nested)
+        self.assertEqual(self.roles['team-codex']['home'], str(nested))
         self.initialize()
         self.change('skills/screenshot-to-code/SKILL.md')
         result = u.apply(self.home, self.proposal(), decision='proceed', review='checked nested layout')

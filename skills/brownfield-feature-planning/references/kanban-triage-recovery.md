@@ -58,17 +58,18 @@ invent a function, issue raw SQL UPDATEs or install another Hermes to get it.
 
 ### Concrete invocation after the checks above
 
-Use the verified Hermes Python and bound command from the private
-`<planner home>/devteam/setup.md` record. Reuse the confirmed interpreter,
-installed script path, dispatcher DB and technical planner profile ID.
-Keep the task ID as the runtime argument. Run one card at a time:
+Run the installed [bound launcher](../scripts/recover-triage) with the exact task ID as its only argument.
+Use the installed skill directory as the working directory for this example.
+Run one card at a time:
 
 ```sh
-"$HERMES_PYTHON" "$RECOVERY_SCRIPT" --db "$BOARD_DB" \
-  --planner-profile "$PLANNER_PROFILE" --task-id "$TASK_ID"
+./scripts/recover-triage "$TASK_ID"
 ```
 
-Use the shipped [recovery script](../scripts/recover_triage.py).
+The launcher calls the shipped [recovery script](../scripts/recover_triage.py) with fixed team bindings.
+It requires no setup record or runtime configuration file.
+If the launcher is missing or unbound, report the installation failure to the Maker/operator.
+Do not collect binding variables or generate configuration as part of recovery.
 Complete the operation, identity and installed-source checks above before invoking it.
 The script rejects signature drift; a matching signature does not prove unchanged semantics.
 Read its JSON output for `specified` and the actual `task` state.

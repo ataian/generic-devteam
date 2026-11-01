@@ -40,6 +40,7 @@ Do not add a central team registry.
 ## Record a new team
 
 Complete the existing file-copy and role-render steps before recording a new installation.
+Generate the bound recovery launcher through `references/bind_recovery.py` before `init`.
 Save the actual role IDs and canonical homes under `confirmed_bindings.roles` in the setup JSON.
 Use `planner`, `coder`, `reviewer`, and `team-codex` as role keys.
 Use `id` and `home` as the two fields in each role object.
@@ -129,6 +130,17 @@ It compares the old pristine baseline, current target, and new personalized Make
 It merges nonconflicting text changes with `git merge-file`.
 It stops application on text conflicts, missing local files, or incompatible source mappings.
 New files in a managed skill tree are included automatically.
+The manifest's `recovery_launcher` uses `bound-recovery-v1` instead of `copy-v1`.
+The updater renders both source baselines with the team's recorded `confirmed_bindings.triage_recovery`.
+It preserves that binding when it renews the launcher from a new template.
+It compares local launcher edits against the bound baseline, not the generic template.
+If an older marker lacks the binding, the Maker/operator resolves it from confirmed setup and dispatcher evidence before preparing the update.
+Save that binding under `confirmed_bindings.triage_recovery` in the existing private setup JSON.
+Keep `confirmed_bindings.roles` equal to the recorded team roles.
+The updater adopts only the missing recovery binding into its reviewed proposal and installation record.
+If the marker already has the binding, the updater preserves it without reading `setup.md`.
+Do not assign that reconciliation to the planner.
+Do not replace unknown local launcher edits with a generic copy.
 Removed source files are listed as `obsolete` and retained on disk.
 A changed renderer is withheld until its transform compatibility is reviewed in a separate implementation change.
 

@@ -18,6 +18,7 @@ import uuid
 from datetime import datetime, timezone
 
 from render_text import ROLE_NAMES, render_role, role_fields
+from bind_recovery import SOURCE as RECOVERY_LAUNCHER, TRANSFORM as RECOVERY_TRANSFORM, render_launcher
 
 LEGACY_COMMIT = '21cae6551c03b6ab84d004f41fc81c921e3e9837'
 LEGACY_VERSION = '1.0.0'
@@ -223,7 +224,7 @@ def check_roles(roles, home=None):
         raise ValueError('Planner home mismatch')
 
 
-def desired(repo, commit, roles, values, souls_only=False):
+def desired(repo, commit, roles, values, souls_only=False, bindings=None):
     check_roles(roles)
     manifest = json.loads(blob(repo, commit, 'manifest.json'))
     result = []
@@ -252,9 +253,16 @@ def desired(repo, commit, roles, values, souls_only=False):
                         raise ValueError('Missing actual skill target home: ' + role)
                     for source in sources:
                         target = Path(roles[role]['home']) / ('.agents' if harness == 'codex' else '') / source
+                        content = blob(repo, commit, source)
+                        transform = 'copy-v1'
+                        mode = source_mode(repo, commit, source)
+                        if source == manifest.get('recovery_launcher'):
+                            if source != RECOVERY_LAUNCHER or role != 'planner' or harness != 'hermes':
+                                raise ValueError('Unsupported recovery launcher mapping')
+                            content = render_launcher(content, (bindings or {}).get('triage_recovery'), roles)
+                            transform, mode = RECOVERY_TRANSFORM, 0o700
                         result.append({'role': role, 'source': source, 'target': str(target),
-                                       'transform': 'copy-v1', 'content': blob(repo, commit, source),
-                                       'mode': source_mode(repo, commit, source)})
+                                       'transform': transform, 'content': content, 'mode': mode})
     targets = [entry['target'] for entry in result]
     if len(targets) != len(set(targets)):
         raise ValueError('Duplicate managed target')
@@ -309,7 +317,8 @@ def initialize(repo, home, team_id, roles=None, legacy=False, base_commit=None, 
             raise ValueError('Confirmed profile ID differs from actual role binding: ' + role)
     commit = legacy_baseline(repo)['maker_commit'] if legacy else revision(repo, base_commit or 'HEAD')
     version = package_version(repo, commit)
-    entries = desired(repo, commit, roles, setup['confirmed_values'], souls_only=legacy)
+    entries = desired(repo, commit, roles, setup['confirmed_values'], souls_only=legacy,
+                      bindings=setup['confirmed_bindings'])
     for entry in entries:
         actual = read(entry['target'])
         if actual is None or (not legacy and base_commit is None and actual != entry['content']):
@@ -358,7 +367,7 @@ def load_record(home):
         fields = ('role', 'source', 'target', 'transform', 'baseline', 'installed_hash')
         if not isinstance(entry, dict) or not all(isinstance(entry.get(key), str) for key in fields):
             raise ValueError('Invalid managed inventory entry')
-        if (entry['role'] not in record['roles'] or entry['transform'] not in ('render-role-v1', 'copy-v1')
+        if (entry['role'] not in record['roles'] or entry['transform'] not in ('render-role-v1', 'copy-v1', RECOVERY_TRANSFORM)
                 or not re.fullmatch(r'[0-9a-f]{64}', entry['baseline'])
                 or not re.fullmatch(r'[0-9a-f]{64}', entry['installed_hash'])):
             raise ValueError('Invalid managed inventory binding/hash')
@@ -449,7 +458,8 @@ def prepare(repo, home, ref='HEAD'):
     renderer = Path(__file__).with_name('render_text.py').read_bytes()
     if any(blob(repo, rev, 'references/render_text.py') != renderer for rev in (old['maker_commit'], commit)):
         raise ValueError('Changed renderer: withhold rendered files and review transform compatibility before migration')
-    old_entries = desired(repo, old['maker_commit'], old['roles'], old['confirmed_values'], old['legacy_skills_unknown'])
+    old_entries = desired(repo, old['maker_commit'], old['roles'], old['confirmed_values'], old['legacy_skills_unknown'],
+                          bindings=old['confirmed_bindings'])
     expected = {entry['target']: entry for entry in old_entries}
     stored = {entry['target']: entry for entry in old['managed']}
     if len(stored) != len(old['managed']) or set(stored) != set(expected):
@@ -461,7 +471,16 @@ def prepare(repo, home, ref='HEAD'):
         baseline = read(state / 'baselines' / entry['baseline'])
         if baseline != origin['content']:
             raise ValueError('Missing or corrupt pristine baseline')
-    new_entries = desired(repo, commit, old['roles'], old['confirmed_values'], old['legacy_skills_unknown'])
+    bindings = dict(old['confirmed_bindings'])
+    new_manifest = json.loads(blob(repo, commit, 'manifest.json'))
+    if (not old['legacy_skills_unknown'] and new_manifest.get('recovery_launcher')
+            and 'triage_recovery' not in bindings):
+        setup = setup_data(state)['confirmed_bindings']
+        if setup.get('roles') != old['roles']:
+            raise ValueError('Maker setup roles differ from recorded team')
+        bindings['triage_recovery'] = setup.get('triage_recovery')
+    new_entries = desired(repo, commit, old['roles'], old['confirmed_values'], old['legacy_skills_unknown'],
+                          bindings=bindings)
     new_targets = {entry['target'] for entry in new_entries}
     dependencies = []
     for source in OPERATIONAL:
@@ -495,6 +514,7 @@ def prepare(repo, home, ref='HEAD'):
     obsolete = sorted(set(stored) - new_targets)
     proposal = {'schema': SCHEMA, 'team_id': old['team_id'], 'home': str(home), 'repo': str(Path(repo).resolve()),
                 'record_hash': digest(raw), 'maker_commit': commit, 'maker_version': version,
+                'confirmed_bindings': bindings,
                 'entries': entries, 'obsolete': obsolete, 'conflicts': conflicts, 'dependencies': dependencies,
                 'notices': ['legacy skills: baseline unknown; withheld'] if old['legacy_skills_unknown'] else [],
                 'activity': activity(old['roles']), 'semantic_review_required': True}
@@ -533,7 +553,7 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
     # paths or merged bytes as an arbitrary write payload.
     fresh_path = prepare(proposal['repo'], home, proposal['maker_commit'])
     fresh = json.loads(required_read(fresh_path))
-    for key in ('entries', 'obsolete', 'dependencies', 'maker_version', 'notices'):
+    for key in ('entries', 'obsolete', 'dependencies', 'maker_version', 'notices', 'confirmed_bindings'):
         if fresh[key] != proposal[key]:
             raise ValueError('Proposal/source/target drift; prepare and review again')
     if fingerprint(state / 'installation.json') != proposal['record_hash'] or read(path) != proposal_raw:
@@ -579,6 +599,7 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
             if fingerprint(entry['target']) != digest(decoded(entry['merged'])) or file_mode(entry['target']) != entry['mode']:
                 raise ValueError('Final target readback mismatch: ' + entry['target'])
         updated = dict(old, maker_commit=proposal['maker_commit'], maker_version=proposal['maker_version'],
+                       confirmed_bindings=proposal['confirmed_bindings'],
                        managed=managed, last_run=str(run), retained_obsolete=proposal['obsolete'])
         updated_raw = json_bytes(updated)
         journal['record_after'] = encoded(updated_raw)
