@@ -5,7 +5,8 @@
 - Project: `generic-devteam` — Maker package for Hermes development teams.
 - Canonical project root and working directory: `/home/joi/projects/generic-devteam`.
 - Git repository root: `/home/joi/projects/generic-devteam`.
-- Inspected planning baseline: `a44d15e3aad77b891fa5c95ebeba49a780e4525e`, branch `develop`, package `1.1.4`.
+- Historical inspected planning baseline: `a44d15e3aad77b891fa5c95ebeba49a780e4525e`, then on `develop`, package `1.1.4`.
+- Required current working branch: `fix/makerscope`. Max moved the planning commits onto this branch and selected it for the implementation work. Verify this branch before edits and commits; do not switch back to `develop` or merge without a separate instruction.
 - Mattermost project channel: not yet established for this planning assignment.
 - Mattermost channel ID: unknown; do not infer it from a generated team's configuration.
 - Hermes Kanban board/project mapping: unresolved. No board named `generic-devteam` was present in the board inventory read on 2026-11-01.
@@ -25,7 +26,9 @@ Resolve board and communication routing before creating implementation tasks.
 ## Repository rules
 
 Read `AGENTS.md`, `README.md`, and `references/tas-authoring-standard.md` before changes.
-Use plain technical English for agent-facing instructions.
+Apply `references/tas-authoring-standard.md` to every new or revised text in each phase.
+Use plain technical English for agent-facing instructions; retain the user-facing language rule.
+Limit TAS review to the changes made for the phase. Do not audit, translate, or rewrite unchanged text solely for TAS compliance.
 Keep versioned planning documents under `docs/` outside the ignored `docs/superpowers/` subtree.
 Planning documents are not part of the delivered Maker manifest and do not independently bump the package version.
 Apply the existing package SemVer rules when delivering an actual Maker changeset.
