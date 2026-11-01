@@ -1,0 +1,45 @@
+# Generic Devteam — project context
+
+## Identity
+
+- Project: `generic-devteam` — Maker package for Hermes development teams.
+- Canonical project root and working directory: `/home/joi/projects/generic-devteam`.
+- Git repository root: `/home/joi/projects/generic-devteam`.
+- Inspected planning baseline: `a44d15e3aad77b891fa5c95ebeba49a780e4525e`, branch `develop`, package `1.1.4`.
+- Mattermost project channel: not yet established for this planning assignment.
+- Mattermost channel ID: unknown; do not infer it from a generated team's configuration.
+- Hermes Kanban board/project mapping: unresolved. No board named `generic-devteam` was present in the board inventory read on 2026-11-01.
+
+## Current assignment
+
+Max assigned Kirk the planning of a narrower Maker setup responsibility.
+Preserve the generated team's capabilities, quality boundaries, setup records, and existing versioned update support.
+Remove recurring Maker-development research and behavioral qualification from normal team creation.
+The design direction is approved. The written specification and subsequent implementation plan have separate approval gates.
+
+Read [the design specification](docs/specs/2026-11-01-maker-setup-scope-design.md) for the exact scope and evidence.
+No implementation tasks or live-team changes have been authorized by this planning step.
+Resolve board and communication routing before creating implementation tasks.
+
+## Repository rules
+
+Read `AGENTS.md`, `README.md`, and `references/tas-authoring-standard.md` before changes.
+Use plain technical English for agent-facing instructions.
+Keep versioned planning documents under `docs/` outside the ignored `docs/superpowers/` subtree.
+Planning documents are not part of the delivered Maker manifest and do not independently bump the package version.
+Apply the existing package SemVer rules when delivering an actual Maker changeset.
+
+Kirk writes planning/project-context documents, not Maker implementation or application code.
+Scotty implements an explicitly approved plan; Julia reviews that implementation independently.
+Preserve unrelated working-tree changes and existing Git history.
+Commit only the intended local changes.
+Local commits do not authorize remote publication, rollout, service changes, or deployment.
+
+## Scope boundaries
+
+The Maker repository and generated/live team profiles are separate targets.
+The default profile's installed launcher is outside this repository at `/home/joi/.hermes/skills/devops/generic-devteam/SKILL.md`.
+Reading that launcher does not authorize editing it or any other profile.
+Keep launcher rollout and existing-team updates separate from repository implementation.
+Do not modify shared Hermes dependencies, identities, secrets, services, or production configuration through this planning assignment.
+Preserve private team setup/update records outside project Git; store no secrets in project documentation.
