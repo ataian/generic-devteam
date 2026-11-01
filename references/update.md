@@ -4,7 +4,12 @@
 
 Use this procedure if the user asks to check and apply Maker changes to existing teams.
 Do not repeat the setup interview.
-Reuse `confirmed_values` and `confirmed_bindings` from each private `devteam/setup.md`.
+Reuse `confirmed_values` and `confirmed_bindings` from the single JSON block in each private `devteam/setup.md`.
+Keep that block as the sole raw-value source; descriptive record sections contain evidence references.
+Distinguish missing confirmed input from actual target drift and stale descriptive prose.
+Resolve missing required input or actual drift before the affected write.
+Correct stale prose from readbacks without repeating confirmed choices or successful creates.
+Do not rewrite existing teams' private records merely to adopt the simplified template.
 Resolve missing or contradictory bindings before writing that team's files.
 Do not create a cron job or watcher.
 Do not stop workers or restart sessions.
@@ -39,7 +44,7 @@ Do not add a central team registry.
 
 ## Record a new team
 
-Complete the existing file-copy and role-render steps before recording a new installation.
+Complete setup delivery and configuration/file readbacks before recording a new installation.
 Generate the bound recovery launcher through `references/bind_recovery.py` before `init`.
 Save the actual role IDs and canonical homes under `confirmed_bindings.roles` in the setup JSON.
 Use `planner`, `coder`, `reviewer`, and `team-codex` as role keys.

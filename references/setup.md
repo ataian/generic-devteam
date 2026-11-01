@@ -232,19 +232,24 @@ Stelle im Planner vor der Rollenannahme die Originalskills
 zu [Superpowers](integrations.md#superpowers). Beide gehören zur festen
 Planner-Ausstattung; Quelle und Zielprüfung im Setuprecord erfassen.
 
-Führe das nach Planneranlage begonnene private Protokoll aus
-[setup-record.md](../templates/setup-record.md) unter dessen `devteam/setup.md` fort.
-Verzeichnis nur für den Besitzer (0700), Record 0600; nicht im Produktprojekt,
-Git oder Makerbaum. Vorher keine bestehende eigene Protokolldatei überschreiben.
-Trage pro erfolgreichem Schritt native Identität, genaue eigene Dateipfade,
-Vorherzustand/Hash, geprüften Zustand und nächste Voraussetzung ein.
+Continue the private record from [setup-record.md](../templates/setup-record.md)
+at `<actual planner home>/devteam/setup.md` after Planner creation.
+Use directory mode 0700 and file mode 0600 outside the product project, Git, and Maker tree.
+Do not overwrite an existing record without reconciling its confirmed data and actual targets.
+Record authorizations, complete upfront dataset readiness, and disclosed technically deferred actions.
+For each completed step, record the native identity or exact own file path, previous state/hash,
+verified readback, and next prerequisite.
+Keep component source, revision, license, and complete file evidence in the target-readback section.
+Keep progress, blockers, and installation/update evidence in their respective sections.
+Do not add behavioral or research checks as record completion gates.
 
-Speichere bestätigte Rohwerte verlustfrei im einzigen `json`-Block der Recordvorlage,
-nicht durch Rückgewinnung aus Markdowntabellen. `confirmed_values` enthält die
-bestätigten Setupwerte; `confirmed_bindings` die bereits aufgelösten Bindungswerte.
-Fehlende Werte nicht erfinden. Die Tabellen halten Annahme-/Rücklesebelege; JSON
-trägt die unveränderten nichtgeheimen Daten. Das folgende reine Pythonfragment
-erzeugt nur Text aus `record_template_text` (bei Fortsetzung: bisheriger Record):
+Store confirmed raw values losslessly in the template's single `json` block.
+Use `confirmed_values` for confirmed setup values and `confirmed_bindings` for resolved technical bindings.
+Preserve all existing keys/types, including native-only model/reasoning values and role/recovery bindings.
+Do not recover raw values from prose or Markdown tables.
+Do not invent missing values or store secrets.
+The following pure Python fragment generates text from `record_template_text`
+(use the existing record on resume):
 
 ```python
 import json
@@ -256,9 +261,9 @@ record_text = record_head + "```json\n" + json.dumps(
 ) + "\n```" + record_tail
 ```
 
-Schreibe `record_text` ausschließlich im genehmigten Zielsetup mit den Dateitools
-an das bestätigte eigene Recordziel und lies es bytegenau als `record_readback_text`
-zurück. Für Rücklese und spätere Wiederaufnahme gilt dasselbe reine Fragment:
+Write `record_text` only to the confirmed own record target during an authorized setup.
+Read back its exact bytes as `record_readback_text`.
+Use the same pure fragment for readback and resume:
 
 ```python
 import json
@@ -267,10 +272,11 @@ confirmed_values = record_data["confirmed_values"]
 confirmed_bindings = record_data["confirmed_bindings"]
 ```
 
-Werte gegen den bestätigten Datensatz und bei Resume gegen native Objekte prüfen.
-Unvollständiges/ungültiges JSON oder widersprüchliche Tabellen/Belege halten an.
-Diese Textfragmente und das folgende Renderfragment lassen sich mit synthetischen
-Daten prüfen, ohne Zielanlage oder Runtime.
+Compare the parsed values with the confirmed dataset and, on resume, the relevant native objects.
+Stop the affected step for incomplete/invalid JSON, missing required confirmed input, or actual target drift.
+Resolve missing input or drift before rendering or writing.
+If only descriptive prose is stale, correct it from readbacks without repeating confirmed choices or creates.
+These text fragments and the following render fragment can be checked with synthetic data without target setup or runtime.
 
 1. Kopiere gemäß [Quellen- und Rollenmatrix](upstream-sources.md#mitgelieferte-bausteine)
    **den ganzen eigenen Skillbaum** aus `skills/` in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
@@ -460,17 +466,20 @@ veranlassen erneutes Lesen von Plan und Board, nicht pauschal „alles fertig“
 
 ## 8. Teilfortsetzung, Rückwege und Übergabe
 
-Lies native Objekte erneut und setze am ersten offenen Gate fort.
-Lade zuvor die bestätigten Rohwerte und Annahmebelege aus `devteam/setup.md`
-(bzw. dem übergebenen Datensatz vor Planneranlage). Namen/Projekt/Bank/Board
-nicht neu erfragen, technische Profil-IDs und `CODEX_MODEL` nicht neu ableiten.
-Verwende den JSON-Rückleseweg aus Abschnitt 6, keine Markdownmaskierungen als Rohwerte.
-Gleiche native Identitäten, Zielkonto-Home/Workspace, Modellkonfiguration und die zuletzt
-geschriebenen SOUL-Bytes mit dem Record ab. Bei Drift vor erneutem Rendern oder
-Schreiben klären; nur fehlende Werte bestätigen lassen.
-Der Setuprecord ist Nachweis, keine zweite Zustandsautorität. Nach jedem Fehler
-bewahre letzte erfolgreiche Phase, genaue eigene Objekte, fehlende Voraussetzung,
-benötigte Maßnahme und Erfolgssignal. Folgende Fälle gehören zum Verfahren:
+Load confirmed data and evidence from `devteam/setup.md`, or the existing pre-profile handoff dataset.
+Use the JSON readback in section 6 as the raw-value source.
+Read the relevant native objects and resume only the first incomplete setup step.
+Reuse confirmed names, project, bank, board, technical profile IDs, models, and reasoning.
+Compare native identities, target account HOME/workspace, effective model configuration,
+and the last written SOUL bytes with the confirmed data and delivery evidence.
+If required confirmed input is missing, obtain it before using it.
+If actual targets drift, resolve that drift before rendering or writing.
+If only descriptive prose is stale, update the prose from readbacks.
+Do not repeat successful creates or confirmed choices because prose is stale.
+Native objects remain authoritative for current state; the record is evidence.
+After a failure, preserve the latest verified step, exact own objects, missing prerequisite,
+next action, required authorization, and success signal.
+Keep the following targeted recovery cases:
 
 | Fall | Erhaltener Teilstand | Nächste Voraussetzung / Erfolgssignal | Gezielter Rückweg |
 |---|---|---|---|
@@ -499,13 +508,15 @@ kein fachlich eingearbeitetes Projektteam.
 
 ## Record the installation baseline
 
-After the role and own-skill file readbacks pass, follow [Team updates](update.md#record-a-new-team).
+After complete setup delivery, configuration/file readbacks, and recovery binding pass, follow [Team updates](update.md#record-a-new-team).
 Save the actual role IDs and homes under `confirmed_bindings.roles` in the existing private setup JSON.
 Use the actual process HOME for the `team-codex` role.
 Run `update_team.py init` against the reviewed committed Maker source.
 Read back `devteam/installation.json` and its pristine baseline files.
 Record the package SemVer and exact Maker commit in the setup evidence.
-Do not use the initialization helper to install files or bypass runtime acceptance.
+Keep installation metadata, pristine personalized `baselines/<sha256>`, proposals, backups, result journals, and rollback evidence.
+Do not use the initialization helper to install files or replace setup readbacks.
+Do not make excluded behavioral or research checks a prerequisite for initialization.
 If the team already exists, use the documented existing-team baseline path instead.
 
 ## Versionsgebundene Quellen

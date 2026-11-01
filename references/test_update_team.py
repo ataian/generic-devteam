@@ -79,6 +79,94 @@ class UpdaterTests(unittest.TestCase):
     def proposal(self):
         return u.prepare(self.repo, self.home, 'HEAD')
 
+    def test_setup_record_template_preserves_update_round_trip(self):
+        import bind_recovery as b
+
+        setup = u.setup_data(self.state)
+        setup['confirmed_values'].update(CODEX_MODEL='native-model-id',
+                                         PLANNER_REASONING='high', CODER_REASONING='medium')
+        template = (self.repo / 'templates/setup-record.md').read_text()
+        self.assertEqual(template.count('```json\n'), 1)
+        head, block = template.split('```json\n', 1)
+        _, tail = block.split('\n```', 1)
+        setup_path = self.state / 'setup.md'
+        setup_path.write_text(head + '```json\n' + json.dumps(setup, ensure_ascii=True, indent=2) + '\n```' + tail)
+        setup_path.chmod(0o600)
+        self.assertEqual(u.setup_data(self.state), setup)
+        launcher = b.install(self.home)
+        self.assertEqual(launcher, self.home / b.SOURCE)
+        self.assertEqual(launcher.read_bytes(), b.render_launcher(
+            (self.repo / b.SOURCE).read_bytes(), self.bindings['triage_recovery'], self.roles))
+        self.assertEqual(u.file_mode(launcher), 0o700)
+
+        record = u.initialize(self.repo, self.home, 'fixture-team')
+        self.assertEqual(record['maker_version'], u.package_version(self.repo, self.base))
+        self.assertEqual(record['maker_commit'], self.base)
+        self.assertEqual(record['roles'], self.roles)
+        self.assertEqual(record['confirmed_values'], setup['confirmed_values'])
+        self.assertEqual(record['confirmed_bindings'], setup['confirmed_bindings'])
+        self.assertEqual(record['provenance'], 'verified-initial-file-readback')
+        self.assertTrue(record['historical_installation_verified'])
+        expected = u.desired(self.repo, self.base, self.roles, setup['confirmed_values'], bindings=self.bindings)
+        self.assertEqual(record['managed'], [
+            {key: entry[key] for key in ('role', 'source', 'target', 'transform')} |
+            {'baseline': u.digest(entry['content']), 'installed_hash': u.digest(entry['content'])}
+            for entry in expected])
+        process_home = Path(self.roles['team-codex']['home'])
+        self.assertEqual(process_home, Path(self.roles['coder']['home']) / 'devteam/user-home')
+        codex_entries = [entry for entry in expected if entry['role'] == 'team-codex']
+        self.assertTrue(codex_entries)
+        for entry in codex_entries:
+            self.assertTrue(Path(entry['target']).is_relative_to(process_home / '.agents/skills'))
+        for entry in expected:
+            self.assertEqual((self.state / 'baselines' / u.digest(entry['content'])).read_bytes(), entry['content'])
+
+        marker = self.state / 'installation.json'
+        before_metadata = marker.read_bytes()
+        target = self.home / 'skills/brownfield-feature-planning/SKILL.md'
+        target.write_bytes(b'Local heading\n' + target.read_bytes())
+        target.chmod(0o640)
+        before_targets = {entry['target']: (Path(entry['target']).read_bytes(), u.file_mode(entry['target']))
+                          for entry in expected}
+        self.change()
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertFalse(proposal['conflicts'])
+        self.assertEqual(marker.read_bytes(), before_metadata)
+        result = u.apply(self.home, plan, decision='proceed', review='Checked template record round trip',
+                         dependency_review='Reviewed operational changes; no runtime migration authorized')
+        self.assertEqual(result['status'], 'applied')
+        updated = json.loads(marker.read_text())
+        self.assertEqual(updated['maker_commit'], self.git('rev-parse', 'HEAD').strip())
+        self.assertEqual(updated['maker_version'], proposal['maker_version'])
+        self.assertEqual(updated['roles'], self.roles)
+        self.assertEqual(updated['confirmed_values'], setup['confirmed_values'])
+        self.assertEqual(updated['confirmed_bindings'], setup['confirmed_bindings'])
+        self.assertEqual(updated['last_run'], result['run'])
+        for entry in proposal['entries']:
+            self.assertEqual(Path(entry['target']).read_bytes(), u.decoded(entry['merged']))
+            self.assertEqual(u.file_mode(entry['target']), entry['mode'])
+        new_expected = u.desired(self.repo, updated['maker_commit'], self.roles,
+                                 setup['confirmed_values'], bindings=self.bindings)
+        for entry in new_expected:
+            managed = next(item for item in updated['managed'] if item['target'] == entry['target'])
+            self.assertEqual({key: managed[key] for key in ('role', 'source', 'target', 'transform')},
+                             {key: entry[key] for key in ('role', 'source', 'target', 'transform')})
+            self.assertEqual(managed['installed_hash'], u.digest(Path(entry['target']).read_bytes()))
+            self.assertEqual(managed['baseline'], u.digest(entry['content']))
+            self.assertEqual((self.state / 'baselines' / managed['baseline']).read_bytes(), entry['content'])
+        self.assertEqual(target.read_bytes(), before_targets[str(target)][0] + b'\nNew upstream instruction.\n')
+        self.assertEqual(json.loads((Path(result['run']) / 'result.json').read_text())['status'], 'applied')
+        self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
+        self.assertEqual(marker.read_bytes(), before_metadata)
+        for path, (content, mode) in before_targets.items():
+            self.assertEqual(Path(path).read_bytes(), content)
+            self.assertEqual(u.file_mode(path), mode)
+        self.assertEqual(u.setup_data(self.state), setup)
+        self.assertFalse(self.state.is_relative_to(self.repo))
+        for path in [self.state, *self.state.rglob('*')]:
+            self.assertEqual(u.file_mode(path), 0o700 if path.is_dir() else 0o600, str(path))
+
     def historical_installation(self, commit, legacy=False):
         original = Path(__file__).resolve().parents[1]
         self.git('fetch', '-q', str(original), commit)

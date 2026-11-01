@@ -1,44 +1,54 @@
-# Privates Zielsetup-Protokoll
+# Private setup record
 
-Vorlage; erst beim beauftragten Zielsetup ausfüllen. Ziel ist ausschließlich
-`<tatsächlich aufgelöster Plannerhome>/devteam/setup.md`, Besitzerverzeichnis 0700,
-Datei 0600, außerhalb Projekt/Git/Export. Keine Token-/Passwort-/Authinhalte,
-keine unbereinigten Configdumps. Secretort und Prüfstatus genügen.
-Dieses Protokoll dokumentiert; native Profile, Board und Dienstobjekte bleiben
-Zustandsautorität. Bei Wiederaufnahme erneut lesen, nicht blind Create wiederholen.
+Fill this template only for an authorized target setup.
+Store it at `<actual planner home>/devteam/setup.md`, outside the project, Git, and exports.
+Use mode 0700 for the owner directory and 0600 for this file.
+Store no tokens, passwords, authentication codes, or unredacted configuration dumps.
+Record only secret locations and access-check status.
+Native profiles, board, and service objects remain authoritative for current state.
+This record is evidence, not permission for rollout or operation.
 
-## Projekt und Objektidentität
+## Authorizations and readiness
 
-- Setupzuordnung / Paketversion / Quellenrevision / Datum: offen
-- Projektname / absoluter Workspace: offen
-- Repositorygrenzen (Workspace selbst muss kein Git-Root sein): offen
-- Je Repository: Root- und Bereichs-AGENTS, Manifest/Lockfile/Wrapper, bestehende Änderungen: offen
-- Boardkennung / nativer Rücklesebeleg / Standardworkspace: offen
-- Projektbank / vorhandener Hindsight-Dienst / Eigentumsbeleg: offen
-- Codeanalyse (genau eine) / Rezeptrevision / Funktionsprüfung: offen
+- Approved local installations, exact change scope, and bootstrap/PM/activation effects: pending.
+- Separate secret, shared-configuration, service, model, and external-identity authorizations: pending.
+- Preserved protection settings, ownership/collision checks, and shared objects affected: pending.
+- Complete upfront dataset readiness: pending.
 
-## Rollen
+Before installation, resolve all foreseeable choices for project/workspace and repository boundaries,
+role names and IDs, models/providers and reasoning, Codex access and Git identity, bank/board,
+analysis choice, communication identity/targets/authorized users, and change scope.
+Use the existing pre-profile dataset and handoff until the Planner home exists.
+Keep raw confirmed values only in the JSON block below.
+Record readiness and evidence references here without repeating those values.
+Disclose any login, native approval, or `/sethome` action that technically requires a created target.
+Record its reason and execution point; do not treat other unresolved choices as deferred actions.
 
-| Funktion | Technische Kennung | Anzeigename | Tatsächlicher Profilhome | Eigentums-/Kollisionsprüfung | SOUL-Annahme / vollständige effektive Aufnahme |
-|---|---|---|---|---|---|
-| planner | offen | offen | offen | offen | offen |
-| coder | offen | offen | offen | offen | offen |
-| reviewer | offen | offen | offen | offen | offen |
+- Disclosed technically deferred actions and completion evidence: pending.
 
-## Bestätigte Render-Rohwerte und Wiederaufnahme
+## Confirmed data
 
-Keine Persona-Abfrage; rollenfeste Texte nicht ergänzen. Jeden Rohwert im folgenden
-einzigen JSON-Block speichern, nicht seine Markdownmaskierung. Mit `json.dumps`
-gemäß [Setupweg](../references/setup.md) befüllen und mit `json.loads` rücklesen;
-Tabellen sind Belegübersichten, keine verlustfreie Datenquelle. Bei Resume wiederverwenden,
-nur fehlende Werte oder Drift klären; native Objekte bleiben Zustandsautorität.
-Store confirmed names, project, bank, board, profile IDs, and reasoning values in `confirmed_values`.
-Store the confirmed workspace as `PROJECT_DIR` in that same object.
-Store the confirmed repository boundaries as `REPOSITORY_ROOTS` in that same object.
-Keep planning and implementation assignments separate in the single-line repository text.
-Keep fixed Planner/Hermes-Coder reasoning and the Codex model ID for native configuration only.
-Store resolved technical bindings in `confirmed_bindings`.
+Write every nonsecret confirmed raw value in this single JSON block.
+Use `json.dumps` and the `json.loads` readback in [Setup](../references/setup.md).
+Preserve existing keys, types, and confirmed overrides on resume and update.
 Empty objects mean that values have not been recorded.
+
+Store names, project, bank, board, profile IDs, models, and reasoning in `confirmed_values`.
+Keep the canonical absolute workspace as `PROJECT_DIR`.
+Keep `REPOSITORY_ROOTS` as single-line repository text with separate planning and implementation assignments, or confirmed absence.
+Preserve `PLANER_NAME`, `CODER_NAME`, `REVIEWER_NAME`, `PROJECT_NAME`, `HINDSIGHT_BANK_NAME`,
+`KANBAN_BOARD_NAME`, `PLANNER_PROFILE`, `CODER_PROFILE`, `REVIEWER_PROFILE`, `CODEX_MODEL`,
+`PLANNER_REASONING`, `CODER_REASONING`, `CODEX_REASONING_DEFAULT`, `CODEX_REASONING_MAX`,
+`ROLE_REASONING_DEFAULT`, and `ROLE_REASONING_HIGH` when confirmed.
+Keep fixed Planner/Hermes-Coder reasoning and the Codex model ID for native configuration only.
+Do not add role-render fields for these native settings.
+
+Store resolved technical bindings in `confirmed_bindings`.
+Under `roles`, retain `planner`, `coder`, `reviewer`, and `team-codex`, each with `id` and canonical `home`.
+Use the actual process HOME for `team-codex`, not `CODEX_HOME`.
+Under `triage_recovery`, retain `python`, `script`, `db`, and `planner_profile`.
+Use the verified dispatcher interpreter, installed planner script path, confirmed board DB resolved by the dispatcher,
+and confirmed technical Planner profile ID.
 
 ```json
 {
@@ -47,149 +57,60 @@ Empty objects mean that values have not been recorded.
 }
 ```
 
-| Feld | Bestätigter Rohwert | Annahme / native Rücklese / Driftprüfung |
-|---|---|---|
-| PLANER_NAME | offen | offen |
-| CODER_NAME | offen | offen |
-| REVIEWER_NAME | offen | offen |
-| PROJECT_NAME | offen | offen |
-| PROJECT_DIR (canonical absolute workspace) | pending | pending |
-| REPOSITORY_ROOTS (single-line absolute paths with separate planning and implementation assignments, or confirmed absence) | pending | pending |
-| HINDSIGHT_BANK_NAME | offen | offen |
-| KANBAN_BOARD_NAME = BOARD (Kennung, nicht Anzeigetitel) | offen | offen |
-| PLANNER_PROFILE | offen | offen |
-| CODER_PROFILE | offen | offen |
-| REVIEWER_PROFILE | offen | offen |
-| CODEX_MODEL (bereits bestätigte Codex-ID) | offen | offen |
-| PLANNER_REASONING (feste native Stufe, kein Rollenfeld) | offen | offen |
-| CODER_REASONING (feste Hermes-Stufe, kein Rollenfeld) | offen | offen |
-| CODEX_REASONING_DEFAULT | offen | offen |
-| CODEX_REASONING_MAX (erlaubte Obergrenze) | offen | offen |
-| ROLE_REASONING_DEFAULT (Reviewer) | offen | offen |
-| ROLE_REASONING_HIGH (höchste erlaubte Reviewer-Prüfstufe) | offen | offen |
+## Setup targets and readbacks
 
-- Zielkonto-Home / unabhängig vom Projektnamen bestätigter kanonischer absoluter Workspace / Abgleich mit Projektkontext und nativen Profil-/Boardbindungen oder offene Klärung: offen
-- ROLE_NAME je Rolle aus PLANER_NAME / CODER_NAME / REVIEWER_NAME: offen
-- Je Rolle: Vorlagenrevision/Hash, deklarierte und tatsächlich vorkommende Felder, gerenderter Solltext/Hash, exaktes SOUL.md-Ziel, Annahme und bytegenaue Rücklese: offen
+Record actual targets and evidence references without duplicating raw confirmed values.
+For each setup item, record its native identity or exact file path, configuration source,
+previous state/hash, delivered revision/hash, mode, and actual readback result.
+Report availability, configuration, file delivery, and unverified behavior separately.
+Do not infer live behavior from configuration or file checks.
 
-## File update evidence
+- Native profiles, personalized SOUL targets and byte comparisons, complete assigned skills and discovery: pending.
+- Required shared dependency availability and established interface readbacks: pending.
+- Per-role model/provider/reasoning settings, effective overrides, and native configuration readbacks: pending.
+- Team-Codex process HOME, separate CODEX_HOME, binary, protected access location/status, and Git identity configuration readbacks: pending.
+- Board/workspace, bank ownership and per-role memory bindings, selected analysis integration and target paths: pending.
+- Planner communication identity, authorized users/channels, subscriptions, dispatcher/notifier ownership, and activation state: pending.
+- Component source repository/subpath, exact revision, license, complete file inventory/hashes, actual target, and discovery/configuration readbacks for each assigned component: pending.
 
-Record the installation marker at `<planner home>/devteam/installation.json`.
-Keep the same nonsecret role bindings under `confirmed_bindings.roles` in the JSON block above.
-Use `{"id": "actual-id", "home": "/actual/canonical/home"}` for each role.
-Use the actual process HOME for `team-codex`.
+Generate the recovery launcher with `references/bind_recovery.py` after copying the complete skill tree.
+Keep its task ID as the only runtime argument.
+The installed launcher must not depend on this record at runtime.
+Binding evidence does not authorize operation or prove semantic API behavior.
 
-- Package SemVer and exact Maker commit: pending.
-- Baseline provenance and evidence: pending.
-- Managed mappings and pristine baseline readbacks: pending.
-- Activity finding and explicit proceed or skip decision: pending.
-- Semantic review and operational dependency decision: pending.
-- Proposal, backup run, target readbacks, and per-team result: pending.
-- Rollback receipt and retained additions or obsolete files: pending.
+- Recovery board/dispatcher binding readback, script byte comparison, launcher hash and mode 0700, deterministic output comparison, and shell-quoted installed invocation path: pending.
 
-Follow the Maker's `references/update.md` for an authorized update.
-Do not interpret this record as rollout permission.
+## Progress and recovery
 
-## Planner triage recovery invocation
+- Latest completed and verified step, created objects/files, and evidence: pending.
+- Incomplete step, exact blocker or missing prerequisite, next action, required authorization, and success signal: pending.
+- Previous own file/configuration state and targeted recovery path: pending.
 
-The Maker records the confirmed `python`, `script`, `db` and `planner_profile` values under
-`confirmed_bindings.triage_recovery` in the existing JSON block.
-Use the verified dispatcher interpreter.
-Use the installed planner script path.
-Bind the DB to the confirmed board and actual dispatcher resolver.
-Reuse the confirmed technical planner profile ID.
-Generate the bound launcher with `references/bind_recovery.py` after copying the complete skill tree.
-Save the shell-quoted installed launcher path below.
-Keep the task ID as its only runtime argument.
-Keep this record as Maker audit evidence, not as a planner runtime dependency.
-Do not treat this binding as operation approval or a semantic API check.
+On resume, read the JSON and relevant actual targets, then continue only the first incomplete setup step.
+Confirm missing input before using it.
+Resolve actual target drift before rendering or writing.
+Correct stale descriptive prose from readbacks without repeating confirmed choices or successful creates.
+Preserve local edits and unrelated profiles, skills, subscriptions, shared binaries/PM runtime,
+personal Codex assets, project files/AGENTS, service/bank/channel contents, and graph caches.
+Limit recovery to recorded own objects and entries.
+Obtain separate authorization for data deletion.
 
-- Bound invocation and board/dispatcher readback evidence: pending.
-- Installed script byte comparison against the Maker: pending.
-- Bound launcher hash, mode 0700 and comparison against the deterministic Maker output: pending.
+## Installation and update evidence
 
-## Native Zuständigkeit und Freigaben
+Initialize only after complete delivery, configuration/file readbacks, and recovery binding.
+Follow [Team updates](../references/update.md) for initialization, existing-team baselines, and authorized updates.
+Keep `installation.json` and pristine personalized `baselines/<sha256>` under the Planner's private `devteam/` directory.
+Keep package SemVer and exact Maker commit distinct from the record schema.
+Preserve baseline provenance, role bindings, managed source/target mappings, transform identifiers, and hashes.
+Never use a locally edited target as a pristine Maker baseline.
+Keep private state directories at 0700 and files at 0600.
 
-- Hermesrevision / Resolver / Terminalbackend: offen
-- Gateway-/Multi-Profile-Owner / bedienter Planneradapter: offen
-- Dispatcher-/Notifierbesitzer, Configquelle / tatsächlicher Workerpfad: offen
-- PM-Bestand / gemeinsame Generation / konkrete Aufnahmewirkung: offen
-- Freigegebene Installationen / Bootstrap-/PM-/Aktivierungswirkung: offen
-- Dienst-/Modell-/Nachrichten-/Testfreigabe und begrenzter Umfang: offen
-- Erhaltene Schutz-/Freigabeeinstellungen und betroffene gemeinsame Bestände: offen
-- Tatsächliche Timeout-/Retry-/Rate-Limit-Behandlung, Grenzen / Zielrevision / offene Probleme: noch ungeprüft
+- Package SemVer, exact Maker commit, installation marker, provenance, and baseline readbacks: pending.
+- Update proposal, activity finding and explicit proceed/skip decision, semantic review, and operational dependency decision: pending when an update is authorized.
+- Backup run, result journal, verified targets, per-team result, guarded rollback receipt, and retained additions/obsolete files: pending when an update is authorized.
 
-## Modelle und Codex
-
-- Je Rolle: Provider, Modell, Reasoning, native Configquelle, Overrides, echter Call: offen
-- Unterstützte Stufen je Modell/Provider und Rangfolge / ausdrücklich bestätigte Grenzen / Standard nicht über Obergrenze / nativer Wechselweg und Beleg: offen
-- Helferpins und gegebenenfalls abweichende Stufensemantik / bestätigte Zuordnung zur Grenze / Konflikte vor Nutzung geklärt: offen
-- Hilfsmodell-/Analysewege und Zugang separat: offen
-- Team-Codex Prozess-HOME / CODEX_HOME / aufgelöste Binary: offen
-- PFLICHT Team-Codex Git-Identität: bestätigter user.name / user.email, Herkunft und Übernahmefreigabe / reguläre CODEX_PROCESS_HOME/.gitconfig, Modus 0600 / Vorzustand und Rückweg: offen
-- PFLICHT Git-Nachweis: --show-origin aus Team-.gitconfig, GIT_AUTHOR_IDENT und GIT_COMMITTER_IDENT in frischen Workerprozessen ohne Identitäts-Envhilfen; Testrepo ohne lokale Identität und vorgesehener Repo-Kontext / Autor und Committer am Probelaufcommit: noch ungeprüft
-- Effektive Skill-/Plugin-/Agent-/Configroots; Projekt-/Admin-/Systemquellen: offen
-- Projekttool-PATH/Caches im echten Worker nach HOME-Wechsel: offen
-- Regulärer Codexlogin / separater Hermeszugang / Secretort, nie Inhalte: offen
-
-## Planner-Kommunikation und Memory
-
-- Server / eigene Botidentität / Team- und Projektkanalmitgliedschaft: offen
-- Menschliche User-ID und Zulassung, kein Allow-all: offen
-- Projektkanal-ID / Typ (öffentlich channel, privat group): offen
-- Getrennte DM-Kanal-ID / Typ / tatsächliche Teilnehmer / Home-Rücklese: offen
-- Effektive Allowlist / Free-Response / Mention / normale Antwortkonfiguration: offen
-- Native Subscriptionidentität: Board, Task, Kanal, Typ, Mensch, Planner, wake, leere Thread-ID: offen
-- Erwähnungsantwort / Antwort ohne Erwähnung / DM / veröffentlichter Planner-Wake: offen
-- Pro Rolle: Hindsight-JSON-Ort / Originaladapterrevision / SDK-/Serververträglichkeit: offen
-- Recall-/Retain-/Reflect-Requestfelder und gespeicherte Tags / zwei Turns / Konsolidierung: offen
-- Reflect-Freigabe erst nach Rollenfilterweitergabe, sonst gefilterter Recall: offen
-
-## Bezogene Komponenten und eigene Ausgaben
-
-| Bestandteil / Rolle / Harness | Originalrepo und Unterpfad | Revision / Release / Lizenz | Vollständige Dateimenge / Hashbeleg | Tatsächliches Ziel / eigene Identität | Discovery / Modus / Funktionsbeleg |
-|---|---|---|---|---|---|
-| aus Manifest einzeln aufführen | offen | offen | offen | offen | offen |
-
-Alle sechs VoltAgent-Original-TOMLs einzeln: Originalpfad, Hash, Modell-/Reasoningpin,
-Discovery, tatsächlicher Delegationscall. Konfigurationsnachweis, Originalidentität
-und Runtimebeleg bleiben getrennt. Bei CBM zusätzlich die vom offiziellen Installer
-bereitgestellten Codex-Unteragenten und ihre Discovery dokumentieren.
-
-| Repository / Fähigkeit | Quellmanifest / Constraint | Aufruf-CWD / Wrapper / Lockfile | Tatsächliche Toolauflösung | Prüfstatus / Beleg |
-|---|---|---|---|---|
-| vom Zielprojekt abgeleitet | offen | offen | offen | offen |
-
-## Fortschritt, Wiederaufnahme und Rückweg
-
-| Phase | Eigenes Objekt / genaue Datei oder Eintragsidentität | Vorherzustand / Hash | Letzter erfolgreich geprüfter Teilstand | Offene Voraussetzung / nächste Maßnahme | Erfolgssignal / Beleg | Konkreter Rückweg / gesonderte Löschfreigabe |
-|---|---|---|---|---|---|---|
-| noch nicht begonnen | offen | offen | offen | offen | offen | offen |
-
-Geschützte gemeinsame Bestände: fremde Profile/Skills/Subscriptions, gemeinsame
-Binaries/PM-Runtime, persönliche Codexausstattung, Produktdateien/AGENTS,
-Dienst-/Bank-/Kanalinhalte und Graphcaches. Änderungen nur eindeutig zugeordnet;
-Datenlöschung benötigt gesonderte Freigabe.
-
-## Abnahme nach geprüftem Stand
-
-Gemäß [Prüfanleitung](../references/verification.md) je Prüfung festhalten:
-bestanden / konkreter Fehler / noch ungeprüft. Bei Fehlern Auswirkung und nächste
-Maßnahme nennen. Nicht benötigte Fähigkeiten mit Begründung kennzeichnen.
-
-| Prüfung | Geprüfter Stand | Ergebnis und kurzer Beleg |
-|---|---|---|
-| Paket: Dateibestand, Links, vollständige Skills, Personalisierung, Syntax und Konsistenz | offen | noch ungeprüft |
-| Rollen, vollständige SOUL-Aufnahme, Skills und Modi | offen | noch ungeprüft |
-| Planner-Interview: Originale grill-me/grilling samt Begleitdateien/Lizenz, Bytevergleich, native Discovery/Laden, SOUL-Pflicht und Planungsdialog im neuen Kontext/Resume | offen | noch ungeprüft |
-| Modelle und wirksame Reasoning-Stufen einschließlich Grenzprüfung bei HIGH+HIGH, Resume und Helferdelegation | offen | noch ungeprüft |
-| Team-Codex und installierte Helfer | offen | noch ungeprüft |
-| Memory und Rollenfilter | offen | noch ungeprüft |
-| Mattermost: Erwähnung, Free-Response, DM und Planner-Wake | offen | noch ungeprüft |
-| Gewählte Codeanalyse: Index, Aufrufbeziehung und Aktualisierung | offen | noch ungeprüft |
-| Tatsächliche Betriebsgrenzen und Erhalt fremder Zustände | offen | noch ungeprüft |
-| Gemeinsamer Probelauf bis zum Plannerbericht | offen | noch ungeprüft |
-
-- Gesamturteil: Paket geprüft / Zielsetup teilweise / Team technisch geprüft — mit Belegen ausfüllen.
-- Offene Gates / konkret benötigte nächste Freigabe: offen
-- Empfehlung: Nutzer erteilt dem Planner später einen konkreten ersten Planungsauftrag.
+Advance installation metadata only after successful target verification.
+Preserve the three-way comparison, local-edit/conflict safeguards, conservative legacy handling, and guarded rollback.
+Report setup completion as **Team configured; setup outputs verified.** only when the required setup readbacks pass.
+Report remaining setup blockers precisely.
+Do not leave excluded research or behavioral experiments as pending setup gates.
