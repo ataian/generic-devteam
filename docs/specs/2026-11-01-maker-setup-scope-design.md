@@ -7,7 +7,7 @@
 - Inspected source: `a44d15e3aad77b891fa5c95ebeba49a780e4525e`, branch `develop`, Maker package `1.1.4`.
 - Max approved the design direction in the planning conversation: preserve the generated team's capabilities and quality; remove development research and behavioral qualification from ordinary team setup.
 - Max explicitly requires useful setup records and the existing versioned installation/update mechanism to remain intact.
-- This document records that direction for review. Approval of this written specification and a subsequent implementation plan are still separate gates.
+- Max accepted this written specification as presented in commit `0694e651df32dbe7d5187d6d4105fb2b91819b0c` and authorized preparation of the implementation plan. The subsequent implementation plan still requires separate approval before execution.
 - No implementation, team rollout, profile change, push, release, or deployment is authorized by this document.
 
 ## 1. Outcome

@@ -15,9 +15,10 @@
 Max assigned Kirk the planning of a narrower Maker setup responsibility.
 Preserve the generated team's capabilities, quality boundaries, setup records, and existing versioned update support.
 Remove recurring Maker-development research and behavioral qualification from normal team creation.
-The design direction is approved. The written specification and subsequent implementation plan have separate approval gates.
+Max accepted the written specification in its substantive form from commit `0694e651df32dbe7d5187d6d4105fb2b91819b0c` and authorized implementation planning.
+The implementation plan remains a draft and requires separate approval before execution.
 
-Read [the design specification](docs/specs/2026-11-01-maker-setup-scope-design.md) for the exact scope and evidence.
+Read [the accepted design specification](docs/specs/2026-11-01-maker-setup-scope-design.md) and [the implementation plan draft](docs/PLAN_1.0.0_Generic-Devteam.md) for the exact scope and evidence.
 No implementation tasks or live-team changes have been authorized by this planning step.
 Resolve board and communication routing before creating implementation tasks.
 
