@@ -52,6 +52,12 @@ anhalten und mit dem Nutzer klären, kein Repo verschieben und keine abweichende
 Bindungen still anlegen. Der Renderwert PROJECT_NAME bleibt ein einzelnes Segment
 ohne Slash, Backslash oder Traversal; Leerzeichen sind zulässig. PROJECT_DIR trägt
 unabhängig davon den bestätigten absoluten Workspace für die native Konfiguration.
+Reuse `PROJECT_DIR` as a Planner render value.
+Save the already confirmed repository boundaries as `REPOSITORY_ROOTS` in `confirmed_values`.
+Use single-line text with explicit planning and implementation assignments for those absolute paths.
+Preserve multiple repositories and nested checkouts.
+If no repository exists yet, record that confirmed fact instead of inventing a root.
+Do not repeat questions for confirmed paths.
 Erfasse vorhandene Repositorygrenzen,
 Root- und relevante Bereichs-AGENTS sowie Manifeste/Lockfiles/Build-/Testkonfiguration.
 Der Workspace muss kein Git-Root sein und wird nicht automatisch initialisiert.
@@ -269,7 +275,8 @@ Daten prüfen, ohne Zielanlage oder Runtime.
 1. Kopiere gemäß [Quellen- und Rollenmatrix](upstream-sources.md#mitgelieferte-bausteine)
    **den ganzen eigenen Skillbaum** aus `skills/` in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
    `screenshot-to-code` in seinem Prozess-HOME unter `.agents/skills/`.
-   Alle Dateien einschließlich `SKILL.md` behalten Namen und Inhalt unverändert.
+   Keep all skill names and bytes unchanged except the recovery launcher.
+   Bind that launcher through the Maker step below after copying the full tree.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.
 2. Prüfe die tatsächlichen Hermes-/Codex-Auswahlen, unterstützten Reasoning-Stufen,
    erlaubten Obergrenzen, Hilfsmodelle und Original-Agentpins in ihrer nativen Konfiguration. Halte
@@ -297,20 +304,27 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    fields = role_fields(role_template_text, role)
    if fields != set(role_manifest["render_fields"]):
        raise ValueError("Vorlage und deklarierte Rollenfelder widersprechen sich")
+   missing = fields - role_source.keys()
+   if missing:
+       raise ValueError("Missing confirmed role bindings: " + ", ".join(sorted(missing)))
    role_values = {field: role_source[field] for field in fields}
    soul_text = render_role(role_template_text, role_values, role)
    ```
 
-   `confirmed_values` sind die bestätigten Rohwerte aus dem Setuprecord (Namen,
-   Projekt, Bank, rückgelesenes Board, technische Profil-IDs und die vier Reasoning-
-   Renderwerte aus Abschnitt 2; feste Planner-/Hermes-Coder-Stufen sowie die für die Konfiguration
-   gespeicherte Codex-Modell-ID werden nicht als Rollenfelder übergeben);
+   Use the confirmed raw names, project, bank, board, profile IDs, and reasoning render values from `confirmed_values`.
+   Include `PROJECT_DIR` and `REPOSITORY_ROOTS` for the Planner.
+   Include `PLANNER_PROFILE` for the Coder.
+   Check `PLANNER_PROFILE` against `confirmed_bindings.roles.planner.id` before rendering.
+   Do not pass fixed Planner/Hermes-Coder reasoning or the Codex model ID as role fields.
    `role_manifest` ist der passende Eintrag aus `role_templates`. Fehlende Werte
    stoppen die Ausgabe, keine Leerdefaults und keine neuen IDs erfinden.
    `ROLE_NAME` entspricht stets dem eigenen Anzeigenamen, nie der technischen ID.
    `role` ist `planner`, `coder` oder `reviewer`. `confirmed_bindings` dokumentiert
-   die tatsächlich aufgelösten Zielwerte im privaten Record; daraus wird keine
-   zusätzliche Laufzeitdatei erzeugt. Kommunikationswerte bleiben beim Planner. Verwende technische
+   die tatsächlich aufgelösten Zielwerte im privaten Record.
+   Do not generate a separate runtime configuration file from these values.
+   Render the role bindings through the existing SOUL templates.
+   Bind the recovery launcher through the Maker step below.
+   Kommunikationswerte bleiben beim Planner. Verwende technische
    Werte unverändert als Daten, nicht die maskierte Markdownfassung als Shellwerte.
 5. Der Textweg validiert den [Rollenfeldvertrag](native-workflow.md#2-rollen-souls-personalisieren): nichtleere
    einzeilige Rohwerte, Namen maximal 120 Zeichen, keine Steuer-/Formatzeichen,
@@ -333,6 +347,7 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    Rollen-/Projekt-/Bank-/Boardwerte und technische IDs gegen den Record,
    wirksame native Konfiguration und protokollierte Einschränkungen. Vergleiche
    Skilldateimenge und Bytes vollständig mit der Quelle.
+   Compare the recovery launcher against its bound Maker output instead of the generic template.
    Lies in der Planner-SOUL die Ladepflicht für `grilling`, dessen Vorrang im
    Interviewabschnitt und die getrennte Planannahme zurück. Beide Originalskills
    müssen im Plannerhome vollständig vorliegen; Makerverweise allein genügen nicht.
@@ -345,6 +360,38 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    Vor Home-/Dialog-/Aufgabenbearbeitung Loader-/Kontextgrenze am Ziel lesen und **vollständige effektive
    SOUL-Aufnahme** pro Rolle nachweisen; Länge und Dateiexistenz genügen nicht.
    Bei Kürzung halten, keine Rollenpflichten still reduzieren.
+
+### Bind the planner recovery invocation
+
+The Maker owns recovery binding and launcher generation.
+Copy the complete `brownfield-feature-planning` skill tree.
+Keep `scripts/recover_triage.py` unchanged.
+Record `python`, `script`, `db` and `planner_profile` under `confirmed_bindings.triage_recovery` in the private setup JSON.
+Use the verified dispatcher interpreter for `python`.
+Use the installed planner skill path for `script`.
+Use the existing dispatcher DB's canonical absolute path for `db`.
+Use the confirmed technical planner ID from `confirmed_bindings.roles.planner.id` for `planner_profile`.
+Check the DB against the confirmed board identity and dispatcher resolver.
+Reuse the existing confirmed setup values without another interview.
+If an existing team's record lacks this binding, resolve it from its confirmed identities and current dispatcher configuration.
+Stop if those sources disagree.
+Run the Maker binder after copying the skill tree:
+
+```sh
+python3 -B references/bind_recovery.py --home /actual/planner-home
+```
+
+The binder reads the existing private setup JSON and writes `skills/brownfield-feature-planning/scripts/recover-triage` in that planner home with mode 0700.
+It binds the interpreter, generic script, dispatcher DB and planner ID with shell-safe quoting.
+It accepts only the task ID at runtime.
+Compare the installed bytes against `bind_recovery.render_launcher` with the confirmed binding.
+Record the generated file hash and shell-quoted installed launcher path in `setup.md` as Maker audit evidence.
+Keep the task ID separate from that fixed command.
+Deliver the callable launcher inside the planner skill tree before recording the installation.
+Do not assign setup-record reads, variable collection or configuration generation to the planner.
+Do not personalize the Python source through the SOUL renderer.
+Do not create a recovery test card for each setup.
+Follow the installed recovery reference's approval and API checks before any later invocation.
 
 ## 7. Einzelprüfungen und Wake vor Ticketfreigabe
 
@@ -449,6 +496,17 @@ auch wenn die Anlage diesem Setup gehört. Rücklese beweist den Rückweg.
 [Prüfanleitung](verification.md), Belegorte und konkrete offene Punkte.
 Paketprüfung und Zielabnahme getrennt ausweisen. Ein technisches Team ist noch
 kein fachlich eingearbeitetes Projektteam.
+
+## Record the installation baseline
+
+After the role and own-skill file readbacks pass, follow [Team updates](update.md#record-a-new-team).
+Save the actual role IDs and homes under `confirmed_bindings.roles` in the existing private setup JSON.
+Use the actual process HOME for the `team-codex` role.
+Run `update_team.py init` against the reviewed committed Maker source.
+Read back `devteam/installation.json` and its pristine baseline files.
+Record the package SemVer and exact Maker commit in the setup evidence.
+Do not use the initialization helper to install files or bypass runtime acceptance.
+If the team already exists, use the documented existing-team baseline path instead.
 
 ## Versionsgebundene Quellen
 

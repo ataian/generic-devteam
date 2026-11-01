@@ -1,19 +1,28 @@
 {
   "name": "generic-devteam",
-  "version": "1.0.0",
+  "version": "1.1.4",
+  "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "runtime-acceptance-open",
   "files": [
+    "AGENTS.md",
     "LICENSE",
     "NOTICE.md",
     "README.md",
     "SKILL.md",
     "references/code-analysis.md",
+    "references/bind_recovery.py",
     "references/integrations.md",
     "references/kanban-block-triage-escalation.md",
     "references/native-workflow.md",
     "references/render_text.py",
     "references/setup.md",
+    "references/tas-authoring-standard.md",
     "references/test_render_reasoning.py",
+    "references/test_triage_recovery.py",
+    "references/test_bound_recovery.py",
+    "references/test_update_team.py",
+    "references/update.md",
+    "references/update_team.py",
     "references/upstream-sources.md",
     "references/verification.md",
     "skills/brownfield-feature-planning/SKILL.md",
@@ -23,6 +32,8 @@
     "skills/brownfield-feature-planning/references/operator-script-acceptance.md",
     "skills/brownfield-feature-planning/references/project-retrospectives.md",
     "skills/brownfield-feature-planning/references/replacement-imports.md",
+    "skills/brownfield-feature-planning/scripts/recover_triage.py",
+    "skills/brownfield-feature-planning/scripts/recover-triage",
     "skills/minimal-change-engineering/SKILL.md",
     "skills/plan-versioning-semver/SKILL.md",
     "skills/project-lib-versioning/SKILL.md",
@@ -55,7 +66,9 @@
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
+        "PROJECT_DIR",
         "PROJECT_NAME",
+        "REPOSITORY_ROOTS",
         "REVIEWER_NAME",
         "REVIEWER_PROFILE",
         "ROLE_NAME"
@@ -81,6 +94,7 @@
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
+        "PLANNER_PROFILE",
         "PROJECT_NAME",
         "REVIEWER_NAME",
         "REVIEWER_PROFILE",
@@ -125,7 +139,7 @@
         ]
       },
       "origin": "Übernommene und vom Nutzer bearbeitete Skillfassung mit ihren Referenzen.",
-      "changes": "Aktuelle Nutzerfassung; beim Setup den vollständigen Skillbaum unverändert kopieren.",
+      "changes": "Copy the complete skill tree. Bind only scripts/recover-triage with references/bind_recovery.py from confirmed setup values.",
       "origin_ref": "references/upstream-sources.md#own-planning",
       "license_path": null,
       "notice_path": "NOTICE.md",
@@ -341,8 +355,7 @@
       ],
       "targets": {
         "hermes": [
-          "coder",
-          "reviewer"
+          "coder"
         ],
         "codex": [
           "team-codex"

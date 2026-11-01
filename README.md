@@ -59,8 +59,10 @@ oder Bauen des Pakets ein Setup auszuführen.
 3. Nach Freigabe kopiere diesen vollständigen Baum in dessen
    `skills/generic-devteam/`. Existiert das Ziel, vergleiche zuerst Herkunft und
    lokale Änderungen; niemals fremde Anpassungen überschreiben. Die vollständigen
-   eigenen Skillbäume behalten ihre `SKILL.md` und werden beim Teamsetup unverändert
-   an die vorgesehenen Ziele kopiert. Nur die Rollen-SOUL-Vorlagen werden personalisiert.
+   eigenen Skillbäume behalten ihre `SKILL.md`.
+   Copy complete skill trees to their assigned targets.
+   Personalize role templates and bind only the recovery launcher through the Maker setup step.
+   Keep all other skill bytes unchanged.
 4. Prüfe in diesem Profil native Discovery von `generic-devteam`, lade `SKILL.md`
    und `references/setup.md` ausdrücklich. Der bestehende Sitzungskatalog und ein
    neu aufgelöstes Skillpaket sind unterschiedliche Nachweise; keinen globalen
@@ -99,6 +101,17 @@ Updates zunächst außerhalb aktiver Discovery prüfen, mit installierten Revisi
 und eigenen Anpassungen vergleichen und den gezielten Änderungsumfang genehmigen
 lassen. Vorherige eigene Dateistände geschützt aufbewahren. Rückbau betrifft nur
 protokollierte eigene Objekte/Einträge; Datenlöschung braucht eine eigene Freigabe.
+
+## Update existing teams
+
+To request a file update, ask: “Check the Maker for changes and apply them to my local teams.”
+Read [Team updates](references/update.md) before changing any team files.
+The updater uses existing setup values, per-team installation evidence, and pristine personalized baselines.
+It preserves local edits through a three-way comparison.
+It requires semantic review and an explicit activity decision before application.
+It retains backups and provides a guarded rollback.
+It does not install runtime components, stop workers, or restart sessions.
+Report skipped and failed teams separately.
 
 ## Öffentliche Paketprüfung — ohne Dienste oder private Quellen
 

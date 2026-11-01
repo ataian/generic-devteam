@@ -32,10 +32,13 @@ einzigen JSON-Block speichern, nicht seine Markdownmaskierung. Mit `json.dumps`
 gemäß [Setupweg](../references/setup.md) befüllen und mit `json.loads` rücklesen;
 Tabellen sind Belegübersichten, keine verlustfreie Datenquelle. Bei Resume wiederverwenden,
 nur fehlende Werte oder Drift klären; native Objekte bleiben Zustandsautorität.
-`confirmed_values` enthält Namen, Projekt, Bank, Board, technische Profil-IDs,
-die vier Reasoning-Renderwerte sowie feste Planner-/Hermes-Coder-Stufen und die
-bereits bestätigte Codex-ID nur für die technische Konfiguration; `confirmed_bindings`
-enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht erfasst.
+Store confirmed names, project, bank, board, profile IDs, and reasoning values in `confirmed_values`.
+Store the confirmed workspace as `PROJECT_DIR` in that same object.
+Store the confirmed repository boundaries as `REPOSITORY_ROOTS` in that same object.
+Keep planning and implementation assignments separate in the single-line repository text.
+Keep fixed Planner/Hermes-Coder reasoning and the Codex model ID for native configuration only.
+Store resolved technical bindings in `confirmed_bindings`.
+Empty objects mean that values have not been recorded.
 
 ```json
 {
@@ -50,6 +53,8 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 | CODER_NAME | offen | offen |
 | REVIEWER_NAME | offen | offen |
 | PROJECT_NAME | offen | offen |
+| PROJECT_DIR (canonical absolute workspace) | pending | pending |
+| REPOSITORY_ROOTS (single-line absolute paths with separate planning and implementation assignments, or confirmed absence) | pending | pending |
 | HINDSIGHT_BANK_NAME | offen | offen |
 | KANBAN_BOARD_NAME = BOARD (Kennung, nicht Anzeigetitel) | offen | offen |
 | PLANNER_PROFILE | offen | offen |
@@ -66,6 +71,42 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 - Zielkonto-Home / unabhängig vom Projektnamen bestätigter kanonischer absoluter Workspace / Abgleich mit Projektkontext und nativen Profil-/Boardbindungen oder offene Klärung: offen
 - ROLE_NAME je Rolle aus PLANER_NAME / CODER_NAME / REVIEWER_NAME: offen
 - Je Rolle: Vorlagenrevision/Hash, deklarierte und tatsächlich vorkommende Felder, gerenderter Solltext/Hash, exaktes SOUL.md-Ziel, Annahme und bytegenaue Rücklese: offen
+
+## File update evidence
+
+Record the installation marker at `<planner home>/devteam/installation.json`.
+Keep the same nonsecret role bindings under `confirmed_bindings.roles` in the JSON block above.
+Use `{"id": "actual-id", "home": "/actual/canonical/home"}` for each role.
+Use the actual process HOME for `team-codex`.
+
+- Package SemVer and exact Maker commit: pending.
+- Baseline provenance and evidence: pending.
+- Managed mappings and pristine baseline readbacks: pending.
+- Activity finding and explicit proceed or skip decision: pending.
+- Semantic review and operational dependency decision: pending.
+- Proposal, backup run, target readbacks, and per-team result: pending.
+- Rollback receipt and retained additions or obsolete files: pending.
+
+Follow the Maker's `references/update.md` for an authorized update.
+Do not interpret this record as rollout permission.
+
+## Planner triage recovery invocation
+
+The Maker records the confirmed `python`, `script`, `db` and `planner_profile` values under
+`confirmed_bindings.triage_recovery` in the existing JSON block.
+Use the verified dispatcher interpreter.
+Use the installed planner script path.
+Bind the DB to the confirmed board and actual dispatcher resolver.
+Reuse the confirmed technical planner profile ID.
+Generate the bound launcher with `references/bind_recovery.py` after copying the complete skill tree.
+Save the shell-quoted installed launcher path below.
+Keep the task ID as its only runtime argument.
+Keep this record as Maker audit evidence, not as a planner runtime dependency.
+Do not treat this binding as operation approval or a semantic API check.
+
+- Bound invocation and board/dispatcher readback evidence: pending.
+- Installed script byte comparison against the Maker: pending.
+- Bound launcher hash, mode 0700 and comparison against the deterministic Maker output: pending.
 
 ## Native Zuständigkeit und Freigaben
 
