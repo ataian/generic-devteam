@@ -81,6 +81,11 @@ class UpdaterTests(unittest.TestCase):
         record = self.initialize()
         mapped = {(x['role'], x['source']) for x in record['managed']}
         self.assertIn(('planner', 'skills/brownfield-feature-planning/references/kanban-triage-recovery.md'), mapped)
+        script_source = 'skills/brownfield-feature-planning/scripts/recover_triage.py'
+        script = next(x for x in record['managed'] if x['source'] == script_source)
+        self.assertEqual(script['role'], 'planner')
+        self.assertEqual(script['transform'], 'copy-v1')
+        self.assertEqual(Path(script['target']).read_bytes(), (self.repo / script_source).read_bytes())
         self.assertIn(('team-codex', 'skills/screenshot-to-code/LICENSE'), mapped)
         codex_entry = next(x for x in record['managed'] if x['role'] == 'team-codex' and x['source'].endswith('/LICENSE'))
         self.assertEqual(codex_entry['target'], str(Path(self.roles['team-codex']['home']) / '.agents/skills/screenshot-to-code/LICENSE'))
@@ -88,6 +93,27 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual((self.state / 'installation.json').stat().st_mode & 0o777, 0o600)
         soul = next(x for x in record['managed'] if x['role'] == 'planner' and x['target'].endswith('/SOUL.md'))
         self.assertNotIn(b'{{', (self.state / 'baselines' / soul['baseline']).read_bytes())
+
+    def test_new_recovery_script_is_delivered_by_existing_updater(self):
+        source = 'skills/brownfield-feature-planning/scripts/recover_triage.py'
+        original = (self.repo / source).read_bytes()
+        target = self.home / source
+        self.git('rm', source)
+        self.commit('fixture before script extraction')
+        target.unlink()
+        self.initialize()
+        (self.repo / source).parent.mkdir(parents=True, exist_ok=True)
+        (self.repo / source).write_bytes(original)
+        self.commit('ship reusable recovery script')
+        plan = self.proposal()
+        result = u.apply(self.home, plan, decision='proceed', review='Reviewed recovery extraction and preserved gates')
+        self.assertEqual(result['status'], 'applied')
+        self.assertEqual(target.read_bytes(), original)
+        record = json.loads((self.state / 'installation.json').read_text())
+        entry = next(x for x in record['managed'] if x['source'] == source)
+        self.assertEqual(entry['transform'], 'copy-v1')
+        self.assertEqual((self.state / 'baselines' / entry['baseline']).read_bytes(), original)
+        self.assertEqual(record['maker_commit'], self.git('rev-parse', 'HEAD').strip())
 
     def test_legacy_souls_preserve_drift_and_do_not_adopt_skills(self):
         original = Path(__file__).resolve().parents[1]

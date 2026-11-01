@@ -346,6 +346,25 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    SOUL-Aufnahme** pro Rolle nachweisen; Länge und Dateiexistenz genügen nicht.
    Bei Kürzung halten, keine Rollenpflichten still reduzieren.
 
+### Bind the planner recovery invocation
+
+Copy `brownfield-feature-planning/scripts/recover_triage.py` with the complete planner skill tree.
+Keep its bytes unchanged.
+Record `python`, `script`, `db` and `planner_profile` under `confirmed_bindings.triage_recovery` in the private setup JSON.
+Use the verified dispatcher interpreter for `python`.
+Use the installed planner skill path for `script`.
+Use the existing dispatcher DB's canonical absolute path for `db`.
+Use the confirmed technical planner ID from `confirmed_bindings.roles.planner.id` for `planner_profile`.
+Check the DB against the confirmed board identity and dispatcher resolver.
+Build a shell-quoted command prefix from these values with `shlex.join`.
+Save that prefix followed by `--task-id "$TASK_ID"` in the private setup record.
+Reuse the existing confirmed setup values without another interview.
+If an existing team's record lacks this binding, resolve it from its confirmed identities and current dispatcher configuration.
+Stop if those sources disagree.
+Do not personalize the Python source through the SOUL renderer.
+Do not create a recovery test card for each setup.
+Follow the installed recovery reference's approval and API checks before any later invocation.
+
 ## 7. Einzelprüfungen und Wake vor Ticketfreigabe
 
 Nach vollständigen angenommenen Rollen-/Skilldateien und nativen Bindungen die

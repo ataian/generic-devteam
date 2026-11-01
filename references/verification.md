@@ -54,6 +54,19 @@ For a rollback, read back restored bytes and metadata before reporting restorati
 Follow [Team updates](update.md) for semantic review, activity decisions, dependencies, and retained files.
 Keep file verification separate from agent behavior and runtime acceptance.
 
+## Recovery script verification
+
+Run `python3 -B -m unittest discover -s references -p 'test_triage_recovery.py'` with the installed Hermes Python.
+Use only synthetic SQLite boards under the scratch directory.
+Report skipped native-transition tests if a delegation guard denies writes.
+Do not bypass the guard to obtain a passing transition.
+Check that the complete planner skill copy includes `scripts/recover_triage.py` with unchanged bytes.
+Read back `confirmed_bindings.triage_recovery` and the bound invocation in the private setup record.
+Compare its interpreter, script, DB and planner profile with the confirmed dispatcher and role identities.
+Keep the task ID unbound until recovery time.
+Do not repeat the native recovery test chain for each team setup or create an extra test card.
+Treat file delivery and invocation binding as separate from a successful live recovery.
+
 ## 2. Team nach Einrichtung prüfen
 
 Erst im beauftragten Zielsetup mit bestätigten Rollen, Diensten, Modellzugängen,

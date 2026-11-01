@@ -85,6 +85,21 @@ Use the actual process HOME for `team-codex`.
 Follow the Maker's `references/update.md` for an authorized update.
 Do not interpret this record as rollout permission.
 
+## Planner triage recovery invocation
+
+Save the confirmed `python`, `script`, `db` and `planner_profile` values under
+`confirmed_bindings.triage_recovery` in the existing JSON block.
+Use the verified dispatcher interpreter.
+Use the installed planner script path.
+Bind the DB to the confirmed board and actual dispatcher resolver.
+Reuse the confirmed technical planner profile ID.
+Save the shell-quoted command prefix with `--task-id "$TASK_ID"` below.
+Keep the task ID as the runtime argument.
+Do not treat this binding as operation approval or a semantic API check.
+
+- Bound invocation and board/dispatcher readback evidence: pending.
+- Installed script byte comparison against the Maker: pending.
+
 ## Native Zuständigkeit und Freigaben
 
 - Hermesrevision / Resolver / Terminalbackend: offen

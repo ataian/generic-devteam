@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "stage": "runtime-acceptance-open",
   "files": [
     "LICENSE",
@@ -14,6 +14,7 @@
     "references/render_text.py",
     "references/setup.md",
     "references/test_render_reasoning.py",
+    "references/test_triage_recovery.py",
     "references/test_update_team.py",
     "references/update.md",
     "references/update_team.py",
@@ -26,6 +27,7 @@
     "skills/brownfield-feature-planning/references/operator-script-acceptance.md",
     "skills/brownfield-feature-planning/references/project-retrospectives.md",
     "skills/brownfield-feature-planning/references/replacement-imports.md",
+    "skills/brownfield-feature-planning/scripts/recover_triage.py",
     "skills/minimal-change-engineering/SKILL.md",
     "skills/plan-versioning-semver/SKILL.md",
     "skills/project-lib-versioning/SKILL.md",

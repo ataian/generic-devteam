@@ -1,8 +1,10 @@
 # Recover an existing Kanban card from automatic triage
 
 Use when a planner has resolved a repeated block but `unblock` / `promote`
-refuse the existing `triage` card. This is operational recovery, not a request
-for a new specification, decomposition, replacement ticket or new approval.
+refuse the existing `triage` card. Treat triage on a devteam board as an error
+state, not a normal planning step. Do not request a new specification, decomposition
+or replacement ticket solely because the card is in triage. Do not ask for approval
+solely because of triage. Obtain any missing approval for the next operation.
 
 ## Decision before transition
 
@@ -38,12 +40,8 @@ operation that preserves the existing spec and dependency gates. The CLI
 same operation as the deterministic internal function below. Do not run
 `decompose` to recover a fully specified card.
 
-In the verified Hermes implementation, the fallback is:
-
-```python
-from hermes_cli.kanban_db import specify_triage_task
-changed = specify_triage_task(conn, task_id, author=planner_profile)
-```
+In the verified Hermes implementation, use the internal
+`specify_triage_task(conn, task_id, author=planner_profile)` fallback.
 
 Use **no** `title`, `body` or `assignee` overrides. This changes `triage -> todo`
 and calls native dependency recomputation. Recompute scans eligible cards on
@@ -60,42 +58,28 @@ invent a function, issue raw SQL UPDATEs or install another Hermes to get it.
 
 ### Concrete invocation after the checks above
 
-Use the verified Hermes Python, not an unrelated system Python. Replace these
-three values with the confirmed DB path, exact task ID and planner profile.
-The following is a one-card operation, not a bulk recovery loop:
+Use the verified Hermes Python and bound command from the private
+`<planner home>/devteam/setup.md` record. Reuse the confirmed interpreter,
+installed script path, dispatcher DB and technical planner profile ID.
+Keep the task ID as the runtime argument. Run one card at a time:
 
-```python
-import sqlite3
-from pathlib import Path
-from hermes_cli.kanban_db import specify_triage_task
-
-board_db = Path('/confirmed/board/kanban.db').resolve(strict=True)
-task_id = 't_exact_id'
-planner_profile = 'actual-planner-profile'
-conn = sqlite3.connect(board_db.as_uri() + '?mode=rw', uri=True)
-conn.row_factory = sqlite3.Row
-try:
-    row = conn.execute(
-        'SELECT id, status, current_run_id FROM tasks WHERE id = ?',
-        (task_id,),
-    ).fetchone()
-    if row is None or row['status'] != 'triage' or row['current_run_id'] is not None:
-        raise RuntimeError('Reinspect state/claim before recovery')
-    changed = specify_triage_task(conn, task_id, author=planner_profile)
-    print('specified:', changed)
-    print(dict(conn.execute(
-        'SELECT id, status, assignee, current_run_id FROM tasks WHERE id = ?',
-        (task_id,),
-    ).fetchone()))
-finally:
-    conn.close()
+```sh
+"$HERMES_PYTHON" "$RECOVERY_SCRIPT" --db "$BOARD_DB" \
+  --planner-profile "$PLANNER_PROFILE" --task-id "$TASK_ID"
 ```
+
+Use the shipped [recovery script](../scripts/recover_triage.py).
+Complete the operation, identity and installed-source checks above before invoking it.
+The script rejects signature drift; a matching signature does not prove unchanged semantics.
+Read its JSON output for `specified` and the actual `task` state.
+If `specified` is false, reread the card instead of forcing a write.
+Exit code 0 means the native transition returned true, not that work started or finished.
 
 `mode=rw` prevents silently creating an empty DB at a wrong path. SQL here is
 read-only inspection; mutation is exclusively through the native transition.
 The preliminary read is not a cross-session lock: arrange a single recovery
 owner, recheck state immediately and rely on the native status guard. Do not
-advertise the example as an atomic multi-condition capability boundary.
+advertise the script as an atomic multi-condition capability boundary.
 
 ## Read back the actual landing state
 
