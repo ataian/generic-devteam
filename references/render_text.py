@@ -13,8 +13,8 @@ ROLE_FIELDS = {
     "HINDSIGHT_BANK_NAME", "KANBAN_BOARD_NAME",
 }
 ROLE_TECHNICAL_FIELDS = {
-    "planner": {"CODER_PROFILE", "REVIEWER_PROFILE"},
-    "coder": {"REVIEWER_PROFILE", "CODEX_REASONING_DEFAULT", "CODEX_REASONING_MAX"},
+    "planner": {"CODER_PROFILE", "REVIEWER_PROFILE", "PROJECT_DIR", "REPOSITORY_ROOTS"},
+    "coder": {"PLANNER_PROFILE", "REVIEWER_PROFILE", "CODEX_REASONING_DEFAULT", "CODEX_REASONING_MAX"},
     "reviewer": {"ROLE_REASONING_DEFAULT", "ROLE_REASONING_HIGH"},
 }
 ROLE_NAMES = {"planner": "PLANER_NAME", "coder": "CODER_NAME", "reviewer": "REVIEWER_NAME"}
@@ -67,6 +67,9 @@ def render_role(template, values, role):
         # technische Werte. Keine Reparatur oder Normalisierung von Nutzereingaben.
         if "`" in value or "\\" in value or "~~~" in value:
             raise ValueError("Unsichere Code-/Fencezeichen im Rollenwert")
+        if key == "PROJECT_DIR" and (not value.startswith("/") or
+                (value != "/" and any(part in {"", ".", ".."} for part in value[1:].split("/")))):
+            raise ValueError("Workspace must be an absolute canonical path")
         if key.endswith("_PROFILE") and not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", value):
             raise ValueError("Ungültige technische Profilkennung")
         if "_REASONING_" in key and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", value):

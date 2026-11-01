@@ -23,6 +23,9 @@ from bind_recovery import SOURCE as RECOVERY_LAUNCHER, TRANSFORM as RECOVERY_TRA
 LEGACY_COMMIT = '21cae6551c03b6ab84d004f41fc81c921e3e9837'
 LEGACY_VERSION = '1.0.0'
 SCHEMA = 1
+# Reviewed pre-1.1.4 renderer: identical substitution/validation for old fields.
+ROLE_BINDING_PREDECESSOR = '051cf4e1e693534cd8ecd75f3fc55e8f8baf9c975f4bf7bd358acd19e6602117'
+ROLE_BINDING_FIELDS = {'PROJECT_DIR', 'REPOSITORY_ROOTS', 'PLANNER_PROFILE'}
 OPERATIONAL = ('references/integrations.md', 'references/setup.md',
                'references/code-analysis.md', 'references/native-workflow.md',
                'references/kanban-block-triage-escalation.md', 'references/render_text.py')
@@ -235,6 +238,14 @@ def desired(repo, commit, roles, values, souls_only=False, bindings=None):
         template = blob(repo, commit, source).decode()
         fields = role_fields(template, role)
         raw = dict(values, ROLE_NAME=values[ROLE_NAMES[role]])
+        if 'PLANNER_PROFILE' in fields:
+            raw.setdefault('PLANNER_PROFILE', roles['planner']['id'])
+            if raw['PLANNER_PROFILE'] != roles['planner']['id']:
+                raise ValueError('Confirmed profile ID differs from actual role binding: planner')
+        missing = fields - raw.keys()
+        if missing:
+            raise ValueError('Missing confirmed role bindings: ' + ', '.join(sorted(missing)) +
+                             '; operator must resolve existing setup evidence before rendering')
         content = render_role(template, {key: raw[key] for key in fields}, role).encode()
         result.append({'role': role, 'source': source, 'target': str(Path(roles[role]['home']) / 'SOUL.md'),
                        'transform': 'render-role-v1', 'content': content, 'mode': 0o600})
@@ -456,7 +467,9 @@ def prepare(repo, home, ref='HEAD'):
     if old['maker_version'] != package_version(repo, old['maker_commit']):
         raise ValueError('Recorded package version mismatch')
     renderer = Path(__file__).with_name('render_text.py').read_bytes()
-    if any(blob(repo, rev, 'references/render_text.py') != renderer for rev in (old['maker_commit'], commit)):
+    old_renderer = blob(repo, old['maker_commit'], 'references/render_text.py')
+    if (blob(repo, commit, 'references/render_text.py') != renderer or
+            (old_renderer != renderer and digest(old_renderer) != ROLE_BINDING_PREDECESSOR)):
         raise ValueError('Changed renderer: withhold rendered files and review transform compatibility before migration')
     old_entries = desired(repo, old['maker_commit'], old['roles'], old['confirmed_values'], old['legacy_skills_unknown'],
                           bindings=old['confirmed_bindings'])
@@ -479,7 +492,23 @@ def prepare(repo, home, ref='HEAD'):
         if setup.get('roles') != old['roles']:
             raise ValueError('Maker setup roles differ from recorded team')
         bindings['triage_recovery'] = setup.get('triage_recovery')
-    new_entries = desired(repo, commit, old['roles'], old['confirmed_values'], old['legacy_skills_unknown'],
+    values = dict(old['confirmed_values'])
+    needed = set().union(*(role_fields(blob(repo, commit, item['template_path']).decode(), role)
+                          for role, item in new_manifest['role_templates'].items()))
+    missing = (needed & ROLE_BINDING_FIELDS) - values.keys()
+    if missing - {'PLANNER_PROFILE'}:
+        if read(state / 'setup.md') is None:
+            raise ValueError('Missing confirmed role bindings: ' + ', '.join(sorted(missing)) +
+                             '; operator must supply confirmed setup evidence')
+        setup = setup_data(state)
+        if setup['confirmed_bindings'].get('roles') != old['roles']:
+            raise ValueError('Maker setup roles differ from recorded team')
+        for field in missing:
+            if field in setup['confirmed_values']:
+                values[field] = setup['confirmed_values'][field]
+    if 'PLANNER_PROFILE' in needed:
+        values.setdefault('PLANNER_PROFILE', old['roles']['planner']['id'])
+    new_entries = desired(repo, commit, old['roles'], values, old['legacy_skills_unknown'],
                           bindings=bindings)
     new_targets = {entry['target'] for entry in new_entries}
     dependencies = []
@@ -514,7 +543,7 @@ def prepare(repo, home, ref='HEAD'):
     obsolete = sorted(set(stored) - new_targets)
     proposal = {'schema': SCHEMA, 'team_id': old['team_id'], 'home': str(home), 'repo': str(Path(repo).resolve()),
                 'record_hash': digest(raw), 'maker_commit': commit, 'maker_version': version,
-                'confirmed_bindings': bindings,
+                'confirmed_bindings': bindings, 'confirmed_values': values,
                 'entries': entries, 'obsolete': obsolete, 'conflicts': conflicts, 'dependencies': dependencies,
                 'notices': ['legacy skills: baseline unknown; withheld'] if old['legacy_skills_unknown'] else [],
                 'activity': activity(old['roles']), 'semantic_review_required': True}
@@ -553,7 +582,7 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
     # paths or merged bytes as an arbitrary write payload.
     fresh_path = prepare(proposal['repo'], home, proposal['maker_commit'])
     fresh = json.loads(required_read(fresh_path))
-    for key in ('entries', 'obsolete', 'dependencies', 'maker_version', 'notices', 'confirmed_bindings'):
+    for key in ('entries', 'obsolete', 'dependencies', 'maker_version', 'notices', 'confirmed_bindings', 'confirmed_values'):
         if fresh[key] != proposal[key]:
             raise ValueError('Proposal/source/target drift; prepare and review again')
     if fingerprint(state / 'installation.json') != proposal['record_hash'] or read(path) != proposal_raw:
@@ -599,7 +628,7 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
             if fingerprint(entry['target']) != digest(decoded(entry['merged'])) or file_mode(entry['target']) != entry['mode']:
                 raise ValueError('Final target readback mismatch: ' + entry['target'])
         updated = dict(old, maker_commit=proposal['maker_commit'], maker_version=proposal['maker_version'],
-                       confirmed_bindings=proposal['confirmed_bindings'],
+                       confirmed_bindings=proposal['confirmed_bindings'], confirmed_values=proposal['confirmed_values'],
                        managed=managed, last_run=str(run), retained_obsolete=proposal['obsolete'])
         updated_raw = json_bytes(updated)
         journal['record_after'] = encoded(updated_raw)

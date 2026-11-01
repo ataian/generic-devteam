@@ -52,6 +52,12 @@ anhalten und mit dem Nutzer klären, kein Repo verschieben und keine abweichende
 Bindungen still anlegen. Der Renderwert PROJECT_NAME bleibt ein einzelnes Segment
 ohne Slash, Backslash oder Traversal; Leerzeichen sind zulässig. PROJECT_DIR trägt
 unabhängig davon den bestätigten absoluten Workspace für die native Konfiguration.
+Reuse `PROJECT_DIR` as a Planner render value.
+Save the already confirmed repository boundaries as `REPOSITORY_ROOTS` in `confirmed_values`.
+Use single-line text with explicit planning and implementation assignments for those absolute paths.
+Preserve multiple repositories and nested checkouts.
+If no repository exists yet, record that confirmed fact instead of inventing a root.
+Do not repeat questions for confirmed paths.
 Erfasse vorhandene Repositorygrenzen,
 Root- und relevante Bereichs-AGENTS sowie Manifeste/Lockfiles/Build-/Testkonfiguration.
 Der Workspace muss kein Git-Root sein und wird nicht automatisch initialisiert.
@@ -298,21 +304,26 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    fields = role_fields(role_template_text, role)
    if fields != set(role_manifest["render_fields"]):
        raise ValueError("Vorlage und deklarierte Rollenfelder widersprechen sich")
+   missing = fields - role_source.keys()
+   if missing:
+       raise ValueError("Missing confirmed role bindings: " + ", ".join(sorted(missing)))
    role_values = {field: role_source[field] for field in fields}
    soul_text = render_role(role_template_text, role_values, role)
    ```
 
-   `confirmed_values` sind die bestätigten Rohwerte aus dem Setuprecord (Namen,
-   Projekt, Bank, rückgelesenes Board, technische Profil-IDs und die vier Reasoning-
-   Renderwerte aus Abschnitt 2; feste Planner-/Hermes-Coder-Stufen sowie die für die Konfiguration
-   gespeicherte Codex-Modell-ID werden nicht als Rollenfelder übergeben);
+   Use the confirmed raw names, project, bank, board, profile IDs, and reasoning render values from `confirmed_values`.
+   Include `PROJECT_DIR` and `REPOSITORY_ROOTS` for the Planner.
+   Include `PLANNER_PROFILE` for the Coder.
+   Check `PLANNER_PROFILE` against `confirmed_bindings.roles.planner.id` before rendering.
+   Do not pass fixed Planner/Hermes-Coder reasoning or the Codex model ID as role fields.
    `role_manifest` ist der passende Eintrag aus `role_templates`. Fehlende Werte
    stoppen die Ausgabe, keine Leerdefaults und keine neuen IDs erfinden.
    `ROLE_NAME` entspricht stets dem eigenen Anzeigenamen, nie der technischen ID.
    `role` ist `planner`, `coder` oder `reviewer`. `confirmed_bindings` dokumentiert
    die tatsächlich aufgelösten Zielwerte im privaten Record.
    Do not generate a separate runtime configuration file from these values.
-   Bind only the recovery launcher through the Maker step below.
+   Render the role bindings through the existing SOUL templates.
+   Bind the recovery launcher through the Maker step below.
    Kommunikationswerte bleiben beim Planner. Verwende technische
    Werte unverändert als Daten, nicht die maskierte Markdownfassung als Shellwerte.
 5. Der Textweg validiert den [Rollenfeldvertrag](native-workflow.md#2-rollen-souls-personalisieren): nichtleere

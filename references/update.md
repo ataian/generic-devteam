@@ -137,12 +137,31 @@ It compares local launcher edits against the bound baseline, not the generic tem
 If an older marker lacks the binding, the Maker/operator resolves it from confirmed setup and dispatcher evidence before preparing the update.
 Save that binding under `confirmed_bindings.triage_recovery` in the existing private setup JSON.
 Keep `confirmed_bindings.roles` equal to the recorded team roles.
-The updater adopts only the missing recovery binding into its reviewed proposal and installation record.
+The updater adopts the missing recovery binding into its reviewed proposal and installation record.
 If the marker already has the binding, the updater preserves it without reading `setup.md`.
 Do not assign that reconciliation to the planner.
 Do not replace unknown local launcher edits with a generic copy.
 Removed source files are listed as `obsolete` and retained on disk.
-A changed renderer is withheld until its transform compatibility is reviewed in a separate implementation change.
+The helper accepts the reviewed pre-1.1.4 renderer by its exact source hash.
+That compatibility case adds role fields without changing substitution of old fields.
+The helper still verifies each old personalized baseline against the stored bytes.
+Other renderer changes remain withheld until transform compatibility is reviewed.
+
+For pre-1.1.4 teams, transfer the already confirmed workspace into `confirmed_values.PROJECT_DIR` in the existing setup JSON.
+Transfer the confirmed repository boundaries into `confirmed_values.REPOSITORY_ROOTS` there.
+Keep planning and implementation assignments separate in that single-line text.
+Preserve multiple repositories and nested checkouts.
+If no repository exists yet, record that confirmed fact instead of inventing a root.
+Do not infer missing paths from the project name or a current working directory.
+Do not repeat the setup interview.
+If confirmed evidence is missing, report the unresolved binding to the operator before preparing the update.
+The updater adopts only missing role-binding values from that setup JSON.
+It reuses the recorded Planner role ID if `PLANNER_PROFILE` is absent.
+It rejects a conflicting Planner ID.
+It preserves values already present in the installation record.
+It saves adopted values only after successful target verification.
+Later updates use those recorded values without reading `setup.md`.
+Do not assign this reconciliation to the Planner or Coder.
 
 Read the proposal and the changed SOULs and skill files.
 Decode the proposal's `new_base` and `merged` fields as base64 if you inspect their bytes programmatically.

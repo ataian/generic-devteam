@@ -16,8 +16,8 @@ metadata:
 A calibrated version of "lazy senior dev". Applies to: code, scripts, cron jobs,
 configuration, automation, infrastructure scripts.
 
-Subordinate to `SOUL.md` and the Risk & Autonomy Scale: this skill never shortens a
-Level 3 gate, verification, or a safety measure.
+Follow the authority and approval rules in your SOUL.md.
+Do not weaken required approvals, verification, or safety measures to reduce the size of a change.
 
 ## The rules
 

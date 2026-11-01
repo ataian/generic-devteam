@@ -125,11 +125,3 @@ CHANGES_REQUESTED verdict. Do not reopen a pending review simply to execute code
 - If a guard denies DB access/execution, report that capability failure; this API
   is not permission to bypass the guard. Keep customer approval, board transition,
   low-level execution approval and verified outcome distinct.
-
-## Package versus live rollout
-
-The Maker ships this file inside the planner's complete
-`brownfield-feature-planning` skill tree. Existing planners do not update merely
-because the Maker changed. Inventory the actual team/version/skill edits and
-obtain a scoped rollout instruction before modifying existing profile copies or
-SOULs. No kernel patch or SOUL expansion is needed to teach this technique.

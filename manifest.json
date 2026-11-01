@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "runtime-acceptance-open",
   "files": [
@@ -66,7 +66,9 @@
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
+        "PROJECT_DIR",
         "PROJECT_NAME",
+        "REPOSITORY_ROOTS",
         "REVIEWER_NAME",
         "REVIEWER_PROFILE",
         "ROLE_NAME"
@@ -92,6 +94,7 @@
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
+        "PLANNER_PROFILE",
         "PROJECT_NAME",
         "REVIEWER_NAME",
         "REVIEWER_PROFILE",
@@ -352,8 +355,7 @@
       ],
       "targets": {
         "hermes": [
-          "coder",
-          "reviewer"
+          "coder"
         ],
         "codex": [
           "team-codex"

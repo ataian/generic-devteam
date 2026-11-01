@@ -32,10 +32,13 @@ einzigen JSON-Block speichern, nicht seine Markdownmaskierung. Mit `json.dumps`
 gemäß [Setupweg](../references/setup.md) befüllen und mit `json.loads` rücklesen;
 Tabellen sind Belegübersichten, keine verlustfreie Datenquelle. Bei Resume wiederverwenden,
 nur fehlende Werte oder Drift klären; native Objekte bleiben Zustandsautorität.
-`confirmed_values` enthält Namen, Projekt, Bank, Board, technische Profil-IDs,
-die vier Reasoning-Renderwerte sowie feste Planner-/Hermes-Coder-Stufen und die
-bereits bestätigte Codex-ID nur für die technische Konfiguration; `confirmed_bindings`
-enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht erfasst.
+Store confirmed names, project, bank, board, profile IDs, and reasoning values in `confirmed_values`.
+Store the confirmed workspace as `PROJECT_DIR` in that same object.
+Store the confirmed repository boundaries as `REPOSITORY_ROOTS` in that same object.
+Keep planning and implementation assignments separate in the single-line repository text.
+Keep fixed Planner/Hermes-Coder reasoning and the Codex model ID for native configuration only.
+Store resolved technical bindings in `confirmed_bindings`.
+Empty objects mean that values have not been recorded.
 
 ```json
 {
@@ -50,6 +53,8 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 | CODER_NAME | offen | offen |
 | REVIEWER_NAME | offen | offen |
 | PROJECT_NAME | offen | offen |
+| PROJECT_DIR (canonical absolute workspace) | pending | pending |
+| REPOSITORY_ROOTS (single-line absolute paths with separate planning and implementation assignments, or confirmed absence) | pending | pending |
 | HINDSIGHT_BANK_NAME | offen | offen |
 | KANBAN_BOARD_NAME = BOARD (Kennung, nicht Anzeigetitel) | offen | offen |
 | PLANNER_PROFILE | offen | offen |

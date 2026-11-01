@@ -57,6 +57,10 @@ class ReasoningContractTests(unittest.TestCase):
         for key in values:
             if key.endswith("_PROFILE"):
                 values[key] = "example-role"
+            elif key == "PROJECT_DIR":
+                values[key] = "/work/project"
+            elif key == "REPOSITORY_ROOTS":
+                values[key] = "Planning: /work/plans; implementation: /work/project/code"
             elif key.endswith("_REASONING_DEFAULT"):
                 values[key] = default
             elif key.endswith(("_REASONING_MAX", "_REASONING_HIGH")):
@@ -139,12 +143,42 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertNotIn("Nach jedem `kanban_request_review`", text)
 
     def test_coder_routes_decisions_outside_its_mandate_to_planner(self):
-        text = self.template("coder")
-        self.assertIn("Route the same task to the verified Planner profile through native `kanban_request_review`.", text)
-        self.assertIn("The Planner profile identifier comes from the setup record", text)
+        values = self.values("coder")
+        values["PLANNER_PROFILE"] = "confirmed-planner"
+        text = render_role(self.template("coder"), values, "coder")
+        self.assertIn("Route the same task to `confirmed-planner` through native `kanban_request_review`.", text)
+        self.assertIn("Send one TIMER request to `confirmed-planner` through `kanban_create`.", text)
+        self.assertIn("Check `confirmed-planner` against the native profile registration before routing a task or TIMER request.", text)
+        self.assertNotIn("setup record", text)
         self.assertIn("Resume after `kanban_request_changes` and reread the baseline.", text)
+        missing = dict(values)
+        del missing["PLANNER_PROFILE"]
+        with self.assertRaises(ValueError):
+            render_role(self.template("coder"), missing, "coder")
+        for bad in ("Display Name", "other/profile", "wrong\nprofile"):
+            with self.subTest(profile=bad), self.assertRaises(ValueError):
+                render_role(self.template("coder"), dict(values, PLANNER_PROFILE=bad), "coder")
         self.assertNotIn("Budgetfragen", text)
         self.assertNotIn("Budgetfreigaben", text)
+
+    def test_planner_renders_confirmed_workspace_and_separate_repository_roots(self):
+        values = self.values("planner")
+        values.update(PROJECT_DIR="/work/client's project",
+                      REPOSITORY_ROOTS="Planning: /work/plans; implementation: /work/client's project/backend, /work/frontend")
+        text = render_role(self.template("planner"), values, "planner")
+        self.assertIn("`/work/client's project`", text)
+        self.assertIn("`Planning: /work/plans; implementation: /work/client's project/backend, /work/frontend`", text)
+        self.assertNotIn("setup record", text)
+        self.assertIn("actual Git root", text)
+        self.assertIn("`terminal.cwd`, board, and ticket bindings", text)
+        for field in ("PROJECT_DIR", "REPOSITORY_ROOTS"):
+            missing = dict(values)
+            del missing[field]
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                render_role(self.template("planner"), missing, "planner")
+        for bad in ("relative/path", "~/work", "/work/../other", "/work//code", "/work/."):
+            with self.subTest(path=bad), self.assertRaises(ValueError):
+                render_role(self.template("planner"), dict(values, PROJECT_DIR=bad), "planner")
 
     def test_planner_preserves_scope_safeguards_without_budget_counter(self):
         text = self.template("planner")

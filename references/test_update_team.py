@@ -42,6 +42,9 @@ class UpdaterTests(unittest.TestCase):
             'PLANER_NAME', 'CODER_NAME', 'REVIEWER_NAME', 'PROJECT_NAME',
             'HINDSIGHT_BANK_NAME', 'KANBAN_BOARD_NAME', 'CODER_PROFILE', 'REVIEWER_PROFILE',
             'CODEX_REASONING_DEFAULT', 'CODEX_REASONING_MAX', 'ROLE_REASONING_DEFAULT', 'ROLE_REASONING_HIGH']}
+        values['PLANNER_PROFILE'] = self.roles['planner']['id']
+        values['PROJECT_DIR'] = "/synthetic/client's workspace"
+        values['REPOSITORY_ROOTS'] = "Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code"
         values['CODER_PROFILE'] = self.roles['coder']['id']
         values['REVIEWER_PROFILE'] = self.roles['reviewer']['id']
         self.bindings = {'board': 'sample', 'roles': self.roles, 'triage_recovery': {
@@ -75,6 +78,87 @@ class UpdaterTests(unittest.TestCase):
 
     def proposal(self):
         return u.prepare(self.repo, self.home, 'HEAD')
+
+    def historical_installation(self, commit, legacy=False):
+        original = Path(__file__).resolve().parents[1]
+        self.git('fetch', '-q', str(original), commit)
+        setup_path = self.state / 'setup.md'
+        setup = u.setup_data(self.state)
+        old_values = {key: value for key, value in setup['confirmed_values'].items()
+                      if key not in ('PROJECT_DIR', 'REPOSITORY_ROOTS', 'PLANNER_PROFILE')}
+        setup_path.write_text('```json\n' + json.dumps(dict(setup, confirmed_values=old_values)) + '\n```\n')
+        historical_renderer = {}
+        exec(u.blob(self.repo, commit, 'references/render_text.py'), historical_renderer)
+        for entry in u.desired(self.repo, commit, self.roles, old_values, souls_only=legacy, bindings=self.bindings):
+            content = entry['content']
+            if entry['transform'] == 'render-role-v1':
+                role = entry['role']
+                template = u.blob(self.repo, commit, entry['source']).decode()
+                fields = historical_renderer['role_fields'](template, role)
+                raw = dict(old_values, ROLE_NAME=old_values[u.ROLE_NAMES[role]])
+                content = historical_renderer['render_role'](template, {key: raw[key] for key in fields}, role).encode()
+                self.assertEqual(entry['content'], content, 'Current renderer must reproduce exact historical output')
+            Path(entry['target']).write_bytes(content)
+        if legacy:
+            self.initialize(legacy=True)
+        else:
+            u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=commit,
+                         basis_evidence='Synthetic exact source installation')
+        return setup
+
+    def check_historical_binding_upgrade(self, commit, legacy=False):
+        setup = self.historical_installation(commit, legacy)
+        # Existing confirmed evidence is supplied by the operator, not the role.
+        (self.state / 'setup.md').write_text('```json\n' + json.dumps(setup) + '\n```\n')
+        target = self.home / 'SOUL.md'
+        target.write_text('Local team note\n' + target.read_text())
+        plan = self.proposal()
+        self.assertFalse(json.loads(plan.read_text())['conflicts'])
+        result = u.apply(self.home, plan, decision='proceed', review='Checked bindings and local note',
+                         dependency_review='Approved file-only migration')
+        self.assertEqual(result['status'], 'applied')
+        self.assertTrue(target.read_text().startswith('Local team note\n'))
+        self.assertIn("`/synthetic/client's workspace`", target.read_text())
+        self.assertIn("`Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code`", target.read_text())
+        coder = (Path(self.roles['coder']['home']) / 'SOUL.md').read_text()
+        self.assertIn('Route the same task to `fixture-planner`', coder)
+        self.assertIn('Send one TIMER request to `fixture-planner`', coder)
+        record = json.loads((self.state / 'installation.json').read_text())
+        self.assertEqual(record['confirmed_values']['PROJECT_DIR'], setup['confirmed_values']['PROJECT_DIR'])
+        self.assertEqual(record['confirmed_values']['REPOSITORY_ROOTS'], setup['confirmed_values']['REPOSITORY_ROOTS'])
+        self.assertEqual(record['confirmed_values']['PLANNER_PROFILE'], 'fixture-planner')
+        (self.state / 'setup.md').rename(self.state / 'audit-only.md')
+        self.assertFalse(json.loads(self.proposal().read_text())['conflicts'])
+
+    def test_113_installation_adopts_confirmed_role_bindings(self):
+        self.check_historical_binding_upgrade('da11a12710aace9a0522c88fd8fb3ef378711d0c')
+
+    def test_100_soul_baseline_adopts_confirmed_role_bindings(self):
+        self.check_historical_binding_upgrade(u.LEGACY_COMMIT, legacy=True)
+
+    def test_old_installation_missing_path_binding_stops_without_writes(self):
+        setup = self.historical_installation('da11a12710aace9a0522c88fd8fb3ef378711d0c')
+        marker = (self.state / 'installation.json').read_bytes()
+        before = (self.home / 'SOUL.md').read_bytes()
+        for field in ('PROJECT_DIR', 'REPOSITORY_ROOTS'):
+            values = dict(setup['confirmed_values'])
+            del values[field]
+            (self.state / 'setup.md').write_text('```json\n' + json.dumps(dict(setup, confirmed_values=values)) + '\n```\n')
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'Missing confirmed.*' + field):
+                self.proposal()
+            self.assertEqual((self.home / 'SOUL.md').read_bytes(), before)
+            self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+        (self.state / 'setup.md').rename(self.state / 'audit-only.md')
+        with self.assertRaisesRegex(ValueError, 'Missing confirmed.*operator'):
+            self.proposal()
+        self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+
+    def test_old_installation_rejects_conflicting_planner_id(self):
+        setup = self.historical_installation('da11a12710aace9a0522c88fd8fb3ef378711d0c')
+        setup['confirmed_values']['PLANNER_PROFILE'] = 'wrong-planner'
+        (self.state / 'setup.md').write_text('```json\n' + json.dumps(setup) + '\n```\n')
+        with self.assertRaisesRegex(ValueError, 'profile ID'):
+            self.proposal()
 
     def test_bound_launcher_is_regenerated_and_binding_survives_updates(self):
         source = 'skills/brownfield-feature-planning/scripts/recover-triage'
