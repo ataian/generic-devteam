@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Richte ein natives Hermes-Projektteam unter Linux ein.
-version: 1.0.0
+version: 1.1.0
 author: Max
 license: MIT
 platforms: [linux]
@@ -25,6 +25,14 @@ Nachweise. Du baust weder einen Installerframework noch einen zweiten Dispatcher
 - Bei Paketautorenschaft/Review nur Dateien prüfen. Das Lesen dieses Skills erteilt
   keine Installation, Aktivierung, Dienst- oder Modellfreigabe.
 - Fachliche Projektplanung folgt später als eigener Auftrag.
+
+## Existing team updates
+
+If the user asks to check and apply Maker changes, read [Team updates](references/update.md).
+Use the existing private setup values and installation evidence.
+Do not repeat the setup interview.
+Keep updates user-triggered.
+Do not treat a Maker source change as permission for live rollout.
 
 ## Voraussetzungen
 

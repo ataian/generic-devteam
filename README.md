@@ -100,6 +100,17 @@ und eigenen Anpassungen vergleichen und den gezielten Änderungsumfang genehmige
 lassen. Vorherige eigene Dateistände geschützt aufbewahren. Rückbau betrifft nur
 protokollierte eigene Objekte/Einträge; Datenlöschung braucht eine eigene Freigabe.
 
+## Update existing teams
+
+To request a file update, ask: “Check the Maker for changes and apply them to my local teams.”
+Read [Team updates](references/update.md) before changing any team files.
+The updater uses existing setup values, per-team installation evidence, and pristine personalized baselines.
+It preserves local edits through a three-way comparison.
+It requires semantic review and an explicit activity decision before application.
+It retains backups and provides a guarded rollback.
+It does not install runtime components, stop workers, or restart sessions.
+Report skipped and failed teams separately.
+
 ## Öffentliche Paketprüfung — ohne Dienste oder private Quellen
 
 Die [Prüfanleitung](references/verification.md) enthält zwei Checklisten:

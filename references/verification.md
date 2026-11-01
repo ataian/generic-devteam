@@ -43,6 +43,17 @@ Vorhandene Pakettests können diese Prüfung unterstützen. Maßgeblich sind ihr
 wirklichen Prüfinhalte und Ergebnisse; eine frühere Testbeschreibung oder ein
 Testlauf ohne gefundene Tests ist kein Nachweis.
 
+## Updater verification
+
+Run `python3 -B -m unittest discover -s references -p 'test_*.py'` for the offline updater and renderer contracts.
+Check that `SKILL.md` and `manifest.json` declare the same package SemVer.
+For a newly recorded team, read back the exact commit, version, actual role homes, and complete managed mappings.
+Compare stored pristine baselines with personalized Maker output, not local edits.
+For an applied update, read back its target files, installation record, and result journal.
+For a rollback, read back restored bytes and metadata before reporting restoration.
+Follow [Team updates](update.md) for semantic review, activity decisions, dependencies, and retained files.
+Keep file verification separate from agent behavior and runtime acceptance.
+
 ## 2. Team nach Einrichtung prüfen
 
 Erst im beauftragten Zielsetup mit bestätigten Rollen, Diensten, Modellzugängen,

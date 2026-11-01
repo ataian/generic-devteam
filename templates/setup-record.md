@@ -67,6 +67,24 @@ enthält die bestätigten Bindungsrohdaten. Leere Objekte bedeuten noch nicht er
 - ROLE_NAME je Rolle aus PLANER_NAME / CODER_NAME / REVIEWER_NAME: offen
 - Je Rolle: Vorlagenrevision/Hash, deklarierte und tatsächlich vorkommende Felder, gerenderter Solltext/Hash, exaktes SOUL.md-Ziel, Annahme und bytegenaue Rücklese: offen
 
+## File update evidence
+
+Record the installation marker at `<planner home>/devteam/installation.json`.
+Keep the same nonsecret role bindings under `confirmed_bindings.roles` in the JSON block above.
+Use `{"id": "actual-id", "home": "/actual/canonical/home"}` for each role.
+Use the actual process HOME for `team-codex`.
+
+- Package SemVer and exact Maker commit: pending.
+- Baseline provenance and evidence: pending.
+- Managed mappings and pristine baseline readbacks: pending.
+- Activity finding and explicit proceed or skip decision: pending.
+- Semantic review and operational dependency decision: pending.
+- Proposal, backup run, target readbacks, and per-team result: pending.
+- Rollback receipt and retained additions or obsolete files: pending.
+
+Follow the Maker's `references/update.md` for an authorized update.
+Do not interpret this record as rollout permission.
+
 ## Native Zuständigkeit und Freigaben
 
 - Hermesrevision / Resolver / Terminalbackend: offen

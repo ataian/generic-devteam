@@ -450,6 +450,17 @@ auch wenn die Anlage diesem Setup gehört. Rücklese beweist den Rückweg.
 Paketprüfung und Zielabnahme getrennt ausweisen. Ein technisches Team ist noch
 kein fachlich eingearbeitetes Projektteam.
 
+## Record the installation baseline
+
+After the role and own-skill file readbacks pass, follow [Team updates](update.md#record-a-new-team).
+Save the actual role IDs and homes under `confirmed_bindings.roles` in the existing private setup JSON.
+Use the actual process HOME for the `team-codex` role.
+Run `update_team.py init` against the reviewed committed Maker source.
+Read back `devteam/installation.json` and its pristine baseline files.
+Record the package SemVer and exact Maker commit in the setup evidence.
+Do not use the initialization helper to install files or bypass runtime acceptance.
+If the team already exists, use the documented existing-team baseline path instead.
+
 ## Versionsgebundene Quellen
 
 [Profile](https://hermes-agent.nousresearch.com/docs/reference/profile-commands),

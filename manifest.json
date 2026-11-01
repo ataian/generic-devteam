@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "stage": "runtime-acceptance-open",
   "files": [
     "LICENSE",
@@ -14,6 +14,9 @@
     "references/render_text.py",
     "references/setup.md",
     "references/test_render_reasoning.py",
+    "references/test_update_team.py",
+    "references/update.md",
+    "references/update_team.py",
     "references/upstream-sources.md",
     "references/verification.md",
     "skills/brownfield-feature-planning/SKILL.md",
