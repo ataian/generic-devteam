@@ -1,8 +1,9 @@
 {
   "name": "generic-devteam",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "stage": "runtime-acceptance-open",
   "files": [
+    "AGENTS.md",
     "LICENSE",
     "NOTICE.md",
     "README.md",
@@ -13,6 +14,7 @@
     "references/native-workflow.md",
     "references/render_text.py",
     "references/setup.md",
+    "references/tas-authoring-standard.md",
     "references/test_render_reasoning.py",
     "references/test_triage_recovery.py",
     "references/test_update_team.py",

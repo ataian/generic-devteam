@@ -9,7 +9,7 @@ Apply one bump to a coherent changeset or release, not one bump per file or test
 Keep historical commits and their version values unchanged.
 Record the package version and exact Maker commit separately in setup and update evidence.
 
-Read `/home/joi/obsidian_vault/System/Assistant/TAS-SOUL-Authoring-Standard.md` before editing agent-context Markdown.
+Read [TAS authoring standard](references/tas-authoring-standard.md) before editing agent-context Markdown.
 Apply TAS to every new or changed instruction in those files.
 Keep role-template changes and live-team rollout as separate authorizations.
 Run `python3 -B -m unittest discover -s references -p 'test_*.py'` before committing package changes.

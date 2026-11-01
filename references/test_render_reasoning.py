@@ -2,6 +2,8 @@
 import json
 from pathlib import Path
 import re
+import shutil
+import tempfile
 import unittest
 
 from render_text import render_role, role_fields
@@ -13,6 +15,37 @@ REASONING_FIELDS = {
     "coder": {"CODEX_REASONING_DEFAULT", "CODEX_REASONING_MAX"},
     "reviewer": {"ROLE_REASONING_DEFAULT", "ROLE_REASONING_HIGH"},
 }
+
+
+class TasPortabilityTests(unittest.TestCase):
+    def read_standard(self, root):
+        instructions = (root / "AGENTS.md").read_text()
+        link = re.search(r"Read \[TAS authoring standard\]\(([^)]+)\)", instructions)
+        if link is None:
+            self.fail("The required standard needs a relative Markdown link")
+        relative = Path(link[1])
+        self.assertFalse(relative.is_absolute())
+        target = (root / relative).resolve()
+        self.assertTrue(target.is_relative_to(root.resolve()))
+        return target.read_text()
+
+    def test_required_standard_resolves_inside_maker(self):
+        self.assertTrue(self.read_standard(ROOT).strip())
+
+    def test_manifest_export_contains_instructions_and_standard_without_vault(self):
+        with tempfile.TemporaryDirectory(prefix="maker-tas-") as directory:
+            export = Path(directory)
+            for relative in MANIFEST["files"] + ["manifest.json"]:
+                source = ROOT / relative
+                target = export / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
+            self.assertTrue((export / "AGENTS.md").is_file(), "Ship the package authoring instructions")
+            standard = self.read_standard(export)
+            self.assertNotIn("/home/", standard)
+            self.assertNotIn("obsidian_vault", standard)
+            self.assertNotIn("[[", standard)
+            self.assertTrue(standard.strip())
 
 
 class ReasoningContractTests(unittest.TestCase):
