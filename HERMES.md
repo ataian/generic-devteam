@@ -19,6 +19,8 @@ Remove recurring Maker-development research and behavioral qualification from no
 Max accepted the written specification in its substantive form from commit `0694e651df32dbe7d5187d6d4105fb2b91819b0c` and authorized implementation planning.
 The implementation plan remains a draft and requires separate approval before execution.
 Max requires all foreseeable setup choices to be resolved in a grouped interview before installation starts. Later questions are limited to new problems/decisions or technically deferred actions disclosed upfront.
+For new profiles, derive a native-compatible lowercase ID from the display name (`Kirk` → `kirk`); ask separately only for conflicts. Preserve existing IDs on resume/update.
+Offer the requested defaults as one set: Planner Sol/high; Hermes Coder, Reviewer, and Team-Codex Sol/medium with maximum high. Resolve native model IDs separately and preserve confirmed overrides. The Coder's own reasoning bound is distinct from the Codex bound.
 After the two implementation phases and reviews, pause for Max's practical setup trial. Do not begin cleanup automatically.
 Keep this file and the planning artifacts until that trial and separate cleanup authorization. The planned final cleanup removes temporary local context/planning files from the tracked tree, not Git history or functional Maker/update assets.
 
