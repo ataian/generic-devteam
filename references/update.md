@@ -182,6 +182,10 @@ Ask the user to approve or defer the dependent file changes.
 Keep the whole team proposal withheld until that decision is recorded.
 Use `--dependency-decision` only to record that decision.
 It does not authorize runtime configuration or integration changes.
+If the helper recipe changed, report the required Team-Codex model and helper reasoning assignments from [the recipe](integrations.md#codex-agents).
+The file updater does not manage the six upstream agent TOMLs.
+Obtain separate authorization before adapting installed helper files.
+Reuse the team's confirmed `CODEX_MODEL`, `CODEX_REASONING_DEFAULT`, and `CODEX_REASONING_MAX`; preserve other fields and local edits.
 If the required runtime capability is absent, defer the dependent proposal.
 
 ## Activity and application

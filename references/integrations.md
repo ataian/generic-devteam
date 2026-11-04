@@ -121,7 +121,7 @@ Preserve unrelated entries. The Coder reads the configured model; reasoning defa
 Keep `CODEX_REASONING_MAX` in the existing Coder SOUL policy, without a new technical maximum key.
 A default does not limit CLI overrides. Check supported levels and access through native availability/configuration readbacks, without higher-reasoning experiments.
 
-Place skills at `CODEX_PROCESS_HOME/.agents/skills/<name>/` and original TOMLs at `CODEX_HOME/agents/`.
+Place skills at `CODEX_PROCESS_HOME/.agents/skills/<name>/` and the adapted [VoltAgent installation copies](#codex-agents) at `CODEX_HOME/agents/`.
 Read back effective config/skill roots, including compatible `CODEX_HOME/skills`, project/ancestor `.agents/skills`, project configuration, admin/system sources and inherited overrides.
 Separate homes reduce personal skill inheritance; they are not a sandbox.
 Preserve personal Codex files and project tool paths after the HOME change.
@@ -270,36 +270,42 @@ Later `npx skills` use can download packages; search results do not authorize in
 Route component suggestions through Coder to Planner instead of installing automatically.
 
 <a id="codex-agents"></a>
-## Sechs unveränderte Original-Agent-TOMLs
+## Six custom agents with Team-Codex model bindings
 
-[VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents),
-MIT-`LICENSE` erhalten. Genau die sechs Originalpfade des
-[Manifests](../manifest.json) beziehen: `test-automator`, `security-auditor`,
-`reviewer`, `anti-ui-slop-reviewer`, `ui-fixer`, `docker-expert`.
-Keine anderen Agentpakete pauschal installieren. Nach `CODEX_HOME/agents/` unter
-Originalbasename schreiben, erst nach Kollisions-/Eigentumsprüfung.
+Obtain exactly the six original agent files listed in the [manifest](../manifest.json) from
+[VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents).
+Preserve the MIT `LICENSE` and original source bytes, revision, and hashes outside active agent discovery.
+Do not install other agent packages as part of this step.
 
-Pro Datei **drei getrennte Nachweise** führen:
+Use `CODEX_MODEL`, `CODEX_REASONING_DEFAULT`, and `CODEX_REASONING_MAX` from the confirmed setup data.
+Set `model` to `CODEX_MODEL` in each of the six installation copies.
+Set `model_reasoning_effort` by this fixed assignment:
 
-1. Vollständige Originalbytes/Revision/Hash, TOML parsebar, Name,
-   `developer_instructions`, `model`, `model_reasoning_effort`, weitere Original-
-   Felder unverändert. Mit dem Original vergleichen, nicht nur Pins abschreiben.
-2. Vor Nutzung Original-Reasoningpins gegen die bestätigten Grenzen prüfen; bei
-   anderer Modell-/Providersemantik die Zuordnung ausdrücklich klären. Unvereinbare
-   Pins erhalten, betroffene Delegation bis zur Nutzerentscheidung nicht starten.
-   Native Discovery im tatsächlichen Team-Codex mit dieser Datei und wirksamen
-   Pins. Native Modellkonfiguration und Zugang prüfen; eigene Modell-/Reasoningauswahl ersetzt
-   keinen Originalpin. Provider/Approval/MCP können aus dem Parent kommen, eine
-   TOML-Sandboxzeile allein ist keine neue Sicherheitsgarantie.
-3. Read back the exact installed helper inventory and native configuration/access availability.
-   Do not delegate to every helper or generate test artifacts during setup.
-   No helper replaces the independent Hermes Reviewer.
+| Agents | Confirmed reasoning value |
+|---|---|
+| `test-automator`, `ui-fixer`, `docker-expert` | `CODEX_REASONING_DEFAULT` |
+| `reviewer`, `security-auditor`, `anti-ui-slop-reviewer` | `high`, capped by `CODEX_REASONING_MAX` |
 
-Fehlt ein Original-Modellpin im gewählten Zugang, halte die betroffene Pflichtfähigkeit offen und erhalte die Originaldatei.
-Planner benennt fehlende Verfügbarkeit und den nötigen autorisierten Zugang;
-keine stille Modellsubstitution, kein zweiter Anbieter als pauschale Voraussetzung.
-Rückweg nur eigene sechs unveränderte Kopien nach Hashabgleich; fremde Agenten bleiben.
-Native Referenz: [Custom Agents](https://developers.openai.com/codex/subagents.md).
+For the review helpers, use `high` if the confirmed maximum is `high` or higher.
+If the maximum is below `high`, use that maximum.
+Compare levels using the selected model/provider semantics, not lexical order.
+For example, maximum `medium` selects `medium`; maximum `ultra` selects `high`.
+Keep `CODEX_REASONING_DEFAULT` unchanged for the default group, even if it is above `high`.
+Resolve unsupported model or reasoning settings during preparation; do not substitute another model or level.
+Do not require availability of the original upstream model pins.
+Change only `model` and `model_reasoning_effort` in the installation copies.
+Preserve all other original fields and instructions.
+Write the adapted copies to `CODEX_HOME/agents/` under their original basenames after ownership and collision checks.
+
+During the existing file/configuration readback, compare each installed TOML with its original source.
+Confirm that only the two assigned fields differ and that all six assignments match the confirmed values.
+Record the original and installed hashes separately with the actual targets and source revision.
+Read back the installed inventory, native discovery, and configuration/access availability in the actual Team-Codex context.
+Keep provider, approval, and MCP inheritance from the parent; an agent TOML sandbox field is not a separate security boundary.
+Do not add model probes, specialist calls, or generated test artifacts to setup.
+No helper replaces the independent Hermes Reviewer.
+For recovery, restore only the recorded own files after hash comparison; preserve unrelated agents and local edits.
+Native reference: [Custom Agents](https://developers.openai.com/codex/subagents.md).
 
 <a id="hindsight"></a>
 ## Hindsight am vorhandenen Dienst
@@ -478,7 +484,7 @@ keine historische besondere Thread-Abnahme hinzufügen.
 
 Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to all three Hermes roles and Team-Codex.
 Read only that branch of [Code analysis](code-analysis.md) as setup instructions.
-For CBM deliver the complete official Codex subagents alongside the unchanged six VoltAgent helpers.
+For CBM deliver the complete official Codex subagents alongside the six [VoltAgent helpers with Team-Codex model bindings](#codex-agents).
 Verify setup targets, native discovery and connection/configuration readbacks without analysis experiments.
 Keep provenance in [Sources](upstream-sources.md).
 
