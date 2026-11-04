@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -14,6 +14,7 @@
     "references/development-verification.md",
     "references/integrations.md",
     "references/kanban-block-triage-escalation.md",
+    "references/main-agent-wrapper.md",
     "references/native-workflow.md",
     "references/render_text.py",
     "references/setup.md",
