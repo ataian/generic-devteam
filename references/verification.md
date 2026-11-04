@@ -4,6 +4,18 @@ Use this checklist for an authorized team setup after delivery and configuration
 Reuse exact evidence captured by each setup step; do not repeat successful steps as a test campaign.
 Read only the selected analysis branch and preserve confirmed values.
 
+## Evidence output
+
+Apply the [tool output contract](../SKILL.md#tool-output) to each readback below.
+Compare complete file inventories, bytes, mappings, and required native-loaded content without printing successful full payloads.
+Use the native interface's documented normalization when comparing loaded text.
+For skill discovery/loading, return success, the resolved source path, and required reference coverage in the actual consumer context.
+For SOUL loading, return the full-content comparison result and concrete differences if it fails.
+For file baselines, return the number checked, source revision, and every missing or mismatched target.
+Keep the complete comparison evidence in the existing private setup area.
+For configuration and access checks, return the required nonsecret values and their effective management sources.
+Report unverified items separately from successful checks.
+
 ## Required outputs
 
 - Profiles: compare actual native IDs, ownership, canonical homes, workspace/board bindings and personalized SOUL bytes with the confirmed dataset and rendered output. Read back full SOUL loading through the established interface; file existence alone is insufficient.

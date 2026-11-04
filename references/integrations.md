@@ -11,6 +11,22 @@ If a common runtime is missing or incompatible, report the concrete prerequisite
 Do not install, upgrade, repair or investigate shared runtimes as part of ordinary setup.
 Do not copy private profile components or invent replacement plugins.
 
+<a id="installation-output"></a>
+## Installation output
+
+Capture verbose noninteractive installation stdout and stderr in a mode-0600 log inside the existing mode-0700 private setup area before returning output to the model.
+Keep protected login, credential entry, and device codes outside these logs.
+Preserve the command's exit status independently of output filtering.
+Inspect the captured result for failure, scanner verdicts, warnings, and required user actions.
+Return the component, target, exit status, relevant findings, and log path.
+If a scanner blocks installation, read its findings and present their concrete scope before requesting the existing approval.
+Do not infer approval from a compact summary or retry with an override without authorization.
+If the result is unclear, read the relevant log sections before deciding the next action.
+
+For native plugin inventory, check the installed command help and use `hermes -p "$PROFILE" plugins list --plain --no-bundled` when supported.
+Return only the requested profile's installed component status and source bindings.
+If these options are unavailable, filter captured native inventory results without changing the inventory check.
+
 <a id="project-tools"></a>
 ## Project tools
 
