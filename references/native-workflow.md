@@ -61,24 +61,24 @@ müssen außerdem die jeweiligen Syntax- und Pfadprüfungen bestehen. Markdown w
 kontextgerecht maskiert; technische Werte in Codekontexten bleiben unverfälscht.
 Alle Nichtplatzhalterbytes der bestätigten Vorlage bleiben erhalten.
 
-Vor dem Schreiben die personalisierte Fassung annehmen lassen. Ziel ist ausschließlich
-`SOUL.md` im bestätigten Rollenhome. Anschließend vollständig zurücklesen und mit
-dem erzeugten Solltext vergleichen. Fremde oder zwischenzeitlich geänderte Dateien
-nicht überschreiben. Die effektive Aufnahme der vollständigen SOUL im jeweiligen
-Profil prüfen; Dateiexistenz allein genügt nicht.
+Use the role personalization accepted during preparation.
+Compare the rendered output with that scope before writing only `SOUL.md` in each confirmed role home.
+Read back complete bytes against the generated output and check effective full loading through the established native interface.
+Do not overwrite foreign or concurrently changed files.
+Ask again only for a newly observed conflict or scope change.
 
-## 3. Technische Werte an ihren tatsächlichen Zielen binden
+## 3. Bind technical values to actual targets
 
-| Wert | Ziel und Prüfung |
+| Value | Target/readback |
 |---|---|
-| Rollenprofil und Anzeigename | Native Profilregistrierung und passende personalisierte SOUL |
-| Projektworkspace | Bestätigten kanonischen absoluten Workspace gegen Projektkontext, Profil-`terminal.cwd`, Board-Standardworkspace und späteren Ticketworkspace prüfen; die SOUL verlangt diesen Abgleich |
-| Boardkennung | SOUL und explizite Boardauswahl bei Ticketaktionen; nativen Boardzustand zurücklesen |
-| Projektbank | Native Memorykonfiguration und Bankplatzhalter der SOUL; Rollenfilter funktional prüfen |
-| Hermes-Modell und Reasoning | Native Profilkonfiguration; wirksame Auswahl einschließlich Overrides prüfen |
-| Team-Codex | Getrennte Prozess-/Konfigurationshomes und geeignete Binary gemäß [Integrationsrezept](integrations.md#team-codex); im tatsächlichen Worker prüfen |
-| Codeanalyse | Genau eine Alternative gemäß [Analyserezept](code-analysis.md), mit Originalskills und passender nativer Aktivierung |
-| Planner-Kommunikation | Native Plannerkonfiguration und konkrete Wake-Subscription; Projektkanal, DM und Nutzeridentität getrennt halten |
+| Role identity | Native registration, canonical home, personalized SOUL |
+| Workspace/repositories | Confirmed workspace, `terminal.cwd`, board default workspace and Planner repository-boundary fields |
+| Board | Native board ID, explicit board selection and dispatcher DB |
+| Bank | Effective provider/bank and exact per-role tags/match settings |
+| Models/reasoning | Native configuration and effective overrides; existing role default/max fields |
+| Team-Codex | Actual binary, separate process/config homes, access and identity under [Integrations](integrations.md#team-codex) |
+| Analysis | Exactly the confirmed branch, complete assets and native connection/configuration readbacks |
+| Communication | Planner-only bot, exact authorized user/channel/DM IDs and genuine Home binding; later task subscriptions remain operational |
 
 Reuse the confirmed workspace as `PROJECT_DIR` in the Planner SOUL.
 Reuse the confirmed repository boundaries as `REPOSITORY_ROOTS` in the Planner SOUL.
@@ -90,39 +90,31 @@ Keep the current Git-root, cwd, board, and ticket checks in the Planner workflow
 Render the confirmed technical `PLANNER_PROFILE` directly into the Coder SOUL.
 Check that ID against the native profile registration.
 Use that bound ID for the existing clarification and TIMER routes.
-Do not derive paths or technical IDs from display names.
+Do not derive paths from display names. Derive only new profile IDs under the setup normalization rule; preserve confirmed IDs.
 Do not ask the user to repeat confirmed values.
 If bindings conflict, resolve the conflict before writing role files.
 Keep branch, plan revision, and ticket/run/event IDs specific to the current task.
 Do not generate a second runtime binding file.
 
-Konkrete Modelle und feste Planner-/Hermes-Coder-Stufen stehen in der nativen
-Konfiguration. Reviewer und Team-Codex erhalten die bestätigten Standard-/Maximalwerte
-wörtlich in ihren Rollen-SOULs. Beim Setup nur Wechsel innerhalb der erlaubten
-Grenzen prüfen, einschließlich CLI-/Session-Overrides und Helferpins. Der Renderer
-prüft sichere Einzelwerte, nicht Modellunterstützung oder Stufenrangfolge; diese
-werden gemäß Setup vor dem Rendern geprüft. Fehlende Unterstützung oder Freigabe
-ist ein konkreter Blocker, kein Anlass für einen stillen Modell-/Providerwechsel
-oder eine höhere Stufe. Die Rollenregel ist keine technische Ausführungssperre.
+Keep fixed Planner/Hermes-Coder reasoning in native configuration.
+Keep Reviewer/Team-Codex default and maximum in the existing role fields.
+Resolve native model IDs, supported levels, helper pins, and limits during preparation.
+Read back actual configuration and overrides; do not probe reasoning boundaries with model calls.
+A role maximum is a policy rule, not a technical execution barrier.
 
 Kommunikationszugänge und Kanalbindungen bleiben beim Planner. Geheimnisse gehören
 in geschützte native Zugangswege. Der private [Setuprecord](../templates/setup-record.md)
 dokumentiert Werte, Ziele und Nachweise; er ist keine zusätzliche Laufzeitkonfiguration.
 
-## 4. Funktionsprüfung und Wiederaufnahme
+## 4. Setup readbacks and resume
 
-1. Rollen, Profile, Board, Workspace und Bank anhand der tatsächlichen Zielobjekte
-   abgleichen; Codex-Prozessbindung gesondert im Worker prüfen.
-2. Vollständige Skillbäume, tatsächliches Laden und vollständige SOUL-Aufnahme prüfen.
-   Caveman-Auftragsregel und Ponytail-Prozessbindung müssen auch nach Resume gelten.
-3. Native Reviewübergabe an den unabhängigen Reviewer, Rückgabe an den Coder und
-   Planner-Wake anhand der aktuellen Zielschnittstellen prüfen. Der begrenzte
-   Pipelineversuch folgt dem [Setupablauf](setup.md#7-einzelprüfungen-und-wake-vor-ticketfreigabe).
-4. Konkrete Laufzeitgrenzen und Fehler, einschließlich Retryverhalten, im Setuprecord
-   festhalten. Statische Quellenprüfung ersetzt keinen echten Funktionsnachweis.
-5. Bei Wiederaufnahme native Objekte und eigene Dateien mit dem letzten geprüften
-   Stand vergleichen und am offenen Schritt fortsetzen. Keine zweite Zustandsquelle
-   aus alten Setupwerten herstellen.
+Compare profiles, board/workspace, bank, actual homes, effective model configuration, complete skill trees,
+full SOUL loading, recovery output and modes with confirmed values.
+Use established discovery/configuration readbacks, not synthetic handoff, wake, or worker experiments.
+Reuse preparation acceptance for role personalization; compare exact rendered output with that scope before writing.
+A concrete mismatch needs resolution before the affected write or activation.
+On resume, read the single setup JSON and actual targets; continue only the incomplete step.
+Correct stale descriptive prose without repeating confirmed decisions or creates.
 
 Diese Schritte gehören zum später ausdrücklich beauftragten Zielsetup. Beim
 Bearbeiten dieses Pakets werden keine Profile, Dienste oder Agenten aktiviert.

@@ -13,3 +13,6 @@ Read [TAS authoring standard](references/tas-authoring-standard.md) before editi
 Apply TAS to every new or changed instruction in those files.
 Keep role-template changes and live-team rollout as separate authorizations.
 Run `python3 -B -m unittest discover -s references -p 'test_*.py'` before committing package changes.
+
+For explicit Maker development or review, use [Development verification](references/development-verification.md).
+Do not require those checks during ordinary team setup.

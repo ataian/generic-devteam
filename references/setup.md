@@ -1,122 +1,99 @@
-# Geführtes natives Zielsetup
+# Guided native target setup
 
-Diese lineare Anleitung gilt nur für ein ausdrücklich beauftragtes Zielsetup.
-Bei Paketbau/Review bleibt sie Text. Verwende die [offizielle Hermes-Dokumentation](https://hermes-agent.nousresearch.com/docs/)
-und den tatsächlichen Zielcode als Versionsautorität. Rechercheanker sind keine
-Installationspins und keine Erfolgsmeldung. Rezepte unten enthalten ausschließlich
-bestätigte, nichtgeheime Variablen; keine rohen Nutzereingaben als Shellcode.
+Execute this recipe only for an authorized target setup.
+Use established supported interfaces and known recipes, not recurring parser, source, loader, or SDK investigation.
+Use confirmed nonsecret values as data; never interpolate raw user text as shell code.
+Keep user-facing conversation in the user's or project's language.
 
-## 1. Bestand vor Änderungen
+## 1. Inventory before changes
 
-1. Ermittle bestehenden Benutzer, Hermes-Distribution/Revision, tatsächliche
-   Profilhomes und Terminalbackend. Prüfe Profilverzeichnis **und** native
-   Profilregistrierung; ein markerloses vorhandenes Verzeichnis ist eine Kollision.
-2. Ordne Gateway/Multi-Profile-Owner, bediente Planneradapter, Dispatcher- und
-   Notifierzuständigkeit zu. Erfasse, wer das Board tatsächlich dispatcht und aus
-   welchem Home die Dispatcherparameter gelesen werden. Einstellungen im Coder
-   allein sind kein Beleg für den Dispatcher. Keine neue Daemonplattform anlegen.
-   Lies aus demselben Home den wirksamen Wert von `kanban.auto_decompose` zurück.
-   Steht er auf `true`, zerlegt der native Decomposer jede Karte, die in `triage`
-   landet, ungefragt in neue Karten samt Parent-Kanten. Eine Karte erreicht `triage`
-   ohne Zutun, sobald sie nach einem Unblock erneut mit demselben Blocktyp blockiert
-   wird; diese Eskalation ist nativ und nicht abschaltbar. Der Wert gehört vor jeder
-   Kette auf `false`, im dispatchenden Home und in jeder Profilkopie, aus der
-   dispatchert werden kann.
-3. Prüfe native Profile, Config set/get, Boards, blocked-first-Erstellung,
-   expliziten Reviewer/Handoff, Same-Card-Rückgabe und Wake anhand der installierten
-   Parser/Leser sowie [Rollenbindungen](native-workflow.md). Bei fehlender Syntax
-   zuerst aktuelle Docs/Quelltext lesen; erst nach Freigabe CLI/Loader prüfen.
-4. Inventarisiere aktivierte Plugins/Memoryprovider aller gemeinsam betroffenen
-   Profile und die PM-Abhängigkeitsgeneration ohne Secretwerte. Normale CLIstarts,
-   einschließlich Help, können Dependency-Sync, Source-Completion oder Plugin-
-   Eviction auslösen. Neue absolute Pluginmemberpfade können schon bei gleichen
-   Versionen gemeinsame PM-Eingaben ändern. Hole vor Pluginaufnahme die Freigabe für gemeinsame PM-Wirkungen ein.
-   Prüfe Fremdquellen zunächst außerhalb aktiver Discovery. Ist diese Wirkung
-   nicht genehmigt, bleiben Quellenprüfung und vorhandene Teilstände erhalten.
-5. Prüfe im tatsächlichen Ziel-Dispatcher Timeout-, Retry- und Rate-Limit-Behandlung
-   einschließlich Requeue, Fehlerzählern und wirksamen Grenzen. Halte konkrete
-   Einschränkungen im Setuprecord fest und kläre deren Auswirkungen vor der
-   betroffenen Nutzung. Ein erfolgreicher kurzer Lauf beweist keine Gesamtgrenze.
+1. Resolve the existing account, Hermes revision/distribution, terminal backend, native profile inventory, and actual homes.
+   Check both directories and registration; an existing unmarked directory is a collision.
+2. Identify the existing gateway/multi-profile owner, Planner adapter, dispatcher home/DB, and notifier.
+   Read effective `kanban.auto_decompose` through the [known resolver](kanban-block-triage-escalation.md#5-setzen-welche-homes-und-der-rücklese-nachweis-der-wirklich-zählt).
+   Require `false` before release; scope authorized changes to the owner and selected team profiles.
+3. Check required interface and dependency availability through established read-only status/configuration paths.
+   Do not qualify the project's toolchain or investigate general timeout, retry, or rate-limit behavior.
+   A missing Hindsight service or common runtime is an operator prerequisite issue, not permission to provision or repair it.
+4. Identify concrete shared bootstrap/PM effects before invoking CLI or adding plugins.
+   Even help/bootstrap can sync dependencies; absolute plugin paths can alter shared PM inputs.
+   Inspect other profiles only when a concrete shared effect requires it.
+   Preserve unrelated profiles and shared runtimes; obtain the necessary scope authorization before those effects.
 
-**Erfolgssignal:** Versionen, Zuständigkeit, verfügbare Schnittstellen, PM-Wirkung
-und offene Gates sind benannt. Bestehende Schutz-/Freigabeeinstellungen bleiben
-unverändert. Kein „bereit“, nur weil ein Gatewayprozess lebt.
+## 2. Complete upfront preparation
 
-## 2. Eingaben und Kollisionsprüfung
+Read available facts through authorized established interfaces.
+Reuse session answers, `clarify` results, confirmed JSON, and the pre-profile handoff.
+Ask independent missing decisions together, then resolve dependent follow-ups within this same preparation stage.
+Do not create profiles, files, bank/board objects, install assets, or activate integrations while any foreseeable choice is missing.
+Do not require a new interview skill or product-planning workshop.
 
-Frage zuerst **Projektname und kanonisches Arbeitsverzeichnis** getrennt. Löse
-den bestätigten Workspace auf dem Zielkonto absolut auf und gleiche ihn vor Anlage
-mit Projektkontext sowie vorhandenen Profil-/Boardbindungen ab. Der Name bestimmt
-nicht den Pfad; auch verschachtelte Checkouts sind zulässig. Bei Widerspruch
-anhalten und mit dem Nutzer klären, kein Repo verschieben und keine abweichenden
-Bindungen still anlegen. Der Renderwert PROJECT_NAME bleibt ein einzelnes Segment
-ohne Slash, Backslash oder Traversal; Leerzeichen sind zulässig. PROJECT_DIR trägt
-unabhängig davon den bestätigten absoluten Workspace für die native Konfiguration.
-Reuse `PROJECT_DIR` as a Planner render value.
-Save the already confirmed repository boundaries as `REPOSITORY_ROOTS` in `confirmed_values`.
-Use single-line text with explicit planning and implementation assignments for those absolute paths.
-Preserve multiple repositories and nested checkouts.
-If no repository exists yet, record that confirmed fact instead of inventing a root.
-Do not repeat questions for confirmed paths.
-Erfasse vorhandene Repositorygrenzen,
-Root- und relevante Bereichs-AGENTS sowie Manifeste/Lockfiles/Build-/Testkonfiguration.
-Der Workspace muss kein Git-Root sein und wird nicht automatisch initialisiert.
-Werkzeugbedarf stammt aus diesen Dateien, nicht aus einem neuen Fachinterview.
-Bei noch leerem Projekt bleiben konkrete Stackwerkzeuge offen; kein Beispielstack
-wird installiert. Siehe [Projektwerkzeuge](integrations.md#project-tools).
+| Group | Complete before starting |
+|---|---|
+| Project and roles | Separate project name and canonical absolute workspace; repository boundaries or confirmed absence; display names for Planner (`PLANER_NAME`), Coder (`CODER_NAME`), Reviewer (`REVIEWER_NAME`); selectable homes and collision resolutions |
+| Models and analysis | Combined default set below or confirmed overrides; actual native model/provider IDs and supported reasoning; helper-pin compatibility; exactly one of CBM or Graphify; repository/corpus scope, roots, cache/output paths and any optional watcher intent |
+| Codex identity | Explicitly authorized `user.name`/`user.email` reuse, provenance, access method and protected login route; discovery alone is not consent |
+| Shared objects | Existing service endpoints; intended board/bank names; create versus authorized reuse and ownership |
+| Communication | Mattermost server/team, intended Planner bot, human and any additional authorized users, allowed project channel, channel type and DM participants; existing IDs or explicit creation intent |
+| Execution scope | Exact local writes, profile assets, shared PM/configuration effects, external identity actions, and activation; protected access preparation where possible |
 
-Danach kurz den Banknamen bestätigen, Projektname als Vorschlag. Prüfe am
-vorhandenen Hindsight-Dienst Existenz und Eigentum, bevor eine neue Bank gebunden
-wird. Gleiche Namen beweisen keine eigene Bank. Erfrage anschließend einmal die
-Anzeigenamen für Planner (`PLANER_NAME`, genau ein N), Coding-Orchestrator
-(`CODER_NAME`) und Reviewer (`REVIEWER_NAME`). Rollenfeste Texte verwenden:
-keine Persona-Abfrage und keine still angehängte Persona. Bestätige danach die
-Boardkennung; der spätere Wert `KANBAN_BOARD_NAME` stammt aus nativer Rücklese
-der Boardkennung (`BOARD`), nicht aus dem Board-Anzeigetitel. Schlage getrennte
-technische Kennungen vor, nie still aus Anzeigenamen ableiten; bereits bestätigte
-Profil-IDs unverändert wiederverwenden,
-prüfe die aktuellen nativen Namensregeln und lasse sie bestätigen. Der gelesene
-Resolver erlaubt `[a-z0-9][a-z0-9_-]{0,63}`; reservierte Namen, native Kollisionen
-und echte Pfade zusätzlich prüfen. Anzeigenamen nie als rohe Pfadsegmente verwenden.
+Resolve workspace separately from project name; do not derive a path or move an existing repository.
+Keep `PROJECT_NAME` as a single segment without slash, backslash, or traversal.
+Bind the confirmed canonical workspace as `PROJECT_DIR`, native `terminal.cwd`, and board default workspace.
+Save `REPOSITORY_ROOTS` as single-line text with separate planning and implementation assignments.
+Preserve nested checkouts and multiple roots; do not initialize Git or install project tools.
+Check existing project instructions and native profile/board bindings for contradictions before creating anything.
 
-Bestätige rollenbezogene Hermes-Modelle/Provider/unterstützte Denktiefe und Codex
-separat. Die hierbei bestätigte technische Codex-Modell-ID als `CODEX_MODEL`
-wiederverwenden, nicht erneut abfragen oder aus dem Hermes-Modell ableiten.
-Frage ausdrücklich: **„Welche maximale Reasoning-Stufe darf das Team verwenden?“**
-Biete nur am gewählten Modell/Provider nachgewiesene native Werte an, keine feste
-Modellwahl oder allgemeingültige Stufenrangfolge. Bestätige für Planner und
-Hermes-Coder jeweils die feste Stufe (`PLANNER_REASONING`, `CODER_REASONING`).
-Für Reviewer bestätige Standard (`ROLE_REASONING_DEFAULT`) und höchste erlaubte
-Prüfstufe (`ROLE_REASONING_HIGH`), für Team-Codex Standard (`CODEX_REASONING_DEFAULT`)
-und Obergrenze (`CODEX_REASONING_MAX`). Ein gemeinsamer Nutzerwert darf auf diese
-Wege übertragen werden, wenn seine Geltung eindeutig bestätigt und er jeweils
-unterstützt ist; sonst Abweichungen getrennt klären. Standard darf die jeweilige
-Obergrenze nicht überschreiten. Fehlende Werte vor Anlage klären, nicht aus
-„höchstes unterstützt“ ableiten. Ein Default ist keine technische Begrenzung.
-Prüfe Hilfsmodelle und Original-Helferpins gegen die für sie bestätigte Grenze;
-bei anderer Stufensemantik die Zuordnung klären, nicht vom Elternmodell ableiten.
-Unvereinbare Pins unverändert lassen und die betroffene Nutzung bis zur Klärung
-zurückhalten. Nicht einstellbares Reasoning ausdrücklich mit dem Nutzer klären;
-keinen erfundenen Wert an eine native Schnittstelle übergeben.
-Keinen zweiten Anbieter voraussetzen. Frage genau eine Codeanalyse ab. Bestimme
-Mattermost-Server, eigene Botidentität, Projektkanal und menschlichen Nutzer;
-ermittle die getrennte DM-ID im geführten Kommunikationsschritt.
+### New profile IDs
 
-Vergleiche **vor Anlage** alle drei Profile, aufgelösten Profilhomes, SOUL-/Skill-
-Ziele, Boardkennung, Bank, Codexzustandsbereiche und Plannerkanal mit vorhandenen
-Objekten einschließlich Symlinks. Fremde oder nicht eindeutig zugeordnete Objekte bleiben unverändert.
-Ein gleichnamiges eigenes Objekt darf nur nach Abgleich mit dem Setuprecord und
-nativer Identität wiederverwendet werden. Bei Konflikt neue bestätigte Kennung
-wählen oder Eigentum klären; nicht automatisch suffixen, löschen oder klonen.
+Keep display names unchanged. For derivation only, trim whitespace, lowercase, transliterate German umlauts to `ae`/`oe`/`ue` and `ß` to `ss`,
+remove decomposable accent marks, replace remaining runs outside `[a-z0-9_-]` with `-`, strip leading/trailing separators, and limit to 64 characters.
+Validate the candidate against `[a-z0-9][a-z0-9_-]{0,63}`, reserved names, target ownership, existing directories/registration, and collisions across selected roles.
+Examples: `Kirk` = `kirk`, `Julia` = `julia`, `Jörg` = `joerg`, `Jean Luc` = `jean-luc`.
+Show valid derived IDs in the final summary, without separate ID questions.
+For an empty/unusable candidate, same-normalized-name collision, reserved name, or existing-profile conflict, obtain one explicit resolution.
+Do not silently prefix, suffix, rename, delete, or clone.
+Preserve existing confirmed IDs on resume and update.
+Compare canonical homes, symlinks, SOUL/skill targets, Codex state, bank/board and channel ownership before writes.
+Reuse only objects whose native identity and ownership agree with the confirmed setup evidence.
 
-Zeige Ziel-/Änderungsliste, Installationen, Dienstzugriffe, PM-Wirkungen,
-Create-/Multiplexeraktivierung und späteren Testumfang; warte auf konkrete Freigabe.
-Token/Passwörter werden nicht abgefragt oder ausgegeben, nur ihr geschützter Zielweg.
-Halte bestätigte Rohwerte samt Annahmebeleg zunächst als Setupdatensatz fest und
-übernimm ihn nach Planneranlage unverändert in den privaten Setuprecord. Vorher
-bei Unterbrechung den nichtgeheimen Datensatz zur Wiederaufnahme übergeben, nicht
-unbeauftragt einen neuen Ablageort anlegen. Ein bereits bestätigtes Feld nicht
-erneut erfragen; nur fehlende Werte oder nachgewiesene Konflikte klären.
+### Offer model defaults once
+
+| Consumer | Model family | Native reasoning policy |
+|---|---|---|
+| Planner | Sol | Fixed high (`PLANNER_REASONING`) |
+| Hermes Coder | Sol | Fixed medium (`CODER_REASONING`) |
+| Reviewer | Sol | Default medium, maximum high (`ROLE_REASONING_DEFAULT` / `ROLE_REASONING_HIGH`) |
+| Team-Codex | Sol | Default medium, maximum high (`CODEX_REASONING_DEFAULT` / `CODEX_REASONING_MAX`) |
+
+Offer this complete set once; accepting it confirms its limits without separate repeated maximum questions.
+Resolve Sol separately to the actual supported native model/provider identifier for each target through established availability/configuration interfaces.
+`sol-medium` and `sol-high` describe model/reasoning combinations; never submit them as guessed native model IDs.
+Record the actual Codex model ID as `CODEX_MODEL` and reasoning separately.
+If any model, provider, level, or original helper pin is unavailable/incompatible, resolve that concrete conflict during preparation.
+Preserve accepted overrides. Do not silently change provider/model or choose the highest supported level.
+Do not require a second provider; keep incompatible original pins unchanged and resolve their required access before starting.
+Validate defaults against maxima using the chosen target's supported semantics, including nonstandard or nonconfigurable reasoning.
+
+Keep Hermes Coder fixed reasoning separate from task-selected Codex reasoning.
+Below HIGH complexity and HIGH impact, Codex uses its default.
+Either HIGH permits up to the maximum; both HIGH require the maximum.
+Keep bounded retry/review escalation and unchanged model/provider rules in the Coder SOUL.
+No per-task customer approval is needed within the confirmed range.
+Do not add a Hermes-Coder maximum, technical maximum setting, render field, or migration.
+
+### Final summary and start decision
+
+Store confirmed nonsecret values once in the existing setup dataset, then transfer them unchanged to the private Planner record after creation.
+Before that home exists, use the existing pre-profile handoff on interruption; do not create another store.
+Present the complete parameters, derived IDs, target homes, create/reuse choices, models/limits, Git identity, analysis settings, communication permissions, concrete writes, shared effects, and activation scope.
+Include the template-based role personalization in preparation acceptance; generated native IDs are substituted from readbacks without reopening agreed role rules.
+Disclose protected logins requiring the new home, native `/hooks` approvals after configuration, and the genuine Planner DM `/sethome` action after role delivery/adapter activation.
+State each action's reason and execution point. Prepare protected credentials earlier where supported; never collect secrets in chat or JSON.
+Obtain the start decision only after all foreseeable decisions are complete.
+Later questions require a new conflict/failure, newly knowable decision, user scope change, or disclosed deferred interaction.
+Generated object IDs and resolved homes are readback outputs; do not ask the user to invent or repeat them.
+Later recipe steps consume this dataset without reopening confirmed choices.
 
 ## 3. Frische Profile, bestätigte Modelle
 
@@ -131,7 +108,6 @@ hermes -p "$PROFILE" config set model.provider "$PROVIDER"
 hermes -p "$PROFILE" config set model.default "$MODEL"
 hermes -p "$PROFILE" config set agent.reasoning_effort "$EFFORT"
 hermes -p "$PROFILE" config set kanban.auto_subscribe_on_create false
-hermes -p "$PROFILE" config set security.protected_instruction_files false
 hermes -p "$PROFILE" config get terminal.cwd
 hermes -p "$PROFILE" config get model.provider
 hermes -p "$PROFILE" config get model.default
@@ -140,18 +116,20 @@ hermes -p "$PROFILE" config get kanban.auto_subscribe_on_create
 hermes -p "$PROFILE" config get security.protected_instruction_files
 ```
 
-Diese Schritte für Planner, Coder und Reviewer ausführen. `EFFORT` ist jeweils
-`PLANNER_REASONING`, `CODER_REASONING` oder `ROLE_REASONING_DEFAULT` aus dem
-bestätigten Datensatz; der Planner läuft fest auf seiner gewählten Stufe.
-`security.protected_instruction_files: false` gehört ausdrücklich in die jeweilige
-Profil-`config.yaml`; der erzeugte Agent soll projektlokale Anweisungsdateien im
-autorisierten Auftrag bearbeiten können. Prüfe den gespeicherten booleschen Wert
-im tatsächlichen Profilhome und den effektiven Wert, und halte beide im Setuprecord
-fest. Ein global wirksames `false` allein belegt die Profilkonfiguration nicht.
-Globale/administrativ verwaltete Vorgaben (etwa `/etc/hermes/config.yaml`) weder
-anlegen noch ändern oder entfernen. Verhindert eine solche Vorgabe das native
-Setzen oder die Wirksamkeit des Profilwerts, den konkreten Konflikt melden;
-keine globale Änderung oder Umgehung daraus ableiten.
+Apply these steps to Planner, Coder and Reviewer using their confirmed model/provider values.
+Use `PLANNER_REASONING`, `CODER_REASONING` or `ROLE_REASONING_DEFAULT` as the respective `EFFORT`.
+Planner and Hermes Coder retain their fixed levels.
+Require effective `security.protected_instruction_files: false` for each selected role.
+Accept an existing centrally managed effective `false` without a duplicate profile entry.
+If needed and authorized, set the profile-local value through the supported native configuration path:
+
+```sh
+hermes -p "$PROFILE" config set security.protected_instruction_files false
+hermes -p "$PROFILE" config get security.protected_instruction_files
+```
+
+Record the effective value and its management source.
+Do not alter central policy or bypass an administrative restriction; report a genuine conflict.
 
 Reasoning nur bei bestätigter Unterstützung setzen, sonst fehlende Fähigkeit
 oder bewusst nicht anwendbaren Wert protokollieren. Create verwendet Modellseeding
@@ -174,10 +152,10 @@ und einen freigegebenen profilbezogenen nativen Weg klären; andere Profile nich
 global abschalten. Vor späteren Nachrichten auch beim bereits bedienten Planner
 die neuen Rollen und das effektive Adapterrouting erneut nachweisen.
 
-Lies nur relevante nichtgeheime Felder zurück. Prüfe konkurrierende Env-/YAML-,
-Session-/per-Modell- und CLI-Overrides, Fallbacks sowie benötigte Hilfsmodellrouten.
-Eine gespeicherte Warnung/Schlüsselannahme beweist keinen Leser. Native Login-
-und Modellwahl im richtigen Profil; echte Workerroute erst bei Einzelabnahme.
+Read back only relevant nonsecret fields and effective override sources.
+Check environment/YAML, session/per-model/CLI overrides, fallbacks and required helper routes through established interfaces.
+Use the correct native profile for protected login and model configuration readback.
+A stored key or warning alone does not establish its effective value.
 
 ## 4. Eigenes Board und Team-Codex
 
@@ -194,36 +172,23 @@ Jede spätere Operation trägt
 `--board "$BOARD"`; keine globale Boardumschaltung. Repository, Branch und
 Planrevision werden bei jedem Auftrag neu gebunden, nicht im Setup erfunden.
 
-Binde im Coderhome `devteam/codex-home` und `devteam/user-home` anhand
-[Team-Codex-Rezept](integrations.md#team-codex), dann vollständige Original-
-Integrationen bereitstellen; ist CBM die gewählte Analyse, gehört der kanonische
-Cache als Literal in den MCP-Eintrag der Team-`config.toml` — **vor** der
-Hook-Zustimmung (siehe [Codeanalyse](code-analysis.md#codebase-memory)). Halte die realen Codex-Binary-/Homewerte für die anschließende
-Zielprüfung im Setuprecord fest. Originalkomponenten zunächst bereitstellen/konfigurieren;
-die in den Rezepten beschriebenen echten Einzelprüfungen folgen erst nach
-vollständigen eigenen Rollendateien und ihrer Annahme in Abschnitt 7.
-Lade das vollständige [Codeanalyserezept](code-analysis.md) und verwende genau
-den gewählten Weg für alle drei Hermes-Rollen und Team-Codex. Ziele, vollständige
-Originaldateimengen, Runtime und Lizenzen zurücklesen. Bei CBM gehört die vollständige
-offizielle Codex-Integration einschließlich ihrer Unteragenten zur Einrichtung.
-Erster Index-/Query-/Änderungsnachweis erst im separat genehmigten Testworkspace.
-Vor aktiver MCP-/Hookaufnahme auch bei hot-admittierten Profilen den tatsächlichen
-Test-CWD und MCP-Root binden; ohne Freigabe/Testbindung nur außerhalb aktiver
-Integration vorbereiten. Produktroots erst mit späterem Projektauftrag aktivieren.
-Keine Produktanalyse und kein stiller Wechsel zur anderen Alternative.
+Bind `devteam/codex-home` and `devteam/user-home` inside the actual Coder home through [Team-Codex](integrations.md#team-codex).
+For CBM, bind the canonical account cache as a literal in the team MCP TOML `env` before hook approval under [Code analysis](code-analysis.md#codebase-memory).
+Record the actual Codex binary and both homes for configuration readback.
+Deliver/configure the complete original components for the chosen analysis branch only.
+Read back targets, assets, runtime binding and licenses for all three Hermes roles and Team-Codex.
+For CBM include its complete native Codex subagents alongside the six VoltAgent helpers.
+Bind authorized repository/MCP roots without indexing or querying product data.
+Do not create an artificial test workspace or switch analysis alternatives silently.
 
 ## 5. Hindsight und Mattermost
 
-Führe [Hindsight](integrations.md#hindsight) für jede Rolle am vorhandenen Dienst
-mit derselben bestätigten **neuen** Projektbank aus. Danach folgt ausschließlich
-im Plannerprofil die [geführte Mattermost-Anbindung](integrations.md#mattermost).
-Zunächst Verbindungskonfiguration, Mitgliedschaft, menschliche Zulassung und zwei
-getrennte Kanalidentitäten anhand der Kanalmetadaten für die native Konfiguration
-bestätigen, ohne eine Nachricht an den Planner zu benötigen. Die geführte Mattermost-
-Rezeptphase 8 (Homebindung und Dialogtests) wartet auf die vollständige
-Annahme und Rücklese aus Abschnitt 6 sowie den profilrichtigen Adapternachweis in
-Abschnitt 7. Andere bereits berechtigte Gesprächswege bleiben nutzbar. Kommunikationswerte gehören
-nicht in gemeinsame Projektanweisungen oder die SOULs.
+Use [Hindsight](integrations.md#hindsight) for every role with the same confirmed new or authorized reused bank on the existing service.
+Use [Mattermost](integrations.md#mattermost) only in the Planner profile.
+Consume the preparation dataset for identity, membership, permissions and existing IDs.
+Read back generated channel/DM IDs from actual metadata.
+Defer Mattermost step 8 until complete accepted role files, bindings, and adapter routing are verified in section 7.
+Do not place communication credentials or targets in shared project instructions or role SOULs.
 
 ## 6. Eigene Skills, Rollen und Textpersonalisierung
 
@@ -232,19 +197,24 @@ Stelle im Planner vor der Rollenannahme die Originalskills
 zu [Superpowers](integrations.md#superpowers). Beide gehören zur festen
 Planner-Ausstattung; Quelle und Zielprüfung im Setuprecord erfassen.
 
-Führe das nach Planneranlage begonnene private Protokoll aus
-[setup-record.md](../templates/setup-record.md) unter dessen `devteam/setup.md` fort.
-Verzeichnis nur für den Besitzer (0700), Record 0600; nicht im Produktprojekt,
-Git oder Makerbaum. Vorher keine bestehende eigene Protokolldatei überschreiben.
-Trage pro erfolgreichem Schritt native Identität, genaue eigene Dateipfade,
-Vorherzustand/Hash, geprüften Zustand und nächste Voraussetzung ein.
+Continue the private record from [setup-record.md](../templates/setup-record.md)
+at `<actual planner home>/devteam/setup.md` after Planner creation.
+Use directory mode 0700 and file mode 0600 outside the product project, Git, and Maker tree.
+Do not overwrite an existing record without reconciling its confirmed data and actual targets.
+Record authorizations, complete upfront dataset readiness, and disclosed technically deferred actions.
+For each completed step, record the native identity or exact own file path, previous state/hash,
+verified readback, and next prerequisite.
+Keep component source, revision, license, and complete file evidence in the target-readback section.
+Keep progress, blockers, and installation/update evidence in their respective sections.
+Do not add behavioral or research checks as record completion gates.
 
-Speichere bestätigte Rohwerte verlustfrei im einzigen `json`-Block der Recordvorlage,
-nicht durch Rückgewinnung aus Markdowntabellen. `confirmed_values` enthält die
-bestätigten Setupwerte; `confirmed_bindings` die bereits aufgelösten Bindungswerte.
-Fehlende Werte nicht erfinden. Die Tabellen halten Annahme-/Rücklesebelege; JSON
-trägt die unveränderten nichtgeheimen Daten. Das folgende reine Pythonfragment
-erzeugt nur Text aus `record_template_text` (bei Fortsetzung: bisheriger Record):
+Store confirmed raw values losslessly in the template's single `json` block.
+Use `confirmed_values` for confirmed setup values and `confirmed_bindings` for resolved technical bindings.
+Preserve all existing keys/types, including native-only model/reasoning values and role/recovery bindings.
+Do not recover raw values from prose or Markdown tables.
+Do not invent missing values or store secrets.
+The following pure Python fragment generates text from `record_template_text`
+(use the existing record on resume):
 
 ```python
 import json
@@ -256,9 +226,9 @@ record_text = record_head + "```json\n" + json.dumps(
 ) + "\n```" + record_tail
 ```
 
-Schreibe `record_text` ausschließlich im genehmigten Zielsetup mit den Dateitools
-an das bestätigte eigene Recordziel und lies es bytegenau als `record_readback_text`
-zurück. Für Rücklese und spätere Wiederaufnahme gilt dasselbe reine Fragment:
+Write `record_text` only to the confirmed own record target during an authorized setup.
+Read back its exact bytes as `record_readback_text`.
+Use the same pure fragment for readback and resume:
 
 ```python
 import json
@@ -267,10 +237,11 @@ confirmed_values = record_data["confirmed_values"]
 confirmed_bindings = record_data["confirmed_bindings"]
 ```
 
-Werte gegen den bestätigten Datensatz und bei Resume gegen native Objekte prüfen.
-Unvollständiges/ungültiges JSON oder widersprüchliche Tabellen/Belege halten an.
-Diese Textfragmente und das folgende Renderfragment lassen sich mit synthetischen
-Daten prüfen, ohne Zielanlage oder Runtime.
+Compare the parsed values with the confirmed dataset and, on resume, the relevant native objects.
+Stop the affected step for incomplete/invalid JSON, missing required confirmed input, or actual target drift.
+Resolve missing input or drift before rendering or writing.
+If only descriptive prose is stale, correct it from readbacks without repeating confirmed choices or creates.
+Use these fragments for the confirmed dataset; do not run synthetic development regressions per setup.
 
 1. Kopiere gemäß [Quellen- und Rollenmatrix](upstream-sources.md#mitgelieferte-bausteine)
    **den ganzen eigenen Skillbaum** aus `skills/` in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
@@ -278,20 +249,12 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    Keep all skill names and bytes unchanged except the recovery launcher.
    Bind that launcher through the Maker step below after copying the full tree.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.
-2. Prüfe die tatsächlichen Hermes-/Codex-Auswahlen, unterstützten Reasoning-Stufen,
-   erlaubten Obergrenzen, Hilfsmodelle und Original-Agentpins in ihrer nativen Konfiguration. Halte
-   Configorte, Freigaben und Funktionsbelege im privaten Setuprecord fest.
-   Die konkrete Codex-Modell-ID bleibt in der technischen Konfiguration;
-   die Coder-SOUL enthält Standard/Obergrenze als konkrete Renderwerte und liest das eingerichtete Modell.
-   Prüfe dort auch die dauerhafte Team-Codex-Prozessbindung und die ausdrückliche
-   `$caveman`-Anweisung für jeden neuen Auftrag, einschließlich Neustart/Resume.
-   Binde die gewählte Codeanalyse gemäß [Analyserezept](code-analysis.md) über die
-   installierten Originalskills und deren native Aktivierung ein. Auswahl, Roots
-   und Nachführungsweg im Setup-Protokoll festhalten; alle drei Rollen und Team-Codex
-   erhalten denselben Analyseweg.
-3. Halte den in Abschnitt 1 geprüften Retryzustand mit Zielrevision und konkreten
-   Einschränkungen im Setuprecord fest; vorhandene Freigabegrenzen bleiben bestehen.
-4. Verwende den reinen Textweg für die Rollenpersonalisierung:
+2. Read back the native Hermes/Codex model and reasoning settings, permitted limits, helper routes and original pins against the preparation dataset.
+   Record configuration sources, authorization and actual readbacks privately.
+   Keep the native Codex model ID outside role render fields.
+   Read back the Coder SOUL's default/max values, process binding and `$caveman` clause for every new task and resume.
+   Bind only the chosen [analysis branch](code-analysis.md) for all assigned consumers; record roots and the installed operational update reference.
+3. Verwende den reinen Textweg für die Rollenpersonalisierung:
    [references/render_text.py](render_text.py). Er liest/schreibt keine Dateien,
    lädt keine Runtime und hat keinen CLI-Einstieg. Lade das Modul im freigegebenen
    Zielsetup über den absoluten Pfad des geprüften Makerpakets (z. B.
@@ -326,7 +289,7 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    Bind the recovery launcher through the Maker step below.
    Kommunikationswerte bleiben beim Planner. Verwende technische
    Werte unverändert als Daten, nicht die maskierte Markdownfassung als Shellwerte.
-5. Der Textweg validiert den [Rollenfeldvertrag](native-workflow.md#2-rollen-souls-personalisieren): nichtleere
+4. Der Textweg validiert den [Rollenfeldvertrag](native-workflow.md#2-rollen-souls-personalisieren): nichtleere
    einzeilige Rohwerte, Namen maximal 120 Zeichen, keine Steuer-/Formatzeichen,
    Templateklammern, Einrückung, Backticks, Backslashes oder Fence-Ausbrüche.
    Er ersetzt alle passenden Mehrfachvorkommen genau in einem Durchlauf, ohne
@@ -335,13 +298,13 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    in nativen IDs, Bank oder Pfad. Unbekannte, fehlende,
    zusätzliche oder beschädigte Felder sind Fehler. Sämtliche Nichtplatzhalterbytes
    bleiben unverändert; keine zusätzliche Persona oder Prozessneufassung anhängen.
-6. Zeige die personalisierten Rollen zur Annahme. Schreibe erst danach `soul_text`
-   nach `<jeweiliger Rollenhome>/SOUL.md`.
-   Bestätige Dateiziel und Eigentum direkt vor dem Schreiben; nutze Dateitools,
-   keine Shellinterpolation oder rekursives globales Suchen/Ersetzen. Eine von
-   Create frisch erzeugte neutrale SOUL nur nach dokumentiertem Vergleich gezielt
-   ersetzen; fremde/geänderte Zieltexte anhalten.
-7. Lies jedes Ziel zurück: exakte Rollenzuordnung, vollständige Ausgabe, keine Restfelder,
+5. Use the role personalization accepted during preparation.
+   Compare exact rendered output with that scope, then write `soul_text` only to the confirmed role home `SOUL.md`.
+   Ask again only for a newly observed conflict or scope change.
+   Recheck target ownership immediately before writing with file tools.
+   Do not use shell interpolation or recursive global replacement.
+   Replace only the compared neutral SOUL created for this setup; stop for foreign or concurrently changed content.
+6. Lies jedes Ziel zurück: exakte Rollenzuordnung, vollständige Ausgabe, keine Restfelder,
    bytegleiche Übereinstimmung mit `soul_text`, unveränderte
    Nichtplatzhalterbytes jeder Rolle, keine Kommunikationswerte in Coder/Reviewer,
    Rollen-/Projekt-/Bank-/Boardwerte und technische IDs gegen den Record,
@@ -351,9 +314,8 @@ Daten prüfen, ohne Zielanlage oder Runtime.
    Lies in der Planner-SOUL die Ladepflicht für `grilling`, dessen Vorrang im
    Interviewabschnitt und die getrennte Planannahme zurück. Beide Originalskills
    müssen im Plannerhome vollständig vorliegen; Makerverweise allein genügen nicht.
-   Lies insbesondere in der Coder-SOUL die Prozessbindung und Auftragsregel zurück:
-   `$caveman` in jedem neuen Auftrag, auch nach Neustart/Resume. Zielpfad und
-   Rücklesebeleg im Setuprecord festhalten. Die tatsächliche Moduswirkung folgt in der Funktionsprüfung.
+   Read back the Coder SOUL process binding and `$caveman` clause for every new task, including restart/resume.
+   Record the installed path and exact readback. Verify configured modes without a synthetic worker experiment.
    Prüfe die tatsächliche Codeanalyse-Integration: gewählte Alternative,
    Originalskills und native Aktivierung müssen für alle Rollen und Team-Codex
    erreichbar sein. Keine zweite Alternative und keine bloße Makerreferenz belassen.
@@ -393,25 +355,23 @@ Do not personalize the Python source through the SOUL renderer.
 Do not create a recovery test card for each setup.
 Follow the installed recovery reference's approval and API checks before any later invocation.
 
-## 7. Einzelprüfungen und Wake vor Ticketfreigabe
+<a id="7-einzelprüfungen-und-wake-vor-ticketfreigabe"></a>
+## 7. Output verification and communication binding
 
-Nach vollständigen angenommenen Rollen-/Skilldateien und nativen Bindungen die
-geplanten profilrichtigen Einzelprüfungen aus den Integrationsrezepten ausführen:
-Discovery, vollständige Promptaufnahme, Modelle, persistente Modi und Memory.
-Für die gewählte Analyse die [Funktions-/Updateprüfung](code-analysis.md#funktionspruefung) im
-separaten Testworkspace durchführen; CBM-MCP und beide Harness-Hookwege getrennt
-belegen. Ohne diese Zielprüfungen bleibt die Codeanalyse-Abnahme offen.
-Für Mattermost Rezeptphase 8 einhalten: Planneradapter nachweisen, dann Homebindung
-im DM setzen/rücklesen, danach Erwähnung/Free-Response/DM prüfen. Frühere
-Hot-Admission ersetzt weder Rollenaufnahme noch Adapternachweis.
-Laufzeitbelege nur im separat freigegebenen
-Umfang; offene Kriterien halten die betroffene Fähigkeit gesperrt.
+After complete accepted roles, skills and native bindings, check discovery, full SOUL loading,
+effective configuration and selected integration connection status through established readbacks.
+Do not run model/helper calls, memory experiments, dialog/rejection matrices, or index/update projects.
+Use Mattermost step 8 for the disclosed activation and genuine DM `/sethome` binding/readback.
+Reuse the configuration and file evidence under [Verification](verification.md).
+Check effective `kanban.auto_decompose=false` with the [dispatcher resolver](kanban-block-triage-escalation.md).
+A correct central setting needs no duplicate profile override.
 
-Der Arbeitsprozess bleibt in den Rollen-SOULs und installierten Skills. Für die separat
-freigegebene Testkarte wie für spätere Karten: blocked-first anlegen, vollständige
-Kette binden, **vor Freigabe** die native Subscription setzen. `PLANNER`, `BOARD`,
-`TASK` und IDs stammen aus tatsächlichen bestätigten Zielobjekten. Öffentliches
-Mattermost `O` → `channel`, privates `P` → `group`; DM ist kein Wakeziel.
+### Later normal task subscriptions
+
+This is an operational recipe for later authorized tasks, not a setup test-card requirement.
+Create tasks blocked-first, bind the complete approved chain, and subscribe before release.
+Use actual confirmed `PLANNER`, `BOARD`, `TASK`, channel and human IDs.
+Mattermost public `O` maps to `channel`, private `P` to `group`; DM is not the task-wake target.
 
 ```sh
 hermes -p "$PLANNER" kanban --board "$BOARD" notify-subscribe "$TASK" \
@@ -431,57 +391,37 @@ Nutze dabei die aktuelle native Unsubscribe-Syntax und exakte eigene Zeilenident
 fremde Subscriptions anhalten/klären. Der Eventcursor beginnt beim Subscribe,
 also nicht erst nach Abschluss abonnieren.
 
-Vor automatischer Dispatchfreigabe die tatsächlichen Betriebsgrenzen sowie
-vollständige Bindungs-/Kettenrücklese prüfen und konkrete Probleme klären.
-Zur Kettenrücklese gehört die Kanban-Automatik: `kanban.auto_decompose` muss im
-dispatchenden Home **und** in jeder Profilkopie `false` melden. Der Nachweis ist
-nicht `config get` allein, sondern der Resolver des Dispatchers mit dem Interpreter
-des Gateways (Abschnitt 5 in
-[Kanban-Automatik](kanban-block-triage-escalation.md)). Andernfalls vor der Freigabe
-setzen und zurücklesen:
-
-```sh
-hermes config set kanban.auto_decompose false
-hermes -p "$ROLE" config set kanban.auto_decompose false
-hermes config get kanban.auto_decompose
-```
-
-Kein Gateway-Neustart nötig: der Wert wird in jedem Tick frisch gelesen. Sonst
-verwandelt ein zweimal gleichartig blockierter Vorgang die genehmigte Kette ungefragt
-in eine neue Kartengruppe mit Parent-Kanten auf die laufende Karte und blockiert damit
-den Fortschritt. Auch bei `false` kann die native Block-Eskalation Karten automatisch
-nach `triage` verschieben. Der Planner klärt deren Ursache innerhalb seines Mandats;
-der Status allein beauftragt weder eine Zerlegung noch neue Tickets. Belege in den Record.
-
-Erst wenn freigegeben: echten Dispatcher-/Codex-/Reviewweg im separaten Testworkspace
-prüfen; tatsächliche Task/Run/Commit-/Eventdaten, Plannerbearbeitung und veröffentlichte
-Projektkanalnachricht belegen. `queued`/`scheduled` ist nicht zugestellt. Wakes
-veranlassen erneutes Lesen von Plan und Board, nicht pauschal „alles fertig“.
+Before later task release, read back the complete chain, routing, and effective auto-decompose setting.
+Use the known resolver; do not repair existing task graphs or run fan-out experiments during setup.
+A later `triage` status requires the Planner's existing recovery/authorization rules; it does not authorize decomposition.
+Do not create a pipeline task to complete setup.
 
 ## 8. Teilfortsetzung, Rückwege und Übergabe
 
-Lies native Objekte erneut und setze am ersten offenen Gate fort.
-Lade zuvor die bestätigten Rohwerte und Annahmebelege aus `devteam/setup.md`
-(bzw. dem übergebenen Datensatz vor Planneranlage). Namen/Projekt/Bank/Board
-nicht neu erfragen, technische Profil-IDs und `CODEX_MODEL` nicht neu ableiten.
-Verwende den JSON-Rückleseweg aus Abschnitt 6, keine Markdownmaskierungen als Rohwerte.
-Gleiche native Identitäten, Zielkonto-Home/Workspace, Modellkonfiguration und die zuletzt
-geschriebenen SOUL-Bytes mit dem Record ab. Bei Drift vor erneutem Rendern oder
-Schreiben klären; nur fehlende Werte bestätigen lassen.
-Der Setuprecord ist Nachweis, keine zweite Zustandsautorität. Nach jedem Fehler
-bewahre letzte erfolgreiche Phase, genaue eigene Objekte, fehlende Voraussetzung,
-benötigte Maßnahme und Erfolgssignal. Folgende Fälle gehören zum Verfahren:
+Load confirmed data and evidence from `devteam/setup.md`, or the existing pre-profile handoff dataset.
+Use the JSON readback in section 6 as the raw-value source.
+Read the relevant native objects and resume only the first incomplete setup step.
+Reuse confirmed names, project, bank, board, technical profile IDs, models, and reasoning.
+Compare native identities, target account HOME/workspace, effective model configuration,
+and the last written SOUL bytes with the confirmed data and delivery evidence.
+If required confirmed input is missing, obtain it before using it.
+If actual targets drift, resolve that drift before rendering or writing.
+If only descriptive prose is stale, update the prose from readbacks.
+Do not repeat successful creates or confirmed choices because prose is stale.
+Native objects remain authoritative for current state; the record is evidence.
+After a failure, preserve the latest verified step, exact own objects, missing prerequisite,
+next action, required authorization, and success signal.
+Keep the following targeted recovery cases:
 
 | Fall | Erhaltener Teilstand | Nächste Voraussetzung / Erfolgssignal | Gezielter Rückweg |
 |---|---|---|---|
 | Fremder Rollen-/Bank-/Boardname | Alle vorhandenen Objekte | Eigentum belegen oder neue Kennung bestätigen; native eindeutige Rücklese | Keine fremde Anlage ändern/löschen |
 | Halbfertiges eigenes Setup | Bereits belegte Profile, Board, Bank, Quellen und Hashes | Drift mit nativen Objekten abgleichen; erstes offenes Gate erfolgreich prüfen | Nur dokumentierte eigene Dateiversion/Configeinträge zurücknehmen |
 | PM-Wirkung nicht freigegeben | Bezogene Quellen außerhalb Discovery | Gemeinsamen Scope genehmigen; neue Generation und bestehende Profile verifizieren | Eigene Pluginaufnahme nativ zurücknehmen, keine gemeinsame Runtime entfernen |
-| Hindsight/Mattermost unerreichbar | Profile, gerenderte Dateien, vorhandene eigene Bank/Kanal | Betreiber stellt Verbindung/Zugang bereit; profilrichtiger echter Request/Dialog gelingt | Nur eigene Verbindungs-/Aktivierungseinträge zurücksetzen, Bank/Kanal erhalten |
-| Original-Modellpin fehlt | Unveränderte sechs TOMLs und sonstige Einrichtung | Autorisierter geeigneter Zugang; tatsächlicher Call je Helfer | Keine Pins umschreiben, betroffene Fähigkeit offen halten |
+| Hindsight/Mattermost unavailable | Verified profiles, files and own bank/channel | Operator restores required service/access; established availability and configuration readbacks pass | Reset only authorized own connection entries; preserve bank/channel contents |
+| Original model pin unavailable | All six unchanged TOMLs and existing verified setup | Authorized compatible access and exact pin/inventory readbacks | Preserve pins and report the affected incomplete capability |
 | Persönliche Codex-Skillwurzel wirksam | Persönliche Ausstattung unangetastet | Doppelbindung und echte Workerauflösung korrigieren; Teamroots nachweisen | Nur eigene Prozessbindung/Skillkopien zurücknehmen |
 | Falscher Wake-Owner | Karte blocked, Arbeitsstand erhalten | Eigene Subscription korrekt neu anlegen und nachlesen | Nur exakte zugeordnete Subscription nativ entfernen |
-| Ungeklärte Retry-/Rate-Limit-Grenze | Geprüfte Einrichtung und Arbeitsstand | Tatsächliches Zielverhalten und Auswirkungen klären | Betroffene automatische Arbeit bis zur Klärung zurückhalten |
 
 Erhalte vorhandene Teilstände; ein unerreichbarer Dienst ist kein Auftrag für einen Ersatzserver.
 Vor Rückbau Aktivierung eigener Plugins/Adapter profilbezogen nativ beenden,
@@ -492,20 +432,21 @@ Profile, persönliche Codexdaten, Projektregeln und Graphcaches erhalten.
 Profil-/Board-/Bank-/Kanal-/Sessionlöschung braucht **gesonderte Datenlöschfreigabe**,
 auch wenn die Anlage diesem Setup gehört. Rücklese beweist den Rückweg.
 
-Übergebe Versionen, tatsächlich bestandene Prüfungen gemäß
-[Prüfanleitung](verification.md), Belegorte und konkrete offene Punkte.
-Paketprüfung und Zielabnahme getrennt ausweisen. Ein technisches Team ist noch
-kein fachlich eingearbeitetes Projektteam.
+Hand off exact versions, output readbacks, evidence locations, and real incomplete bindings under [Verification](verification.md).
+Report **Team configured; setup outputs verified** only after the installation baseline below is complete.
+Excluded behavioral checks are outside scope, not pending gates.
 
 ## Record the installation baseline
 
-After the role and own-skill file readbacks pass, follow [Team updates](update.md#record-a-new-team).
+After complete setup delivery, configuration/file readbacks, and recovery binding pass, follow [Team updates](update.md#record-a-new-team).
 Save the actual role IDs and homes under `confirmed_bindings.roles` in the existing private setup JSON.
 Use the actual process HOME for the `team-codex` role.
 Run `update_team.py init` against the reviewed committed Maker source.
 Read back `devteam/installation.json` and its pristine baseline files.
 Record the package SemVer and exact Maker commit in the setup evidence.
-Do not use the initialization helper to install files or bypass runtime acceptance.
+Keep installation metadata, pristine personalized `baselines/<sha256>`, proposals, backups, result journals, and rollback evidence.
+Do not use the initialization helper to install files or replace setup readbacks.
+Do not make excluded behavioral or research checks a prerequisite for initialization.
 If the team already exists, use the documented existing-team baseline path instead.
 
 ## Versionsgebundene Quellen
