@@ -1,6 +1,6 @@
-# Main-Agent Maker wrapper
+# Maker wrapper
 
-Before setup or update, ensure the Main-Agent has this wrapper or a local adaptation.
+Before setup or update, ensure you have this wrapper or a local adaptation in your own agent profile.
 
 ## Bootstrap prompt
 

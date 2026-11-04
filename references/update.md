@@ -25,7 +25,7 @@ An exported skill tree without Git history cannot resolve old source revisions.
 
 ## Discover teams
 
-First verify the Main-Agent wrapper or a local adaptation under [Main-Agent Maker wrapper](main-agent-wrapper.md).
+First check your own wrapper or a local adaptation under [Maker wrapper](main-agent-wrapper.md).
 
 1. Inspect the native profile inventory and actual resolved profile homes.
 2. Check the installed CLI help before invoking a native inventory command.

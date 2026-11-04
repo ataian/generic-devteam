@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Richte ein natives Hermes-Projektteam unter Linux ein.
-version: 1.1.9
+version: 1.1.10
 author: Max
 license: MIT
 platforms: [linux]
@@ -21,7 +21,7 @@ Use the user's or project's language for user-facing conversation.
 
 Use this entry for an explicitly requested new team or interrupted setup.
 For requested existing-team file updates, read [Team updates](references/update.md); reuse confirmed values without a new interview.
-Before either operation, verify the Main-Agent wrapper or a local adaptation under [Main-Agent Maker wrapper](references/main-agent-wrapper.md).
+Before either operation, check your own wrapper or a local adaptation under [Maker wrapper](references/main-agent-wrapper.md).
 Package authoring or review authorizes file work only, not installation or activation.
 Keep product planning and project onboarding as later explicit tasks.
 

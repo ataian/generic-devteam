@@ -29,7 +29,7 @@ Missing shared runtimes/services are operator prerequisites, not an instruction 
 
 ## Direkt aus dem Checkout verwenden
 
-Für Setup und Updates benötigt der Main-Agent einen schlanken Maker-Wrapper oder eine passende eigene Adaption.
+Für Setup und Updates benötigt der ausführende Agent einen schlanken Maker-Wrapper oder eine passende eigene Adaption.
 Der [Bootstrap-Prompt](references/main-agent-wrapper.md) beschreibt diesen Einstieg.
 
 Öffne den Checkout im vorhandenen Hermes und beauftrage:

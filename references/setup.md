@@ -19,7 +19,7 @@ Keep user-facing conversation in the user's or project's language.
    Even help/bootstrap can sync dependencies; absolute plugin paths can alter shared PM inputs.
    Inspect other profiles only when a concrete shared effect requires it.
    Preserve unrelated profiles and shared runtimes; obtain the necessary scope authorization before those effects.
-5. Check the Main-Agent wrapper or a local adaptation under [Main-Agent Maker wrapper](main-agent-wrapper.md).
+5. Check your own wrapper or a local adaptation under [Maker wrapper](main-agent-wrapper.md).
 
 ## 2. Complete upfront preparation
 
