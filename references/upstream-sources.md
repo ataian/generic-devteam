@@ -61,7 +61,7 @@ Notice-Dateien erhalten, auch wenn sie oberhalb eines ausgewählten Unterbaums l
 - `categories/03-infrastructure/docker-expert.toml`
 
 Use the confirmed Team-Codex model for all six agents.
-Assign default or maximum reasoning through [the helper recipe](integrations.md#codex-agents).
+Assign default reasoning or `high` capped by the confirmed maximum through [the helper recipe](integrations.md#codex-agents).
 Preserve all other original fields and the original source evidence.
 The Codex agent `reviewer` does not replace the independent Hermes Reviewer.
 

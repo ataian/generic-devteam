@@ -73,7 +73,7 @@ Record the actual Codex model ID as `CODEX_MODEL` and reasoning separately.
 If the selected model, provider, or reasoning level is unavailable or incompatible, resolve that conflict during preparation.
 Preserve accepted overrides. Do not silently change provider/model or choose the highest supported level.
 Use the Team-Codex model for all six helpers.
-Assign the confirmed default and maximum reasoning levels through [the helper recipe](integrations.md#codex-agents).
+Assign default reasoning or `high` capped by the confirmed maximum through [the helper recipe](integrations.md#codex-agents).
 Do not require access to the upstream model pins or a second provider.
 Validate defaults against maxima using the chosen target's supported semantics, including nonstandard or nonconfigurable reasoning.
 

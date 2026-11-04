@@ -284,9 +284,13 @@ Set `model_reasoning_effort` by this fixed assignment:
 | Agents | Confirmed reasoning value |
 |---|---|
 | `test-automator`, `ui-fixer`, `docker-expert` | `CODEX_REASONING_DEFAULT` |
-| `reviewer`, `security-auditor`, `anti-ui-slop-reviewer` | `CODEX_REASONING_MAX` |
+| `reviewer`, `security-auditor`, `anti-ui-slop-reviewer` | `high`, capped by `CODEX_REASONING_MAX` |
 
-Use the same reasoning value for all six if default and maximum are equal.
+For the review helpers, use `high` if the confirmed maximum is `high` or higher.
+If the maximum is below `high`, use that maximum.
+Compare levels using the selected model/provider semantics, not lexical order.
+For example, maximum `medium` selects `medium`; maximum `ultra` selects `high`.
+Keep `CODEX_REASONING_DEFAULT` unchanged for the default group, even if it is above `high`.
 Resolve unsupported model or reasoning settings during preparation; do not substitute another model or level.
 Do not require availability of the original upstream model pins.
 Change only `model` and `model_reasoning_effort` in the installation copies.
