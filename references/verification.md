@@ -32,7 +32,7 @@ Report unverified items separately from successful checks.
 ## Baseline and completion
 
 Follow [Record a new team](update.md#record-a-new-team) only after all required outputs and recovery binding pass.
-Read back the private single setup JSON, `installation.json`, complete managed mappings, transform identifiers and pristine personalized `baselines/<sha256>` bytes.
+Read back and validate locally the private single setup JSON, `installation.json`, complete managed mappings, transform identifiers and pristine personalized `baselines/<sha256>` bytes under the [tool output contract](../SKILL.md#tool-output).
 Record package SemVer and exact Maker commit separately, with baseline provenance and actual role homes.
 Use the real process HOME for `team-codex`.
 Keep private state directories at 0700 and files at 0600.
@@ -41,7 +41,7 @@ Keep proposals, backups and journals when the actual update operation requires t
 Use **Team configured; setup outputs verified** only after required outputs and the baseline are complete.
 Otherwise state the exact incomplete binding, preserved progress, next action and required authorization.
 A missing shared prerequisite is an operator issue, not an automatic install/repair task.
-On resume, read confirmed JSON and relevant native objects; continue only the incomplete step.
+On resume, reconcile saved setup data with relevant native objects; continue only the incomplete step.
 Correct stale prose without repeating confirmed choices or creates.
 
 Setup verifies configuration, availability and delivered outputs. It does not qualify live agent behavior or project readiness.

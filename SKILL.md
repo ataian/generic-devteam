@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Richte ein natives Hermes-Projektteam unter Linux ein.
-version: 1.1.11
+version: 1.1.12
 author: Max
 license: MIT
 platforms: [linux]
@@ -37,14 +37,15 @@ Keep required instructions in context; reduce evidence output, not verification 
 Read complete required instructions and only the selected integration branch.
 Reuse unchanged instructions already available in the current context after a user pause.
 If context is missing or the source changed, reload the affected instructions.
-On resume, read the confirmed setup JSON and relevant native state, then continue the first incomplete step.
+On resume, reconcile saved setup data with relevant native state, then continue the first incomplete step.
 
-Select required fields before returning configuration, inventory, or API results to the model.
+Load and validate the complete setup JSON locally; let scripts consume its values directly.
+Return only the setup values, configuration fields, inventory entries, or API results needed for the current decision.
 For complete file and native-loading checks, compare the full results programmatically.
 Return the checked scope, actual source/target bindings, result, and concrete differences.
 Keep complete nonsecret evidence in the existing private setup area and return its path.
 For verbose installations, use the protected logging procedure in [Integrations](references/integrations.md#installation-output).
-If a check fails, inspect the relevant evidence and return the actionable error or warning.
+If a check fails or a decision needs more detail, inspect the relevant evidence and return the necessary details, errors, and warnings.
 Do not replace inspection with a log path or hide unresolved findings by truncating output.
 
 ## Setup sequence
