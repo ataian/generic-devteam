@@ -31,7 +31,7 @@ Do not require a new interview skill or product-planning workshop.
 | Group | Complete before starting |
 |---|---|
 | Project and roles | Separate project name and canonical absolute workspace; repository boundaries or confirmed absence; display names for Planner (`PLANER_NAME`), Coder (`CODER_NAME`), Reviewer (`REVIEWER_NAME`); selectable homes and collision resolutions |
-| Models and analysis | Combined default set below or confirmed overrides; actual native model/provider IDs and supported reasoning; helper-pin compatibility; exactly one of CBM or Graphify; repository/corpus scope, roots, cache/output paths and any optional watcher intent |
+| Models and analysis | Combined default set below or confirmed overrides; actual native model/provider IDs and supported reasoning; helper model/reasoning bindings to the confirmed Team-Codex policy; exactly one of CBM or Graphify; repository/corpus scope, roots, cache/output paths and any optional watcher intent |
 | Codex identity | Explicitly authorized `user.name`/`user.email` reuse, provenance, access method and protected login route; discovery alone is not consent |
 | Shared objects | Existing service endpoints; intended board/bank names; create versus authorized reuse and ownership |
 | Communication | Mattermost server/team, intended Planner bot, human and any additional authorized users, allowed project channel, channel type and DM participants; existing IDs or explicit creation intent |
@@ -70,9 +70,11 @@ Offer this complete set once; accepting it confirms its limits without separate 
 Resolve Sol separately to the actual supported native model/provider identifier for each target through established availability/configuration interfaces.
 `sol-medium` and `sol-high` describe model/reasoning combinations; never submit them as guessed native model IDs.
 Record the actual Codex model ID as `CODEX_MODEL` and reasoning separately.
-If any model, provider, level, or original helper pin is unavailable/incompatible, resolve that concrete conflict during preparation.
+If the selected model, provider, or reasoning level is unavailable or incompatible, resolve that conflict during preparation.
 Preserve accepted overrides. Do not silently change provider/model or choose the highest supported level.
-Do not require a second provider; keep incompatible original pins unchanged and resolve their required access before starting.
+Use the Team-Codex model for all six helpers.
+Assign the confirmed default and maximum reasoning levels through [the helper recipe](integrations.md#codex-agents).
+Do not require access to the upstream model pins or a second provider.
 Validate defaults against maxima using the chosen target's supported semantics, including nonstandard or nonconfigurable reasoning.
 
 Keep Hermes Coder fixed reasoning separate from task-selected Codex reasoning.
@@ -249,7 +251,7 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
    Keep all skill names and bytes unchanged except the recovery launcher.
    Bind that launcher through the Maker step below after copying the full tree.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.
-2. Read back the native Hermes/Codex model and reasoning settings, permitted limits, helper routes and original pins against the preparation dataset.
+2. Read back the native Hermes/Codex model and reasoning settings, permitted limits, helper routes and adapted model/reasoning settings against the preparation dataset.
    Record configuration sources, authorization and actual readbacks privately.
    Keep the native Codex model ID outside role render fields.
    Read back the Coder SOUL's default/max values, process binding and `$caveman` clause for every new task and resume.
@@ -419,7 +421,7 @@ Keep the following targeted recovery cases:
 | Halbfertiges eigenes Setup | Bereits belegte Profile, Board, Bank, Quellen und Hashes | Drift mit nativen Objekten abgleichen; erstes offenes Gate erfolgreich prüfen | Nur dokumentierte eigene Dateiversion/Configeinträge zurücknehmen |
 | PM-Wirkung nicht freigegeben | Bezogene Quellen außerhalb Discovery | Gemeinsamen Scope genehmigen; neue Generation und bestehende Profile verifizieren | Eigene Pluginaufnahme nativ zurücknehmen, keine gemeinsame Runtime entfernen |
 | Hindsight/Mattermost unavailable | Verified profiles, files and own bank/channel | Operator restores required service/access; established availability and configuration readbacks pass | Reset only authorized own connection entries; preserve bank/channel contents |
-| Original model pin unavailable | All six unchanged TOMLs and existing verified setup | Authorized compatible access and exact pin/inventory readbacks | Preserve pins and report the affected incomplete capability |
+| Selected Team-Codex model or reasoning level unavailable | Original helper sources and existing verified setup | Authorized compatible access and exact configuration/inventory readbacks | Preserve the confirmed selection and report the affected incomplete capability |
 | Persönliche Codex-Skillwurzel wirksam | Persönliche Ausstattung unangetastet | Doppelbindung und echte Workerauflösung korrigieren; Teamroots nachweisen | Nur eigene Prozessbindung/Skillkopien zurücknehmen |
 | Falscher Wake-Owner | Karte blocked, Arbeitsstand erhalten | Eigene Subscription korrekt neu anlegen und nachlesen | Nur exakte zugeordnete Subscription nativ entfernen |
 
