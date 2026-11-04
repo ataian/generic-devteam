@@ -79,6 +79,39 @@ class UpdaterTests(unittest.TestCase):
     def proposal(self):
         return u.prepare(self.repo, self.home, 'HEAD')
 
+    def test_setup_scalars_survive_initialize_discovery_and_update(self):
+        setup = u.setup_data(self.state)
+        scalars = {'CREATE_BANK': True, 'CREATE_BOARD': False, 'WATCHER': True,
+                   'OPTIONAL_VALUE': None, 'INTEGER_VALUE': 7, 'NUMBER_VALUE': 1.5,
+                   'STRING_VALUE': 'confirmed'}
+        setup['confirmed_values'].update(scalars)
+        (self.state / 'setup.md').write_text('```json\n' + json.dumps(setup) + '\n```\n')
+        self.initialize()
+        _, _, record = u.load_record(self.home)
+        for key, value in scalars.items():
+            with self.subTest(key=key):
+                self.assertEqual(record['confirmed_values'][key], value)
+                self.assertIs(type(record['confirmed_values'][key]), type(value))
+        self.assertEqual(u.discover([{'home': str(self.home)}])[0]['status'], 'recorded')
+        self.change()
+        result = u.apply(self.home, self.proposal(), decision='proceed', review='checked scalar preservation')
+        self.assertEqual(result['status'], 'applied')
+        _, _, updated = u.load_record(self.home)
+        self.assertEqual(updated['confirmed_values'], setup['confirmed_values'])
+        for key, value in scalars.items():
+            self.assertIs(type(updated['confirmed_values'][key]), type(value))
+
+    def test_setup_values_reject_structures_and_non_json_numbers(self):
+        record = self.initialize()
+        marker = self.state / 'installation.json'
+        for value in ([], {}, ['nested'], {'nested': True}, float('nan'), float('inf'), -float('inf')):
+            with self.subTest(value=value):
+                values = dict(record['confirmed_values'], INVALID=value)
+                marker.write_text(json.dumps(dict(record, confirmed_values=values)))
+                with self.assertRaisesRegex(ValueError, 'Invalid installation setup data'):
+                    u.load_record(self.home)
+                self.assertEqual(u.discover([{'home': str(self.home)}])[0]['status'], 'failed')
+
     def test_setup_record_template_preserves_update_round_trip(self):
         import bind_recovery as b
 

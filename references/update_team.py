@@ -8,6 +8,7 @@ import argparse
 import base64
 import hashlib
 import json
+import math
 import os
 from pathlib import Path, PurePosixPath
 import re
@@ -368,7 +369,9 @@ def load_record(home):
             raise ValueError('Invalid installation field: ' + key)
     check_roles(record.get('roles'), home)
     if (not isinstance(record.get('confirmed_values'), dict)
-            or not all(isinstance(value, str) for value in record['confirmed_values'].values())
+            or not all(isinstance(value, (str, bool, int, float, type(None)))
+                       and (not isinstance(value, float) or math.isfinite(value))
+                       for value in record['confirmed_values'].values())
             or not isinstance(record.get('confirmed_bindings'), dict)
             or type(record.get('legacy_skills_unknown')) is not bool):
         raise ValueError('Invalid installation setup data')
