@@ -120,6 +120,13 @@ hermes -p "$PROFILE" config get security.protected_instruction_files
 ```
 
 Apply these steps to Planner, Coder and Reviewer using their confirmed model/provider values.
+Disable the automatic skill-review trigger only in the Planner profile:
+
+```sh
+hermes -p "$PLANNER" config set skills.creation_nudge_interval 0
+hermes -p "$PLANNER" config get skills.creation_nudge_interval
+```
+
 Use `PLANNER_REASONING`, `CODER_REASONING` or `ROLE_REASONING_DEFAULT` as the respective `EFFORT`.
 Planner and Hermes Coder retain their fixed levels.
 Require effective `security.protected_instruction_files: false` for each selected role.

@@ -40,8 +40,9 @@ Project preparation belongs to a later explicit project task.
 
 Original: [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent).
 Resolve the complete distribution tree `skills/autonomous-ai-agents/codex` for Coder and `skills/devops/sdlc-review` for Reviewer.
-Reuse the existing distribution and its canonical license/companion files; verify the actual subpaths.
-If assets are missing, report the prerequisite without repairing the shared distribution or installing a private replacement.
+Reuse the natively managed distribution skills and their canonical license/companion files; verify the actual subpaths.
+If an already-authorized distribution copy is required, preserve its path relative to `skills/` under the target skill root: `autonomous-ai-agents/codex` or `devops/sdlc-review`.
+If a skill is missing from native discovery, report the prerequisite; do not repair the shared distribution or install a flattened private replacement.
 
 Später je Rolle Katalog, Hauptskill und alle benötigten Referenzen im tatsächlichen
 Profil laden, Quellpfad/Revision nachweisen. `codex` bleibt unverändert; konkrete
