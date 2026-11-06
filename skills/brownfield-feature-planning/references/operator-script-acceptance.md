@@ -93,6 +93,8 @@ Reject an operator step that depends on an undocumented manual intervention. If 
 
 Use only when the bounded change of verification responsibility is accepted. These are prerequisites and evidence requirements, not a tested native pause/resume recipe.
 
+Record test orders, operator results, and role assessments on their existing Kanban cards.
+
 1. Preserve the original task as the shared reference. Re-read it with `hermes kanban --board BOARD show TASK --json`; check the body, actual schema, parent set and run ownership before any edit. Prepend an explicit authoritative amendment using the supported `edit TASK --body` command, preserving the still-valid original requirements below it. Read back that same task and verify body plus unchanged status/parents/runs; do not infer release from a successful edit.
 2. Specify the transition contract before releasing work: who produces the test order, which supported task state and owner cover the operator interval, who may change the repository, who confirms receipt, and how implementation or review resumes. Do not fill an unresolved transition with a guessed command sequence. Preserve existing dependency protection while that contract is unresolved; waiting is not a new capability-failure retry.
 3. Require a test order from the responsible implementer, and a separate recheck order from the independent reviewer. Each names the exact source commit or reproducibly identified provisional diff, test files, complete immutable image references, local engine target, commands, prerequisites, expected results, owned resource names, resource limits and authorized cleanup. Re-inventory resources immediately before mutation rather than relying on a prior snapshot.

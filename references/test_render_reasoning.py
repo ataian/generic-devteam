@@ -224,5 +224,72 @@ class ReasoningContractTests(unittest.TestCase):
             self.assertTrue(expected == output, role)
 
 
+class TicketDocumentationTests(unittest.TestCase):
+    """Static instruction contracts, not live agent-behavior tests."""
+
+    def setUp(self):
+        self.root = ROOT / "skills/brownfield-feature-planning"
+        self.skill = (self.root / "SKILL.md").read_text()
+        self.release = (self.root / "references/kanban-phase-release.md").read_text()
+        self.status = (self.root / "references/kanban-status-inspection.md").read_text()
+
+    def test_normal_handoff_uses_git_baseline_and_native_card(self):
+        self.assertIn("Keep the accepted plan and phase plan in the agreed versioned project location.", self.skill)
+        self.assertIn("Record ticket documentation directly on the existing Kanban card.", self.skill)
+        self.assertIn("Keep product documentation in its owning repository.", self.skill)
+        self.assertIn("Read the referenced files at the approved Git revision", self.release)
+        self.assertIn("Every plan reference resolves to the approved revision.", self.release)
+        self.assertIn("Every notification binding matches the verified target.", self.release)
+        self.assertIn("Unblock descendants in reverse order and phase one last.", self.release)
+
+    def test_partial_creation_resumes_from_persisted_cards(self):
+        self.assertIn("approved plan path, plan commit, and phase identifier", self.release)
+        self.assertIn("including archived cards", self.release)
+        self.assertIn("Create only missing phases.", self.release)
+        self.assertIn("Read each returned exact card before further writes.", self.release)
+        self.assertIn("stop release on any unresolved mismatch", self.release)
+
+    def test_partial_release_preserves_completed_transitions(self):
+        self.assertIn("Before the first release, require every card to be blocked.", self.release)
+        self.assertIn("On resume, verify current runs and dependency gates for already released cards.", self.release)
+        self.assertIn("Preserve their completed release transitions.", self.release)
+        self.assertIn("Apply this order only to pending initial releases on resume.", self.release)
+        self.assertNotIn("Every card is still blocked", self.release)
+        self.assertNotIn("attachment verification", self.skill)
+
+    def test_correction_updates_existing_assignment_and_plan_reference(self):
+        self.assertIn("update the existing authoritative task body and its exact plan reference", self.skill)
+        self.assertIn("A comment alone must not leave the next worker reading a contradictory task body.", self.skill)
+        self.assertIn("Preserve the original task and all valid parents", self.skill)
+        self.assertIn("If an independent check is required, retain that check.", self.skill)
+
+    def test_operator_blocker_keeps_evidence_and_ownership_on_card(self):
+        self.assertIn("Record the operator handoff on the existing card.", self.skill)
+        self.assertIn("restart impact", self.skill)
+        self.assertIn("rollback", self.skill)
+        self.assertIn("Record actual receipt and assessment on the existing acknowledgment card.", self.status)
+        self.assertIn("Record the resumption decision on the existing blocked card.", self.status)
+        self.assertIn("Read the posted instruction back before release.", self.status)
+        self.assertIn("Do not complete, reclaim, redispatch or overwrite the active worker's report.", self.status)
+        self.assertIn("Verify actual process end separately from run `ended_at`.", self.status)
+        operator = (self.root / "references/operator-script-acceptance.md").read_text()
+        self.assertIn("Record test orders, operator results, and role assessments on their existing Kanban cards.", operator)
+
+    def test_removed_file_duties_do_not_survive_in_loaded_procedures(self):
+        retrospective = (self.root / "references/project-retrospectives.md").read_text()
+        self.assertIn("Record a ticket retrospective on the existing card.", retrospective)
+        text = "\n".join((self.skill, self.release, self.status, retrospective))
+        for obsolete in (
+            "durable manifest", "repository manifest commit", "existing manifest",
+            "central receipt record", "central resumption decision",
+            "central feature collection and its index", "README index",
+            "Attach the accepted plan and specification as real files",
+            "attach the amended plan to both tasks",
+            "For an operator handoff, write a durable file",
+        ):
+            with self.subTest(obsolete=obsolete):
+                self.assertNotIn(obsolete, text)
+
+
 if __name__ == "__main__":
     unittest.main()
