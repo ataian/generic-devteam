@@ -1,28 +1,39 @@
 # Kanban status inspection
 
-Use for read-only triage of handoff, completion and blocker notifications when the board and worker can advance between the notification and the response.
+Use this reference for read-only triage of handoff, completion and blocker notifications.
+Recheck current state because the board and workers can advance after a notification.
+Keep diagnosis separate from authorization to change a task, repository or runtime.
 
 ## Read and reduce before output truncation
 
-1. Use native `kanban_show(task_id=..., board=...)` for the exact task and `kanban_list(board=...)` for dependency state. Always set the board explicitly. If these supply the required evidence, stop there; do not add a scratch export and code-execution step to every routine status read.
-2. Use the CLI/Python recipes below only when a missing native projection or a substantial batch justifies extraction and that execution context is authorized. Consume the full subprocess stdout within Python, parse there, then print only the required fields. Passing a large CLI response through a terminal tool and calling `json.loads` on that tool's displayed text can parse a truncated prefix instead of the actual JSON. Keep exported scratch files local to the inspecting session; publish the actual assignment and result on Kanban so another worker does not need access to a different profile's scratch directory.
-3. Keep failures honest: a nonzero subprocess exit or malformed full JSON is not an empty board. Raise/report it and retry a structured read; do not infer success or perform compensating writes.
-4. For ordinary inspection of persisted JSON or spillover, use `read_file` with bounded pagination and read the needed fields as text; no JSON decoder or code-execution permission is needed. Only if a justified machine-validated batch requires parsing, consume raw bytes inside its already-authorized execution context: line-number prefixes and pagination in the human-facing `read_file` presentation are not JSON payload. Do not create that execution dependency for a routine task read. Re-read the existing result after a presentation mismatch; do not repeat board writes or releases.
+1. Use native `kanban_show(task_id=..., board=...)` for the exact task.
+2. Use native `kanban_list(board=...)` for relevant dependency state.
+3. Set the board explicitly on every call.
+4. Stop extraction when native reads supply the required evidence.
+5. Use `read_file` with bounded pagination for saved JSON, reports and spillover text.
+6. Do not introduce Python execution or a scratch export for a routine read or acknowledgment.
+7. Use authorized CLI/Python extraction only for a missing native projection or a substantial machine-validated batch.
+8. Parse complete subprocess stdout inside that execution context before returning reduced fields.
+9. Keep any scratch export local to the inspecting session rather than making it an inter-agent handoff dependency.
+10. Keep assignments, questions and results on the existing Kanban card.
+11. Report nonzero subprocess exits or malformed full JSON as read failures, not an empty board.
+12. After a presentation or parser failure, re-read the existing result or exact target instead of repeating a write or release.
+13. Do not relax parsing or reconstruct truncated content.
+14. Do not bypass denied access or actions through another tool or command form.
+15. Use an otherwise permitted native read if only the original command form was unsuitable.
 
-For a complete batch stored in your own scratch workspace, a raw-file reload within an authorized Python execution context is:
+Inspect actual top-level and nested keys before reusing a response schema.
+Treat fields omitted by CLI JSON as unknown rather than empty claims or satisfied dependencies.
+If parent-satisfaction metadata is absent, read each exact parent and require completion before relying on its gate.
+If claim metadata is absent, inspect native state or available run status, end time and provenance.
+If comment IDs are absent, verify one exact-task entry matching the author and distinctive posted body.
+Do not repeat a successful comment or transition to repair its readback parser.
 
-```python
-from pathlib import Path
-import json
+### Conditional CLI extraction
 
-batch = json.loads(Path(batch_path).read_text(encoding="utf-8"))
-if set(batch) != set(expected_task_ids):
-    raise ValueError("Persisted batch does not contain the exact intended targets")
-```
-
-This raw-file reload requires an authorized Python execution context; it does not authorize bypassing denied access or actions. An otherwise permitted native read remains available when only the command form was unsuitable.
-
-Reusable read-only recipe (replace board and task arguments with verified identifiers; keep dynamic values as argument-array elements):
+Use this read-only pattern only under the extraction conditions above.
+Replace board and task variables with verified identifiers.
+Keep dynamic values in argument-array elements.
 
 ```python
 import json
@@ -38,77 +49,113 @@ def read_json(board, verb, *args):
 
 
 snapshot = read_json(board, "show", task_id)
-# Check the actual projection rather than manufacturing an empty run list.
 runs = snapshot["runs"]
 if any("id" not in run for run in runs):
     raise ValueError("Inspect run identity schema before selecting latest run")
-# Native run IDs are monotonically assigned; do not assume array order.
 ordered_runs = sorted(runs, key=lambda run: run["id"])
-implementation_handoffs = [
-    run for run in ordered_runs if run.get("outcome") == "review_requested"
-]
+handoffs = [run for run in ordered_runs if run.get("outcome") == "review_requested"]
 print(json.dumps({
     "task": {
         key: snapshot["task"].get(key)
         for key in ("id", "title", "status", "assignee", "current_run_id")
     },
     "latest_run": ordered_runs[-1:],
-    "implementation_handoff": implementation_handoffs[-1:],
-    "parents": snapshot.get("parents", []),
+    "implementation_handoff": handoffs[-1:],
+    "parents": snapshot.get("parents"),
 }, ensure_ascii=False))
 ```
 
-Reduce the returned run metadata further if it is large. The code is a read-only extraction pattern, not a substitute for checking live state before a write. Inspect top-level and nested keys before using one response surface as the schema for another: CLI JSON may omit fields exposed by native tools. Treat an omitted CLI field as unknown, not as proof of an empty value or no active run. When parent-satisfaction metadata is omitted, fetch each exact parent and require its completed state before release. When claim metadata is omitted, inspect available run statuses/end times and provenance or use a native read. For comment readback, use a returned comment ID only when the read surface actually exposes it; otherwise match the exact target task, author and distinctive posted body, and require one matching entry. Do not hide schema mismatches behind defaults that manufacture an empty claim or satisfied dependency. After a verification parser fails following a successful comment or transition, re-read the exact target and verify its current state; do not repeat the write to repair the parser.
+Select the latest run by native monotonic run ID rather than array order.
+Reduce large run metadata further before returning it.
+Do not use an extraction snapshot instead of a fresh state check before a consequential transition.
+If output capture still truncates the payload, redirect full CLI stdout to the active profile's private scratch workspace.
+Persist justified multi-task batches and compare their exact IDs and counts with the intended set.
+If a machine-validated reload is needed, read raw file bytes within the already-authorized execution context.
+Do not parse the line-numbered `read_file` presentation as JSON.
+
+```python
+from pathlib import Path
+import json
+
+batch = json.loads(Path(batch_path).read_text(encoding="utf-8"))
+if set(batch) != set(expected_task_ids):
+    raise ValueError("Persisted batch does not contain the exact intended targets")
+```
 
 ## Determine the phase, not just the status label
 
-- On handoff, verify reviewer assignment and the `review_requested` provenance. A reviewer claim may change `review` to `running`; an empty latest run summary does not erase the prior implementer's handoff.
-- On completion, classify the deliverable before applying its gate. Coding/product completion requires a completed independent-reviewer run and verdict. An explicitly authorized bounded operator completion requires the operator's own completed run, original ownership and fulfilled result contract; it does not substitute for the later coding/product review. Read the board to verify only the intended immediate successor is ready or running and later descendants remain parent-gated. Leave the dispatcher in control.
-- On blocker, inspect the latest blocking event, its actor/reason, run outcome, relevant log and current Git state. Distinguish a newly failed operation from notification of a deliberate coordination stop; an intentionally parked duplicate needs acknowledgment of the existing hold, not new diagnosis, decomposition or retry. Historical capacity errors must not authorize retry of a different current blocker.
-- Attribute evidence: say the implementer reports a test result, or the reviewer records an independently executed result. Do not imply the planner ran those tests.
-- Keep a named final-commit acceptance gap visible until a reviewer supplies the missing integrated execution. Preserve unrelated resources; a leftover-resource caveat is not cleanup authorization.
+1. Read the notified task's current run and event provenance before reporting its phase.
+2. Identify the claimed role from the run's `profile` and review origin rather than `running` alone.
+3. On handoff, verify reviewer assignment and the implementer's `review_requested` provenance.
+4. Read the latest implementation handoff separately from the latest reviewer run.
+5. Do not discard an earlier handoff because the new review run has an empty summary.
+6. On completion, classify the deliverable before applying its gate.
+7. For coding/product completion, require the completed independent-reviewer run, verdict, reviewed commit and test evidence.
+8. For explicitly authorized bounded operator completion, require the operator's own completed run, original ownership and fulfilled result contract.
+9. Do not substitute operator completion for later coding/product review.
+10. Read the board to verify that only the intended immediate successor is ready or running.
+11. Verify that later descendants remain parent-gated.
+12. Leave successor advancement to the dispatcher.
+
+Attribute each test result to the implementer, operator or independent reviewer who produced it.
+Do not imply that the planner executed another role's tests.
+If a reviewer supplies a missing check, close only that gap with the reviewer's provenance.
+Preserve earlier reports as historical observations rather than retroactively changing their executor or outcome.
+If full acceptance ran on an earlier tree, retain the exact-final-commit gap until the reviewer records the missing integrated run.
+Do not count targeted tests as the missing full acceptance run.
+Preserve unrelated resources when reporting leftover-resource caveats.
+
+## Diagnose the current blocker
+
+1. Read the latest blocking event, actor, reason, run outcome, relevant worker log and current Git state.
+2. Inspect dispatcher diagnostics if they can change the next safe action.
+3. Distinguish a failed operation from a deliberate coordination stop or a supported dependency wait.
+4. If a duplicate was intentionally parked, acknowledge its existing hold rather than inventing a diagnosis, decomposition or retry.
+5. Do not apply an old failure or capacity diagnosis to a different current blocker.
+6. For startup failures, trace parent command, child argv, interpreter, working directory and module resolution.
+7. Distinguish launcher startup, worker startup, coding-harness acceptance and completed implementation.
+8. Inspect the inner harness result even if its wrapper exited successfully.
+9. Do not infer a completed verdict or a code defect from truncated reviewer output.
+10. If review stopped, inspect preserved review provenance and any active retry before proposing intervention.
+11. Leave an active retry with its owner.
+12. If execution aborted, inspect HEAD, partial changes, missing deliverables and relevant writer processes.
+13. Do not infer process termination or a security denial from a timeout.
+14. Treat success-looking reports from interrupted runs as provisional until supported by actual acceptance evidence.
+15. If a guard blocked an operation, identify the exact attempted action and available guard evidence.
+16. Distinguish file access, code execution, authentication and execution-service availability.
+17. State that the cause is unknown when the concrete prompt or trace is unavailable.
+18. Inspect runtime context only where needed to explain the failed boundary.
+19. Do not infer worker capability from a successful operation in another profile or session.
+20. Preserve mandated STOP/no-fallback rules when proposing the next action.
+
+For an unresolved blocker, report the responsible actor, next safe action, observed evidence, impact and resumption condition.
+Route the handoff to the existing card's authorized owner.
+If an operator repair is needed, identify its scope, restart impact, non-secret verification and rollback.
+Do not treat diagnosis as permission to change the shared gateway, profile, infrastructure or approval policy.
 
 ## Check dependency handoffs before relying on silence
 
-1. Read the waiting card's latest run, actual terminal event kind and exact open parent. Then read the existing operator/acknowledgment successor. Distinguish a supported dependency wait from a failed operation; a waiting consumer cannot advance while its prerequisite remains blocked without an assigned next action.
-2. Read `hermes kanban --board <board> notify-list <task> --json` and inspect the installed notifier's event-selection and wake policy only as needed to establish whether this specific handoff can reach its coordinator. Match the actual event kind, not the human-facing status label. Recheck current behavior rather than preserving a negative claim about a particular event across installations.
-3. Separate configured subscription, event cursor, ping cursor, actual delivered message and coordinator acceptance. A correctly bound `notify+wake` subscription is not evidence that every transition triggers notification. If the required handoff is uncovered, do not claim automatic continuation, reclassify a genuine wait as an error, create a new diagnostic graph or silently add a watcher. Route the concrete coordination gap through the authorized existing mechanism and state the limitation plainly.
-4. On a status inquiry, report completion versus active work versus idle waiting first, followed by the last real deliverable and the specific unfinished team work. Read back any authorized change before reporting that execution resumed; a comment alone is neither a release nor a worker claim.
+1. Read the waiting card's latest run, terminal event kind and exact open parent.
+2. Read its existing operator or acknowledgment prerequisite and actual edge direction.
+3. Verify that an assigned next action can resolve the blocked prerequisite.
+4. Read `hermes kanban --board <board> notify-list <task> --json` when delivery matters to the handoff.
+5. Inspect the installed notifier's event-selection and wake policy only as needed for that event kind.
+6. Recheck current behavior rather than assuming that a status label implies a notification.
+7. Distinguish subscription configuration, event cursor, ping cursor, actual message delivery and coordinator acceptance.
+8. Do not treat `notify+wake` as proof that every transition triggers a coordinator turn.
+9. If the handoff is uncovered, report the concrete coordination gap through the authorized existing mechanism.
+10. Do not promise automatic continuation, relabel a genuine wait as an error or create a diagnostic graph or watcher.
 
-## Prove result receipt without taking another worker's claim
+## Report the observed boundary
 
-1. Read the exact operator card, original run/event provenance, complete operator result and existing acknowledgment card. Compare task, run profile, claim/spawn values and real parent direction; a result summary or display name alone is insufficient.
-2. Read `hermes kanban --board <board> notify-list <operator-task> --json` and match the intended platform/chat/thread/user/profile/mode. Correlate its cursor and ping with the actual terminal event received in the current conversation. A cursor alone is not proof that a person or agent read and accepted the report; record the actual receipt and explicit assessment. State which destination was observed rather than claiming acknowledgment in every subscribed destination.
-3. If numeric event IDs are required but the native projection omits them, use an authorized read-only exact-task query against the verified board database; do not infer IDs from event order or timestamps. A reusable query, bound with a verified task value, is `SELECT id, task_id, kind, run_id, created_at, payload FROM task_events WHERE task_id = ? AND kind IN ('claimed', 'spawned', 'completed') ORDER BY id`. Use a read-only connection, such as `sqlite3.connect('file:' + db_path + '?mode=ro', uri=True)`, and parameterized values. Do not load write handlers or mutate the database to repair missing projection fields. When read access is unavailable, retain the observed kind/time/run/payload tuple and state the numeric-ID limitation.
-4. Record actual receipt and assessment on the existing acknowledgment card. Include the observed event/run/session association, exact operator result read, bounded acceptance, missing evidence, and next step. If the incoming notification exposes no platform post ID, mark it unavailable instead of inventing one. Preserve the operator result's earlier statement that receipt was pending. Add the new observation rather than rewriting history.
-5. Read back the receipt comment on that exact card. If the acknowledgment card has an active run, leave its ownership unchanged. Do not complete, reclaim, redispatch or overwrite the active worker's report. Report the bounded operator result as accepted, the acknowledgment task by its actual status, and the later coding/review/deployment gates as still pending.
+1. Report completed work, active execution or idle waiting first.
+2. Name the last real deliverable, unfinished work, next responsible role and any genuinely required owner decision.
+3. Report `ready` until an intended-profile claim proves `running` with its actual run identity.
+4. Do not describe a posted clarification, acknowledgment or rewritten specification as resumed execution.
+5. Keep implementation, independent review, downstream gates and product acceptance distinct.
+6. Treat subscribed notifications as board events rather than necessarily human-authored instructions.
+7. Do not infer continuous log monitoring or an aggregate completion hook from the event stream.
 
-This procedure verifies one real communication boundary. Do not promote it into proof of reviewer return, approval-capable execution, complete phase acceptance or a hard deployment gate.
-
-## Narrow scope without stopping the accepted delivery
-
-Use when the owner rejects an expanded side workflow but still wants the original executable delivered. This is not authority to resume a cancelled project, add functionality, bypass a denial or weaken a data-safety gate.
-
-1. Read the exact existing coding card and current board with native tools. Check its run, repository state and relevant writer processes before changing ownership; use current evidence rather than a queued notification. State whether work is running, ready or idle and whether any input is genuinely missing.
-2. Recover the agreed instruction when newer documentation has obscured it. Map its commands to the existing implementation and record a bounded remaining-work specification on the existing coding card: inputs, executable output, affected files, relevant safety checks, finite verification, commit and independent review. Do not rewrite a working importer or build a new test platform merely to simplify the entry point.
-3. Park obsolete runnable successors before releasing the narrowed task: `hermes kanban --board <board> assign <obsolete-task> none`. Replace their active body instructions with the explicit hold and historical-reference status; do not falsely complete them. Temporarily unassign the coding card if necessary to prevent dispatch during graph edits.
-4. Update the existing coding body through `hermes kanban --board <board> edit <coding-task> --body <body-text>`, referencing the approved plan revision and explicitly superseding obsolete instructions and historical attachments. Remove only an abandoned-scope prerequisite using `hermes kanban --board <board> unlink <obsolete-parent> <coding-task>`. Preserve dependencies that still protect the requested mutation; removing an obsolete lifecycle prerequisite does not prove that lifecycle checks passed.
-5. Read back the exact body, remaining parents, parked successors and notification route. Confirm the required parents are fulfilled and the previous writer has ended. Restore the intended coding assignee using the supported `assign` command, then release with native `kanban_unblock(task_id=..., board=...)`. Do not reset recurrence counters, reclassify capability failures or manually claim/dispatch.
-6. Use a bounded native `kanban_list` filtered by the assignee and status to check dispatcher pickup. Report `ready` until the current card has a real intended-profile claim; report `running` with its actual new run identity after pickup. A rewritten specification or posted comment is not resumed execution. Keep coding, review and verified import results distinct: restarting delivery is progress, not a finished product.
-
-## Resume a blocked card after coordinator acknowledgment
-
-Use when the existing acknowledgment card has actually completed and its deliverable resolves the original blocker. Do not apply this procedure to a still-running acknowledgment or an unresolved execution/security denial.
-
-1. Read the acknowledgment's complete report, original completed run and terminal event, then re-read the blocked target, exact parents and downstream cards. Require the intended owner, fulfilled result contract, satisfied original parents and no active target run. Separate the missing orchestration work from the worker's privileges: if the authorized coordinator already performed subscription/graph setup, the returning worker need not gain those privileges or repeat the probe.
-2. Verify actual process end separately from run `ended_at`. Take the PID and process-start identity from the exact original spawn record; inspect with `ps -p <verified-pid> -o pid,ppid,stat,etime,comm` and, if relevant, `ps --ppid <verified-pid> -o pid,ppid,stat,etime,comm`. A board-completed worker can still be running its epilogue and editing its report. If a handoff requires termination, wait only through a supported bounded foreground process check; do not kill/reclaim completed work, infer exit from `done`, or manufacture polling of delegated work whose result requires ending the turn. If the PID may have been reused, compare its recorded start identity rather than treating an unrelated process as the worker.
-3. Re-read the final report after the prior worker exits, because its final completion-event evidence may have been appended after the first read. Check current repository HEAD, `git status --short` and `git diff --check`; preserve unrelated uncommitted files and require no parallel repo writer. Keep historical observation records intact rather than rewriting them as current success.
-4. Record the resumption decision on the existing blocked card. Name the fulfilled prerequisite deliverables, the specific repaired boundary, the remaining authorized file/commit/review work and the unchanged exclusions. Explicitly tell the returning worker to reuse completed operator/acknowledgment cards instead of constructing another graph. Read the posted instruction back before release.
-5. Reference the completed prerequisite cards and their final result records from the resumption decision. Verify the exact task, run, checked artifact identity, and result against those original records.
-6. Use `kanban_unblock(task_id=..., board=...)` only from the authorized orchestrator context after the exact blocker is resolved. Do not re-kind the block, reset recurrence accounting, weaken runtime policies or manually claim/dispatch. Read back the exact target immediately: distinguish the returned `ready` transition from a subsequent actual dispatcher `running` claim, and require the new run's intended profile. Verify unchanged parent sets and that later phases have no active runs and remain gated. Use the native transition as the release record. Add any missing readback evidence to the same card and verify the comment. Leave implementation and independent review with their owners.
-
-## Correlate native receipt without exposing conversation contents
-
-When a receipt contract requires canonical session evidence beyond the current conversation's actual notification, inspect only the verified session/message metadata and a boolean exact-task/status match. For an authorized read-only session database, use a parameterized query such as `SELECT id, session_id, role, instr(content, ?) > 0 AS exact_notification_match FROM messages WHERE id = ?`, binding the exact notification prefix and the independently observed message-row ID. Read session routing metadata separately to confirm destination/profile. Do not dump general chat content or infer a missing message-row ID.
-
-Keep these evidence layers distinct: native task-event ID, internal notification-row ID, admitted gateway session, external platform post ID and explicit agent acceptance. Correlate actual task/status, checkpoint and routing when no event foreign key is stored; never invent such a relation or treat a missing external post ID as proof that an observed internal receipt failed. State the actual boundary verified and any stronger evidence still unavailable.
+If operator-result receipt or canonical session correlation is required, load the [operator-executed verification contract](operator-script-acceptance.md#operator-executed-verification-contract).
+If the owner authorizes scope or graph changes, load [phase release](kanban-phase-release.md#narrow-scope-without-stopping-the-accepted-delivery).
+If a blocker is resolved or a run was interrupted, load [safe resumption](kanban-triage-recovery.md#resume-after-a-blocker-or-interrupted-run).

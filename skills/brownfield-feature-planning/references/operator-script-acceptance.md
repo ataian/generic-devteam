@@ -1,145 +1,278 @@
 # Operator script acceptance
 
-Use this checklist when a feature already exists but operators lack a reliable setup or activation path. These are planning and acceptance requirements, not a claim that any particular installation recipe has been implemented or tested.
+Use for an accepted operator setup, import, or activation path.
+These rules neither authorize deployment nor prove that a recipe has run.
 
-## 1. Establish the boundary
+## Establish the execution boundary
 
-Record whether the request is to produce artifacts, verify them in isolation, or apply them to a live deployment. Do not seek a production host as a blocker for artifact-only work. Inventory operator-runtime prerequisites separately from developer/build prerequisites before choosing the entrypoint. Under a Docker-only production contract, host-side Java, Maven, Python installation, backend source checkout and image compilation are not acceptable setup instructions. Select a Docker-and-shell entrypoint and an already-built executable/runtime artifact; verify the package contents and availability rather than treating a candidate container recipe as tested. Keep builds on the development/build side. Include all required compiled classes, schema resources and DB-client dependencies in the delivered artifact; shipping sources that compile only when the operator invokes the command merely relocates the development requirement.
+Separate artifact creation, isolated verification, and live application.
+Record approved test targets and deployment exclusions in the plan and phase cards.
+Do not require a production host for artifact-only work or inherit historical host permissions.
 
-For instruction-to-script work, read the maintained instruction and existing executable/importer first, and map only its required actions to the acceptance path. Read deployment definitions and image/startup metadata only when those actions require them. Apply later activation, upgrade, UI and lifecycle checks only when those functions are explicitly in scope; this checklist must not turn a database-import script into an application-management package.
+Read the maintained instruction and existing importer first.
+Map required actions to actors, inputs, resources, and observable results.
+Inspect deployment/startup wiring only as needed for that path.
+Do not expand import automation into application-lifecycle management.
+Distinguish a user-confirmed deployed checkout from direct live inspection.
 
-When deployment is in scope, read the maintained deployment definition and its current Git state. If the user identifies a refreshed checkout as the deployed baseline, record that provenance separately from a direct live-system inspection. Never describe the latter as performed when only repository inspection occurred.
+Under a Docker-only contract, require only Docker and ordinary shell facilities on the operator host.
+Keep language-runtime installation, source checkout, compilation, and image builds on the development side.
+Place the entrypoint and short README in the deployment repository.
+Invoke packaged business logic from its producing module; do not copy sources or create another parser.
+Name the chain: host script → producing artifact → command process/container → database.
+Identify exact repositories, services, images, and paths as existing, proposed, or execution-verified.
 
-## 2. Trace the complete operator path
+## Configuration and process boundaries
 
-For every required action, specify who performs it, the process/container boundary, permissions, inputs and an observable success condition:
+1. Resolve the deployment directory, ordered config files, project identity, and existing container.
+   Reject ambiguous targets before mutation.
+   Verify administrative access rather than assuming a default role.
+2. Name the operator configuration, required keys, and normal invocation.
+   Trace credentials/settings from authorized sources into the DB client and app process.
+   Read only needed fields without printing secrets or executing dotenv files with shell `source`.
+   Avoid duplicate password stores.
+   Distinguish existing readers from proposed configuration behavior.
+3. Inspect producer packaging and the built command, resources, and dependencies.
+   Verify command-only launch with a harmless help/argument check in the built image.
+   Contents alone prove neither deployment availability nor entrypoint execution.
+   Do not add live compilation or dependency downloads from obsolete developer recipes.
+4. Choose placement from the isolation requirement.
+   A process inside the existing container shares its resource limits and can affect the app through exhaustion.
+   A temporary container can have separate limits but still shares host/database capacity.
+   Override its server entrypoint to run only the utility.
+   Do not require a permanent service or bespoke image without need.
+5. For temporary jobs, resolve the actual local image ID and existing DB network.
+   Mount only required inputs/configuration read-only.
+   Exclude app data mounts, published ports, privileges, and the Docker socket.
+   Container-network DB access does not require a host DB port.
+   Verify command availability before mutation.
+   Treat outdated images as explicit update prerequisites, not permission for live builds, pulls, or restarts.
+6. Deliver producer packaging before its wrapper.
+   Retire the old entrypoint only after a successful real data-operation check.
+   Include required container access, authentication, and verification in the executable path.
+   Document and test any unavoidable manual preparation.
 
-| Boundary | Required planning evidence |
-| --- | --- |
-| Deployment selection | Explicit directory, ordered config files and project identity; reject ambiguous targets before mutation. |
-| Container access | Resolve the existing project's container rather than choosing a convenient fixed name or creating a second installation. |
-| Database administration | Test actual administrative access; do not assume a default role or leave authentication to manual container editing. |
-| Bulk import | Reuse the existing importer; specify how its executable, dependencies, inputs and network reachability are supplied. |
-| Runtime configuration | Trace settings into the actual application process; writing an unused environment file has no effect. |
-| Artifact availability | Specify how operator-host images arrive; a developer's local build is not automatically present on the deployment host. |
-| Activation | Confirm only intended app services restart; preserve database and unrelated dependency containers. |
-| Verification | Assert exact status values and a meaningful operation, not merely successful process exit. |
+Limit import-only mutations to module data and invocation-owned resources.
+Do not recreate app/DB services, change credentials, alter primary data, or publish ports for that path.
+If activation is contracted, verify flags and DB settings in the running process.
+An edited environment file or fresh image does not prove enablement.
+Disclose required restarts/recreation and obtain approval for changed functionality.
+Preserve unrelated services and dependencies.
+For optional-data failure containment, load [External-data discovery](data-discovery.md#optional-data-features).
 
-### Specify configuration and noninterference before promising one-command operation
+## Artifact provenance and startup-contract preflight
 
-1. Trace each credential from the authorized input file or secret source to the DB client and application process. Inspect the actual variable names and selected deployment configuration; do not guess a default administrator or claim a dotenv file supplies credentials just because Compose references it. Read only the required fields, never print values or execute the file with shell `source`.
-2. Name the operator-owned configuration file, required keys and exact invocation. Add a separate module config only for genuinely separate settings; do not introduce a second password store or copy existing secrets merely to simplify an example. State clearly whether the executable reads an existing config, prompts or accepts process-environment values. Document existing behavior separately from a proposed new reader.
-3. Check application enablement independently of image freshness and successful data import. Trace flag and DB settings into the running process; writing a new unused env file cannot activate the feature. If the running process lacks them, disclose the needed configuration/recreation boundary and obtain approval for any changed functionality rather than silently adding restart or reconfiguration actions.
-4. Limit mutations to the optional module's data and invocation-owned temporary resources. Do not restart/recreate existing app or DB services, change their credentials, alter the primary database or publish ports to satisfy an import-only path. Bound tool-container resource use on shared infrastructure; a separate database does not imply zero shared-resource risk. Check that optional datastore failure is contained by the application instead of promising noninterference from packaging alone.
-5. Explain acceptance in operator terms: the documented command against a running instance, verified imported records and relevant failure/repeat checks. An isolated copy without sibling source repos proves packaging independence only; do not present it as the customer's installation workflow or as evidence of real DB execution.
+Inventory baseline, target, and dependency artifacts before integrated acceptance.
+Assign acquisition or transfer to an authorized role.
+Inspect exact immutable references on the verified worker engine.
+Require their actual `RepoDigests` and compare reported versus live Image-IDs separately.
+Distinguish image, manifest, and index digests.
+Record selected platform and acquired platform-image identity when relevant.
+Tags, source checkouts, and local builds do not prove deployed image content.
 
-### Bound preparation and acceptance before artifact checks
+For upgrade acceptance, require authentic pre-feature artifacts and functional dependencies.
+Do not substitute stripped target builds or idle placeholder services.
+Label smaller component fixtures by their actual scope.
+Preserve baseline identities and use distinct target-build names to prevent tag overwrite.
 
-1. Extract the finite operator journey and safety/failure gates from the accepted plan. For each check record the user-visible outcome, expected result and the requirement or changed-code risk it proves; discard redundant proof work rather than inventing another acceptance phase. Preserve required backup, noninterference, recovery and independent-review gates.
-2. List the setup artifacts needed to execute that journey: owned isolated deployment, authentic app/dependency images, input catalog, synthetic credentials and safe negative-test contexts. Assign preparation to the implementation or operator role as appropriate. Missing fixtures or target builds are unfinished team work, not automatically customer-supplied prerequisites; do not hand off a document that requires a fully prepared environment without specifying who prepares it and how.
-3. Inspect the actual setup commands for conflicts with the test order's restrictions, including implicit downloads or builds. Resolve an accidental scope contradiction in the authoritative existing order; preserve genuine user restrictions and runtime approvals, and seek narrowly bounded authorization when a necessary operation exceeds them. Do not fabricate offline flags, prepared manifests or successful provisioning, and do not silently bypass a denied operation.
-4. Execute the documented journey on the final tested state and return the actual results. Attribute reused evidence to its original executor and commit. Explain any remaining gap in product terms and route the specific unfinished deliverable, not an open-ended investigation.
+Compare startup guards with maintained and baseline build definitions using `git show BASELINE:path`.
+Trace `Entrypoint + Cmd`, `WorkingDir`, mounts, and artifact paths.
+Path spelling alone proves neither incompatibility nor a schema-changing upgrade.
+Reproduce suspected mismatches against the unchanged predicate before proposing fixes.
+If imports start orchestration, use an inspected scratch-only predicate probe with synthetic inputs.
+Prevent external calls and include a control that reaches the next guard.
+Report predicate evidence separately from container/database execution.
 
-### Artifact provenance and startup-contract preflight
-
-1. Inventory baseline, target and dependency artifacts before promising an integrated acceptance run. Use `docker image ls` to establish local availability and narrowly formatted `docker image inspect --format '{{.Id}} {{json .RepoDigests}}' IMAGE` to identify candidates. For independently verifying an operator handoff, inspect each exact digest-pinned reference on the verified worker engine, require that reference in the actual RepoDigests and compare the separately reported Image-ID with the live Image-ID. Do not assume `.Id` equals the manifest or index digest: these describe different content objects. Record selected platform identity when applicable. Record how authorized artifacts are acquired or transferred and who supplies them. A tag, historical source checkout or locally rebuilt JAR alone does not prove the deployed baseline's image content. Treat an unauthenticated registry response as an access-boundary result, not evidence that the artifact is absent; request an authorized artifact path without putting credentials in tickets or chat.
-2. Require genuine pre-feature application artifacts and functional dependency services for an upgrade-from-existing-installation gate. Keep smaller fixtures for unit/component tests, but label their limits; removing feature classes from the target build or using idle dependency containers cannot establish authentic baseline compatibility.
-3. Compare the actual starter guard against the maintained and baseline build definitions (`git show BASELINE:path/to/Dockerfile`) and, when available, effective container metadata. Trace the complete `Entrypoint + Cmd`, `WorkingDir`, relevant mounts and inspected artifact path. Do not infer runtime equivalence from command spelling alone, or infer a schema-changing upgrade solely from a relative-versus-absolute path mismatch.
-4. Reproduce a suspected guard mismatch against the unchanged predicate before prescribing a fix. If importing the module would execute orchestration, inspect it first and use a scratch-only probe of the relevant method with synthetic metadata and explicit dependencies; AST extraction of a reviewed method is one option. Prevent external calls, assert the exact rejection, and use a comparison case that reaches the next guard. Report this as predicate-level evidence, not container, database or end-to-end success.
-5. Separate the missing-artifact boundary from the compatibility-code boundary. Record both on the existing task. If correcting a runtime guard exceeds a test/documentation-only phase, propose one narrowly scoped, independently reviewed prerequisite and obtain amendment approval before creating it. Preserve artifact, configuration and migration safety checks; do not change fixtures or build files merely to hide the production mismatch. Leave any remaining real-image compatibility checks explicitly unresolved.
-
-### Standalone commands packaged in an application image
-
-Use this inspection and decision procedure when a deployment wrapper should call existing backend code. It is not evidence that a proposed container invocation has already worked.
-
-1. Locate the producer's packaging configuration and Dockerfile, then inspect the built artifact on the development side. For a Spring Boot executable JAR, a bounded inspection can use:
-
-   ```sh
-   unzip -l application.jar \
-     'BOOT-INF/classes/com/example/ImportCommand.class' \
-     'BOOT-INF/classes/catalog/schema.sql' \
-     'org/springframework/boot/loader/launch/PropertiesLauncher.class' \
-     'BOOT-INF/lib/postgresql-*.jar'
-   ```
-
-   Substitute the real class/resource names. Confirm the exact entries and bundled dependency version. A command class, resource and driver in a local JAR prove package contents, not their presence in the running deployment or a working entrypoint. Do not add a live driver download or compiler merely because an older developer instruction used one.
-2. Determine the command-only launch supported by that packaging and loader version. Invoke the intended standalone main explicitly, not the application main or the image's default server entrypoint. Require a harmless help/argument check in the built image before calling the launch verified; packaged class presence alone is insufficient. Keep any necessary CLI/config-reader change small and reuse the existing business method.
-3. Choose the process boundary from the noninterference requirement:
-
-   | Placement | Mechanism and trade-off |
-   | --- | --- |
-   | Existing application container | `docker exec` starts another process, not another backend instance. Ordinary command failure is separate, but memory/CPU limits are shared and an OOM condition can affect the backend. |
-   | Temporary container from the existing application image | Override the server entrypoint and run only the utility. Apply independent resource limits and a smaller runtime heap; no additional permanent service or bespoke tool image is inherently required. Shared host/database capacity still matters. |
-
-   Describe this trade-off briefly rather than telling the operator another backend must start. Record the chosen contract, not a blanket rule that every utility requires a new container.
-4. For a temporary job, resolve the intended application's actual local image ID and the target deployment's existing database network. Bind only required inputs/configuration read-only; do not inherit application data mounts, published ports, privileged settings or a Docker socket. No host PostgreSQL port is needed merely to reach the DB over its existing container network. Verify the required command is present before database mutation; an outdated image should produce an explicit normal-update prerequisite, not an automatic live build, pull or application restart.
-5. Order producer packaging before the deployment wrapper, and retire an obsolete operator entrypoint only after the replacement has a real successful data-operation check. Keep shell-side orchestration, packaged business logic and application activation separate; do not treat an import transaction as proof that the running application received new settings.
+Record artifact-access and compatibility-code blockers separately on the existing card.
+Obtain amendment approval for out-of-phase fixes with independent review.
+Do not change fixtures/build definitions to hide production mismatches.
+Keep outstanding real-image checks explicit.
 
 ### Authenticated registry metadata and acquisition handoff
 
-Use after the owner confirms candidate image references and explicitly authorizes a credential source. A successful metadata check resolves the access boundary, not local image availability or compatibility.
+Use after owner confirmation of candidate references and authorization of the credential source.
 
-1. Resolve the authorized profile or secret source and read only the required variables machine-side. For an explicitly supplied dotenv file, use `dotenv_values(path, interpolate=False)` rather than shell `source`; print only presence booleans. Do not display/copy the complete file, log credential values, or pass them to a coding-model prompt. Scope worker authorization to registry authentication rather than implicitly granting access to unrelated application or profile secrets.
-2. Validate the registry origin before sending authentication: require the approved HTTPS hostname and port, reject URL userinfo, and disable credential-forwarding redirects. In a read-only Python probe, `urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())` supports a direct connection with redirects rejected; use it when no proxy is required. Keep authorization headers in memory, not shell arguments or diagnostic output. Select Basic or token authentication from the registry's actual challenge instead of assuming all registries behave alike.
-3. Request `/v2/<repository>/manifests/<reference>` with Docker v2/manifest-list and OCI manifest/index Accept types. Bound request time and response size. Report only the approved reference, HTTP status, validated schema/media type and a syntactically valid `Docker-Content-Digest`; do not dump headers, response bodies or exception objects that could contain credentials. A metadata probe can use `GET` to validate the manifest JSON rather than accepting status alone.
-4. Record source confirmation separately from technical evidence: owner-confirmed baseline, authenticated manifest availability and captured digest are distinct facts. Pin the resulting immutable reference in the plan and worker handoff. Recheck on acquisition; stop on identity drift instead of silently following a changed mutable tag.
-5. Delegate actual acquisition and verification to the execution role. Use a private temporary Docker configuration outside repositories and build contexts so authentication cannot overwrite an existing user login. Supply the password machine-side through stdin, never argv; remove only owned temporary authentication files. For digest-pinned acquisition, use `docker --config CONFIG_DIR pull REGISTRY/REPOSITORY@DIGEST`, then narrowly inspect IDs/RepoDigests. Record local acquisition separately from the earlier metadata check.
-6. Preserve the authentic baseline before building targets. Give feature builds distinct local names and retain baseline IDs/digests; building under the same mutable tag can destroy the very starting point the upgrade test must exercise. For manifest indexes, record the selected platform and acquired platform-image identity as well as the index digest.
-7. Report the strongest completed boundary only: manifest access is not a pull, a pull is not startup compatibility, and compatibility is not end-to-end or authenticated UI acceptance. Release an approved prerequisite through the existing graph only after its next execution context and supported handoff satisfy their own entry gates; access verification alone does not resolve command-approval or ownership boundaries. Keep the successor dependency-gated and retain all remaining safety checks.
+1. Read required credentials machine-side without dotenv execution or interpolation.
+   Limit access to registry credentials, not unrelated profile/application secrets.
+   Keep values out of prompts, argv, reports, and diagnostics.
+2. Validate the approved HTTPS origin/port before authentication.
+   Reject URL userinfo and credential-forwarding redirects.
+   Follow the actual authentication challenge and keep headers in memory.
+   Bound request time and response size.
+3. Request `/v2/<repository>/manifests/<reference>` with Docker/OCI manifest/index Accept types.
+   Validate schema/media type and `Docker-Content-Digest` syntax.
+   Report only approved reference, status, type, and digest.
+   Do not dump bodies, headers, or secret-bearing exceptions.
+   An unauthenticated response proves an access boundary, not artifact absence.
+4. Separate owner confirmation, authenticated availability, and digest capture.
+   Pin immutable references in the plan/handoff and stop on acquisition-time identity drift.
+5. Assign acquisition to the execution role.
+   Use private temporary Docker authentication outside repositories/build contexts.
+   Pass passwords through stdin and preserve existing logins.
+   Pull pinned references and verify local IDs, RepoDigests, engine, and platform.
+   Remove only owned temporary authentication files.
+6. Distinguish metadata access, acquisition, compatibility, and end-to-end acceptance.
+   Provisioning elsewhere does not prove the next worker's command-approval capability.
+   Keep successors gated until their execution context and handoff meet entry conditions.
 
-Reject an operator step that depends on an undocumented manual intervention. If a prerequisite genuinely cannot be automated, name it precisely, document the concrete preparation procedure and test that procedure.
+## Safe mutation and recovery
 
-### Operator-executed verification contract
+Perform read-only preflight and acquire artifacts before interrupting services.
+Preserve environment values, Compose override order, mounts, dependencies, and later-start configuration.
+Empty-directory initialization SQL does not provision an existing volume.
+Provide the required existing-instance provisioning path.
 
-Use only when the bounded change of verification responsibility is accepted. These are prerequisites and evidence requirements, not a tested native pause/resume recipe.
-
-Record test orders, operator results, and role assessments on their existing Kanban cards.
-
-1. Preserve the original task as the shared reference. Re-read it with `hermes kanban --board BOARD show TASK --json`; check the body, actual schema, parent set and run ownership before any edit. Prepend an explicit authoritative amendment using the supported `edit TASK --body` command, preserving the still-valid original requirements below it. Read back that same task and verify body plus unchanged status/parents/runs; do not infer release from a successful edit.
-2. Specify the transition contract before releasing work: who produces the test order, which supported task state and owner cover the operator interval, who may change the repository, who confirms receipt, and how implementation or review resumes. Do not fill an unresolved transition with a guessed command sequence. Preserve existing dependency protection while that contract is unresolved; waiting is not a new capability-failure retry.
-3. Require a test order from the responsible implementer, and a separate recheck order from the independent reviewer. Each names the exact source commit or reproducibly identified provisional diff, test files, complete immutable image references, local engine target, commands, prerequisites, expected results, owned resource names, resource limits and authorized cleanup. Re-inventory resources immediately before mutation rather than relying on a prior snapshot.
-4. Freeze the tested tree during each operator run. After provisional checks and the required product commit, repeat all mandated checks on the exact final commit. If later code changes, invalidate affected evidence and rerun the corresponding gates; do not merge pre-commit success into a final-commit acceptance claim.
-5. Return the operator's evidence to the ordering role for assessment. For review checks, preserve the reviewer's independently chosen scope and own verdict; common operator execution must not become common test judgment. Confirm the responsible planner's receipt before each role transition through the verified communication path; a ticket comment alone is not acknowledgment and does not authorize an unrequested watcher.
-
-| Evidence field | Required content |
-| --- | --- |
-| Provenance | Ordering role, operator, timestamp, repository and exact commit or reproducibly identified provisional state. |
-| Execution | Actual commands, exit status, relevant original output and comparison with expected results. |
-| Artifact identity | Actual image IDs, RepoDigests, platform identity when relevant and explicit local engine target. |
-| Noninterference | Preflight inventory, isolation outcome and ownership of affected containers, networks, volumes, mounts and ports. |
-| Limits | Preserved gates, errors, denied operations, untested points and exact authorized cleanup performed. |
-| Assessment | Ordering implementer's interpretation or independent reviewer's own recheck assessment; distinguish it from the operator's execution report. |
-
-Keep secrets out of test orders, evidence, model prompts and board artifacts. Record the rejection and its actual boundary; do not bypass denied access or actions. Rejection of an unsuitable command form does not forbid an otherwise authorized read with a native read tool. Separate method approval, artifact availability, operator execution, final-commit verification and independent reviewer acceptance in every handoff.
-
-## 3. Design safe mutation and recovery
-
-Require read-only preflight before mutation and obtain artifacts before interrupting service. Preserve existing environment-file values, Compose override ordering, mounts and service dependencies. Maintain one effective configuration across installation, status checks and later operator starts; otherwise a successful setup can disappear at the next restart.
-
-Identify whether initialization runs only for empty data directories; adding initialization SQL does not repair an already deployed volume. Use an explicit existing-instance provisioning path for optional databases.
-
-Scope backups to the data that will change and verify restoration, not just dump creation. Require successful backup before replacing an existing catalog, including direct import calls that bypass an install orchestrator. Separate disabling a feature from deleting its data.
-
-Record original app configuration and image identity before changes. Detect operator edits before rewriting or restoring managed files. Limit cleanup to resources owned by the invocation. Bound external calls, serialize conflicting installs, and require clear nonzero failure results.
-
-Do not promise image rollback as database rollback. If a proposed app replacement requires main-schema changes outside the accepted feature scope, stop and route a separate upgrade decision rather than silently widening the installer.
+Back up affected data and verify restoration, not only dump creation.
+Require backup before catalog replacement, including direct importer calls.
+Record original configuration/image identity and detect operator edits before rewriting or restoring files.
+Serialize conflicting operations and bound external calls.
+Return clear nonzero failures and clean only authorized invocation-owned resources.
+Separate disablement from deletion and image rollback from database rollback.
+Route out-of-scope main-schema changes to a separate upgrade decision.
 
 ### Version-control protection for generated state
 
-1. Trace where runtime state is actually written relative to each independent repository, including nested deployment directories. Cover credentials, configuration snapshots, completed dumps and partial backups; directory permissions do not prevent an accidental Git add.
-2. Plan a targeted versioned ignore rule in every affected repository. Use a directory-only pattern without a root anchor when the same generated directory can appear beneath nested deployments; avoid broad `*.env` or `*.dump` rules that could hide legitimate project fixtures. One repository's `.gitignore` does not apply to a sibling repository.
-3. Verify synthetic paths using `git check-ignore --no-index -v <root-state-path> <nested-state-path>` and check that the reported rule comes from the intended versioned `.gitignore`, not a global exclude or `.git/info/exclude`. Include negative controls for normal source/documentation paths. Use `git ls-files` filtered by path names to detect already tracked state without reading secret contents; escalate any match rather than automatically deleting files or rewriting history.
-4. State the limits in the adjacent operator documentation: ignore rules protect untracked files from ordinary adds, not already tracked files or `git add -f`; external deployment repositories require their own rules. Update any temporary manual-exclusion wording when the versioned protection is delivered.
-5. If the accepted phase permits changes in only one repository but its gate requires protection in several, stop before coding. Obtain approval for a small reviewed prerequisite in the missing repository, then link it before the existing phase; do not weaken the gate or use machine-local excludes as the delivered fix.
+1. Locate generated credentials, config snapshots, complete dumps, and partial backups in every affected repository.
+   Include nested deployments; directory permissions do not prevent Git staging.
+2. Add targeted versioned ignore rules in each owning repository.
+   Use directory-only unanchored patterns when generated directories occur at multiple depths.
+   Avoid broad extension rules that hide legitimate fixtures.
+3. Test synthetic root/nested paths with `git check-ignore --no-index -v`.
+   Require the intended versioned `.gitignore`, not global or machine-local excludes.
+   Include normal source/documentation paths as negative controls.
+   Inspect `git ls-files` names for tracked state without reading secrets.
+   Escalate matches rather than deleting data or rewriting history.
+4. Explain limits: ignore rules exclude neither tracked files nor `git add -f`.
+   Sibling repositories need their own rules.
+   Replace obsolete manual-exclusion instructions when versioned protection is delivered.
+5. If authorized file scope cannot meet the gate, obtain approval for the missing repository prerequisite.
+   Retain independent review; do not weaken the gate or substitute machine-local exclusions.
 
-## 4. Make documentation testable
+## Real operator acceptance
 
-Put a short README next to the executable in the deployment repository and link it from the operator's usual entrypoint. Lead with only the necessary configuration file/keys, how credentials are obtained, one complete normal invocation and its result. Include real operator obligations and failure/repeat behavior, not development prerequisites or hypothetical password-management tasks. Explain maintenance windows, later starts, recovery and UI only when those operations are in the accepted contract. Keep detailed architecture and historical procedures separate so the operator need not read them to run the command.
+Define a finite journey from accepted outcomes and safety gates.
+Tie each check to a requirement or concrete changed-code risk.
+Assign bounded fixture/artifact preparation to the appropriate team role, not implicitly to the user.
+Inspect setup commands for hidden builds/downloads and order contradictions.
+Correct accidental contradictions in the authoritative order without bypassing real restrictions.
 
-Execute the accepted path against a safely owned running instance and record actual artifact identities and limits. For import-only work, verify the documented invocation, resulting records, relevant target/input/backup failures and repeat behavior, with targeted evidence that primary data and existing services remain unchanged. Build a full populated application fixture and exercise activation, UI or lifecycle transitions only when those functions are explicitly contracted; do not make them prerequisites for a database import.
+Link a short README beside the entrypoint from the operator's usual starting point.
+Lead with required keys, credential sourcing, one complete invocation, results, and failure/repeat behavior.
+Include maintenance, activation, UI, and lifecycle only when contracted.
+Keep architecture/history outside the normal path.
 
-Distinguish Bash syntax checks, real CLI parsing, intercepted mutation examples and live isolated execution in each handoff; a documentation verifier that intercepts actions proves syntax/argument handling, not operator success. API/container checks and GUI artifact inspection do not prove an authenticated UI workflow. Carry those remaining gates into the agreed end-to-end phase rather than silently treating them as covered.
+Execute those commands against a safely owned running target.
+For import-only work, verify records, relevant target/input/backup failures, and repeat behavior.
+Prove primary data and existing services unchanged.
+Require populated full-app fixtures and authenticated UI/lifecycle checks only for contracted functions.
+A source-independent package copy proves packaging independence, not DB execution.
 
-Run the integrated acceptance path on the final committed tree after changes to startup, capability or safety gates; a previous full run plus narrow final regression tests can miss interactions. If the full run is deferred to the independent reviewer, name that exact gap in the handoff and keep it unresolved until the reviewer supplies execution evidence. Verify source/commit identifiers against the final repository state rather than copying a pre-amend evidence document's hash.
+Before fixture creation, re-inventory Docker endpoint, capacity, containers, networks, volumes, mounts, and listeners.
+Replace fixed names, tags, ports, and host paths with owned test resources.
+Compose project naming alone is not isolation.
+Prefer no published ports; otherwise use free loopback-only bindings.
+Use synthetic credentials and bounded CPU/RAM.
+Prove isolation before startup and preserve resources without established cleanup ownership.
+Do not use host networking, privileges, production binds, or broad prune/down commands as shortcuts.
 
-For Compose tests, re-inventory all existing containers, network/volume ownership and host listeners before fixture creation; an earlier port listing is not a reservation. Override every fixed container name, published port and persistent host path with owned test resources; project naming alone is insufficient. Prefer no published ports, otherwise use free loopback-only bindings. Use synthetic credentials/configuration, bound CPU/RAM use, and prove isolation before starting the fixture. Preserve pre-existing services and even earlier test resources unless ownership and cleanup authorization are established; never use host networking, privileged containers, production bind paths or broad prune/down commands as a shortcut. Free RAM/disk and available images establish prerequisites, not noninterference or successful lifecycle execution.
+Separate syntax checks, CLI parsing, intercepted examples, isolated execution, and UI acceptance.
+Assert exact status and meaningful results, not process exit alone.
+Attribute reused evidence to its executor and checked state.
+Run integrated acceptance on the final committed tree after startup, capability, or safety changes.
+A prior full run plus narrow final regressions does not close that gate.
+If the reviewer supplies the final run, keep the gap open until execution evidence exists.
+Verify reported commit identities against final Git state.
+
+## Operator-executed verification contract
+
+Use only for an accepted, bounded responsibility amendment.
+Separate plan approval, role assignment, source access, runtime approval, and product acceptance.
+This contract provides neither native pause/resume support nor permission to bypass denials.
+
+### Roles and transitions
+
+1. Read the complete proposal, authoritative plan, exact task/parents/runs, and relevant Git state.
+   Attribute approval to the current owner decision, not a proposal label.
+   Give the bounded decision and distinguish it from operational release.
+2. Preserve SOUL-defined roles.
+   The implementer owns product changes, test orders, assessment, and commits through the mandated coding path.
+   The independent reviewer chooses/assesses separate rechecks and owns the verdict.
+   The operator executes authorized orders and reports original observations.
+   The planner coordinates board state, routing, receipt, and release rather than taking over lifecycle tests.
+   Shared execution does not permit shared test judgment.
+3. Amend the versioned plan before the authoritative task body.
+   Bind the card to exact plan and phase-plan Git revisions.
+   Identify superseded responsibilities and unchanged gates.
+   Preserve history without contradictory active instructions.
+   Read back the exact body, references, status, parents, and run ownership.
+4. Specify supported state/ownership during the operator interval, repository write authority,
+   receipt owner, and implementation/review return.
+   Verify delivery and acknowledgment before release.
+   Do not invent pause/claim support, reuse run IDs, create parallel writers, or use repeated blocks as waiting.
+   Preserve protective parents and never falsely complete redundant work.
+5. Limit the amendment to its named phase.
+   Require separate approval for infrastructure, new watchers, or additional product changes.
+   Preserve denials and their real boundary.
+   An unsuitable command form does not bar an otherwise authorized native read.
+   Do not reassign a denied operation to bypass its guard.
+
+Use [Kanban phase release](kanban-phase-release.md) for graph changes.
+Use [Kanban triage recovery](kanban-triage-recovery.md) for blocked-card resumption and process-end checks.
+An operator can close only its own card under the accepted bounded-result contract.
+That closure cannot replace product review or deployment approval.
+
+### Test orders, source freeze, and evidence
+
+Keep orders, results, and assessments on existing Kanban cards; use native run logs for detailed output.
+Require the implementer's order and the reviewer's independently chosen recheck order.
+Each identifies:
+
+- Repository, exact commit or reproducibly identified provisional diff, and test files.
+- Immutable artifacts, local engine, prerequisites, commands, and expected results.
+- Owned resources, limits, current preflight, and authorized cleanup.
+
+Freeze the tested tree during each operator run and refresh resource inventory before mutation.
+After provisional checks and the product commit, repeat all mandated checks on the exact final commit.
+Invalidate affected evidence after changes and rerun those gates.
+A frozen implementation commit can precede authorized external tests; it is not reviewed completion.
+
+Return evidence to the ordering role.
+Record ordering role/operator, timestamp, source state, actual commands, exits, and relevant original output.
+Include image IDs/RepoDigests, platform, engine, isolation, and resource ownership.
+State denials, errors, untested points, and exact cleanup.
+Separate operator observations from implementer assessment and independent reviewer verdict.
+Exclude secrets and restricted source identities from orders, board artifacts, and model prompts.
+
+### Receipt without taking another worker's claim
+
+Confirm the responsible planner's receipt before each role transition.
+A posted comment, configured subscription, or cursor alone is not acknowledgment.
+
+1. Read the operator card, complete result, original runs/events, and existing acknowledgment card.
+   Compare exact task, run profile, claim/spawn provenance, and parent direction.
+   A display name or shared profile grants no ownership of another session's claim.
+2. Inspect `hermes kanban --board <board> notify-list <operator-task> --json`.
+   Match platform/chat/thread/user/profile/mode and actual event-selection/wake behavior.
+   Correlate cursor/ping with the terminal event received in the current conversation.
+   Separate subscription, event cursor, ping, delivery, and explicit assessment.
+   Claim receipt only at the observed destination.
+3. If required event IDs are absent, use an authorized read-only exact-task lookup.
+   Query parameterized `task_events` rows for verified task and claimed/spawned/completed events.
+   Do not infer IDs, load write handlers, or repair projections with DB writes.
+   If unavailable, retain the observed kind/time/run/payload association and state the limitation.
+4. If canonical session evidence is required, inspect only verified session/message metadata
+   and a boolean exact-task/status match through a parameterized read-only query.
+   Verify routing separately without dumping chat contents or inventing IDs/foreign keys.
+   Distinguish task-event ID, notification-row ID, gateway session, external post ID, and agent acceptance.
+   Mark missing external post IDs unavailable; this does not negate observed internal receipt.
+5. Append actual receipt and explicit assessment to the existing acknowledgment card.
+   Include event/run/session association, exact result read, bounded acceptance, gaps, and next step.
+   Preserve the earlier pending-receipt observation and read back the new comment.
+6. Leave an active acknowledgment run/report with its owner.
+   Do not complete, reclaim, redispatch, or overwrite it.
+   Separate accepted operator results from the acknowledgment card's actual status.
+   Keep later coding, review, and deployment gates pending.
+
+Receipt proves neither reviewer return, runtime approval capability, nor product acceptance.
+Use the recovery reference before resuming after acknowledgment completion.
+Keep unsupported handoffs explicit rather than promising automatic continuation or adding watchers.
