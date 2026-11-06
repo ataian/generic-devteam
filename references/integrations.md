@@ -11,6 +11,22 @@ If a common runtime is missing or incompatible, report the concrete prerequisite
 Do not install, upgrade, repair or investigate shared runtimes as part of ordinary setup.
 Do not copy private profile components or invent replacement plugins.
 
+<a id="installation-output"></a>
+## Installation output
+
+Capture verbose noninteractive installation stdout and stderr in a mode-0600 log inside the existing mode-0700 private setup area before returning output to the model.
+Keep protected login, credential entry, and device codes outside these logs.
+Preserve the command's exit status independently of output filtering.
+Inspect the captured result for failure, scanner verdicts, warnings, and required user actions.
+Return the component, target, exit status, relevant findings, and log path.
+If a scanner blocks installation, read its findings and present their concrete scope before requesting the existing approval.
+Do not infer approval from a compact summary or retry with an override without authorization.
+If the result is unclear, read the relevant log sections before deciding the next action.
+
+For native plugin inventory, check the installed command help and use `hermes -p "$PROFILE" plugins list --plain --no-bundled` when supported.
+Return only the requested profile's installed component status and source bindings.
+If these options are unavailable, filter captured native inventory results without changing the inventory check.
+
 <a id="project-tools"></a>
 ## Project tools
 
@@ -24,8 +40,9 @@ Project preparation belongs to a later explicit project task.
 
 Original: [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent).
 Resolve the complete distribution tree `skills/autonomous-ai-agents/codex` for Coder and `skills/devops/sdlc-review` for Reviewer.
-Reuse the existing distribution and its canonical license/companion files; verify the actual subpaths.
-If assets are missing, report the prerequisite without repairing the shared distribution or installing a private replacement.
+Reuse the natively managed distribution skills and their canonical license/companion files; verify the actual subpaths.
+If an already-authorized distribution copy is required, preserve its path relative to `skills/` under the target skill root: `autonomous-ai-agents/codex` or `devops/sdlc-review`.
+If a skill is missing from native discovery, report the prerequisite; do not repair the shared distribution or install a flattened private replacement.
 
 Später je Rolle Katalog, Hauptskill und alle benötigten Referenzen im tatsächlichen
 Profil laden, Quellpfad/Revision nachweisen. `codex` bleibt unverändert; konkrete

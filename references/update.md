@@ -184,6 +184,10 @@ Ask the user to approve or defer the dependent file changes.
 Keep the whole team proposal withheld until that decision is recorded.
 Use `--dependency-decision` only to record that decision.
 It does not authorize runtime configuration or integration changes.
+For the Planner skill-maintenance policy, report the separate configuration step in [Setup](setup.md#3-frische-profile-bestätigte-modelle).
+The file updater delivers the Planner template change but does not set `skills.creation_nudge_interval`.
+Obtain separate authorization to set and read back `skills.creation_nudge_interval=0` in the existing Planner profile.
+
 If the helper recipe changed, report the required Team-Codex model and helper reasoning assignments from [the recipe](integrations.md#codex-agents).
 The file updater does not manage the six upstream agent TOMLs.
 Obtain separate authorization before adapting installed helper files.
