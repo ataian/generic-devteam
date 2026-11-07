@@ -482,17 +482,57 @@ class ReviewerEquipmentTests(unittest.TestCase):
         ):
             self.assertIn(clause, section)
         self.assertIn("Before file application, complete the pre-apply record and approval steps", update)
+        procedure = section.split("\n1. **", 1)[1].split("\nThe file-updater rollback", 1)[0]
+        steps = re.findall(r"(?:^|\n)[1-5]\. \*\*([^*]+)\*\*(.*?)(?=\n[1-5]\. \*\*|\Z)",
+                           "1. **" + procedure, re.S)
+        self.assertEqual([title for title, _ in steps], [
+            "Before file application:", "Read-only discovery:", "Approve the full update scope once:",
+            "After successful file application:", "Verify and persist the result:",
+        ])
+        self.assertIn("Before invoking `apply`, capture the installed package version and exact Maker commit", steps[0][1])
+        self.assertIn("retirement status `pending`", steps[0][1])
+        preflight = steps[1][1]
+        for clause in (
+            "Keep this discovery strictly read-only.",
+            "Do not remove trees or change exclusions or bindings during discovery.",
+            "Inspect native discovery roots and every resolved source path for the five exact skill identities.",
+            "Record source ownership, aliases, symlinks, and shared/external sources before selecting any removal path.",
+            "determine the supported Reviewer-specific exclusion or unbinding from the installed interface without applying it.",
+            "Record the concrete Reviewer-specific obsolete bindings for scope approval.",
+        ):
+            self.assertIn(clause, preflight)
+        self.assertNotRegex(preflight, r"(?im)^\s*(?:If [^\n]*, )?(?:use|apply|reconcile|remove|exclude|unbind)\b")
+        approval = steps[2][1]
+        self.assertIn("the concrete paths and Reviewer-specific exclusions/unbindings found during read-only discovery", approval)
+        self.assertIn("Include the concrete Reviewer-specific obsolete bindings from that inventory.", approval)
+        self.assertIn("add the approved exact reconciliation scope to the existing private record before file application", approval)
+        postapply = steps[3][1]
+        ordered = (
+            "Run the pending retirement after successful file application",
+            "Save the complete discovered local trees and affected Reviewer-specific bindings",
+            "Compare the complete backup inventory and file bytes/hashes with the source before removal.",
+            "Save backup location, source inventory, verification, and unaffected-role inventories",
+            "Continue only if file application, the complete backup, and backup comparison succeeded.",
+            "Recheck the inspected source bytes and bindings immediately before any removal, exclusion, or binding change; stop on concurrent drift.",
+            "Remove only the verified Reviewer-local trees",
+            "Apply only the inspected, supported Reviewer-specific exclusions/unbindings",
+            "Reconcile only the inventoried Reviewer-specific obsolete bindings within the approved update scope.",
+        )
+        positions = [postapply.index(clause) for clause in ordered]
+        self.assertEqual(positions, sorted(positions))
+        between_drift_and_removal = postapply.split(ordered[5], 1)[1].split(ordered[6], 1)[0]
+        self.assertFalse(between_drift_and_removal.strip(), "Drift check must immediately precede retirement writes")
         for clause in (
             "Resolve the exact Reviewer home from confirmed bindings and native profile inventory.",
             "Inspect native discovery roots and every resolved source path for the five exact skill identities.",
             "Do not delete guessed paths or follow links into shared assets.",
-            "use a supported Reviewer-specific exclusion or unbinding",
+            "determine the supported Reviewer-specific exclusion or unbinding",
             "If no supported isolation is available, stop this reconciliation with a concrete blocker.",
             "outside all native discovery roots",
             "Compare the complete backup inventory and file bytes/hashes with the source before removal.",
-            "Recheck the inspected source bytes and bindings immediately before removal",
+            "Recheck the inspected source bytes and bindings immediately before any removal, exclusion, or binding change",
             "Report each concrete retained instruction or autoload reference that would recreate or require a retired skill.",
-            "Reconcile only its Reviewer-specific obsolete binding within the approved update scope.",
+            "Reconcile only the inventoried Reviewer-specific obsolete bindings within the approved update scope.",
             "Verify absence of all five identities through native Reviewer discovery and source resolution.",
             "Verify preservation of unaffected roles and assets against the pre-removal inventory.",
             "Mark retirement `complete` only after these readbacks pass",

@@ -279,31 +279,37 @@ Skill retirement does not authorize general integration or runtime cleanup.
    Before invoking `apply`, capture the installed package version and exact Maker commit from the installation record and available setup evidence.
    Save the pre-update version, target release/commit, and retirement status `pending` in the existing private `devteam/setup.md` progress/update section.
    Keep the original pre-update evidence on resume; do not replace it with advanced installation metadata.
-   For missing provenance, record the unresolved evidence and the approved exact reconciliation scope.
+   For missing provenance, record the unresolved evidence for the exact reconciliation scope below.
    Read back this private record before file application.
    Do not create a central registry or change the file-helper record schema.
-2. **Approve the full update scope once:** Include these exact removals and the local-adaptation override once in the target update scope and approval.
-   Include complete-tree backups, native readbacks, and any concrete Reviewer-specific obsolete bindings found during inspection.
-   This authoring procedure grants no live deletion permission.
-   Within that approved update, retirement is mandatory, not an optional second choice.
-   If the scope is withheld, record the incomplete step instead of claiming a complete team update.
-3. **Resolve and protect targets:** Resolve the exact Reviewer home from confirmed bindings and native profile inventory.
+2. **Read-only discovery:** Resolve the exact Reviewer home from confirmed bindings and native profile inventory.
+   Keep this discovery strictly read-only.
+   Do not remove trees or change exclusions or bindings during discovery.
    Inspect native discovery roots and every resolved source path for the five exact skill identities.
    Record source ownership, aliases, symlinks, and shared/external sources before selecting any removal path.
    Do not delete guessed paths or follow links into shared assets.
-   If a shared or external source serves other roles, use a supported Reviewer-specific exclusion or unbinding after checking the installed interface and approval scope.
+   If a shared or external source serves other roles, determine the supported Reviewer-specific exclusion or unbinding from the installed interface without applying it.
    If no supported isolation is available, stop this reconciliation with a concrete blocker.
    Report each concrete retained instruction or autoload reference that would recreate or require a retired skill.
-   Reconcile only its Reviewer-specific obsolete binding within the approved update scope.
+   Record the concrete Reviewer-specific obsolete bindings for scope approval.
    Do not remove unrelated bindings or expand into general MCP/hook cleanup.
+3. **Approve the full update scope once:** Include these exact removals and the local-adaptation override once in the target update scope and approval.
+   Include complete-tree backups, native readbacks, and the concrete paths and Reviewer-specific exclusions/unbindings found during read-only discovery.
+   Include the concrete Reviewer-specific obsolete bindings from that inventory.
+   For missing provenance, add the approved exact reconciliation scope to the existing private record before file application.
+   This authoring procedure grants no live deletion permission.
+   Within that approved update, retirement is mandatory, not an optional second choice.
+   If the scope is withheld, record the incomplete step instead of claiming a complete team update.
 4. **After successful file application:** Run the pending retirement after successful file application and before reporting a complete team update.
    Save the complete discovered local trees and affected Reviewer-specific bindings to a protected external backup outside all native discovery roots, including inherited and project roots.
    Preserve modes, link metadata, and the full file inventory without dereferencing links into shared assets.
    Compare the complete backup inventory and file bytes/hashes with the source before removal.
    Save backup location, source inventory, verification, and unaffected-role inventories in the existing private record.
-   Recheck the inspected source bytes and bindings immediately before removal; stop on concurrent drift.
+   Continue only if file application, the complete backup, and backup comparison succeeded.
+   Recheck the inspected source bytes and bindings immediately before any removal, exclusion, or binding change; stop on concurrent drift.
    Remove only the verified Reviewer-local trees from discovery, without following links or deleting shared sources.
    Apply only the inspected, supported Reviewer-specific exclusions/unbindings for shared sources and obsolete references.
+   Reconcile only the inventoried Reviewer-specific obsolete bindings within the approved update scope.
    Treat already absent skills as successful no-ops after native readback.
 5. **Verify and persist the result:** Verify absence of all five identities through native Reviewer discovery and source resolution.
    Use an established fresh discovery/readback interface; stale session catalogs and missing files alone do not establish absence.
