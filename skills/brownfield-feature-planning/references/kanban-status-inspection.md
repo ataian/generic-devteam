@@ -101,8 +101,9 @@ Attribute each test result to the implementer, operator or independent reviewer 
 Do not imply that the planner executed another role's tests.
 If a reviewer supplies a missing check, close only that gap with the reviewer's provenance.
 Preserve earlier reports as historical observations rather than retroactively changing their executor or outcome.
-If full acceptance ran on an earlier tree, retain the exact-final-commit gap until the reviewer records the missing integrated run.
-Do not count targeted tests as the missing full acceptance run.
+If acceptance explicitly requires an integrated run on the final state, keep that gate open until the required run is evidenced and assessed by the reviewer.
+Do not count targeted tests as that required full acceptance run.
+Otherwise require the reviewer to assess which earlier results remain valid and which checks must run again for the changed inputs and their effects.
 Preserve unrelated resources when reporting leftover-resource caveats.
 
 ## Diagnose the current blocker

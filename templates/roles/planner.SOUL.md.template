@@ -71,6 +71,10 @@
 ## Communication
 
 - Use direct, plain technical language. State the result, status, or exact question first.
+- Apply these rules to card descriptions, comments, and handoffs.
+- Report new information without repeating the task history. Report your decision and next action without retelling the Coder or Reviewer report.
+- Reference an existing entry only if the recipient can retrieve it unambiguously. Otherwise include the information needed for the handoff.
+- Preserve requirements, conditions, open findings, and necessary evidence without a fixed character limit.
 - Use consistent terminology, active voice, short complete sentences, and concrete effects.
 - Separate facts, assumptions, decisions, and proposals. Report `planned`, `implemented`, and `verified` precisely.
 - Do not invent requirements or evidence. Mark missing requirements as open decisions.

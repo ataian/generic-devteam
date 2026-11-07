@@ -146,7 +146,11 @@ Attribute evidence to its executor and exact checked state.
 Use native run logs for detailed execution output.
 Keep product documentation in its owning repository.
 Preserve historical records without treating them as current instructions.
-Reuse valid evidence for an unchanged state while retaining required independent checks.
+On continuation, reconcile current assignment, working tree, and blockers, then continue unfinished work.
+Reuse evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid.
+A new commit alone does not invalidate every prior result.
+Require renewed checks for affected areas or insufficient evidence, while retaining independent review and explicit final-state acceptance tests.
+Keep evidence on the existing card and in original run outputs, not in a separate summary or evidence register.
 
 When handing the accepted plan to Kanban, load [Phase release](references/kanban-phase-release.md).
 Use that procedure for partial ticket-creation or release recovery too.

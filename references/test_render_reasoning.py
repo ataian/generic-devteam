@@ -97,18 +97,51 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertNotIn("if the worker guard prohibits them", result)
         self.assertNotIn("{{", result)
 
-    def test_reviewer_uses_concrete_values_and_an_independent_second_pass(self):
+    def test_reviewer_renders_risk_escalation_without_automatic_repeat(self):
+        """Rendered instruction contract, not measured agent behavior."""
         result = render_role(self.template("reviewer"), self.values("reviewer", "low", "medium"), "reviewer")
         for text in [
             "Use the configured default reasoning `low` for normal changes.",
             "You can upgrade to `medium` at any time.",
-            "A required second pass is a separate run at reasoning `medium` with the unchanged model and provider.",
-            "Do not restate the first reasoning.",
-            "Perform the second pass and produce the high-risk evidence block.",
+            "If HIGH risk is known before review, start at `medium`.",
+            "If you discover a serious risk during normal review, recheck affected areas and prior conclusions at `medium` before the verdict.",
+            "Keep the configured model and provider unchanged.",
+            "Do not repeat a completed high-reasoning review solely because the task is HIGH risk.",
+            "Do not create extra rounds for these lenses.",
+            "Perform the checks that this change requires before you deliver the verdict.",
         ]:
-            self.assertTrue(text in result, text)
+            self.assertIn(text, result)
+        for obsolete in ("A required second pass", "Perform the second pass", "across substantive review rounds"):
+            self.assertNotIn(obsolete, result)
         self.assertNotIn("{{", result)
         self.assertNotIn("Reasoning Stufe", result)
+
+    def test_card_output_contract_reaches_each_rendered_role(self):
+        """Persistent card text stays concise without unsafe truncation."""
+        for role in ("planner", "coder", "reviewer"):
+            text = render_role(self.template(role), self.values(role), role)
+            with self.subTest(role=role):
+                self.assertIn("Apply these rules to card descriptions, comments, and handoffs.", text)
+                self.assertIn("Preserve requirements, conditions, open findings, and necessary evidence without a fixed character limit.", text)
+                self.assertIn("Reference an existing entry only if the recipient can retrieve it unambiguously.", text)
+        coder = self.template("coder")
+        self.assertIn("Persisted Kanban text uses short complete sentences, not chat fragments.", coder)
+        self.assertIn("$caveman", coder)
+        self.assertIn("Never use `kanban_complete` to close your own implementation.", coder)
+        self.assertIn("Report your decision and next action without retelling the Coder or Reviewer report.", self.template("planner"))
+        self.assertIn("Describe each finding fully once.", self.template("reviewer"))
+
+    def test_correction_contract_preserves_evidence_and_independent_verdict(self):
+        for role in ("coder", "reviewer"):
+            text = render_role(self.template(role), self.values(role), role)
+            with self.subTest(role=role):
+                self.assertIn("Reuse evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid.", text)
+                self.assertIn("Keep the original executor and checked state; distinguish reused evidence from newly executed checks.", text)
+                self.assertIn("Run checks affected by changes or insufficient evidence; retain required independent checks and explicit final-state acceptance tests.", text)
+        self.assertIn("On resume, reconcile the current assignment, working tree, and blockers; continue unfinished work instead of repeating completed preparation.", self.template("coder"))
+        reviewer = self.template("reviewer")
+        self.assertIn("On a correction return, compare against the previously reviewed state and assess the delta, affected dependencies, and prior open findings independently.", reviewer)
+        self.assertIn("Deliver a verdict against the exact reviewed commit", reviewer)
 
     def test_native_tokens_are_not_fixed_to_one_provider(self):
         for default, maximum in [("medium", "high"), ("low", "xhigh"), ("1024", "4096")]:
@@ -289,6 +322,14 @@ class TicketDocumentationTests(unittest.TestCase):
         self.assertIn("Replace contradictory active body instructions through the supported edit operation.", self.recovery)
         self.assertIn("Preserve the existing card, authorized scope, history, valid dependencies, review provenance and counters.", self.recovery)
         self.assertIn("Keep independent review and required safety checks.", self.skill)
+
+    def test_evidence_reuse_preserves_required_final_state_gates(self):
+        self.assertIn("Reuse evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid.", self.skill)
+        self.assertIn("A new commit alone does not invalidate every prior result.", self.skill)
+        self.assertIn("Keep evidence on the existing card and in original run outputs, not in a separate summary or evidence register.", self.skill)
+        self.assertIn("If acceptance explicitly requires an integrated run on the final state", self.status)
+        self.assertIn("Do not count targeted tests as that required full acceptance run.", self.status)
+        self.assertNotIn("If full acceptance ran on an earlier tree, retain the exact-final-commit gap", self.status)
 
     def test_operator_blocker_keeps_evidence_and_ownership_on_card(self):
         self.assertIn("Route the handoff to the existing card's authorized owner.", self.status)
