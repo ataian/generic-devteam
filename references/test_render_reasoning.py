@@ -97,8 +97,8 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertNotIn("if the worker guard prohibits them", result)
         self.assertNotIn("{{", result)
 
-    def test_reviewer_renders_risk_escalation_without_automatic_repeat(self):
-        """Rendered instruction contract, not measured agent behavior."""
+    def test_reviewer_renders_risk_escalation_and_separate_critical_pass(self):
+        """Static rendered instruction contract, not measured agent behavior."""
         result = render_role(self.template("reviewer"), self.values("reviewer", "low", "medium"), "reviewer")
         for text in [
             "Use the configured default reasoning `low` for normal changes.",
@@ -106,15 +106,54 @@ class ReasoningContractTests(unittest.TestCase):
             "If HIGH risk is known before review, start at `medium`.",
             "If you discover a serious risk during normal review, recheck affected areas and prior conclusions at `medium` before the verdict.",
             "Keep the configured model and provider unchanged.",
-            "Do not repeat a completed high-reasoning review solely because the task is HIGH risk.",
+            "If the change affects material security, data-integrity, transaction, or concurrency invariants, obtain a separate pass before the verdict even when the main review finds no defect.",
+            "Use a fresh context at `medium` through an existing permitted review path.",
+            "Omit the Coder's narrative and the main review's findings until this pass forms its own assessment.",
+            "Apply the same model/provider, reasoning, access, approval, and read-only limits to this pass.",
+            "Verify new findings and resolve contradictions before the verdict.",
+            "Apply the correction evidence rules to this pass; obtain a fresh pass for affected critical invariants when prior evidence is no longer valid.",
+            "Do not add another full review or duplicate a test suite solely because a task is HIGH risk.",
+            "If required high-reasoning verification or a permitted fresh context is unavailable, report the capability blocker.",
+            "For high-risk verdicts report:",
+            "separate-pass coverage or valid reused evidence",
             "Do not create extra rounds for these lenses.",
             "Perform the checks that this change requires before you deliver the verdict.",
         ]:
             self.assertIn(text, result)
-        for obsolete in ("A required second pass", "Perform the second pass", "across substantive review rounds"):
-            self.assertNotIn(obsolete, result)
         self.assertNotIn("{{", result)
         self.assertNotIn("Reasoning Stufe", result)
+
+    def test_reviewer_orientation_keeps_native_handoff_without_claiming_blindness(self):
+        """Catch conflicting read-order instructions in the rendered role."""
+        result = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
+        procedure = result.split("## Review procedure\n", 1)[1].split("\n## ", 1)[0].strip()
+        entry = "Read the task and latest handoff through `kanban_show` as required by `sdlc-review`."
+        self.assertTrue(procedure.startswith("1. " + entry))
+        self.assertLess(procedure.index(entry), procedure.index("Confirm the canonical workspace"))
+        self.assertLess(procedure.index(entry), procedure.index("Read the applicable HERMES.md"))
+        for text in [
+            entry,
+            "Treat the narrative as a claim, not evidence.",
+            "Do not describe a read as blind if its context already contains the Coder's explanation or prior findings.",
+            "Resolve a conflict with the approved model or reasoning settings before relying on the affected verification.",
+            "Preserve confirmed local overrides; do not change model or provider to repair a stale instruction.",
+        ]:
+            self.assertIn(text, result)
+
+    def test_reviewer_avoids_failed_retries_and_redundant_evidence_work(self):
+        """Static contract retains verification while removing proven waste paths."""
+        result = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
+        for text in [
+            "Inspect existing validation commands for included test and build phases before selecting checks.",
+            "Read existing result artifacts instead of rerunning a successful check only to obtain a clearer summary.",
+            "Check existing runtime paths, inputs, and permitted access before starting a custom probe or review helper.",
+            "After a deterministic argument or permission error, correct the call or use an existing permitted path before retrying.",
+            "Do not repeat an unchanged failed call or bypass a native guard.",
+            "Read complete large task records and logs locally; return only decision-relevant fields and necessary evidence to context.",
+            "Preserve requirements, prior decisions, open findings, errors, and warnings.",
+            "Run checks affected by changes or insufficient evidence; retain required independent checks and explicit final-state acceptance tests.",
+        ]:
+            self.assertIn(text, result)
 
     def test_card_output_contract_reaches_each_rendered_role(self):
         """Persistent card text stays concise without unsafe truncation."""
