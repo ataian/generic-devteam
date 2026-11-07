@@ -111,7 +111,9 @@ class ReasoningContractTests(unittest.TestCase):
             "Omit the Coder's narrative and the main review's findings until this pass forms its own assessment.",
             "Apply the same model/provider, reasoning, access, approval, and read-only limits to this pass.",
             "Verify new findings and resolve contradictions before the verdict.",
-            "Apply the correction evidence rules to this pass; obtain a fresh pass for affected critical invariants when prior evidence is no longer valid.",
+            "Repeat the independent pass for affected material security, data-integrity, transaction, or concurrency invariants when its previous evidence is no longer valid.",
+            "Reuse its evidence only while the checked inputs and relevant dependencies, configuration, and test conditions remain valid.",
+            "A new commit alone does not invalidate every prior result.",
             "Do not add another full review or duplicate a test suite solely because a task is HIGH risk.",
             "If required high-reasoning verification or a permitted fresh context is unavailable, report the capability blocker.",
             "For high-risk verdicts report:",
@@ -319,6 +321,119 @@ class ReasoningContractTests(unittest.TestCase):
             output = render_role(source, values, role)
             expected = re.sub(r"\{\{([A-Z0-9_]+)\}\}", lambda m: values[m[1]], source)
             self.assertTrue(expected == output, role)
+
+
+class ReviewerEquipmentTests(unittest.TestCase):
+    """Static package contracts; no target integration or model calls."""
+
+    template = ReasoningContractTests.template
+    values = ReasoningContractTests.values
+
+    def test_default_equipment_retains_other_roles_and_sdlc(self):
+        expected = {
+            "brownfield-feature-planning": {"hermes": ["planner"]},
+            "minimal-change-engineering": {"hermes": ["planner"]},
+            "plan-versioning-semver": {"hermes": ["planner"]},
+            "project-lib-versioning": {"hermes": ["planner", "coder"]},
+            "screenshot-to-code": {"hermes": ["planner", "coder"], "codex": ["team-codex"]},
+        }
+        self.assertEqual({name: item["targets"] for name, item in MANIFEST["own_skills"].items()}, expected)
+        upstream = MANIFEST["upstream_components"]
+        for name in ("graphify", "codebase-memory"):
+            self.assertEqual(upstream[name]["targets"], {
+                "hermes": ["planner", "coder"], "codex": ["team-codex"],
+            })
+        self.assertEqual(upstream["sdlc-review"]["targets"], {"hermes": ["reviewer"]})
+        self.assertEqual(upstream["sdlc-review"]["subpaths"], ["skills/devops/sdlc-review"])
+        for name, item in MANIFEST["own_skills"].items():
+            self.assertTrue((ROOT / item["skill_path"]).is_file(), name)
+        self.assertIn("Use the installed `sdlc-review` skill for the detailed review checklist.", self.template("reviewer"))
+
+    def test_english_contract_at_each_consumer(self):
+        for role in ("planner", "coder", "reviewer"):
+            text = render_role(self.template(role), self.values(role), role)
+            with self.subTest(role=role):
+                self.assertIn("Use English for role communication, tickets, handoffs, findings, technical project documentation, and agent instructions.", text)
+                self.assertIn("Preserve exact identifiers, quotations, error messages, and deliberately localized product text.", text)
+                self.assertNotIn("user's requested language", text)
+        for relative in ("SKILL.md", "references/setup.md", "references/tas-authoring-standard.md"):
+            text = (ROOT / relative).read_text()
+            with self.subTest(source=relative):
+                self.assertIn("English for development communication and artifacts", text)
+                self.assertIn("deliberately localized product text", text)
+                self.assertNotIn("user's or project's language", text)
+                self.assertNotIn("follows the user or project setting", text)
+
+    def test_optional_graph_does_not_remove_structural_verification(self):
+        text = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
+        for clause in (
+            "Verify affected structure directly in source, callers, dependencies, contracts, and tests.",
+            "You can use an already available authorized graph for a concrete structural question.",
+            "Graph access is optional; an unavailable or stale graph alone does not block review.",
+            "Graph findings replace neither source review nor tests, and missing edges do not prove a missing dependency.",
+            "If a decision-relevant evidence gap remains unresolved, report the technical blocker.",
+        ):
+            self.assertIn(clause, text)
+        self.assertNotIn("Use the approved structural analysis integration", text)
+        self.assertNotIn("minimal-change-engineering", text)
+        self.assertNotIn("screenshot-to-code", text)
+        self.assertNotIn("project-lib-versioning", text)
+        self.assertIn("Use the approved structural analysis integration and its original skill.", self.template("planner"))
+        self.assertIn("Use the approved analysis integration and its original skill for structural analysis.", self.template("coder"))
+
+    def test_scope_library_ui_and_finding_contracts_reach_reviewer(self):
+        text = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
+        for clause in (
+            "Flag unrelated scope or unnecessary complexity when it causes concrete risk or violates accepted requirements.",
+            "Do not demand a smaller diff or alternative design solely by preference.",
+            "For changed project libraries, verify SemVer and the release policy against the accepted change set and baseline.",
+            "Verify affected consumer dependency chains, effective artifact resolution, and relevant builds/tests.",
+            "Do not require another bump if the intended version step is already fulfilled.",
+            "For visual acceptance, independently view the specified source and actual render at the reviewed state.",
+            "Compare relevant viewports, zoom/DPR, source page/crop, data, fonts, content, layout, typography, assets, and required interactions/accessibility under comparable conditions.",
+            "Respect accepted deviations and scope.",
+            "Record actual visual evidence and missing checks; build success, DOM text, or an image path alone does not prove visual acceptance.",
+            "Account for every prior open finding before approval.",
+            "Write one coherent finding per list item.",
+            "Include the location, failure condition, impact, and correction target.",
+            "Use a multi-line reproduction or small code snippet when needed.",
+            "Distinguish observed defects, unverified risks, and optional improvements.",
+        ):
+            self.assertIn(clause, text)
+        self.assertNotIn("Write one finding per line.", text)
+
+    def test_equipment_recipes_and_update_limit_match_assignments(self):
+        analysis = (ROOT / "references/code-analysis.md").read_text()
+        self.assertIn("Reviewer receives neither integration by default.", analysis)
+        self.assertIn("Preserve existing local Reviewer adaptations; this recipe does not remove them.", analysis)
+        self.assertIn("| Planner and Coder | `graphify/skill-claw.md`", analysis)
+        self.assertIn("| Planner and Coder | `skills/codebase-memory/SKILL.md`", analysis)
+        self.assertIn("# Run for Planner and Coder with their respective ROLE_HOME.", analysis)
+        self.assertNotIn("Jede Hermes-Rolle", analysis)
+        sources = (ROOT / "references/upstream-sources.md").read_text()
+        for name, targets in (
+            ("minimal-change-engineering", "Hermes-Planner"),
+            ("project-lib-versioning", "Planner and Coder"),
+            ("screenshot-to-code", "Planner, Coder and Team-Codex"),
+        ):
+            row = next(line for line in sources.splitlines() if "]" in line and f"[{name}]" in line)
+            self.assertTrue(row.endswith("| " + targets + " |"), row)
+        for component in ("codebase-memory", "graphify"):
+            row = next(line for line in sources.splitlines() if f'id="{component}"' in line)
+            self.assertTrue(row.endswith("| Planner, Coder and Team-Codex |"), row)
+        contracts = {
+            "references/integrations.md": "to Planner, Coder and Team-Codex. Do not install it in Reviewer by default",
+            "references/setup.md": "Do not install analysis components in Reviewer by default.",
+            "references/native-workflow.md": "no default Reviewer integration",
+            "references/verification.md": "Reviewer has no default analysis delivery/discovery gate",
+            "references/update.md": "Reviewer deassignment does not uninstall existing skills or remove their discovery paths.",
+        }
+        for relative, clause in contracts.items():
+            with self.subTest(source=relative):
+                self.assertIn(clause, (ROOT / relative).read_text())
+        update = (ROOT / "references/update.md").read_text()
+        self.assertIn("deassigned managed skill copies are listed as `obsolete` and retained on disk.", update)
+        self.assertIn("The updater does not manage upstream Graphify/CBM integrations, MCP configuration, hooks, or indices.", update)
 
 
 class TicketDocumentationTests(unittest.TestCase):

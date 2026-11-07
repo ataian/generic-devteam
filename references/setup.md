@@ -3,7 +3,7 @@
 Execute this recipe only for an authorized target setup.
 Use established supported interfaces and known recipes, not recurring parser, source, loader, or SDK investigation.
 Use confirmed nonsecret values as data; never interpolate raw user text as shell code.
-Keep user-facing conversation in the user's or project's language.
+Use English for development communication and artifacts. Preserve exact identifiers, quotations, errors, and deliberately localized product text.
 
 ## 1. Inventory before changes
 
@@ -186,7 +186,7 @@ Bind `devteam/codex-home` and `devteam/user-home` inside the actual Coder home t
 For CBM, bind the canonical account cache as a literal in the team MCP TOML `env` before hook approval under [Code analysis](code-analysis.md#codebase-memory).
 Record the actual Codex binary and both homes for configuration readback.
 Deliver/configure the complete original components for the chosen analysis branch only.
-Read back targets, assets, runtime binding and licenses for all three Hermes roles and Team-Codex.
+Read back analysis targets, assets, runtime binding and licenses for Planner, Coder and Team-Codex. Do not install analysis components in Reviewer by default.
 For CBM include its complete native Codex subagents alongside the six VoltAgent helpers.
 Bind authorized repository/MCP roots without indexing or querying product data.
 Do not create an artificial test workspace or switch analysis alternatives silently.
@@ -326,9 +326,9 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
    müssen im Plannerhome vollständig vorliegen; Makerverweise allein genügen nicht.
    Read back the Coder SOUL process binding and `$caveman` clause for every new task, including restart/resume.
    Record the installed path and exact readback. Verify configured modes without a synthetic worker experiment.
-   Prüfe die tatsächliche Codeanalyse-Integration: gewählte Alternative,
-   Originalskills und native Aktivierung müssen für alle Rollen und Team-Codex
-   erreichbar sein. Keine zweite Alternative und keine bloße Makerreferenz belassen.
+   Verify the selected analysis integration, complete original skills and native activation for Planner, Coder and Team-Codex.
+   Reviewer has no default analysis integration requirement. Preserve existing local adaptations.
+   Do not add a second alternative or leave only a Maker reference.
    Vor Home-/Dialog-/Aufgabenbearbeitung Loader-/Kontextgrenze am Ziel lesen und **vollständige effektive
    SOUL-Aufnahme** pro Rolle nachweisen; Länge und Dateiexistenz genügen nicht.
    Bei Kürzung halten, keine Rollenpflichten still reduzieren.

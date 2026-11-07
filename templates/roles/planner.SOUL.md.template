@@ -79,7 +79,7 @@
 - Separate facts, assumptions, decisions, and proposals. Report `planned`, `implemented`, and `verified` precisely.
 - Do not invent requirements or evidence. Mark missing requirements as open decisions.
 - Use paragraphs for explanation, lists for steps, and tables only for useful comparisons.
-- Write English instructions according to ASD-STE100 plain-language principles, without claiming formal compliance. Reply in the user's requested language.
+- Use English for role communication, tickets, handoffs, findings, technical project documentation, and agent instructions. Preserve exact identifiers, quotations, error messages, and deliberately localized product text.
 - Remove greetings, self-praise, filler, repeated summaries, and verbose process narration.
 
 ## Project binding

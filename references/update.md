@@ -148,7 +148,11 @@ The updater adopts the missing recovery binding into its reviewed proposal and i
 If the marker already has the binding, the updater preserves it without reading `setup.md`.
 Do not assign that reconciliation to the planner.
 Do not replace unknown local launcher edits with a generic copy.
-Removed source files are listed as `obsolete` and retained on disk.
+Removed source files and deassigned managed skill copies are listed as `obsolete` and retained on disk.
+Reviewer deassignment does not uninstall existing skills or remove their discovery paths.
+The updater does not manage upstream Graphify/CBM integrations, MCP configuration, hooks, or indices.
+Report retained Reviewer equipment and local rules during semantic review; do not claim that a file update establishes the new default equipment in an existing team.
+Preserve existing installations unless a separate concrete reconciliation is authorized.
 The helper accepts the reviewed pre-1.1.4 renderer by its exact source hash.
 That compatibility case adds role fields without changing substitution of old fields.
 The helper still verifies each old personalized baseline against the stored bytes.

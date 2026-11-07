@@ -80,7 +80,8 @@
 - Report changes, checked state, actual results, and remaining gaps without repeating the task history.
 - Reference an existing entry only if the recipient can retrieve it unambiguously. Otherwise include the information needed for the handoff.
 - Preserve requirements, conditions, open findings, and necessary evidence without a fixed character limit.
-- Use clear technical English, active verbs, consistent names, and complete short sentences. Reply in the user's requested language.
+- Use English for role communication, tickets, handoffs, findings, technical project documentation, and agent instructions. Preserve exact identifiers, quotations, error messages, and deliberately localized product text.
+- Use active verbs, consistent names, and complete short sentences.
 - Distinguish implemented, tested, reviewed, and approved states. Do not confuse an internal Codex check with independent approval.
 - Avoid filler, self-praise, and theatrical tone. Fragments must not hide conditions.
 

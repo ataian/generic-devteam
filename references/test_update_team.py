@@ -219,7 +219,9 @@ class UpdaterTests(unittest.TestCase):
                 raw = dict(old_values, ROLE_NAME=old_values[u.ROLE_NAMES[role]])
                 content = historical_renderer['render_role'](template, {key: raw[key] for key in fields}, role).encode()
                 self.assertEqual(entry['content'], content, 'Current renderer must reproduce exact historical output')
-            Path(entry['target']).write_bytes(content)
+            target = Path(entry['target'])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(content)
         if legacy:
             self.initialize(legacy=True)
         else:
@@ -509,6 +511,41 @@ class UpdaterTests(unittest.TestCase):
         result = u.apply(self.home, plan, decision='proceed', review='checked')
         self.assertEqual(result['status'], 'applied')
         self.assertTrue((self.home / relative).exists())
+
+    def test_reviewer_deassignment_retains_installed_skills(self):
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        names = ('minimal-change-engineering', 'project-lib-versioning', 'screenshot-to-code')
+        for name in names:
+            manifest['own_skills'][name]['targets']['hermes'].append('reviewer')
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture old reviewer equipment')
+        setup = u.setup_data(self.state)
+        previous = {}
+        for entry in u.desired(self.repo, 'HEAD', self.roles, setup['confirmed_values'], bindings=self.bindings):
+            if entry['role'] == 'reviewer' and entry['source'].startswith('skills/'):
+                target = Path(entry['target'])
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(entry['content'])
+                target.chmod(entry['mode'])
+                previous[str(target)] = target.read_bytes()
+        self.assertTrue(previous)
+        self.initialize()
+        for name in names:
+            manifest['own_skills'][name]['targets']['hermes'].remove('reviewer')
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture deassign reviewer skills without deletion')
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertEqual(set(proposal['obsolete']), set(previous))
+        self.assertFalse(proposal['conflicts'])
+        result = u.apply(self.home, plan, decision='proceed', review='Checked retained reviewer equipment')
+        self.assertEqual(result['status'], 'applied')
+        _, _, record = u.load_record(self.home)
+        self.assertEqual(set(record['retained_obsolete']), set(previous))
+        self.assertFalse(set(previous) & {item['target'] for item in record['managed']})
+        for target, content in previous.items():
+            self.assertEqual(Path(target).read_bytes(), content)
 
     def test_initial_record_rejects_profile_id_drift(self):
         path = self.state / 'setup.md'
