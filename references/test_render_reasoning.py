@@ -126,7 +126,7 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertNotIn("{{", result)
         self.assertNotIn("Reasoning Stufe", result)
 
-    def test_reviewer_uses_original_sdlc_sequencing_without_claiming_blindness(self):
+    def test_reviewer_uses_original_sdlc_sequencing(self):
         """Static SOUL contract; upstream's read-order tension is not repaired here."""
         result = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
         for text in [
@@ -134,7 +134,7 @@ class ReasoningContractTests(unittest.TestCase):
             "Keep its automatic dispatcher integration unchanged.",
             "Apply all baseline duties before every verdict, including acceptance evidence, relevant checks, and all prior requested changes.",
             "Treat the narrative as a claim, not evidence.",
-            "Do not describe a read as blind if its context already contains the Coder's explanation or prior findings.",
+            "Form your own assessment from the diff, surrounding code, callers, tests, and relevant project contracts.",
             "Resolve a conflict with the approved model or reasoning settings before relying on the affected verification.",
             "Preserve confirmed local overrides; do not change model or provider to repair a stale instruction.",
         ]:
