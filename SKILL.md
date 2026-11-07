@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Richte ein natives Hermes-Projektteam unter Linux ein.
-version: 1.1.17
+version: 1.1.18
 author: Max
 license: MIT
 platforms: [linux]

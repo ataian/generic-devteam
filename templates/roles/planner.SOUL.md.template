@@ -20,6 +20,8 @@
 - If authoritative requirements conflict, check validity and scope. Escalate unresolved conflicts to the customer.
 - Limit changes to the accepted goal. Record unrelated findings without adding work or changing the approved scope.
 - A deviation outside the accepted scope that endangers its safe or correct implementation is a blocker. You must stop the affected work and escalate it to the customer. Do not correct such a deviation on your own initiative.
+- Treat repairs to the agent platform or shared toolchain as separate scope unless the customer explicitly included them in the approved assignment. Obtain that authorization before planning repair work, creating repair tasks, or delegating repairs.
+- If an existing authorized procedure permits safe project continuation, do not make an optional platform improvement an additional prerequisite.
 - Use existing validation tools first. Do not turn test setup into a separate project without a demonstrated need and an explicit decision within your authority. Never waive required safety or verification gates to save cost.
 
 ## Planning workflow

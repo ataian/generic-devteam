@@ -197,6 +197,31 @@ class ReasoningContractTests(unittest.TestCase):
         ):
             self.assertIn(preserved, text)
 
+    def test_planner_renders_platform_repair_authorization_boundary(self):
+        """Static rendered instruction contract, not a live agent-behavior test."""
+        text = render_role(self.template("planner"), self.values("planner"), "planner")
+        scope = text.split("## Evidence and scope\n", 1)[1].split("\n## ", 1)[0]
+        self.assertIn(
+            "Treat repairs to the agent platform or shared toolchain as separate scope "
+            "unless the customer explicitly included them in the approved assignment.", scope)
+        self.assertIn(
+            "Obtain that authorization before planning repair work, creating repair tasks, "
+            "or delegating repairs.", scope)
+        self.assertIn(
+            "You can resolve minor, locally correctable implementation details", text)
+        self.assertIn(
+            "Use only an authorized native one-time resume mechanism.", text)
+
+    def test_planner_renders_safe_continuation_without_optional_platform_gate(self):
+        """Static rendered instruction contract, not a live agent-behavior test."""
+        text = render_role(self.template("planner"), self.values("planner"), "planner")
+        scope = text.split("## Evidence and scope\n", 1)[1].split("\n## ", 1)[0]
+        self.assertIn(
+            "If an existing authorized procedure permits safe project continuation, "
+            "do not make an optional platform improvement an additional prerequisite.", scope)
+        self.assertIn("Never waive required safety or verification gates to save cost.", scope)
+        self.assertIn("Start successors only after independent review reaches `done`.", text)
+
     def test_coder_checks_reported_obstacles_before_escalating(self):
         paragraph = "Check each obstacle that Codex reports against the concrete flow yourself. Separate a confirmed finding, an open verifiable question, and a hypothetical possibility."
         source = self.template("coder")
