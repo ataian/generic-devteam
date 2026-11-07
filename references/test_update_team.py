@@ -513,6 +513,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertTrue((self.home / relative).exists())
 
     def test_reviewer_deassignment_retains_installed_skills(self):
+        """The file helper retains trees; the required prose poststep is separate."""
         manifest_path = self.repo / 'manifest.json'
         manifest = json.loads(manifest_path.read_text())
         names = ('minimal-change-engineering', 'project-lib-versioning', 'screenshot-to-code')
@@ -531,21 +532,52 @@ class UpdaterTests(unittest.TestCase):
                 previous[str(target)] = target.read_bytes()
         self.assertTrue(previous)
         self.initialize()
+        # Local changes and untracked learned/reference files survive file apply.
+        reviewer = Path(self.roles['reviewer']['home'])
+        for name in names:
+            main = reviewer / 'skills' / name / 'SKILL.md'
+            main.write_bytes(main.read_bytes() + b'\nLocal adaptation.\n')
+            learned = main.parent / 'references/local-learning.md'
+            learned.parent.mkdir(exist_ok=True)
+            learned.write_bytes(b'Learned local rule.\n')
+            previous[str(main)] = main.read_bytes()
+            previous[str(learned)] = learned.read_bytes()
+        # These upstream trees are outside the file helper's managed mappings.
+        for name in ('graphify', 'codebase-memory'):
+            main = reviewer / 'skills' / name / 'SKILL.md'
+            main.parent.mkdir(parents=True)
+            main.write_bytes(b'Locally adapted upstream fixture.\n')
+            previous[str(main)] = main.read_bytes()
+        managed_previous = {
+            item['target'] for item in u.load_record(self.home)[2]['managed']
+            if item['role'] == 'reviewer' and item['source'].startswith('skills/')}
+        unaffected = {
+            str(path): path.read_bytes()
+            for role in ('planner', 'coder', 'team-codex')
+            for path in (Path(self.roles[role]['home']) /
+                         ('.agents/skills' if role == 'team-codex' else 'skills')).rglob('*') if path.is_file()}
+        setup_path = self.state / 'setup.md'
+        pending = '\nReviewer retirement 1.1.22: pending; pre-update evidence retained.\n'
+        setup_path.write_text(setup_path.read_text() + pending)
+        setup_before = setup_path.read_bytes()
         for name in names:
             manifest['own_skills'][name]['targets']['hermes'].remove('reviewer')
         manifest_path.write_text(json.dumps(manifest))
         self.commit('fixture deassign reviewer skills without deletion')
         plan = self.proposal()
         proposal = json.loads(plan.read_text())
-        self.assertEqual(set(proposal['obsolete']), set(previous))
+        self.assertEqual(set(proposal['obsolete']), managed_previous)
         self.assertFalse(proposal['conflicts'])
         result = u.apply(self.home, plan, decision='proceed', review='Checked retained reviewer equipment')
         self.assertEqual(result['status'], 'applied')
         _, _, record = u.load_record(self.home)
-        self.assertEqual(set(record['retained_obsolete']), set(previous))
+        self.assertEqual(set(record['retained_obsolete']), managed_previous)
         self.assertFalse(set(previous) & {item['target'] for item in record['managed']})
         for target, content in previous.items():
             self.assertEqual(Path(target).read_bytes(), content)
+        for target, content in unaffected.items():
+            self.assertEqual(Path(target).read_bytes(), content)
+        self.assertEqual(setup_path.read_bytes(), setup_before)
 
     def test_initial_record_rejects_profile_id_drift(self):
         path = self.state / 'setup.md'

@@ -118,29 +118,34 @@ class ReasoningContractTests(unittest.TestCase):
             "If required high-reasoning verification or a permitted fresh context is unavailable, report the capability blocker.",
             "For high-risk verdicts report:",
             "separate-pass coverage or valid reused evidence",
-            "Do not create extra rounds for these lenses.",
+            "Do not manufacture extra rounds or postpone baseline duties for a round's emphasis.",
+            "The separate pass is not another correction round.",
             "Perform the checks that this change requires before you deliver the verdict.",
         ]:
             self.assertIn(text, result)
         self.assertNotIn("{{", result)
         self.assertNotIn("Reasoning Stufe", result)
 
-    def test_reviewer_orientation_keeps_native_handoff_without_claiming_blindness(self):
-        """Catch conflicting read-order instructions in the rendered role."""
+    def test_reviewer_uses_original_sdlc_sequencing_without_claiming_blindness(self):
+        """Static SOUL contract; upstream's read-order tension is not repaired here."""
         result = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
-        procedure = result.split("## Review procedure\n", 1)[1].split("\n## ", 1)[0].strip()
-        entry = "Read the task and latest handoff through `kanban_show` as required by `sdlc-review`."
-        self.assertTrue(procedure.startswith("1. " + entry))
-        self.assertLess(procedure.index(entry), procedure.index("Confirm the canonical workspace"))
-        self.assertLess(procedure.index(entry), procedure.index("Read the applicable HERMES.md"))
         for text in [
-            entry,
+            "Use the installed original `sdlc-review` for review entry, sequencing, per-round lenses, baseline duties, and native outcomes.",
+            "Keep its automatic dispatcher integration unchanged.",
+            "Apply all baseline duties before every verdict, including acceptance evidence, relevant checks, and all prior requested changes.",
             "Treat the narrative as a claim, not evidence.",
             "Do not describe a read as blind if its context already contains the Coder's explanation or prior findings.",
             "Resolve a conflict with the approved model or reasoning settings before relying on the affected verification.",
             "Preserve confirmed local overrides; do not change model or provider to repair a stale instruction.",
         ]:
             self.assertIn(text, result)
+        self.assertNotIn("Read the task and latest handoff through", result)
+        self.assertNotIn("as review lenses", result)
+        for key in ('"review_outcome":"approved"', '"reviewer_checks":["<actual-check>"]',
+                    '"reviewed_commit":"<exact-commit>"'):
+            self.assertIn(key, result)
+        self.assertIn("`kanban_comment`, then call `kanban_request_changes", result)
+        self.assertIn('kanban_block(kind="capability"', result)
 
     def test_reviewer_avoids_failed_retries_and_redundant_evidence_work(self):
         """Static contract retains verification while removing proven waste paths."""
@@ -353,6 +358,9 @@ class ReviewerEquipmentTests(unittest.TestCase):
         for role in ("planner", "coder", "reviewer"):
             text = render_role(self.template(role), self.values(role), role)
             with self.subTest(role=role):
+                communication = text.split("## Communication\n", 1)[1].split("\n## ", 1)[0]
+                self.assertIn("Use direct, plain technical English instructions according to ASD-STE100 plain-language principles.", communication)
+                self.assertNotIn("TAS", text)
                 self.assertIn("Use English for role communication, tickets, handoffs, findings, technical project documentation, and agent instructions.", text)
                 self.assertIn("Preserve exact identifiers, quotations, error messages, and deliberately localized product text.", text)
                 self.assertNotIn("user's requested language", text)
@@ -402,10 +410,8 @@ class ReviewerEquipmentTests(unittest.TestCase):
             self.assertIn(clause, text)
         self.assertNotIn("Write one finding per line.", text)
 
-    def test_equipment_recipes_and_update_limit_match_assignments(self):
+    def test_equipment_recipes_use_positive_assignments(self):
         analysis = (ROOT / "references/code-analysis.md").read_text()
-        self.assertIn("Reviewer receives neither integration by default.", analysis)
-        self.assertIn("Preserve existing local Reviewer adaptations; this recipe does not remove them.", analysis)
         self.assertIn("| Planner and Coder | `graphify/skill-claw.md`", analysis)
         self.assertIn("| Planner and Coder | `skills/codebase-memory/SKILL.md`", analysis)
         self.assertIn("# Run for Planner and Coder with their respective ROLE_HOME.", analysis)
@@ -421,19 +427,85 @@ class ReviewerEquipmentTests(unittest.TestCase):
         for component in ("codebase-memory", "graphify"):
             row = next(line for line in sources.splitlines() if f'id="{component}"' in line)
             self.assertTrue(row.endswith("| Planner, Coder and Team-Codex |"), row)
-        contracts = {
-            "references/integrations.md": "to Planner, Coder and Team-Codex. Do not install it in Reviewer by default",
-            "references/setup.md": "Do not install analysis components in Reviewer by default.",
-            "references/native-workflow.md": "no default Reviewer integration",
-            "references/verification.md": "Reviewer has no default analysis delivery/discovery gate",
-            "references/update.md": "Reviewer deassignment does not uninstall existing skills or remove their discovery paths.",
-        }
-        for relative, clause in contracts.items():
+        for relative in ("references/code-analysis.md", "references/integrations.md",
+                         "references/setup.md", "references/native-workflow.md", "references/verification.md"):
+            text = (ROOT / relative).read_text()
             with self.subTest(source=relative):
-                self.assertIn(clause, (ROOT / relative).read_text())
+                self.assertIn("Planner, Coder and Team-Codex", text)
+                for obsolete in ("Reviewer receives neither", "Do not install it in Reviewer by default",
+                                 "Do not install analysis components in Reviewer by default",
+                                 "no default Reviewer integration", "Reviewer has no default analysis",
+                                 "Preserve existing local Reviewer adaptations"):
+                    self.assertNotIn(obsolete, text)
+
+    def test_retirement_has_exact_skill_scope_and_fixed_release_gate(self):
+        """Prose contract only; this does not execute a target retirement."""
         update = (ROOT / "references/update.md").read_text()
-        self.assertIn("deassigned managed skill copies are listed as `obsolete` and retained on disk.", update)
-        self.assertIn("The updater does not manage upstream Graphify/CBM integrations, MCP configuration, hooks, or indices.", update)
+        self.assertIn("## Required Reviewer skill retirement (1.1.22)\n", update)
+        section = update.split("## Required Reviewer skill retirement (1.1.22)\n", 1)[1].split("\n## ", 1)[0]
+        rows = re.findall(r"^\| `([^`]+)` \| `([^`]+)` \|$", section, re.M)
+        expected = ("minimal-change-engineering", "project-lib-versioning", "screenshot-to-code",
+                    "graphify", "codebase-memory")
+        self.assertEqual(rows, [(name, f"<reviewer home>/skills/{name}/") for name in expected])
+        self.assertIn("pre-update version below `1.1.22` to a target version at or above `1.1.22`", section)
+        self.assertIn("This includes teams on `1.1.21`", section)
+        self.assertIn("Keep this introduction release fixed on later Maker releases.", section)
+        for name in expected:
+            item = MANIFEST["own_skills"].get(name) or MANIFEST["upstream_components"][name]
+            self.assertNotIn("reviewer", item["targets"]["hermes"])
+        for clause in (
+            "This migration overrides local-adaptation preservation only for these five Reviewer skill trees.",
+            "Include learned files, references, hidden files, and local additions.",
+            "Keep the native `sdlc-review` skill and its automatic integration unchanged.",
+            "Preserve all other adaptations and all Planner, Coder and Team-Codex assets.",
+            "Preserve shared runtimes, caches, indices, MCP entries, hooks, and unrelated integrations.",
+            "Do not copy retired methods into SOUL or other skills.",
+        ):
+            self.assertIn(clause, section)
+
+    def test_retirement_requires_preapply_pending_state_and_verified_resume(self):
+        update = (ROOT / "references/update.md").read_text()
+        self.assertIn("## Required Reviewer skill retirement (1.1.22)\n", update)
+        section = update.split("## Required Reviewer skill retirement (1.1.22)\n", 1)[1].split("\n## ", 1)[0]
+        for clause in (
+            "Before invoking `apply`, capture the installed package version and exact Maker commit",
+            "Save the pre-update version, target release/commit, and retirement status `pending`",
+            "Read back this private record before file application.",
+            "Resume a pending retirement on later updates even if `installation.json` already reports `1.1.22` or a later version.",
+            "Never infer migration completion from version alone.",
+            "For legacy or unknown versions, resolve the source evidence or explicitly reconcile these five identities within the approved scope.",
+            "Do not silently skip an unknown version.",
+            "Run the pending retirement after successful file application and before reporting a complete team update.",
+            "Treat already absent skills as successful no-ops after native readback.",
+            "Keep failed or interrupted retirement `pending`, with the concrete blocker and next action.",
+            "If retirement is withheld or fails, report `files updated; team update incomplete`.",
+        ):
+            self.assertIn(clause, section)
+        self.assertIn("Before file application, complete the pre-apply record and approval steps", update)
+        for clause in (
+            "Resolve the exact Reviewer home from confirmed bindings and native profile inventory.",
+            "Inspect native discovery roots and every resolved source path for the five exact skill identities.",
+            "Do not delete guessed paths or follow links into shared assets.",
+            "use a supported Reviewer-specific exclusion or unbinding",
+            "If no supported isolation is available, stop this reconciliation with a concrete blocker.",
+            "outside all native discovery roots",
+            "Compare the complete backup inventory and file bytes/hashes with the source before removal.",
+            "Recheck the inspected source bytes and bindings immediately before removal",
+            "Report each concrete retained instruction or autoload reference that would recreate or require a retired skill.",
+            "Reconcile only its Reviewer-specific obsolete binding within the approved update scope.",
+            "Verify absence of all five identities through native Reviewer discovery and source resolution.",
+            "Verify preservation of unaffected roles and assets against the pre-removal inventory.",
+            "Mark retirement `complete` only after these readbacks pass",
+            "The file-updater rollback does not restore this prose poststep's removed trees or bindings.",
+            "Restore complete trees, modes, and Reviewer-specific bindings from the external backup",
+        ):
+            self.assertIn(clause, section)
+        self.assertIn("Include these exact removals and the local-adaptation override once in the target update scope and approval.", section)
+        self.assertIn("Within that approved update, retirement is mandatory, not an optional second choice.", section)
+        self.assertIn("Outside this explicit retirement, retain generic obsolete files and local adaptations.", update)
+        self.assertNotIn("Preserve existing installations unless a separate concrete reconciliation is authorized.", update)
+        for relative in ("README.md", "references/code-analysis.md", "templates/setup-record.md"):
+            self.assertIn("#required-reviewer-skill-retirement-1122", (ROOT / relative).read_text())
 
 
 class TicketDocumentationTests(unittest.TestCase):

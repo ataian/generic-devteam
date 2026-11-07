@@ -100,7 +100,7 @@ The Reviewer reuses valid evidence and reruns affected checks while retaining re
 Planner, Coder and Team-Codex retain the selected complete Graphify/CBM integration. Reviewer has no default graph-tool prerequisite and verifies structure directly; an unresolved evidence gap still blocks approval.
 Reviewer retains conditional library-version/consumer and independent visual acceptance checks without the three implementation-oriented skill bundles.
 Package changes do not activate these rules in existing teams; use the separately authorized team-update procedure.
-The updater retains deassigned skill copies and does not uninstall upstream analysis integrations or hooks; existing-team equipment requires separate reconciliation.
+The file helper retains obsolete copies. Complete the [required version-gated Reviewer skill retirement](references/update.md#required-reviewer-skill-retirement-1122) after file application within the approved team update; preserve all assets outside its exact scope.
 Für neue Planungen erhält der Planner die Originalskills `grill-me` und `grilling`
 von Matt Pocock. Seine SOUL verlangt `grilling` für die Anforderungsklärung;
 Interview, Entwurfsarbeit und ausdrückliche Planannahme bleiben getrennt.

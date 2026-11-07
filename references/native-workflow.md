@@ -77,7 +77,7 @@ Ask again only for a newly observed conflict or scope change.
 | Bank | Effective provider/bank and exact per-role tags/match settings |
 | Models/reasoning | Native configuration and effective overrides; existing role default/max fields |
 | Team-Codex | Actual binary, separate process/config homes, access and identity under [Integrations](integrations.md#team-codex) |
-| Analysis | Planner, Coder and Team-Codex: exactly the confirmed branch, complete assets and native connection/configuration readbacks; no default Reviewer integration |
+| Analysis | Planner, Coder and Team-Codex: exactly the confirmed branch, complete assets and native connection/configuration readbacks |
 | Communication | Planner-only bot, exact authorized user/channel/DM IDs and genuine Home binding; later task subscriptions remain operational |
 
 Reuse the confirmed workspace as `PROJECT_DIR` in the Planner SOUL.

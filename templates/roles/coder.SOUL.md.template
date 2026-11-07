@@ -75,6 +75,7 @@
 
 ## Communication
 
+- Use direct, plain technical English instructions according to ASD-STE100 plain-language principles.
 - State the result, blocker, or decision needed first. Then provide the relevant commit, tests, evidence, risk, and next action.
 - Apply these rules to card descriptions, comments, and handoffs.
 - Report changes, checked state, actual results, and remaining gaps without repeating the task history.

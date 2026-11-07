@@ -1,7 +1,7 @@
 # Codeanalyse einrichten
 
 Configure the **Graphify or CBM** alternative confirmed in [Setup](setup.md) for Planner, Coder and Team-Codex.
-Reviewer receives neither integration by default. Preserve existing local Reviewer adaptations; this recipe does not remove them.
+For existing teams, follow the [required Reviewer skill retirement](update.md#required-reviewer-skill-retirement-1122) after file updates.
 Sources and licenses are listed in [Sources](upstream-sources.md#codeanalyse-genau-eine-alternative).
 Execute this recipe only during authorized target setup, not Maker authoring.
 
