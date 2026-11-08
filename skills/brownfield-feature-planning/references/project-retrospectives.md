@@ -1,11 +1,40 @@
 # Bounded project retrospectives
 
-Use when the user asks how an existing phased project was planned, executed or misdirected. Produce an evidence-backed analysis, not another execution project.
+Use only when the user requests analysis of how an existing project was planned or executed.
+Produce an evidence-backed assessment, not another execution project.
 
-1. Read the original request and actual plan acceptance as well as the latest scope correction. Do not reconstruct earlier intent solely from a later angry clarification or a compressed summary. Distinguish the initial user goal, the planner's solution, accepted amendments and the final contracted delivery. Acceptance proves authorization, not that the planner proposed the smallest useful solution.
-2. Ground the chronology in current native board/run reads, relevant dated project documents and Git history. Use session search to recover original messages when needed. Avoid ordinary JSON-reading scripts, invented elapsed-time or cost estimates and unrelated infrastructure research. Attribute reported waiting durations to their source unless independently calculated.
-3. Separate observed failure, contributing condition, causal interpretation and accountable role. Explain scope-generated complexity before blaming provider limits or approval guards. Preserve the difference between an unnecessary operation removed from scope and a necessary operation denied by a security boundary.
-4. Compare the final artifact with both the corrected contract and earlier promises. List changed runtime prerequisites and capabilities explicitly; a smaller import wrapper need not satisfy the earlier application's activation contract. Keep mock testing, actual data execution, independent code review and user/operational acceptance distinct.
-5. Derive a small set of actionable improvements with an owner and observable success criterion. Start with a short delivery contract, smallest viable approach, early safe real execution, supported handoffs and brief evidence-based status reports. Do not turn the retrospective into new watchers, approval infrastructure, cleanup runs or tickets without authorization.
-6. Store the dated retrospective in the existing central feature collection, name the historical phase range, link it from the index and mark recommendations as proposals rather than approved work. Do not initialize the unversioned project root or claim external backup/Git versioning without evidence.
-7. Save reusable process lessons in this skill, not raw chronology or broad shared project memory. Amend narrowly rather than growing another detailed coordination checklist. Keep useful safety controls and independent review; reduce activities that do not advance the contracted product result.
+## Reconstruct the accepted scope
+
+Read the original request, actual plan acceptance, and later accepted corrections.
+Use original messages when summaries leave a consequential ambiguity.
+Distinguish the initial goal, the proposed solution, accepted amendments, and the final delivery contract.
+Acceptance establishes authorization, not that the proposed approach was minimal.
+
+## Assess the evidence
+
+Read the relevant native board events, runs, project records, and Git history.
+Use ordinary native reads unless a substantial batch needs authorized extraction.
+Separate observed failure, contributing condition, causal interpretation, and responsible role.
+Explain scope-generated complexity before attributing it to providers or runtime guards.
+Distinguish an unnecessary operation removed from scope from a required operation denied by a guard.
+Attribute time and cost claims to their actual source or calculate them from measured evidence.
+
+Compare the delivered artifact with the accepted contract and earlier promises.
+Name changed runtime prerequisites and capabilities.
+Keep mock tests, actual data execution, independent review, and operational acceptance separate.
+A narrower utility does not establish fulfillment of an earlier application-lifecycle promise.
+
+## Return the result
+
+State the technical outcome and actionable problems first.
+Propose a small set of improvements tied to the observed process.
+Name the owner and observable success criterion for each recommendation.
+Do not create watchers, approval infrastructure, cleanup work, or follow-up tickets without authorization.
+
+Record a ticket retrospective on the existing card.
+Name its historical phase range.
+For project-wide analysis, return the report in the requesting conversation unless the user requested a file.
+Preserve historical records and mark recommendations as proposals.
+Propose reusable skill improvements separately from the retrospective result.
+Apply them only when skill maintenance is explicitly requested.
+Keep required safety controls and independent review.

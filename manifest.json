@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "1.1.15",
+  "version": "1.1.22",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -20,6 +20,7 @@
     "references/setup.md",
     "references/tas-authoring-standard.md",
     "references/test_bound_recovery.py",
+    "references/test_brownfield_planning.py",
     "references/test_render_reasoning.py",
     "references/test_triage_recovery.py",
     "references/test_update_team.py",
@@ -28,6 +29,7 @@
     "references/upstream-sources.md",
     "references/verification.md",
     "skills/brownfield-feature-planning/SKILL.md",
+    "skills/brownfield-feature-planning/references/data-discovery.md",
     "skills/brownfield-feature-planning/references/kanban-phase-release.md",
     "skills/brownfield-feature-planning/references/kanban-status-inspection.md",
     "skills/brownfield-feature-planning/references/kanban-triage-recovery.md",
@@ -140,7 +142,7 @@
           "planner"
         ]
       },
-      "origin": "Übernommene und vom Nutzer bearbeitete Skillfassung mit ihren Referenzen.",
+      "origin": "Aus der übernommenen Nutzerfassung abgeleitete TAS-Neufassung mit generischem Planungskern und bedingt geladenen Fachreferenzen.",
       "changes": "Copy the complete skill tree. Bind only scripts/recover-triage with references/bind_recovery.py from confirmed setup values.",
       "origin_ref": "references/upstream-sources.md#own-planning",
       "license_path": null,
@@ -154,8 +156,7 @@
       "status": "included",
       "targets": {
         "hermes": [
-          "planner",
-          "reviewer"
+          "planner"
         ]
       },
       "origin": "Übernommene, vom Nutzer bearbeitete Skillfassung; MIT-Angabe im Frontmatter, historischer Autoren-/Auditverweis nicht zusätzlich belegt.",
@@ -190,8 +191,7 @@
       "targets": {
         "hermes": [
           "planner",
-          "coder",
-          "reviewer"
+          "coder"
         ]
       },
       "codex_instruction_only": true,
@@ -210,8 +210,7 @@
       "targets": {
         "hermes": [
           "planner",
-          "coder",
-          "reviewer"
+          "coder"
         ],
         "codex": [
           "team-codex"
@@ -413,8 +412,7 @@
       "targets": {
         "hermes": [
           "planner",
-          "coder",
-          "reviewer"
+          "coder"
         ],
         "codex": [
           "team-codex"
@@ -454,8 +452,7 @@
       "targets": {
         "hermes": [
           "planner",
-          "coder",
-          "reviewer"
+          "coder"
         ],
         "codex": [
           "team-codex"

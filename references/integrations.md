@@ -499,7 +499,7 @@ keine historische besondere Thread-Abnahme hinzufügen.
 
 ## Codeanalyse und Quellenstand
 
-Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to all three Hermes roles and Team-Codex.
+Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to Planner, Coder and Team-Codex.
 Read only that branch of [Code analysis](code-analysis.md) as setup instructions.
 For CBM deliver the complete official Codex subagents alongside the six [VoltAgent helpers with Team-Codex model bindings](#codex-agents).
 Verify setup targets, native discovery and connection/configuration readbacks without analysis experiments.

@@ -94,6 +94,13 @@ den geschützten Zielweg; das Protokoll speichert nur Secretort/Prüfstatus.
 Die Rollen bekommen vollständige eigene Skillbäume, unveränderte Rollenpflichten,
 personalisierte SOULs und native Modell-/Reasoning-Konfiguration. Im Ziel bezogene
 Originalkomponenten werden mit Revision, Dateimenge und Lizenz nachgewiesen.
+The Reviewer uses a separate fresh-context pass for material security, data-integrity, transaction, or concurrency invariants.
+This requirement does not duplicate every test suite or restart the full review after each correction.
+The Reviewer reuses valid evidence and reruns affected checks while retaining required independent and final-state acceptance checks.
+Planner, Coder and Team-Codex retain the selected complete Graphify/CBM integration. Reviewer has no default graph-tool prerequisite and verifies structure directly; an unresolved evidence gap still blocks approval.
+Reviewer retains conditional library-version/consumer and independent visual acceptance checks without the three implementation-oriented skill bundles.
+Package changes do not activate these rules in existing teams; use the separately authorized team-update procedure.
+The file helper retains obsolete copies. Complete the [required version-gated Reviewer skill retirement](references/update.md#required-reviewer-skill-retirement-1122) after file application within the approved team update; preserve all assets outside its exact scope.
 Für neue Planungen erhält der Planner die Originalskills `grill-me` und `grilling`
 von Matt Pocock. Seine SOUL verlangt `grilling` für die Anforderungsklärung;
 Interview, Entwurfsarbeit und ausdrückliche Planannahme bleiben getrennt.

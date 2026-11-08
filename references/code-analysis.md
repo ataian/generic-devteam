@@ -1,10 +1,9 @@
 # Codeanalyse einrichten
 
-Richte die im [Setup](setup.md) bestätigte Auswahl **Graphify oder CBM** für
-Planner, Coder, Reviewer und Team-Codex ein. Bezugsquellen und Lizenzen stehen in
-[upstream-sources.md](upstream-sources.md#codeanalyse-genau-eine-alternative).
-Diese Anleitung wird beim beauftragten Zielsetup ausgeführt, nicht beim Bearbeiten
-des Makerpakets.
+Configure the **Graphify or CBM** alternative confirmed in [Setup](setup.md) for Planner, Coder and Team-Codex.
+For existing teams, follow the [required Reviewer skill retirement](update.md#required-reviewer-skill-retirement-1122) after file updates.
+Sources and licenses are listed in [Sources](upstream-sources.md#codeanalyse-genau-eine-alternative).
+Execute this recipe only during authorized target setup, not Maker authoring.
 
 ## Gemeinsame Vorbereitung
 
@@ -37,7 +36,7 @@ vollständigen Originalbäume nach folgender Zuordnung kopieren:
 
 | Verbraucher | Originalhauptdatei → `SKILL.md` | Referenzen → `references/` | Zielverzeichnis |
 |---|---|---|---|
-| Jede Hermes-Rolle | `graphify/skill-claw.md` | `graphify/skills/claw/references/` vollständig | `<ROLE_HOME>/skills/graphify/` |
+| Planner and Coder | `graphify/skill-claw.md` | `graphify/skills/claw/references/` vollständig | `<ROLE_HOME>/skills/graphify/` |
 | Team-Codex | `graphify/skill-codex.md` | `graphify/skills/codex/references/` vollständig | `<CODEX_PROCESS_HOME>/.agents/skills/graphify/` |
 
 Die zum Paket gehörenden `LICENSE`, `LICENSE-MIT` und `NOTICE` beilegen. Ganze
@@ -129,7 +128,7 @@ bestätigte absolute Pfade. Unter `CBM_BIN_DIR` liegt die tatsächlich verwendet
 Originalbinary `codebase-memory-mcp`.
 
 ```sh
-# Je Hermes-Rolle mit deren ROLE_HOME ausführen.
+# Run for Planner and Coder with their respective ROLE_HOME.
 HERMES_HOME="$ROLE_HOME" \
   "$CBM_BIN_DIR/codebase-memory-mcp" install \
   --clients=hermes --skip-binary --dir="$CBM_BIN_DIR"
@@ -173,7 +172,7 @@ Zielauflösung vor Ausführung abgleichen.
 
 | Kontext | Erwartete Originalintegration |
 |---|---|
-| Jede Hermes-Rolle | `skills/codebase-memory/SKILL.md`, MCP-Eintrag in `config.yaml`, Shellhook `hooks.pre_llm_call` |
+| Planner and Coder | `skills/codebase-memory/SKILL.md`, MCP-Eintrag in `config.yaml`, Shellhook `hooks.pre_llm_call` |
 | Team-Codex | MCP in `config.toml`, Aktivierungszeiger in `AGENTS.md`, `skills/codebase-memory/SKILL.md` |
 | Team-Codex-Unteragenten | `agents/codebase-memory-scout.toml`, `agents/codebase-memory.toml` (Verify), `agents/codebase-memory-auditor.toml` |
 | Team-Codex-Hooks | `SessionStart` und `SubagentStart`; vorhandene `hooks.json`, sonst native TOML-Ablage |

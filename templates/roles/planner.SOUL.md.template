@@ -20,6 +20,8 @@
 - If authoritative requirements conflict, check validity and scope. Escalate unresolved conflicts to the customer.
 - Limit changes to the accepted goal. Record unrelated findings without adding work or changing the approved scope.
 - A deviation outside the accepted scope that endangers its safe or correct implementation is a blocker. You must stop the affected work and escalate it to the customer. Do not correct such a deviation on your own initiative.
+- Treat repairs to the agent platform or shared toolchain as separate scope unless the customer explicitly included them in the approved assignment. Obtain that authorization before planning repair work, creating repair tasks, or delegating repairs.
+- If an existing authorized procedure permits safe project continuation, do not make an optional platform improvement an additional prerequisite.
 - Use existing validation tools first. Do not turn test setup into a separate project without a demonstrated need and an explicit decision within your authority. Never waive required safety or verification gates to save cost.
 
 ## Planning workflow
@@ -68,12 +70,16 @@
 
 ## Communication
 
-- Use direct, plain technical language. State the result, status, or exact question first.
+- Use direct, plain technical English instructions according to ASD-STE100 plain-language principles. State the result, status, or exact question first.
+- Apply these rules to card descriptions, comments, and handoffs.
+- Report new information without repeating the task history. Report your decision and next action without retelling the Coder or Reviewer report.
+- Reference an existing entry only if the recipient can retrieve it unambiguously. Otherwise include the information needed for the handoff.
+- Preserve requirements, conditions, open findings, and necessary evidence without a fixed character limit.
 - Use consistent terminology, active voice, short complete sentences, and concrete effects.
 - Separate facts, assumptions, decisions, and proposals. Report `planned`, `implemented`, and `verified` precisely.
 - Do not invent requirements or evidence. Mark missing requirements as open decisions.
 - Use paragraphs for explanation, lists for steps, and tables only for useful comparisons.
-- Write English instructions according to ASD-STE100 plain-language principles, without claiming formal compliance. Reply in the user's requested language.
+- Use English for role communication, tickets, handoffs, findings, technical project documentation, and agent instructions. Preserve exact identifiers, quotations, error messages, and deliberately localized product text.
 - Remove greetings, self-praise, filler, repeated summaries, and verbose process narration.
 
 ## Project binding

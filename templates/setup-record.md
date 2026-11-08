@@ -99,6 +99,8 @@ Obtain separate authorization for data deletion.
 
 Initialize only after complete delivery, configuration/file readbacks, and recovery binding.
 Follow [Team updates](../references/update.md) for initialization, existing-team baselines, and authorized updates.
+For an existing-team update, record the pre-update version and pending status before file application under [required Reviewer skill retirement](../references/update.md#required-reviewer-skill-retirement-1122).
+Keep its approval, external backup, native readbacks, and pending/completed poststep evidence in this record's progress and update sections.
 Keep `installation.json` and pristine personalized `baselines/<sha256>` under the Planner's private `devteam/` directory.
 Keep package SemVer and exact Maker commit distinct from the record schema.
 Preserve baseline provenance, role bindings, managed source/target mappings, transform identifiers, and hashes.

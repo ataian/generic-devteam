@@ -2,7 +2,7 @@
 
 **Status:** Package authoring standard.
 **Scope:** All agent-context Markdown, including SOULs, skills, references, setup and update instructions, and project instructions.
-**Language:** English for instructions. The agent's user-facing language follows the user or project setting.
+**Language:** English for development communication and artifacts, including role communication, tickets, handoffs, findings, technical project documentation, and agent instructions. Preserve exact identifiers, quotations, error messages, and deliberately localized product text.
 **Basis:** Selected ASD-STE100 principles, operational contracts, and progressive disclosure. This is not full ASD-STE100 compliance.
 
 ## Purpose

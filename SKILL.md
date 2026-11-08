@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Richte ein natives Hermes-Projektteam unter Linux ein.
-version: 1.1.15
+version: 1.1.22
 author: Max
 license: MIT
 platforms: [linux]
@@ -15,7 +15,7 @@ metadata:
 
 Configure a Planner, Coder/Team-Codex, and independent Reviewer in an existing Linux Hermes installation.
 This Maker is a prose setup recipe, not an installer framework or a second dispatcher.
-Use the user's or project's language for user-facing conversation.
+Use English for development communication and artifacts. Preserve exact identifiers, quotations, errors, and deliberately localized product text.
 
 ## Triggers and boundaries
 
