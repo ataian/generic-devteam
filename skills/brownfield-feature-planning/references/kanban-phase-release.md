@@ -25,7 +25,7 @@ Do not treat plan acceptance as permission for the planner to implement or manua
 3. Build each body from accepted common constraints and the phase's files, interfaces, tests, gate, dependencies and commit boundary.
 4. Include absolute source paths, approval provenance, implementer-only harness instructions and the independent reviewer handoff.
 5. Create each card with the intended assignee/workspace, `--initial-status blocked`, an idempotency key, required skill and explicit completion contract.
-6. Set the approved runtime and retry fields explicitly.
+6. Set explicit customer limits and required native runtime/retry fields without inventing discretionary attempt budgets.
 7. Check `--max-retries` semantics before setting a consecutive-failure limit.
 8. Do not interpret the failure number that trips a breaker as the number of extra attempts.
 9. Read each returned exact card before further writes.
@@ -36,7 +36,7 @@ Do not treat plan acceptance as permission for the planner to implement or manua
 
 Keep ticket instructions, decisions, handoffs, blockers, verification and review outcomes on the existing card.
 Attribute evidence to its executor and checked code state.
-Use native run logs for detailed execution output.
+Native run outputs remain available evidence, not an authored run-log duty.
 Keep product documentation in its owning repository.
 
 ### Resume a partial batch

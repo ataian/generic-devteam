@@ -139,5 +139,115 @@ class BrownfieldPackageTests(unittest.TestCase):
         self.assertLessEqual(sum(p.stat().st_size for p in SKILL.rglob("*") if p.is_file()), 90000)
 
 
+    def test_plan_separates_binding_scope_from_coder_discretion(self):
+        text = (SKILL / "SKILL.md").read_text()
+        for clause in (
+            "Distinguish binding requirements and architectural constraints from implementation suggestions.",
+            "Expected file lists are guidance unless explicitly marked as hard boundaries.",
+            "Leave execution-time technical decisions within the accepted goal and constraints to the Coder.",
+            "Record consequential in-scope decisions on the existing ticket.",
+            "For an authorized binding amendment, update the versioned plan and affected current and future ticket bindings before release.",
+            "Preserve already-reviewed history and verify the returning worker's applicable baseline.",
+        ):
+            self.assertIn(clause, text)
+
+    def test_integrated_acceptance_uses_existing_phase_and_reviewer(self):
+        text = (SKILL / "SKILL.md").read_text()
+        self.assertIn("Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.", text)
+        self.assertIn("Place combined-behavior checks in the phase where integrated behavior becomes available.", text)
+        self.assertIn("Use existing results for the Planner's final customer report, not a new technical review or closing ticket.", text)
+
+    def test_progress_policy_preserves_explicit_and_native_limits_only(self):
+        text = (SKILL / "SKILL.md").read_text()
+        release = (SKILL / "references/kanban-phase-release.md").read_text()
+        for clause in (
+            "Work until the acceptance criteria are met.",
+            "Correct recoverable failures independently.",
+            "Escalate the concrete obstacle when no justified next approach remains.",
+            "Preserve explicit customer financial/resource caps, configured limits, provider quotas, operational permissions, and native failure-loop guards.",
+        ):
+            self.assertIn(clause, text)
+        self.assertNotIn("who may authorize an extension", text)
+        self.assertNotIn("retry allowances", text)
+        self.assertIn("Set explicit customer limits and required native runtime/retry fields without inventing discretionary attempt budgets.", release)
+        for source in (text, release):
+            self.assertNotIn("Use native run logs for detailed execution output.", source)
+            self.assertIn("Native run outputs remain available evidence, not an authored run-log duty.", source)
+
+    def test_recovery_screens_current_blocker_and_keeps_customer_return_in_execution(self):
+        text = (SKILL / "references/kanban-triage-recovery.md").read_text()
+        for clause in (
+            "Triage means blocked work in this team; never deliberately send work there.",
+            "Check an actual Coder escalation for an overlooked in-scope solution before involving the customer.",
+            "Record the correction and resume the Coder without a customer round.",
+            "Record a sufficient customer answer and its scope on the existing ticket.",
+            "Use `kanban_comment(task_id=..., body=...)` and read back the posted decision before resumption.",
+            "An old answer must not clear a newer blocker.",
+            "Leave an already-active or completed task unchanged.",
+            "A Mattermost wake is not an active Reviewer run; use ordinary unblock or guarded triage recovery instead of request-changes.",
+            "Preserve native counter semantics, including resets performed by legitimate native transitions.",
+        ):
+            self.assertIn(clause, text)
+        self.assertNotIn("Resolve routine technical decisions within the planner's existing mandate", text)
+        self.assertNotIn("answered planner question", text)
+
+    def test_workflow_migration_orders_old_ownership_before_new_authority(self):
+        """Static update recipe contract; native migration fixtures are separate."""
+        update = (ROOT / "references/update.md").read_text()
+        heading = "## Workflow migration (2.0.0)\n"
+        self.assertIn(heading, update)
+        section = update.split(heading, 1)[1].split("\n## ", 1)[0]
+        steps = re.findall(r"(?:^|\n)[1-7]\. \*\*([^*]+)\*\*(.*?)(?=\n[1-7]\. \*\*|\Z)", section, re.S)
+        self.assertEqual([title for title, _ in steps], [
+            "Inspect before authority changes:", "Settle active old-contract work:",
+            "Resolve parked legacy cards:", "Reconcile local authority:",
+            "Review and apply files:", "Read back the same cards:",
+            "Verify subsequent instruction loading:",
+        ])
+        for clause in (
+            "pre-update version below `2.0.0` to a target at or above `2.0.0`",
+            "Resume an unfinished migration even after installation metadata advances.",
+            "Resolve unknown legacy provenance instead of assuming completion.",
+        ):
+            self.assertIn(clause, section)
+        for clause in (
+            "Let active workers finish under their existing contract or obtain a separately scoped transition decision.",
+            "Do not mix old and new loaded roles on one active handoff.",
+            "For an active legacy Planner review run, let that owner use the established native `kanban_request_changes` return to its original Coder.",
+            "This is a migration-only completion, not the route for new questions.",
+        ):
+            self.assertIn(clause, steps[1][1])
+        for clause in (
+            "Require no active run or competing claim.",
+            "Resolve the actual blocker and use ordinary unblock or guarded triage recovery to restore its source phase first.",
+            "If clarification is complete and Coder continuation is required, use the guarded review-reopen procedure",
+            "Preserve pending independent review and unresolved `CHANGES_REQUESTED` findings.",
+            "Do not reopen pending review indiscriminately.",
+        ):
+            self.assertIn(clause, steps[2][1])
+        for clause in (
+            "Reconcile old Planner-review clarification routes and fixed discretionary retry approvals within the approved update mandate.",
+            "Preserve explicit customer financial/resource caps, operational permissions, native guards, and unrelated local adaptations.",
+            "Obtain a customer decision only for genuinely conflicting explicit mandates.",
+        ):
+            self.assertIn(clause, steps[3][1])
+        self.assertIn("Recheck current runs and claims immediately before application; defer if the settled state changed.", steps[4][1])
+        self.assertIn("Keep the same card and its history.", steps[5][1])
+        self.assertIn("For the next Coder handoff, bind the independent Reviewer explicitly; retain historical Planner provenance.", steps[5][1])
+        self.assertIn("Verify effective loading in subsequent execution contexts separately from saved file bytes.", steps[6][1])
+        self.assertIn("Do not restart a gateway or session merely because files changed.", steps[6][1])
+        self.assertLess(update.index(heading), update.index("## Activity and application\n"))
+        self.assertIn("Before applying workflow authority changes, complete steps 1–4", update)
+
+    def test_technical_review_interruption_does_not_require_coder_rework(self):
+        text = (SKILL / "references/kanban-triage-recovery.md").read_text()
+        for clause in (
+            "For a technical interruption during review, restore unfinished review with its existing provenance.",
+            "Use a Coder return only for substantive findings, questions, or required implementation continuation.",
+            "Keep capability failures and verified quota pauses blocked until their actual cause is resolved.",
+        ):
+            self.assertIn(clause, text)
+
+
 if __name__ == "__main__":
     unittest.main()

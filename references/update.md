@@ -198,6 +198,46 @@ Obtain separate authorization before adapting installed helper files.
 Reuse the team's confirmed `CODEX_MODEL`, `CODEX_REASONING_DEFAULT`, and `CODEX_REASONING_MAX`; preserve other fields and local edits.
 If the required runtime capability is absent, defer the dependent proposal.
 
+## Workflow migration (2.0.0)
+
+Use this procedure during an explicitly authorized team update from a pre-update version below `2.0.0` to a target at or above `2.0.0`.
+Resume an unfinished migration even after installation metadata advances.
+Resolve unknown legacy provenance instead of assuming completion.
+Keep migration progress in the existing private setup/update record.
+The file helper does not migrate cards or certify loaded instructions.
+
+1. **Inspect before authority changes:** Read affected cards, actual phase/assignment, current runs and claims, latest `review_requested` provenance, blockers, decisions, and parent gates.
+   Record the pre-update package version, exact Maker commit, affected card IDs, and unfinished migration steps in the existing update record.
+2. **Settle active old-contract work:** Let active workers finish under their existing contract or obtain a separately scoped transition decision.
+   Do not mix old and new loaded roles on one active handoff.
+   For an active legacy Planner review run, let that owner use the established native `kanban_request_changes` return to its original Coder.
+   This is a migration-only completion, not the route for new questions.
+   A wake session cannot take over that run or reopen an active card.
+3. **Resolve parked legacy cards:** Require no active run or competing claim.
+   Resolve the actual blocker and use ordinary unblock or guarded triage recovery to restore its source phase first.
+   If clarification is complete and Coder continuation is required, use the guarded review-reopen procedure in [Review-provenance special case](../skills/brownfield-feature-planning/references/kanban-triage-recovery.md#review-provenance-special-case).
+   Inspect installed public help and native source semantics before using that procedure.
+   Preserve pending independent review and unresolved `CHANGES_REQUESTED` findings.
+   Do not reopen pending review indiscriminately.
+4. **Reconcile local authority:** Reconcile old Planner-review clarification routes and fixed discretionary retry approvals within the approved update mandate.
+   Preserve explicit customer financial/resource caps, operational permissions, native guards, and unrelated local adaptations.
+   Do not silently transfer or enlarge a separate customer-approved mandate.
+   Obtain a customer decision only for genuinely conflicting explicit mandates.
+5. **Review and apply files:** Prepare the normal three-way proposal and review changed instructions with neighboring local rules.
+   Recheck current runs and claims immediately before application; defer if the settled state changed.
+   Use the existing activity decision, semantic review, backups, and exact-target verification below.
+   Complete the fixed `1.1.22` retirement procedure when applicable; this workflow migration does not replace it.
+6. **Read back the same cards:** Verify card identity, recorded decisions, implementation owner, review provenance, counters, parent gates, and actual phase.
+   Keep the same card and its history.
+   Update contradictory active instructions and affected baseline bindings through supported operations within the approved scope.
+   For the next Coder handoff, bind the independent Reviewer explicitly; retain historical Planner provenance.
+   New customer-decision questions use Reviewer → Coder → needs-input → Planner/Mattermost → Coder → Reviewer.
+7. **Verify subsequent instruction loading:** Verify effective loading in subsequent execution contexts separately from saved file bytes.
+   Confirm the applicable plan and role baseline before the next handoff.
+   Do not restart a gateway or session merely because files changed.
+   Report file application, card migration, and effective-loading evidence separately.
+   Keep unresolved steps open instead of inferring completion from a package version or queued run.
+
 ## Activity and application
 
 The helper scans visible process environments for exact bound role homes.
@@ -210,6 +250,7 @@ Obtain an explicit proceed or skip decision for that team.
 The CLI conservatively requires this decision for every application and rollback.
 Do not fabricate an inactivity result to avoid the question.
 Before file application, complete the pre-apply record and approval steps in [required Reviewer skill retirement](#required-reviewer-skill-retirement-1122).
+Before applying workflow authority changes, complete steps 1–4 of [Workflow migration](#workflow-migration-200).
 
 ```sh
 python3 -B references/update_team.py apply --home /actual/planner-home \
@@ -362,6 +403,7 @@ Preserve the operational dependency-decision gate when recipes or component meta
 
 For an authorized target update, read back the exact installation record, result journal, and changed targets.
 Read back the required retirement status and native evidence for affected teams before claiming the team update is complete.
+Read back workflow migration progress and subsequent-context loading evidence for affected teams; report missing evidence as an open step.
 Report package version and commit separately.
 Report `applied`, `skipped`, `failed`, unknown legacy skill baselines, retained files, and remaining runtime checks per team.
 Do not claim that running sessions loaded the new context.

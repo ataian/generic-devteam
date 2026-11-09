@@ -17,14 +17,16 @@ metadata:
 
 Use for a feature or correction that changes an existing application.
 Ground the plan in the current code, accepted requirements, and observable behavior.
-Use the team's requirement-clarification and design skills under their existing approval rules.
-This skill supplies existing-code analysis and handoff procedures, not a new role or execution policy.
+Use team clarification/design skills and their approval rules.
+Keep existing roles and execution policy.
 
 ## Boundaries
 
 - Keep accepted product decisions binding when revising a plan.
 - Keep independent review and required safety checks.
-- Resolve technical choices within the accepted goal and your role's authority.
+- Leave execution-time technical decisions within the accepted goal and constraints to the Coder.
+- Distinguish binding requirements and architectural constraints from implementation suggestions.
+- Expected file lists are guidance unless explicitly marked as hard boundaries.
 - Ask the customer about changed use cases, material trade-offs, or scope expansion.
 - Separate existing behavior, proposed behavior, and verified behavior.
 - Do not infer permission to mutate a resource from permission to inspect it.
@@ -38,22 +40,22 @@ This skill supplies existing-code analysis and handoff procedures, not a new rol
 
 ### 1. Establish the outcome and baseline
 
-Read the request, applicable project rules, accepted decisions, and relevant existing plan.
-State the requested observable result and its scope boundary.
-Reuse settled answers instead of restarting the interview.
-For automation, map the agreed manual steps to inputs, existing commands, mutations, and results.
-Do not expand a bounded utility into application lifecycle management.
+Read the request, project rules, accepted decisions, and existing plan.
+State the observable result and scope.
+Reuse settled answers.
+For automation, map agreed manual steps to inputs, existing commands, mutations, and results.
+Keep bounded utilities within scope.
 
 Verify the workspace, actual Git roots, branch, HEAD, and working-tree changes.
 Keep planning and implementation repository roots distinct.
 If an older proposal conflicts with the customer's selected current branch, inspect that branch without switching or merging merely to match the proposal.
-Record the proposal revision, current code baseline, and later accepted-plan commit as distinct identities.
+Distinguish proposal revision, current code baseline, and accepted-plan commit.
 Use the required analysis integration under its existing freshness and coverage rules.
 Recheck affected findings if the baseline changes during approval.
 
-If the plan belongs outside the application repository, establish its storage and Git ownership during planning.
-Resolve required versioning authorization before ticket handoff without blocking the specification itself.
-Do not initialize an extra repository or commit into a sibling repository merely to satisfy the baseline requirement.
+For an external plan, establish storage and Git ownership during planning.
+Resolve versioning authorization before handoff, not specification.
+Do not create an extra repository or commit into a sibling to satisfy the baseline rule.
 
 ### 2. Trace the actual behavior
 
@@ -93,19 +95,20 @@ Name the authorized isolated verification environment when tests are in scope.
 
 ### 4. Build reviewable phases
 
-Place common constraints once, followed by each phase's requirements, files, interfaces, dependencies, tests, acceptance gate, and commit boundary.
-Give each phase a coherent independently reviewable deliverable.
-Map each gate to the repository changes that make it achievable.
+State common constraints once.
+Give each phase an independently reviewable deliverable with requirements, files, interfaces, dependencies, tests, gate, and commit boundary.
+Map gates to enabling changes.
+Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.
+Place combined-behavior checks in the phase where integrated behavior becomes available.
+Use existing results for the Planner's final customer report, not a new technical review or closing ticket.
 Order producer artifacts before their consumers across separately versioned repositories.
-Name required local build or installation prerequisites.
-Pass the actual applicable project/module rule paths to the coding handoff.
+Name local build/installation prerequisites and applicable project/module rule paths in the handoff.
 Do not create placeholder rule files or suppress real read errors to make preflight appear successful.
 
-Preserve accepted phase and review boundaries.
-Change them only through the applicable plan-amendment decision.
-If a worker exposes a scope/gate contradiction, preserve the gate and propose the smallest repository-specific prerequisite.
-Obtain the required amendment approval before adding or releasing coding work.
-Do not widen the workspace or substitute an unversioned workaround.
+Preserve accepted phase and review boundaries unless amended by the required authority.
+For a scope/gate conflict, preserve the gate and propose the smallest repository-specific prerequisite.
+Obtain amendment approval before adding or releasing work.
+Keep workspace boundaries and versioned baselines.
 
 Inspect existing version sources and relevant Git history before requiring a version bump.
 If the intended version step is already fulfilled on the accepted baseline, reuse that result.
@@ -113,12 +116,15 @@ A matching tag alone does not establish matching source or artifact identity.
 
 ### 5. Define limits and verify the plan
 
-Separate estimated effort from hard run timeouts, retry allowances, and elapsed delivery time.
-Calculate estimates from the phase table with a tool.
-Include independent review and state whether waits, provider delays, and correction rounds are included.
-Define the stop condition, permitted remaining work, and who may authorize an extension.
-Keep approved budgets unless evidence or a new owner decision changes them.
-Shorter prose does not prove cheaper implementation or a global cost cap.
+Distinguish effort, delivery time, foreground waits, process deadlines, and native stuck-worker protection.
+Calculate phase-table estimates with a tool.
+Include independent review; state whether waits, provider delays, and corrections are included.
+Work until the acceptance criteria are met. Correct recoverable failures independently.
+Do not repeat a failed approach unchanged. Escalate the concrete obstacle when no justified next approach remains.
+Stop when the accepted result and required checks are complete.
+Preserve explicit customer financial/resource caps, configured limits, provider quotas, operational permissions, and native failure-loop guards.
+Use supported long-running execution, not generic Codex timeouts or correction-count approvals.
+Prose size proves neither cost nor a global cap.
 
 Check every specification requirement against the proposed files, tests, gates, dependencies, and commit boundaries.
 Check phase numbering and acceptance-case identifiers against the actual document.
@@ -133,20 +139,19 @@ Keep a rejected or unapproved plan unreleased.
 Keep the accepted plan and phase plan in the agreed versioned project location.
 Bind each task to their absolute paths and exact Git commits.
 
-For an authorized documentation commit, inspect staged and unstaged changes first.
-Run document validation before staging.
-Use checked exits if validation and writes share a shell invocation.
+For an authorized documentation commit, inspect staged/unstaged changes and validate before staging.
+Check exits between validation and writes.
 Stage only intended planning files and run `git diff --cached --check`.
-Verify the resulting commit's changed files, parent baseline, and working-tree state.
-If a checker defect is discovered after committing, inspect that commit and rerun the corrected check without manufacturing a duplicate commit or rewriting history.
+Verify committed files, parent baseline, and working tree.
+After a checker defect, inspect the commit and rerun the corrected check without duplicate commits or history rewrites.
 
 Record ticket documentation directly on the existing Kanban card.
 Include decisions, instructions, blockers, handoffs, verification results, and review outcomes there.
 Attribute evidence to its executor and exact checked state.
-Use native run logs for detailed execution output.
+Native run outputs remain available evidence, not an authored run-log duty.
 Keep product documentation in its owning repository.
 Preserve historical records without treating them as current instructions.
-On continuation, reconcile current assignment, working tree, and blockers, then continue unfinished work.
+On continuation, reconcile assignment, working tree, and blockers; resume unfinished work.
 Reuse evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid.
 A new commit alone does not invalidate every prior result.
 Require renewed checks for affected areas or insufficient evidence, while retaining independent review and explicit final-state acceptance tests.
@@ -158,25 +163,27 @@ Report the verified handoff state, not assumed worker execution or product compl
 
 ## Revising an existing plan
 
-Read the current plan, accepted specification, repository rules, and replacement instructions.
+Read the plan, accepted specification, repository rules, and replacement instructions.
 Distinguish superseded skill defaults from explicit product decisions and approved exceptions.
-Update the existing plan when intent is unchanged.
-Leave accepted specifications and repository rules unchanged unless their amendment is authorized.
+Record consequential in-scope decisions on the existing ticket.
+For an authorized binding amendment, update the versioned plan and affected current and future ticket bindings before release.
+Preserve already-reviewed history and verify the returning worker's applicable baseline.
+Revise the existing plan for unchanged intent; amend accepted specifications or rules only with authority.
 Keep valid safety gates, review boundaries, and budget decisions.
-Compare the revised requirements, phase/gate/commit structure, and actual documentation diff.
-Present the revised document for explicit acceptance before creating or releasing affected implementation work.
-A request to revise the plan is not permission to execute it.
+Compare revised requirements, phases, gates, commits, and documentation diff.
+Obtain explicit revised-plan acceptance before creating or releasing affected work.
+Plan revision does not authorize execution.
 
-If the customer narrows active work, distinguish cancellation from continued authorization of the original goal.
-Use the scope-change procedure in [Phase release](references/kanban-phase-release.md) before changing the existing cards or graph.
-Preserve reusable work and still-valid prerequisites.
-Resume authorized remaining work only after its prerequisites and ownership are verified.
+Distinguish cancellation from narrowing the authorized goal.
+Use [Phase release](references/kanban-phase-release.md) before scope-related card/graph changes.
+Preserve reusable work and valid prerequisites.
+Verify prerequisites and ownership before resuming authorized work.
 
 ## Conditional references
 
 Load a reference only when its trigger applies.
-Read the relevant procedure and its prerequisites, not unrelated branches.
-References describe conditional work; they do not add requirements to the accepted goal.
+Read its procedure and prerequisites, not unrelated branches.
+Conditional references add no scope.
 
 | Trigger | Required reference |
 |---|---|

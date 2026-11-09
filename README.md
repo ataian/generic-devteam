@@ -100,6 +100,12 @@ The Reviewer reuses valid evidence and reruns affected checks while retaining re
 Planner, Coder and Team-Codex retain the selected complete Graphify/CBM integration. Reviewer has no default graph-tool prerequisite and verifies structure directly; an unresolved evidence gap still blocks approval.
 Reviewer retains conditional library-version/consumer and independent visual acceptance checks without the three implementation-oriented skill bundles.
 Package changes do not activate these rules in existing teams; use the separately authorized team-update procedure.
+The Coder owns implementation decisions within the accepted goal and binding constraints.
+Reviewer findings and customer-decision questions return to the Coder first; only the Coder escalates a missing customer decision through needs-input to the Planner.
+The Planner checks actual blockers and coordinates sufficient customer answers in Mattermost.
+Technical interruptions preserve unfinished review; approval completes the exact reviewed commit directly to DONE.
+Work continues while a justified next approach remains, within explicit customer limits, provider quotas, operational permissions, and native safeguards.
+After the last required ticket reaches DONE, the Planner sends a short customer report from existing results and independent verdicts, without a closing ticket or another technical review.
 The file helper retains obsolete copies. Complete the [required version-gated Reviewer skill retirement](references/update.md#required-reviewer-skill-retirement-1122) after file application within the approved team update; preserve all assets outside its exact scope.
 Für neue Planungen erhält der Planner die Originalskills `grill-me` und `grilling`
 von Matt Pocock. Seine SOUL verlangt `grilling` für die Anforderungsklärung;
@@ -123,6 +129,9 @@ It preserves local edits through a three-way comparison.
 It requires semantic review and an explicit activity decision before application.
 It retains backups and provides a guarded rollback.
 It does not install runtime components, stop workers, or restart sessions.
+For the incompatible `2.0.0` routing change, use [Workflow migration](references/update.md#workflow-migration-200) before applying authority changes.
+Settle active old-contract work, distinguish an active Planner review return from parked-card recovery, and preserve same-card history and unrelated local adaptations.
+Verify subsequent-context loading separately from saved files; a clean merge or newer package version does not prove migration completion.
 Report skipped and failed teams separately.
 
 ## Setup output verification

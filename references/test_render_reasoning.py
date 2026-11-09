@@ -130,7 +130,7 @@ class ReasoningContractTests(unittest.TestCase):
         """Static SOUL contract; upstream's read-order tension is not repaired here."""
         result = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
         for text in [
-            "Use the installed original `sdlc-review` for review entry, sequencing, per-round lenses, baseline duties, and native outcomes.",
+            "Use the installed original `sdlc-review` for review entry, sequencing, per-round lenses, baseline duties, and native outcomes, with the team-specific routing refinement below.",
             "Keep its automatic dispatcher integration unchanged.",
             "Apply all baseline duties before every verdict, including acceptance evidence, relevant checks, and all prior requested changes.",
             "Treat the narrative as a claim, not evidence.",
@@ -146,6 +146,21 @@ class ReasoningContractTests(unittest.TestCase):
             self.assertIn(key, result)
         self.assertIn("`kanban_comment`, then call `kanban_request_changes", result)
         self.assertIn('kanban_block(kind="capability"', result)
+
+    def test_reviewer_customer_decision_route_refines_upstream_without_waiving_guards(self):
+        """Rendered policy contract, not proof of upstream or live-agent compliance."""
+        text = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
+        procedure = text.split("## Review procedure\n", 1)[1].split("\n## ", 1)[0]
+        for clause in (
+            "For customer-decision questions, the team's Reviewer → Coder → Planner route takes precedence over conflicting upstream escalation guidance.",
+            "Return the question to the Coder first through `kanban_request_changes`; only the Coder escalates it through the Planner.",
+            "Keep genuine technical interruptions blocked until their cause is resolved, then recover unfinished review with its provenance.",
+            "This routing refinement grants no permission to bypass runtime safeguards or required review checks.",
+        ):
+            self.assertIn(clause, procedure)
+        self.assertIn("Keep its automatic dispatcher integration unchanged.", procedure)
+        self.assertIn('kanban_block(kind="capability", reason=...)', text)
+        self.assertIn('"reviewed_commit":"<exact-commit>"', text)
 
     def test_reviewer_avoids_failed_retries_and_redundant_evidence_work(self):
         """Static contract retains verification while removing proven waste paths."""
@@ -228,11 +243,14 @@ class ReasoningContractTests(unittest.TestCase):
         values = self.values("coder")
         values["PLANNER_PROFILE"] = "confirmed-planner"
         text = render_role(self.template("coder"), values, "coder")
-        self.assertIn("Route the same task to `confirmed-planner` through native `kanban_request_review`.", text)
+        self.assertIn('kanban_block(kind="needs_input", reason=...)', text)
+        self.assertIn('kanban_comment(task_id=..., body=...)', text)
+        self.assertIn("The existing subscription wakes `confirmed-planner`", text)
+        self.assertNotIn("through native `kanban_request_review`", text)
         self.assertIn("Send one TIMER request to `confirmed-planner` through `kanban_create`.", text)
         self.assertIn("Check `confirmed-planner` against the native profile registration before routing a task or TIMER request.", text)
         self.assertNotIn("setup record", text)
-        self.assertIn("Resume after `kanban_request_changes` and reread the baseline.", text)
+        self.assertIn("After native resumption, reread the decision and applicable plan baseline.", text)
         missing = dict(values)
         del missing["PLANNER_PROFILE"]
         with self.assertRaises(ValueError):
@@ -286,8 +304,7 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn(
             "Obtain that authorization before planning repair work, creating repair tasks, "
             "or delegating repairs.", scope)
-        self.assertIn(
-            "You can resolve minor, locally correctable implementation details", text)
+        self.assertNotIn("You can resolve minor, locally correctable implementation details", text)
         self.assertIn(
             "Use only an authorized native one-time resume mechanism.", text)
 
@@ -309,11 +326,116 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertEqual(rendered.count(paragraph), 1)
 
     def test_planner_checks_blocker_premises_before_adding_requirements(self):
-        paragraph = "Confirm a real blocker before escalation. Resolve local technical or harmless details within the accepted scope."
+        paragraph = "Check an actual Coder escalation for an overlooked in-scope solution before involving the customer."
         source = self.template("planner")
         self.assertEqual(source.count(paragraph), 1)
         rendered = render_role(source, self.values("planner"), "planner")
         self.assertEqual(rendered.count(paragraph), 1)
+
+    def test_coder_owns_in_scope_decisions_and_shared_path_fixes(self):
+        """Static rendered authority contract; not live decision-making evidence."""
+        coder = render_role(self.template("coder"), self.values("coder"), "coder")
+        for clause in (
+            "Resolve technical implementation questions within the accepted goal and constraints.",
+            "Preserve agreed function, essential usability, explicit requirements, security, privacy, data integrity, permissions, cost boundaries, and external contracts.",
+            "Several small decisions must not accumulate into an unapproved redesign.",
+            "Apply existing requirements and applicable customer decisions without asking again.",
+            "Fix the cause within the assignment, including a shared code path when necessary.",
+            "Treat suggested implementations and expected file lists as guidance unless explicitly binding.",
+            "For a binding change outside your authority, supply facts, options, a recommendation, and the paused work to the Planner.",
+        ):
+            self.assertIn(clause, coder)
+        self.assertNotIn("resolves missing requirements and architectural decisions", coder)
+
+    def test_coder_codex_assignment_and_positive_documentation_replace_write_bans(self):
+        text = render_role(self.template("coder"), self.values("coder"), "coder")
+        for clause in (
+            "Implement the ticket requirements with Codex.",
+            "Document decisions, progress, and verification results on the existing Kanban ticket.",
+            "Maintain the project changelog.",
+            "Use the project's established changelog convention and version grouping.",
+        ):
+            self.assertIn(clause, text)
+        for obsolete in ("alone changes project files", "must not implement or patch project files yourself",
+                         "Do not use another coding agent or direct Hermes edits as a fallback for Codex",
+                         "including tests, scripts, configuration, and documentation"):
+            self.assertNotIn(obsolete, text)
+
+    def test_coder_progress_is_not_a_discretionary_attempt_or_timeout_budget(self):
+        text = self.template("coder")
+        for clause in (
+            "Work until the acceptance criteria are met.",
+            "Correct recoverable failures independently.",
+            "Do not repeat a failed approach unchanged.",
+            "Escalate the concrete obstacle when no justified next approach remains.",
+            "Stop when the accepted result and required checks are complete.",
+            "A corrected call, necessary follow-up, or valid resume needs no new start approval.",
+            "Distinguish the foreground wait window from process termination and native stuck-worker protection.",
+            "Preserve explicit customer financial/resource caps, configured limits, provider quotas, operational permissions, and native failure-loop guards.",
+        ):
+            self.assertIn(clause, text)
+        self.assertNotIn("After three substantive", text)
+        self.assertNotIn("State the same limit to Codex", text)
+        self.assertNotIn("1800", text)
+
+    def test_reviewer_returns_questions_to_coder_without_inventing_defects(self):
+        text = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
+        for clause in (
+            "Return defects, missing evidence, questions, and requirement conflicts to the Coder on the same ticket.",
+            "A question is not automatically a proven defect.",
+            "Only the Coder escalates an unresolved customer decision through the Planner.",
+            "Assess an explanation without requiring a project edit or an empty commit.",
+            "A Coder answer or customer decision does not itself approve the implementation.",
+            "Successful review completes the ticket directly; DONE has no return to the Coder.",
+            "Respect the Coder's in-scope implementation discretion.",
+        ):
+            self.assertIn(clause, text)
+        self.assertNotIn("Escalate a real requirement conflict to the Planner", text)
+        self.assertIn('kanban_comment(task_id=..., body=...)', text)
+        self.assertIn("Resolve Reviewer returns within your authority, then present the candidate or explanation for independent review again.", self.template("coder"))
+
+    def test_reviewer_preserves_external_permission_limits_and_ordinary_checks(self):
+        text = self.template("reviewer")
+        for clause in (
+            "Independent review grants no additional external-action permission.",
+            "An already-consumed one-shot allowance does not renew for review.",
+            "Reuse valid evidence or return an unpermitted evidence gap to the Coder.",
+            "Run ordinary checks already covered by the assignment without new approval.",
+            "Use internal Codex review helpers only for a concrete risk or evidence gap.",
+        ):
+            self.assertIn(clause, text)
+
+    def test_planner_screens_blockers_and_resumes_through_state_appropriate_route(self):
+        text = render_role(self.template("planner"), self.values("planner"), "planner")
+        for clause in (
+            "Record an overlooked solution and resume the Coder without a customer round.",
+            "For a genuine customer-owned decision, discuss it in Mattermost and record the sufficient answer and scope on the ticket.",
+            "Resume affected work without another start request when that answer permits continuation.",
+            'kanban_comment(task_id=..., body=...)',
+            'kanban_unblock(task_id=..., board=...)',
+            "For automatic triage, use the installed `scripts/recover-triage` launcher under the recovery reference's checks.",
+            "Triage means blocked work; never deliberately send work there.",
+            "The Mattermost wake is not an active Reviewer run.",
+            "Verify recipient, phase, parent gates, and adoption of the applicable baseline.",
+        ):
+            self.assertIn(clause, text)
+        self.assertNotIn("ESCALATE_PLAN", text)
+        self.assertNotIn("kanban_request_changes(reason=...)", text)
+
+    def test_planner_amends_binding_baselines_and_closes_from_existing_results(self):
+        text = self.template("planner")
+        for clause in (
+            "Distinguish binding requirements and architectural constraints from implementation suggestions.",
+            "Expected file lists are guidance unless explicitly marked as hard boundaries.",
+            "Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.",
+            "Place combined-behavior checks where integrated behavior becomes available.",
+            "Maintain the amended versioned plan after the required customer decision.",
+            "Update affected current and future ticket bindings before release.",
+            "Preserve already-reviewed history.",
+            "When the last required ticket is DONE, confirm the required plan tickets completed and send a short Mattermost customer report from their results and review verdicts.",
+            "State recorded limitations and separately pending publication actions without a new technical review or closing ticket.",
+        ):
+            self.assertIn(clause, text)
 
     def test_caveman_style_is_scoped_to_the_coder(self):
         self.assertIn("$caveman", self.template("coder"))

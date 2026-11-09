@@ -89,7 +89,11 @@ Bind the workspace natively as `terminal.cwd` and the board default workspace.
 Keep the current Git-root, cwd, board, and ticket checks in the Planner workflow.
 Render the confirmed technical `PLANNER_PROFILE` directly into the Coder SOUL.
 Check that ID against the native profile registration.
-Use that bound ID for the existing clarification and TIMER routes.
+Use that bound ID for the existing Planner wake and TIMER routes.
+For a missing customer decision, the Coder keeps assignment and blocks the same card with `kind="needs_input"`.
+The existing subscription wakes the Planner for Mattermost coordination.
+After recording the sufficient answer, the Planner uses ordinary unblock or guarded triage recovery.
+Keep `kanban_request_review` bound to the independent Reviewer, not customer clarification.
 Do not derive paths from display names. Derive only new profile IDs under the setup normalization rule; preserve confirmed IDs.
 Do not ask the user to repeat confirmed values.
 If bindings conflict, resolve the conflict before writing role files.

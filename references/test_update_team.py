@@ -244,7 +244,9 @@ class UpdaterTests(unittest.TestCase):
         self.assertIn("`/synthetic/client's workspace`", target.read_text())
         self.assertIn("`Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code`", target.read_text())
         coder = (Path(self.roles['coder']['home']) / 'SOUL.md').read_text()
-        self.assertIn('Route the same task to `fixture-planner`', coder)
+        self.assertIn('kanban_block(kind="needs_input", reason=...)', coder)
+        self.assertIn('Keep the same card and Coder assignment.', coder)
+        self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder)
         self.assertIn('Send one TIMER request to `fixture-planner`', coder)
         record = json.loads((self.state / 'installation.json').read_text())
         self.assertEqual(record['confirmed_values']['PROJECT_DIR'], setup['confirmed_values']['PROJECT_DIR'])
@@ -252,6 +254,64 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(record['confirmed_values']['PLANNER_PROFILE'], 'fixture-planner')
         (self.state / 'setup.md').rename(self.state / 'audit-only.md')
         self.assertFalse(json.loads(self.proposal().read_text())['conflicts'])
+
+    def pre200_installation(self):
+        """Exact local source fixture, not an inferred package-version baseline."""
+        original = Path(__file__).resolve().parents[1]
+        commit = 'bd7664b531250c5583dec58d21570de1cace1120'
+        self.git('fetch', '-q', str(original), commit)
+        setup = u.setup_data(self.state)
+        self.assertEqual(u.package_version(self.repo, commit), '1.1.22')
+        for entry in u.desired(self.repo, commit, self.roles, setup['confirmed_values'], bindings=self.bindings):
+            target = Path(entry['target'])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(entry['content'])
+            target.chmod(entry['mode'])
+        return u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=commit,
+                            basis_evidence='Synthetic exact 1.1.22 source and complete managed-tree installation')
+
+    def test_pre200_update_preserves_local_caps_and_pending_migration_record(self):
+        record = self.pre200_installation()
+        self.assertEqual(record['maker_version'], '1.1.22')
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        local = 'Local approved resource cap: 40 EUR; no deployment permission.\n\n'
+        coder.write_text(local + coder.read_text())
+        setup = self.state / 'setup.md'
+        setup.write_text(setup.read_text() + '\nWorkflow migration 2.0.0: pending; old-card ownership unresolved.\n')
+        before_setup = setup.read_bytes()
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertEqual(proposal['maker_version'], '2.0.0')
+        self.assertFalse(proposal['conflicts'])
+        result = u.apply(self.home, plan, decision='proceed',
+                         review='Checked local cap preservation; card migration and loading remain pending',
+                         dependency_review='Authorized fixture file-only changes; no live transition or runtime change')
+        self.assertEqual(result['status'], 'applied')
+        updated = u.load_record(self.home)[2]
+        self.assertEqual(updated['maker_version'], '2.0.0')
+        self.assertEqual(updated['roles'], self.roles)
+        self.assertEqual(updated['confirmed_bindings'], self.bindings)
+        self.assertTrue(coder.read_text().startswith(local))
+        self.assertIn('kanban_block(kind="needs_input", reason=...)', coder.read_text())
+        self.assertNotIn('through native `kanban_request_review`', coder.read_text())
+        reviewer = (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text()
+        self.assertIn('only the Coder escalates it through the Planner.', reviewer)
+        self.assertEqual(setup.read_bytes(), before_setup)
+
+    def test_pre200_conflicting_local_planner_route_withholds_file_application(self):
+        self.pre200_installation()
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        old = 'Route the same task to `fixture-planner` through native `kanban_request_review`.'
+        self.assertIn(old, coder.read_text())
+        coder.write_text(coder.read_text().replace(old, 'Local binding mandate: route all decisions to Planner review.'))
+        before = coder.read_bytes()
+        metadata = (self.state / 'installation.json').read_bytes()
+        plan = self.proposal()
+        self.assertIn(str(coder), json.loads(plan.read_text())['conflicts'])
+        with self.assertRaises(ValueError):
+            u.apply(self.home, plan, decision='proceed', review='Unresolved explicit local route conflict')
+        self.assertEqual(coder.read_bytes(), before)
+        self.assertEqual((self.state / 'installation.json').read_bytes(), metadata)
 
     def test_113_installation_adopts_confirmed_role_bindings(self):
         self.check_historical_binding_upgrade('da11a12710aace9a0522c88fd8fb3ef378711d0c')

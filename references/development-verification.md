@@ -21,6 +21,9 @@ Use `test_bound_recovery.py` for binding, shell quoting, modes, and setup-indepe
 Use `test_triage_recovery.py` with the installed Hermes interpreter and synthetic scratch databases.
 Retain skipped/denied native transitions as missing evidence; never bypass their guard.
 Keep all development fixtures outside installed role skill trees.
+Cover legacy active Planner-review returns and parked clarification recovery/reopen in the existing synthetic recovery tests.
+Keep pending independent review, same-card history, original implementer provenance, counters, and parent gates intact.
+Check migration order, old-contract worker preservation, local authority reconciliation, and saved-files versus effective-loading evidence in the existing instruction tests.
 
 Check manifest file existence, sorted uniqueness, version equality, relative links and anchors.
 Compare component assignments, transforms, role fields, complete own skill bytes, helpers, and legal files with the approved baseline.
@@ -29,6 +32,21 @@ Render synthetic role values through the existing renderer; compare nonplacehold
 Review changed instructions under [TAS](tas-authoring-standard.md), including their conditions and required references.
 Trace setup references semantically; a keyword scan alone does not establish scope.
 Walk missing dependencies, collisions, resume, defaults/overrides, model availability, and update dependency decisions.
+
+## Reviewer method and team routing
+
+Upstream `sdlc-review` describes human decisions as an escalation through `kanban_block` and request-changes as a defect return.
+The Maker Reviewer explicitly refines that routing: customer-decision questions return to Coder first through `kanban_request_changes`, without inventing a defect.
+Only the Coder escalates unresolved customer decisions through the Planner.
+Genuine technical interruptions still block and recover unfinished review with its provenance.
+Keep upstream method, lenses, baseline checks, automatic loading, native guards, independent critical-invariant passes, and exact-commit approval unchanged.
+This is a team-specific policy refinement, not a claim of universal upstream compatibility or live compliance.
+Inspect the installed skill and transition semantics when qualifying that boundary; report concrete drift rather than patching, shadowing, or disabling upstream.
+The upstream startup instruction to read the handoff first and the artifact lens instruction to read cold retain their existing read-order tension.
+
+Assess the combined contract through the existing implementation phase and its independent Reviewer.
+Map integrated acceptance to that phase instead of adding a closing ticket or a Planner technical re-review.
+Check that final Planner reporting uses existing ticket results and verdicts and distinguishes pending publication.
 
 ## Separately commissioned behavioral qualification
 
