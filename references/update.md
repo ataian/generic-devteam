@@ -192,10 +192,17 @@ For the Planner skill-maintenance policy, report the separate configuration step
 The file updater delivers the Planner template change but does not set `skills.creation_nudge_interval`.
 Obtain separate authorization to set and read back `skills.creation_nudge_interval=0` in the existing Planner profile.
 
-If the helper recipe changed, report the required Team-Codex model and helper reasoning assignments from [the recipe](integrations.md#codex-agents).
+For a requested VoltAgent update, use [the original-file recipe](integrations.md#codex-agents).
+Read the target Maker manifest's `codex-custom-agents.source_revision`, `subpaths`, and `legal_files` as the required version inventory.
 The file updater does not manage the six upstream agent TOMLs.
-Obtain separate authorization before adapting installed helper files.
-Reuse the team's confirmed `CODEX_MODEL`, `CODEX_REASONING_DEFAULT`, and `CODEX_REASONING_MAX`; preserve other fields and local edits.
+Compare all six installed files with that revision, even if the recorded Maker version is already current.
+Include replacement of old Maker model/reasoning overrides with unchanged originals in the explicit team-update authorization.
+Resolve other local edits or conflicting customer rules before replacement; preserve unresolved files.
+Back up all six installed files and record their paths, bytes/hashes, modes, and source provenance before authorized replacement.
+Recheck drift before writing; preserve ownership and modes.
+Keep the companion update pending until all six files match the pinned originals and native discovery/access readbacks pass.
+Record revision, matching hashes, and completion in the existing private update record; resume pending work on later updates.
+For rollback, restore the verified backup after a drift check and read back the restored files.
 If the required runtime capability is absent, defer the dependent proposal.
 
 For Caveman changes, inspect each assigned consumer under [the writing-skill recipe](integrations.md#caveman).

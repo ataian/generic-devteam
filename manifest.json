@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -408,6 +408,7 @@
     },
     "codex-custom-agents": {
       "original_repo": "https://github.com/VoltAgent/awesome-codex-subagents",
+      "source_revision": "9abe3279a0aa4ee518381af800ca1062398f5433",
       "subpaths": [
         "categories/04-quality-security/test-automator.toml",
         "categories/04-quality-security/security-auditor.toml",
@@ -415,6 +416,9 @@
         "categories/04-quality-security/anti-ui-slop-reviewer.toml",
         "categories/01-core-development/ui-fixer.toml",
         "categories/03-infrastructure/docker-expert.toml"
+      ],
+      "legal_files": [
+        "LICENSE"
       ],
       "targets": {
         "codex": [

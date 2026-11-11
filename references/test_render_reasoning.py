@@ -87,7 +87,7 @@ class ReasoningContractTests(unittest.TestCase):
         for text in [
             "below HIGH, use `low`.",
             "HIGH complexity with HIGH impact uses `high`.",
-            "These limits also apply to retries, resumes, and delegated helpers.",
+            "These limits also apply to retries, resumes, and other delegated helpers; the six VoltAgent specialists below use their original settings.",
             "Supply the reasoning level selected for this task under the existing matrix",
             "Default-level example with a quoted TOML string:",
             "For a higher selected level, pass that selected value instead.",
@@ -96,6 +96,38 @@ class ReasoningContractTests(unittest.TestCase):
             self.assertTrue(text in result, text)
         self.assertNotIn("if the worker guard prohibits them", result)
         self.assertNotIn("{{", result)
+
+    def test_voltagent_specialists_keep_original_settings_outside_parent_matrix(self):
+        """Rendered instruction contract; no live Codex execution."""
+        result = render_role(self.template("coder"), self.values("coder", "low", "medium"), "coder")
+        self.assertIn("For the main Codex process, use the model from the shared Team-Codex configuration.", result)
+        self.assertIn("Use their installed original model and reasoning settings without prompt overrides.", result)
+        self.assertIn("Pass this distinction to Codex in each task and resume.", result)
+        self.assertIn("HIGH complexity with HIGH impact uses `medium`.", result)
+        self.assertIn("Preserve explicit customer financial/resource caps", result)
+        self.assertNotIn("Keep write scopes and model pins within policy.", result)
+
+    def test_voltagent_source_contract_is_pinned_and_unchanged(self):
+        """Static delivery contract, not proof of native agent selection."""
+        component = MANIFEST["upstream_components"]["codex-custom-agents"]
+        self.assertRegex(component.get("source_revision", ""), r"^[0-9a-f]{40}$")
+        self.assertEqual(component.get("legal_files"), ["LICENSE"])
+        self.assertEqual(len(component["subpaths"]), 6)
+        recipe = (ROOT / "references/integrations.md").read_text().split('<a id="codex-agents"></a>', 1)[1].split('<a id="hindsight"></a>', 1)[0]
+        self.assertIn("codex-custom-agents.source_revision", recipe)
+        self.assertIn("Compare complete installed bytes with the pinned originals, including model and reasoning fields.", recipe)
+        self.assertIn("Resolve unavailable original models, unsupported reasoning, or conflicting customer limits during preparation.", recipe)
+        for obsolete in ("Set `model` to `CODEX_MODEL`", "capped by `CODEX_REASONING_MAX`",
+                         "only the two assigned fields differ"):
+            self.assertNotIn(obsolete, recipe)
+
+    def test_voltagent_update_reads_version_inventory_without_parent_rebinding(self):
+        text = (ROOT / "references/update.md").read_text()
+        self.assertIn("Read the target Maker manifest's `codex-custom-agents.source_revision`, `subpaths`, and `legal_files`", text)
+        self.assertIn("Back up all six installed files and record their paths, bytes/hashes, modes, and source provenance", text)
+        self.assertIn("Keep the companion update pending until all six files match the pinned originals", text)
+        self.assertNotIn("report the required Team-Codex model and helper reasoning assignments", text)
+        self.assertNotIn("before adapting installed helper files", text)
 
     def test_reviewer_renders_risk_escalation_and_separate_critical_pass(self):
         """Static rendered instruction contract, not measured agent behavior."""

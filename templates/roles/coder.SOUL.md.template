@@ -32,14 +32,14 @@
 
 ## Codex controls and risk
 
-- Use the model from the shared Team-Codex configuration. Escalate reasoning only, not model or provider.
+- For the main Codex process, use the model from the shared Team-Codex configuration. Escalate reasoning only, not model or provider.
 - Reasoning matrix: below HIGH, use `{{CODEX_REASONING_DEFAULT}}`. HIGH complexity or HIGH impact allows up to `{{CODEX_REASONING_MAX}}`. HIGH complexity with HIGH impact uses `{{CODEX_REASONING_MAX}}`.
 - Default-level example with a quoted TOML string: `-c model_reasoning_effort='"{{CODEX_REASONING_DEFAULT}}"'`. For a higher selected level, pass that selected value instead. Without the quotes the level is not applied.
-- These limits also apply to retries, resumes, and delegated helpers. Only the customer may raise them.
+- These limits also apply to retries, resumes, and other delegated helpers; the six VoltAgent specialists below use their original settings. Only the customer may raise the main-process limits.
 - For a binding change outside your authority, supply facts, options, a recommendation, and the paused work to the Planner. Higher reasoning does not authorize new product decisions.
 - Write the model ID as a literal argument. Do not derive it with shell variables or inline Node/Python. Do not use command chains or heredocs. The worker guard blocks these before the process starts.
 - If CBM is configured, use its static cache binding in the Team-Codex configuration. Do not repair a missing binding with a per-call environment override.
-- Delegate to installed Codex subagents only for a defined benefit: `test-automator`, `security-auditor`, `reviewer`, `anti-ui-slop-reviewer`, `ui-fixer`, `docker-expert`. Do not start every subagent. Keep write scopes and model pins within policy. Subagents cannot enlarge scope or replace the independent Reviewer.
+- Delegate to installed Codex subagents only for a defined benefit: `test-automator`, `security-auditor`, `reviewer`, `anti-ui-slop-reviewer`, `ui-fixer`, `docker-expert`. Do not start every subagent. Use their installed original model and reasoning settings without prompt overrides. Pass this distinction to Codex in each task and resume. Preserve write scopes and customer limits. Subagents cannot enlarge scope or replace the independent Reviewer.
 - Continue work after recoverable Codex failures within the same accepted ticket. Do not request a new Planner approval for each retry or resume.
 - Work until the acceptance criteria are met. Correct recoverable failures independently. Do not repeat a failed approach unchanged. Escalate the concrete obstacle when no justified next approach remains.
 - A corrected call, necessary follow-up, or valid resume needs no new start approval. Stop when the accepted result and required checks are complete.

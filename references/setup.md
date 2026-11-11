@@ -32,7 +32,7 @@ Do not require a new interview skill or product-planning workshop.
 | Group | Complete before starting |
 |---|---|
 | Project and roles | Separate project name and canonical absolute workspace; repository boundaries or confirmed absence; display names for Planner (`PLANER_NAME`), Coder (`CODER_NAME`), Reviewer (`REVIEWER_NAME`); selectable homes and collision resolutions |
-| Models and analysis | Combined default set below or confirmed overrides; actual native model/provider IDs and supported reasoning; helper model/reasoning bindings to the confirmed Team-Codex policy; exactly one of CBM or Graphify; repository/corpus scope, roots, cache/output paths and any optional watcher intent |
+| Models and analysis | Combined default set below or confirmed overrides; actual native model/provider IDs and supported reasoning; availability of original VoltAgent model/reasoning settings at the manifest revision; exactly one of CBM or Graphify; repository/corpus scope, roots, cache/output paths and any optional watcher intent |
 | Codex identity | Explicitly authorized `user.name`/`user.email` reuse, provenance, access method and protected login route; discovery alone is not consent |
 | Shared objects | Existing service endpoints; intended board/bank names; create versus authorized reuse and ownership |
 | Communication | Mattermost server/team, intended Planner bot, human and any additional authorized users, allowed project channel, channel type and DM participants; existing IDs or explicit creation intent |
@@ -73,9 +73,9 @@ Resolve Sol separately to the actual supported native model/provider identifier 
 Record the actual Codex model ID as `CODEX_MODEL` and reasoning separately.
 If the selected model, provider, or reasoning level is unavailable or incompatible, resolve that conflict during preparation.
 Preserve accepted overrides. Do not silently change provider/model or choose the highest supported level.
-Use the Team-Codex model for all six helpers.
-Assign default reasoning or `high` capped by the confirmed maximum through [the helper recipe](integrations.md#codex-agents).
-Do not require access to the upstream model pins or a second provider.
+Use the six VoltAgent specialists' original model and reasoning settings under [the helper recipe](integrations.md#codex-agents).
+Resolve their availability and any conflicting customer limits before setup; preserve the pinned originals.
+The Team-Codex model and default/maximum matrix govern the main process, not these six specialists.
 Validate defaults against maxima using the chosen target's supported semantics, including nonstandard or nonconfigurable reasoning.
 
 Keep Hermes Coder fixed reasoning separate from task-selected Codex reasoning.
@@ -259,7 +259,8 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
    Keep all skill names and bytes unchanged except the recovery launcher.
    Bind that launcher through the Maker step below after copying the full tree.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.
-2. Read back the native Hermes/Codex model and reasoning settings, permitted limits, helper routes and adapted model/reasoning settings against the preparation dataset.
+2. Read back the native Hermes/Codex settings, permitted limits, and helper routes against the preparation dataset.
+   Compare the six VoltAgent TOMLs byte-for-byte with the manifest revision, including their original model and reasoning settings.
    Record configuration sources, authorization and actual readbacks privately.
    Keep the native Codex model ID outside role render fields.
    Verify Caveman source, installed trees, autoload, and native skill discovery/loading through [the writing-skill recipe](integrations.md#caveman).

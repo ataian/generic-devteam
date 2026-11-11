@@ -31,7 +31,7 @@ Werte ersetzen; den übrigen Inhalt erhalten.
 Geeignete vorhandene Installationen wiederverwenden. Bei neuem Bezug den konkreten
 Originalstand und dessen Dateiumfang prüfen und Version/Revision im Setup-Protokoll
 festhalten. Die folgenden Repositorypfade benennen die Bezugsstellen, keine bereits
-nachgewiesenen Installationen. For Caveman, use the exact source revision in the manifest; other research anchors remain unpinned.
+nachgewiesenen Installationen. For Caveman and Codex-Custom-Agents, use the exact source revision in the manifest; other research anchors remain unpinned.
 
 Vollständige Skill-/Pluginpakete samt benötigten Begleitdateien übernehmen, nicht
 nur einzelne Einstiegstexte. Die zum Bezugsstand gehörenden Lizenz- und
@@ -54,6 +54,10 @@ Notice-Dateien erhalten, auch wenn sie oberhalb eines ausgewählten Unterbaums l
 
 ### Codex-Custom-Agents: Originaldateien
 
+The [manifest](../manifest.json) is the version inventory for this component.
+Read `upstream_components.codex-custom-agents`: `original_repo`, `source_revision`, `subpaths`, and `legal_files`.
+Setup and updates use that exact revision, not a moving branch or the historical research anchor.
+
 - `categories/04-quality-security/test-automator.toml`
 - `categories/04-quality-security/security-auditor.toml`
 - `categories/04-quality-security/reviewer.toml`
@@ -61,9 +65,8 @@ Notice-Dateien erhalten, auch wenn sie oberhalb eines ausgewählten Unterbaums l
 - `categories/01-core-development/ui-fixer.toml`
 - `categories/03-infrastructure/docker-expert.toml`
 
-Use the confirmed Team-Codex model for all six agents.
-Assign default reasoning or `high` capped by the confirmed maximum through [the helper recipe](integrations.md#codex-agents).
-Preserve all other original fields and the original source evidence.
+Keep all six TOMLs byte-identical to that revision through [the helper recipe](integrations.md#codex-agents).
+Use their original model and reasoning settings, separately from the Team-Codex main-process policy.
 The Codex agent `reviewer` does not replace the independent Hermes Reviewer.
 
 ## Codeanalyse: genau eine Alternative

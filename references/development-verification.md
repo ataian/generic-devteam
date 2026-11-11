@@ -55,7 +55,7 @@ Do not turn this section into a pending setup checklist.
 Select only checks needed by the commissioned question:
 
 - Hindsight: inspect adapter/SDK forwarding if needed; use authorized synthetic role/shared/untagged data to distinguish retain, recall, reflect, prefetch, and consolidation. Preserve `per_tag`, `any_strict`, and tag semantics.
-- Codex: check actual model/reasoning requests, HIGH/HIGH selection, retries/resumes, bounded review escalation, helper pins, and persistent Ponytail/Caveman behavior. Run individual helpers only when commissioned.
+- Codex: check main-process model/reasoning requests, HIGH/HIGH selection, retries/resumes, bounded review escalation, unchanged VoltAgent pins at the manifest revision, and persistent Ponytail/Caveman behavior. Verify that main-process selections do not override these six specialists. Run individual helpers only when commissioned.
 - Git: if commit behavior is in scope, use an isolated repository without local identity and compare author/committer on its actual commit with the confirmed team identity.
 - Analysis: in an authorized scratch repository, index `probe_entry` calling `probe_leaf`, query that relationship, add `probe_added`, and verify the native update path. For CBM distinguish MCP, hooks, cache binding, subagents, and watcher behavior.
 - Communication: distinguish mention, free response, DM, unauthorized-user/channel rejection, and actual subscription delivery. Use synthetic ingress without model calls for rejection checks where supported.

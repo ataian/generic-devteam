@@ -102,7 +102,8 @@ Do not generate a second runtime binding file.
 
 Keep fixed Planner/Hermes-Coder reasoning in native configuration.
 Keep Reviewer/Team-Codex default and maximum in the existing role fields.
-Resolve native model IDs, supported levels, helper model/reasoning bindings, and limits during preparation.
+Resolve native model IDs, supported levels, and limits during preparation.
+For the six VoltAgent specialists, verify unchanged TOMLs and original model/reasoning availability through [their recipe](integrations.md#codex-agents).
 Read back actual configuration and overrides; do not probe reasoning boundaries with model calls.
 A role maximum is a policy rule, not a technical execution barrier.
 

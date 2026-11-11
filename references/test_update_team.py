@@ -561,6 +561,32 @@ class UpdaterTests(unittest.TestCase):
         result = u.apply(self.home, plan, decision='proceed', review='checked', dependency_review='User approved file-only changes; runtime remains unchanged')
         self.assertEqual(result['status'], 'applied')
 
+    def test_voltagent_revision_change_requires_decision_without_writing_agent_files(self):
+        """Pinned metadata gates file updates; external TOMLs stay operator-owned."""
+        self.initialize()
+        agents = self.root / 'coder/devteam/codex-home/agents'
+        agents.mkdir(parents=True)
+        original = b'name = "reviewer"\nmodel = "local-model"\n'
+        target = agents / 'reviewer.toml'
+        target.write_bytes(original)
+        target.chmod(0o600)
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        # Synthetic commit identifier; this offline fixture never fetches upstream.
+        manifest['upstream_components']['codex-custom-agents']['source_revision'] = 'a' * 40
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture change pinned VoltAgent revision')
+        plan = self.proposal()
+        self.assertIn('manifest.json:upstream_components', json.loads(plan.read_text())['dependencies'])
+        with self.assertRaises(ValueError):
+            u.apply(self.home, plan, decision='proceed', review='checked')
+        result = u.apply(self.home, plan, decision='proceed', review='checked',
+                         dependency_review='Approved file-only update; VoltAgent companion update pending')
+        self.assertEqual(result['status'], 'applied')
+        self.assertEqual(target.read_bytes(), original)
+        self.assertEqual(target.stat().st_mode & 0o777, 0o600)
+        self.assertNotIn(str(target), {entry['target'] for entry in u.load_record(self.home)[2]['managed']})
+
     def test_obsolete_file_is_retained_and_reported(self):
         self.initialize()
         relative = 'skills/brownfield-feature-planning/references/project-retrospectives.md'
