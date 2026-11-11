@@ -3,29 +3,32 @@
 **Status:** Package authoring standard.
 **Scope:** All agent-context Markdown, including SOULs, skills, references, setup and update instructions, and project instructions.
 **Language:** English for development communication and artifacts, including role communication, tickets, handoffs, findings, technical project documentation, and agent instructions. Preserve exact identifiers, quotations, error messages, and deliberately localized product text.
-**Basis:** Selected ASD-STE100 principles, operational contracts, and progressive disclosure. This is not full ASD-STE100 compliance.
+**Basis:** Caveman prose style, operational contracts, and progressive disclosure. This is not full ASD-STE100 compliance.
 
 ## Purpose
 
 Use TAS to write agent-context Markdown. A SOUL defines durable role behavior. It is not a project encyclopedia, tutorial, change log, or runtime configuration dump. Put other content in the appropriate document type below.
 
-## Writing rules
+## Style source
 
-1. Use plain technical English. Prefer common words and active voice.
-2. State one requirement per sentence or bullet. Keep conditions next to the affected action.
-3. Use direct imperatives for instructions and prohibitions. Use `must` and `must not` only when explicit requirement levels are necessary, and `can` for permissions. Use `if` for conditions.
-4. Identify the actor, action, input, and required result. Include the trigger when behavior is conditional.
-5. Define one term for one concept. Keep command names, status values, paths, API fields, and placeholders exact.
-6. Keep exceptions when they change permitted behavior. Do not replace conditions with absolute rules.
-7. Put stable, non-negotiable boundaries before procedural detail.
-8. Remove motivation, character biographies, slogans, repetition, rhetorical emphasis, emoji, filler, and lengthy examples.
-9. Write complete but compact sentences. Do not enforce a hard word limit or use telegraph fragments where they hide meaning.
-10. Prefer actionable evidence requirements over broad traits such as 'be rigorous' or 'be professional'.
-11. Distinguish `planned`, `implemented`, `tested`, `reviewed`, `approved`, `published`, and `deployed`.
-12. Report what was checked. Never infer execution success from a command, a commit, or an agent's claim alone.
-13. Do not invent requirements, missing source facts, approval, tool capabilities, or test results.
-14. State unresolved decisions and the authorized escalation target.
-15. Use short prose for explanations, ordered steps for procedures, and tables only when comparison improves clarity.
+Use the original `caveman` writing skill from the source declared in [the integration recipe](integrations.md#caveman).
+For package authoring, read that original directly when it is not already available; installation is not required or authorized.
+Apply its style to authored Markdown and other persisted prose, overriding its persisted-content exception.
+Use original `caveman-review` for findings, including Auto-Clarity; retain the assigned review procedure and native outcomes.
+Preserve exact technical payload, safety warnings, conditions, and exceptions.
+Clarity takes precedence over word or line limits.
+Generated roles receive these scope rules through their SOULs, not through this authoring reference.
+
+## Instruction contracts
+
+1. Identify the actor, action, input, and required result. Keep triggers and conditions next to the action.
+2. Preserve permissions and exceptions; do not replace conditions with absolute rules.
+3. Put stable, non-negotiable boundaries before procedural detail.
+4. Require observable evidence rather than broad traits such as 'be rigorous'.
+5. Distinguish `planned`, `implemented`, `tested`, `reviewed`, `approved`, `published`, and `deployed`.
+6. Verify required coverage and results before reporting success. Keep successful-check reporting concise; identify failures and missing required checks.
+7. Do not invent requirements, missing source facts, approval, tool capabilities, or test results.
+8. State unresolved decisions and the authorized escalation target.
 
 ## Content placement
 
@@ -57,12 +60,12 @@ Examples:
 
 ## Output contract
 
-- State the result or blocker first.
-- Follow with verified facts, relevant risks, unresolved decisions, and the next action.
 - Use concrete paths, commits, test names, and state labels where needed.
 - Give a reviewer a reproducible finding, not an impression.
 - Give a coder a testable acceptance criterion, not an interpretation task.
-- Do not add a summary that merely repeats the report.
+- Bind tickets to the exact accepted plan and phase instead of copying requirements or standard team procedures.
+- Keep development decisions, accepted exceptions, consequential failures, blockers, outcomes, and verdicts on the existing card.
+- Keep routine procedures, successful-test catalogues, command recipes, and log inventories out of ticket prose.
 
 ## Rewrite acceptance checks
 

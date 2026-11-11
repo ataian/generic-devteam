@@ -253,31 +253,37 @@ Rückweg: eigene Pluginregistrierung/Hookfreigabe und zugeordnete Modusdateien
 gezielt zurücknehmen; keine gemeinsamen Runtimes oder persönlichen Plugins löschen.
 
 <a id="caveman"></a>
-## Caveman und find-skills
+## Caveman writing skills
 
-Original [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman): exakt
-vollständigen Hauptskill `skills/caveman/SKILL.md` **und** `README.md` beziehen,
-Original-`LICENSE`, `LICENSE-MIT`, `NOTICE` erhalten. Der recherchierte Original-
-Alias `full` wird auf `caveman` abgebildet (`src/hooks/caveman-config.js`). Aktuellen
-Dateibaum/Mapping bestätigen; kein zusätzliches CLI-/Proxy-/Routingprodukt.
+Use the original [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) release and exact revision in the manifest's `caveman.source_release` and `caveman.source_revision`.
+Use that same revision for `caveman-review`, whose `source_component` is `caveman`.
+Fetch the complete `skills/caveman/` and `skills/caveman-review/` trees outside active discovery.
+Keep their `SKILL.md`, `README.md`, and root `LICENSE`, `LICENSE-MIT`, and `NOTICE` unchanged.
+Compare reused copies against this source; an older skill with the same name is not sufficient.
+Install only these writing skills; exclude Read less, CLI/engine, hooks, proxy, routing, cloud features, `ultracave`, and `megacave`.
 
-Nach `<Coderhome>/skills/caveman/` und `<CODEX_PROCESS_HOME>/.agents/skills/caveman/`
-mit vollständigen Begleitdateien bereitstellen. Nur für das Coderprofil
-`skills.auto_load` gezielt um `caveman` erweitern; bestehende Liste zunächst lesen,
-duplikatfrei mergen und als JSON-Liste über
-`hermes -p "$PROFILE" config set skills.auto_load "$AUTO_LOAD_JSON"` setzen,
-danach `config get skills.auto_load`. Nicht die ganze vorhandene Liste ersetzen.
-Das Reviewerprofil erhält weder die Skillkopie noch den Autoload-Eintrag; seine
-SOUL verlangt sachliche Klartextbefunde, damit Reviewbefunde nicht durch
-Kürzung mehrdeutig werden.
-Verify native discovery/loading without a style conversation.
-Team-Codex receives `$caveman` in every new task, including restart/resume.
-Read back that durable clause in the personalized [Coder SOUL](../templates/roles/coder.SOUL.md.template).
-Do not make its later use depend on reloading this Maker.
+| Consumer | Skill trees | Activation |
+|---|---|---|
+| Planner | `<Plannerhome>/skills/caveman/` | `skills.auto_load`: `caveman` |
+| Coder | `<Coderhome>/skills/caveman/` | `skills.auto_load`: `caveman` |
+| Reviewer | `<Reviewerhome>/skills/caveman/`, `<Reviewerhome>/skills/caveman-review/` | `skills.auto_load`: `caveman`; SOUL loads `caveman-review` for findings |
+| Team-Codex | `<CODEX_PROCESS_HOME>/.agents/skills/caveman/` | Literal `$caveman` in each task and resume |
 
-Nur Chat wird verkürzt. Code, Dokumentation, Commits, Memory und Sicherheitsklarheit
-bleiben normal verständlich. Planner bleibt normale Sprache. Rückweg entfernt nur
-die eigenen identifizierten Skillkopien und den eigenen Autoload-Eintrag.
+Resolve each home from confirmed native bindings before copying complete trees and legal files.
+For each Hermes role, read `skills.auto_load` and merge `caveman` without duplicates or loss of existing entries.
+Set the merged JSON list through `hermes -p "$PROFILE" config set skills.auto_load "$AUTO_LOAD_JSON"`.
+Read it back with `hermes -p "$PROFILE" config get skills.auto_load`.
+Preserve local adaptations; resolve collisions before replacing any installed copy.
+
+Before role personalization, verify complete source/target file sets and bytes, autoload configuration, and native skill discovery/loading without a style conversation.
+After writing the personalized SOULs, perform the following readbacks in setup section 6, step 6.
+Read back each personalized SOUL's Caveman use and persisted-prose scope.
+Read back the Reviewer's `caveman-review` load trigger and separation of formatting from review procedure.
+Read back the Coder's per-task `$caveman` clause and propagation of scope and clarity safeguards, including restart/resume.
+These SOUL clauses extend upstream style to authored tickets, documentation, and other persisted prose; preserve technical payload and safety exceptions.
+The upstream skills remain unchanged. Their use must not depend on reloading this Maker.
+Record source revision, inventories, hashes, target paths, and loading evidence in the existing private setup record.
+For rollback, restore only recorded own skill trees and autoload changes after checking current drift; preserve unrelated entries and obtain required deletion approval.
 
 <a id="find-skills"></a>
 Original [vercel-labs/skills](https://github.com/vercel-labs/skills): copy complete `skills/find-skills/` and MIT `LICENSE` to `<CODEX_PROCESS_HOME>/.agents/skills/find-skills/`.

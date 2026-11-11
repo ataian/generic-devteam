@@ -30,8 +30,8 @@ Werte ersetzen; den übrigen Inhalt erhalten.
 
 Geeignete vorhandene Installationen wiederverwenden. Bei neuem Bezug den konkreten
 Originalstand und dessen Dateiumfang prüfen und Version/Revision im Setup-Protokoll
-festhalten. Die folgenden Repositorypfade benennen die Bezugsstellen, keine fest
-vorgeschriebenen Versionen oder bereits nachgewiesenen Installationen.
+festhalten. Die folgenden Repositorypfade benennen die Bezugsstellen, keine bereits
+nachgewiesenen Installationen. For Caveman, use the exact source revision in the manifest; other research anchors remain unpinned.
 
 Vollständige Skill-/Pluginpakete samt benötigten Begleitdateien übernehmen, nicht
 nur einzelne Einstiegstexte. Die zum Bezugsstand gehörenden Lizenz- und
@@ -47,7 +47,8 @@ Notice-Dateien erhalten, auch wenn sie oberhalb eines ausgewählten Unterbaums l
 | <a id="grill-me"></a>grill-me / grilling | [mattpocock/skills](https://github.com/mattpocock/skills) | Vollständige Bäume `skills/productivity/grill-me` und `skills/productivity/grilling` einschließlich `agents/`, benötigter Referenzen und MIT-`LICENSE` aus dem Repositoryroot | Hermes-Planner |
 | <a id="hindsight"></a>Hindsight-Integration | [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) | Vollständiges `hindsight-integrations/hermes`; vorhandenen Hindsight-Dienst anbinden | Alle Hermes-Rollen |
 | <a id="ponytail"></a>Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Vollständiges Repository mit Hermes-Plugin, `.codex-plugin/plugin.json`, Skills und Hooks | Hermes-Coder und Team-Codex |
-| <a id="caveman"></a>Caveman | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Vollständiges `skills/caveman` für den Chatstil, nicht das zusätzliche CLI-/Proxyprodukt | Hermes-Coder und Team-Codex |
+| <a id="caveman"></a>Caveman | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Complete `skills/caveman`, root `LICENSE`, `LICENSE-MIT`, `NOTICE`; writing only | All Hermes roles and Team-Codex |
+| <a id="caveman-review"></a>Caveman Review | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Complete `skills/caveman-review` and the same legal files and revision; finding format only | Hermes-Reviewer |
 | <a id="find-skills"></a>find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) | Vollständiges `skills/find-skills` | Team-Codex |
 | <a id="codex-agents"></a>Codex-Custom-Agents | [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents) | Die unten aufgeführten Originaldateien | Team-Codex |
 

@@ -198,6 +198,14 @@ Obtain separate authorization before adapting installed helper files.
 Reuse the team's confirmed `CODEX_MODEL`, `CODEX_REASONING_DEFAULT`, and `CODEX_REASONING_MAX`; preserve other fields and local edits.
 If the required runtime capability is absent, defer the dependent proposal.
 
+For Caveman changes, inspect each assigned consumer under [the writing-skill recipe](integrations.md#caveman).
+The file updater does not install Caveman skills or change `skills.auto_load`.
+Include the exact skill targets, source revision, autoload changes, backups, and readbacks in the explicit team-update authorization.
+Preserve local adaptations and historical tickets.
+Defer the dependent SOUL changes until the required skills and loading bindings are verified.
+Read back each delivered scope clause and the Coder's per-task propagation after file application.
+Record subsequent-context loading separately; do not restart sessions or claim that running contexts adopted the change.
+
 ## Workflow migration (2.0.0)
 
 Use this procedure during an explicitly authorized team update from a pre-update version below `2.0.0` to a target at or above `2.0.0`.

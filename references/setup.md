@@ -262,7 +262,7 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
 2. Read back the native Hermes/Codex model and reasoning settings, permitted limits, helper routes and adapted model/reasoning settings against the preparation dataset.
    Record configuration sources, authorization and actual readbacks privately.
    Keep the native Codex model ID outside role render fields.
-   Read back the Coder SOUL's default/max values, process binding and `$caveman` clause for every new task and resume.
+   Verify Caveman source, installed trees, autoload, and native skill discovery/loading through [the writing-skill recipe](integrations.md#caveman).
    Bind only the chosen [analysis branch](code-analysis.md) for all assigned consumers; record roots and the installed operational update reference.
 3. Verwende den reinen Textweg für die Rollenpersonalisierung:
    [references/render_text.py](render_text.py). Er liest/schreibt keine Dateien,
@@ -324,7 +324,10 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
    Lies in der Planner-SOUL die Ladepflicht für `grilling`, dessen Vorrang im
    Interviewabschnitt und die getrennte Planannahme zurück. Beide Originalskills
    müssen im Plannerhome vollständig vorliegen; Makerverweise allein genügen nicht.
-   Read back the Coder SOUL process binding and `$caveman` clause for every new task, including restart/resume.
+   Read back the Coder SOUL's default/max values and process binding.
+   Read back every role's Caveman load requirement and persisted-prose scope.
+   Read back the Reviewer's `caveman-review` trigger and preserved review procedure.
+   Read back the Coder SOUL process binding, per-task `$caveman` clause, and scope/clarity propagation, including restart/resume.
    Record the installed path and exact readback. Verify configured modes without a synthetic worker experiment.
    Verify the selected analysis integration, complete original skills and native activation for Planner, Coder and Team-Codex.
    Do not add a second alternative or leave only a Maker reference.

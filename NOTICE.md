@@ -46,6 +46,9 @@ Fremdkomponenten sind Bezugsidentitäten mit dokumentierten Zielrezepten, keine
 mitexportierten Installationen. Ihre konkreten Bezugsstände behalten eigene
 Lizenzen/Notices; unsere MIT-Lizenz lizenziert sie nicht um. Rechercheidentitäten
 in nativen Rezepten sind keine Installationspins oder Runtimegarantien.
+For the two Caveman writing skills, `source_revision` pins the original release in the `caveman` component.
+`caveman-review.source_component` reuses that source identity.
+Their upstream texts remain unchanged; role SOULs extend their prose scope and preserve the review workflow.
 
 The manifest stage `setup-recipe` describes a recipe package, not qualified live-team behavior. General timeout/retry/rate-limit investigation and synthetic behavioral experiments are outside normal setup scope.
 

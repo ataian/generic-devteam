@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -351,15 +351,43 @@
     },
     "caveman": {
       "original_repo": "https://github.com/JuliusBrussee/caveman",
+      "source_release": "v4.1.0",
+      "source_revision": "1e91f1306d602d4ca23618701b1185575ae1869b",
       "subpaths": [
         "skills/caveman"
       ],
+      "legal_files": [
+        "LICENSE",
+        "LICENSE-MIT",
+        "NOTICE"
+      ],
       "targets": {
         "hermes": [
-          "coder"
+          "planner",
+          "coder",
+          "reviewer"
         ],
         "codex": [
           "team-codex"
+        ]
+      },
+      "recipe_ref": "references/integrations.md#caveman",
+      "recipe_status": "documented"
+    },
+    "caveman-review": {
+      "original_repo": "https://github.com/JuliusBrussee/caveman",
+      "source_component": "caveman",
+      "subpaths": [
+        "skills/caveman-review"
+      ],
+      "legal_files": [
+        "LICENSE",
+        "LICENSE-MIT",
+        "NOTICE"
+      ],
+      "targets": {
+        "hermes": [
+          "reviewer"
         ]
       },
       "recipe_ref": "references/integrations.md#caveman",

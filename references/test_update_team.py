@@ -271,6 +271,7 @@ class UpdaterTests(unittest.TestCase):
                             basis_evidence='Synthetic exact 1.1.22 source and complete managed-tree installation')
 
     def test_pre200_update_preserves_local_caps_and_pending_migration_record(self):
+        target_version = json.loads((self.repo / 'manifest.json').read_text())['version']
         record = self.pre200_installation()
         self.assertEqual(record['maker_version'], '1.1.22')
         coder = Path(self.roles['coder']['home']) / 'SOUL.md'
@@ -281,14 +282,14 @@ class UpdaterTests(unittest.TestCase):
         before_setup = setup.read_bytes()
         plan = self.proposal()
         proposal = json.loads(plan.read_text())
-        self.assertEqual(proposal['maker_version'], '2.0.0')
+        self.assertEqual(proposal['maker_version'], target_version)
         self.assertFalse(proposal['conflicts'])
         result = u.apply(self.home, plan, decision='proceed',
                          review='Checked local cap preservation; card migration and loading remain pending',
                          dependency_review='Authorized fixture file-only changes; no live transition or runtime change')
         self.assertEqual(result['status'], 'applied')
         updated = u.load_record(self.home)[2]
-        self.assertEqual(updated['maker_version'], '2.0.0')
+        self.assertEqual(updated['maker_version'], target_version)
         self.assertEqual(updated['roles'], self.roles)
         self.assertEqual(updated['confirmed_bindings'], self.bindings)
         self.assertTrue(coder.read_text().startswith(local))

@@ -102,7 +102,7 @@ Assign each acceptance criterion to an implementation ticket and its existing in
 Place combined-behavior checks in the phase where integrated behavior becomes available.
 Use existing results for the Planner's final customer report, not a new technical review or closing ticket.
 Order producer artifacts before their consumers across separately versioned repositories.
-Name local build/installation prerequisites and applicable project/module rule paths in the handoff.
+Name local build/installation prerequisites and applicable project/module rule paths in the plan.
 Do not create placeholder rule files or suppress real read errors to make preflight appear successful.
 
 Preserve accepted phase and review boundaries unless amended by the required authority.
@@ -146,7 +146,7 @@ Verify committed files, parent baseline, and working tree.
 After a checker defect, inspect the commit and rerun the corrected check without duplicate commits or history rewrites.
 
 Record ticket documentation directly on the existing Kanban card.
-Include decisions, instructions, blockers, handoffs, verification results, and review outcomes there.
+Keep decisions, exceptions, consequential failures/remedies, blockers, outcomes, and verdicts there.
 Attribute evidence to its executor and exact checked state.
 Native run outputs remain available evidence, not an authored run-log duty.
 Keep product documentation in its owning repository.
@@ -155,7 +155,7 @@ On continuation, reconcile assignment, working tree, and blockers; resume unfini
 Reuse evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid.
 A new commit alone does not invalidate every prior result.
 Require renewed checks for affected areas or insufficient evidence, while retaining independent review and explicit final-state acceptance tests.
-Keep evidence on the existing card and in original run outputs, not in a separate summary or evidence register.
+Keep original evidence; do not create a separate summary or evidence register.
 
 When handing the accepted plan to Kanban, load [Phase release](references/kanban-phase-release.md).
 Use that procedure for partial ticket-creation or release recovery too.

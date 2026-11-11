@@ -21,9 +21,9 @@ Do not treat plan acceptance as permission for the planner to implement or manua
 ## 2. Create blocked cards and persist progress
 
 1. Identify each phase in its task body by approved plan path, plan commit, phase identifier and planning repository root.
-2. Reference the accepted plan, phase plan and any separate specification by absolute path and exact Git commit.
-3. Build each body from accepted common constraints and the phase's files, interfaces, tests, gate, dependencies and commit boundary.
-4. Include absolute source paths, approval provenance, implementer-only harness instructions and the independent reviewer handoff.
+2. Reference separate phase plans or specifications by absolute path and exact Git commit.
+3. Write a short goal and the exact plan/phase reference instead of copying phase text.
+4. Keep task-specific accepted exceptions in the body. Keep standard team procedures in role rules.
 5. Create each card with the intended assignee/workspace, `--initial-status blocked`, an idempotency key, required skill and explicit completion contract.
 6. Set explicit customer limits and required native runtime/retry fields without inventing discretionary attempt budgets.
 7. Check `--max-retries` semantics before setting a consecutive-failure limit.
@@ -34,10 +34,10 @@ Do not treat plan acceptance as permission for the planner to implement or manua
 12. Bind the verified notification destination.
 13. Read `notify-list --json` and compare platform, channel, chat type, participant, notifier profile and delivery mode literally.
 
-Keep ticket instructions, decisions, handoffs, blockers, verification and review outcomes on the existing card.
+Keep development decisions, consequential failures and remedies, blockers, concise outcomes, and review verdicts on the existing card.
 Attribute evidence to its executor and checked code state.
 Native run outputs remain available evidence, not an authored run-log duty.
-Keep product documentation in its owning repository.
+Keep product and test/start documentation in its owning repository.
 
 ### Resume a partial batch
 
@@ -59,7 +59,7 @@ Keep product documentation in its owning repository.
 5. On partial release, verify current runs and dependency gates for already released cards.
 6. Preserve completed release transitions.
 7. Verify each card's assignee, workspace, skill, runtime/retry fields and completion contract.
-8. Verify each body's approved scope, gate, commit boundary and reviewer handoff.
+8. Check each goal and exception against its phase scope, gate, commit boundary and reviewer binding.
 9. Verify that every plan reference resolves to its approved revision.
 10. Verify every notification binding against the intended destination.
 11. Verify that phase one has no parent and the final phase has no child in the approved chain.
@@ -69,7 +69,7 @@ Keep product documentation in its owning repository.
 
 ## 4. Release without racing the dispatcher
 
-1. Record the verified graph checkpoint on the first phase card and read it back.
+1. Verify the complete graph before release. Use native card/link state as the checkpoint; omit routine progress comments.
 2. Finish authorized planning commits before release.
 3. Do not leave planner metadata edits uncommitted in a directory workspace that a worker can immediately modify.
 4. Unblock descendants in reverse order and phase one last.
@@ -77,7 +77,7 @@ Keep product documentation in its owning repository.
 6. Read back each transition to verify that descendants remain `todo` while parents are incomplete.
 7. Read phase one as `ready` unless a real dispatcher claim already makes it `running`.
 8. Use native board events as the release record.
-9. Add missing readback findings to the relevant card and verify each posted comment.
+9. Record consequential discrepancies on the relevant card and verify each posted comment.
 10. Keep the historical pre-release checkpoint distinct from current task status.
 11. Read the whole project board again after release.
 12. Leave later advancement to the dispatcher and independent review gates.
@@ -95,7 +95,7 @@ Do not use scope narrowing to resume cancelled work, add functionality, bypass a
 2. Report whether work is running, ready or idle and whether input is genuinely missing.
 3. If newer documentation obscured the agreed instructions, recover their accepted baseline.
 4. Map the remaining instructions to existing implementation rather than rewriting working code or building a new test platform.
-5. Record the bounded inputs, executable output, files, safety checks, finite verification, commit and independent review on the existing coding card.
+5. Bind the accepted bounded scope on the existing card. Record the narrowing decision and exceptions missing from the plan.
 6. Park obsolete runnable successors with the supported `assign <obsolete-task> none` operation before release.
 7. Replace their active body instructions with an explicit hold and historical-reference status.
 8. Do not falsely complete parked work.
