@@ -587,6 +587,50 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(target.stat().st_mode & 0o777, 0o600)
         self.assertNotIn(str(target), {entry['target'] for entry in u.load_record(self.home)[2]['managed']})
 
+    def test_all_asset_pin_changes_gate_same_version_without_companion_writes(self):
+        """Offline helper characterization; prose companion execution stays separate."""
+        self.initialize()
+        setup = self.state / 'setup.md'
+        setup.write_text(setup.read_text() + '\nUpstream companion update: pending; provenance unknown.\n')
+        before_setup = setup.read_bytes()
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        version = manifest['version']
+        external = {}
+        for relative in ('coder/devteam/codex-home/agents/reviewer.toml',
+                         'planner/plugins/superpowers/local.txt',
+                         'coder/skills/graphify/SKILL.md'):
+            target = self.root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(b'Local upstream asset; preserve edits.\n')
+            external[str(target)] = target.read_bytes()
+        names = ('codex-cli', 'superpowers', 'grill-me', 'hindsight', 'ponytail',
+                 'caveman', 'find-skills', 'codex-custom-agents', 'codebase-memory', 'graphify')
+        for index, name in enumerate(names):
+            with self.subTest(component=name):
+                item = manifest['upstream_components'][name]
+                self.assertRegex(item.get('source_revision', ''), r'^[0-9a-f]{40}$')
+                # Synthetic identifiers, never fetched or presented as upstream evidence.
+                item['source_revision'] = f'{index + 1:040x}'
+                manifest_path.write_text(json.dumps(manifest))
+                self.commit('fixture change asset pin ' + name)
+                plan = self.proposal()
+                proposal = json.loads(plan.read_text())
+                self.assertEqual(proposal['maker_version'], version)
+                self.assertIn('manifest.json:upstream_components', proposal['dependencies'])
+                marker = (self.state / 'installation.json').read_bytes()
+                with self.assertRaises(ValueError):
+                    u.apply(self.home, plan, decision='proceed', review='checked')
+                self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+                result = u.apply(self.home, plan, decision='proceed', review='checked',
+                                 dependency_review='Approved file-only fixture; companion remains pending')
+                self.assertEqual(result['status'], 'applied')
+                self.assertEqual(setup.read_bytes(), before_setup)
+                managed = {x['target'] for x in u.load_record(self.home)[2]['managed']}
+                for target, original in external.items():
+                    self.assertNotIn(target, managed)
+                    self.assertEqual(Path(target).read_bytes(), original)
+
     def test_obsolete_file_is_retained_and_reported(self):
         self.initialize()
         relative = 'skills/brownfield-feature-planning/references/project-retrospectives.md'

@@ -14,7 +14,9 @@ Repository.
 **Delivery boundary:** This is a `setup-recipe` package. Normal setup checks available prerequisites,
 performs authorized profile-local installation/configuration, reads back its outputs, and saves the versioned installation baseline.
 Completion is **Team configured; setup outputs verified**. Configuration/file readbacks do not guarantee live team behavior.
-Missing shared runtimes/services are operator prerequisites, not an instruction to install or repair them.
+Hermes/distribution skills and existing services remain operator prerequisites; Maker does not pin, install, upgrade or repair Hermes or the Hindsight service.
+The manifest locks independently delivered upstream assets to exact commits; setup and team updates consume those pins without a fresh latest-version search.
+First Codex/analysis runtime installation can be included in the disclosed upfront setup scope; preserve existing/shared installations unless their concrete change is explicitly approved.
 
 ## Voraussetzungen
 
@@ -24,7 +26,7 @@ Missing shared runtimes/services are operator prerequisites, not an instruction 
 - Complete preparation decisions for project/workspace and repository boundaries, role display names,
   derived IDs/collision resolution, actual native models/providers and reasoning, exactly one analysis branch,
   Codex Git identity/access, bank/board create-or-reuse, communication permissions, and execution scope.
-- Available Codex and chosen analysis runtime. Authorized profile-local installations, shared PM effects,
+- Compatible Codex and chosen analysis runtime, or their disclosed approved first installation. Authorized profile-local installations, shared PM effects,
   and activation. No server/account/daemon provisioning or project toolchain qualification.
 
 ## Direkt aus dem Checkout verwenden
@@ -128,7 +130,10 @@ The updater uses existing setup values, per-team installation evidence, and pris
 It preserves local edits through a three-way comparison.
 It requires semantic review and an explicit activity decision before application.
 It retains backups and provides a guarded rollback.
-It does not install runtime components, stop workers, or restart sessions.
+The file helper does not install runtime components, stop workers, or restart sessions.
+The mandatory prose companion path compares all assigned upstream assets on every update, even at the same Maker version.
+Any full plugin update and any CBM/Graphify runtime or Team-Codex CLI change requires advance explicit approval of actual targets, versions and shared effects.
+Pins do not grant that permission; deferred required companion work leaves the team update incomplete.
 For the incompatible `2.0.0` routing change, use [Workflow migration](references/update.md#workflow-migration-200) before applying authority changes.
 Settle active old-contract work, distinguish an active Planner review return from parked-card recovery, and preserve same-card history and unrelated local adaptations.
 Verify subsequent-context loading separately from saved files; a clean merge or newer package version does not prove migration completion.

@@ -14,7 +14,7 @@ Resolve missing or contradictory bindings before writing that team's files.
 Do not create a cron job or watcher.
 Do not stop workers or restart sessions.
 Do not change models, plugins, integrations, configuration, or external services through the file helper.
-The required prose [Reviewer skill retirement](#required-reviewer-skill-retirement-1122) is the narrow post-file-update exception for approved removal and Reviewer-specific obsolete bindings.
+The required [upstream companion update](#required-upstream-companion-update) and [Reviewer skill retirement](#required-reviewer-skill-retirement-1122) use separate approved prose steps, not the file helper.
 Do not run a new setup or pipeline test card as part of a file update.
 
 Use Python 3.11 or later and local Git for this helper.
@@ -129,6 +129,9 @@ Preserve local SOUL drift through the same three-way comparison as a recorded in
 
 ## Prepare and review one team
 
+Inspect all assigned upstream assets under [Required upstream companion update](#required-upstream-companion-update) before presenting the complete update scope.
+Perform that comparison even for a same-version or no-op file proposal.
+
 ```sh
 python3 -B references/update_team.py plan --home /actual/planner-home --target HEAD
 ```
@@ -192,10 +195,70 @@ For the Planner skill-maintenance policy, report the separate configuration step
 The file updater delivers the Planner template change but does not set `skills.creation_nudge_interval`.
 Obtain separate authorization to set and read back `skills.creation_nudge_interval=0` in the existing Planner profile.
 
-For a requested VoltAgent update, use [the original-file recipe](integrations.md#codex-agents).
+## Required upstream companion update
+
+This mandatory prose procedure covers independently delivered skills, all six VoltAgent TOMLs, complete plugins and the selected analysis assets.
+Include Superpowers, grill-me/grilling, the Hindsight adapter, Ponytail in both harnesses, Caveman, caveman-review, find-skills and the selected CBM or Graphify integration.
+Include Team-Codex CLI target/reuse assessment separately from asset replacement.
+Compare every assigned upstream asset on every requested team update, even when the Maker version is unchanged.
+Read `source_revision` or inherited `source_component`, `subpaths`, legal files, mappings and hashes from the target Maker manifest.
+Use those exact commits without a fresh latest-version search.
+The existing file helper remains file-only for role templates and `own_skills`; it does not install or reconcile these upstream components.
+Keep pending/completed companion evidence in the existing private `devteam/setup.md` progress/update sections, not another registry or helper schema.
+Pins are source targets, not operational permission.
+Keep Hermes core and its distribution skills native-managed and outside Maker updates.
+Keep the Hindsight service untouched.
+
+1. **Inspect:** Resolve every assigned consumer, native registration/discovery root and actual source/target path before any write.
+   Compare exact commits and complete file/byte inventories, including hidden files, companions, legal files and local additions.
+   Compare each installed asset against the required source, not merely its name, package version or earlier reviewed revision.
+   Check native loading, duplicate/shadowed paths, ownership, modes, symlinks and shared consumers.
+   Read current CBM/Graphify runtimes and Team-Codex binary paths, versions and shared use separately from the asset inventory.
+   Preserve compatible existing runtimes; never change them automatically to enforce asset pins.
+   Do not blindly upgrade or downgrade a reused matching/newer CLI.
+   If pinned assets require an unavailable capability, name the exact runtime/asset mismatch and required update/defer decision.
+   Record missing historical provenance as unknown; never invent an installed revision or pristine baseline.
+   Use verified current bytes as a pre-change backup, not as an asserted pristine upstream baseline.
+   Capture the pre-update Maker version/commit and per-component required/observed sources, differences, proposed actions and `pending` status before file application.
+   Preserve earlier pending evidence when installation metadata already advanced.
+2. **Approve:** Present the complete file and companion scope, including all concrete paths, source/target versions, local-edit decisions and native binding changes.
+   Obtain advance explicit approval once for the complete concrete plugin/runtime/CLI change set.
+   Any full Superpowers, Ponytail or Hindsight-adapter update requires that approval, even when only profile/team-local paths appear to change.
+   Disclose dependency resolution, shared Hermes PM generations and affected other consumers before plugin approval.
+   Include every proposed CBM/Graphify runtime and Team-Codex CLI change with its actual versions, paths and shared effects.
+   Include required autoload, hooks, MCP and old team-owned registration replacements in that same scope.
+   Preserve local edits unless their exact reconciliation is approved; do not ask again for each file within the approved batch.
+   Record approval or deferral before mutations; `--dependency-decision` records the dependent-file decision, not permission by itself.
+3. **Back up:** Save complete affected installed trees and native bindings outside all discovery roots before replacement.
+   Preserve bytes/hashes, inventories, ownership, modes, link metadata, original provenance evidence and runtime state separately.
+   Verify complete backup inventories and bytes against the inspected targets before proceeding.
+   Keep the backup path and supported restoration route in the existing private record.
+4. **Apply:** Recheck all inspected targets and bindings for concurrent drift immediately before writes; stop on a difference.
+   Apply only approved changes through [Integrations](integrations.md) and the selected [analysis recipe](code-analysis.md).
+   Keep complete upstream bytes unchanged; do not alter model/reasoning fields, plugin manifests or skill instructions.
+   Keep shared runtime/PM mutations within the approved concrete scope; do not bootstrap or repair Hermes as a hidden prerequisite.
+   Complete required assets and native loading before applying dependent role/skill file changes.
+   If an asset, approval or compatible runtime is unavailable, withhold dependent outputs and keep the companion status `pending`.
+   After file application, read back affected personalized scope/use clauses through their existing recipes.
+5. **Verify:** Compare every delivered source/target path and byte with the required commit, including complete file sets and legal files.
+   Read back native registration, actual loaded source paths, required main/reference content and affected configuration/hooks in each assigned consumer.
+   Distinguish exact asset matches, compatible runtime reuse, unresolved source provenance and unverified running-context loading.
+   Verify unaffected roles/shared consumers against the pre-change inventory.
+   Mark each companion `complete` only after all its required readbacks pass; save and read back that evidence.
+   Resume pending work from the backup, prior evidence and actual native state on later updates, even after the Maker version advances.
+   Report `files updated; team update incomplete` while required companion work is pending or deferred.
+6. **Rollback:** The file-helper rollback does not restore companion assets or native bindings.
+   Obtain the applicable restoration scope and inspect current bytes/bindings for later edits before using the verified backup.
+   Restore only recorded affected trees, modes and native registrations/configuration without overwriting later work or shared assets.
+   Restore a runtime or PM generation only through its supported route within explicit shared-effect approval.
+   Read back restored files, native registration/loading and unaffected consumers separately from helper rollback.
+   Record restored state and renewed `pending` status; do not leave a completion claim for reverted assets.
+   Keep deletion and service/session restarts separately authorized.
+
+For VoltAgent, use [the original-file recipe](integrations.md#codex-agents).
 Read the target Maker manifest's `codex-custom-agents.source_revision`, `subpaths`, and `legal_files` as the required version inventory.
 The file updater does not manage the six upstream agent TOMLs.
-Compare all six installed files with that revision, even if the recorded Maker version is already current.
+Compare all six installed files with that revision as part of every requested team update.
 Include replacement of old Maker model/reasoning overrides with unchanged originals in the explicit team-update authorization.
 Resolve other local edits or conflicting customer rules before replacement; preserve unresolved files.
 Back up all six installed files and record their paths, bytes/hashes, modes, and source provenance before authorized replacement.
@@ -266,6 +329,7 @@ The CLI conservatively requires this decision for every application and rollback
 Do not fabricate an inactivity result to avoid the question.
 Before file application, complete the pre-apply record and approval steps in [required Reviewer skill retirement](#required-reviewer-skill-retirement-1122).
 Before applying workflow authority changes, complete steps 1–4 of [Workflow migration](#workflow-migration-200).
+Before dependent file application, complete the approved asset/loading requirements in [Required upstream companion update](#required-upstream-companion-update).
 
 ```sh
 python3 -B references/update_team.py apply --home /actual/planner-home \
@@ -417,6 +481,7 @@ Do not repeat removed behavioral experiments or treat them as pending setup gate
 Preserve the operational dependency-decision gate when recipes or component metadata change, including changes that remove tests.
 
 For an authorized target update, read back the exact installation record, result journal, and changed targets.
+Read back all required upstream companion statuses and native evidence, including unchanged-version comparisons, before claiming a complete team update.
 Read back the required retirement status and native evidence for affected teams before claiming the team update is complete.
 Read back workflow migration progress and subsequent-context loading evidence for affected teams; report missing evidence as an open step.
 Report package version and commit separately.

@@ -1,14 +1,24 @@
 # Original integrations in the confirmed target context
 
-Execute these recipes only during an authorized setup.
+Execute these recipes only during an authorized setup or the approved [upstream companion update](update.md#required-upstream-companion-update).
 Consume the complete preparation dataset from [Setup](setup.md); do not reopen confirmed choices.
-Use established available sources and compatible installed components, without a newest-upstream search.
+Read the manifest's exact `source_revision` for each independent component under [Sources](upstream-sources.md#fremdkomponenten).
+Use complete pinned source trees and compatible installed runtimes, without a newest-upstream search.
 Record source/revision, complete file inventory/hashes, licenses/notices, targets and exact readbacks.
 Historical research anchors are provenance, not installation pins or behavioral evidence.
 Check ownership and preserve local edits before writes.
 Obtain authorized profile-local installation, hook and shared PM effects before activation.
-If a common runtime is missing or incompatible, report the concrete prerequisite and operator action.
-Do not install, upgrade, repair or investigate shared runtimes as part of ordinary setup.
+Inspect existing binaries, owners, consumers, paths and versions before proposing runtime installation or replacement.
+Include an absent Codex or selected analysis runtime's exact first-installation target in the complete upfront setup scope.
+That accepted scope needs no repeated version question for each file or role.
+Preserve existing/shared installations during new team setup; obtain explicit approval for a concrete required change.
+For a team update, obtain advance explicit approval for any full plugin update, CBM/Graphify runtime change or Team-Codex CLI change.
+Disclose actual targets, versions, shared consumers and PM dependency-generation effects together before that approval.
+Use the supported native PM path only within that approved scope; do not hide bootstrap repair in plugin admission.
+Keep Hermes and its distribution skills outside Maker pinning, installation, upgrades and repair.
+Keep the Hindsight service untouched; its independently pinned adapter can change only within the approved plugin scope.
+If pinned assets cannot work with the preserved runtime, report the concrete mismatch and obtain an update/defer decision.
+Do not change the runtime silently or claim dependent outputs current while they remain deferred.
 Do not copy private profile components or invent replacement plugins.
 
 <a id="installation-output"></a>
@@ -41,7 +51,7 @@ Project preparation belongs to a later explicit project task.
 Original: [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent).
 Resolve the complete distribution tree `skills/autonomous-ai-agents/codex` for Coder and `skills/devops/sdlc-review` for Reviewer.
 Reuse the natively managed distribution skills and their canonical license/companion files; verify the actual subpaths.
-If an already-authorized distribution copy is required, preserve its path relative to `skills/` under the target skill root: `autonomous-ai-agents/codex` or `devops/sdlc-review`.
+Keep the native distribution's category-relative paths and existing management; do not install private distribution copies through Maker.
 If a skill is missing from native discovery, report the prerequisite; do not repair the shared distribution or install a flattened private replacement.
 
 Später je Rolle Katalog, Hauptskill und alle benötigten Referenzen im tatsächlichen
@@ -57,8 +67,15 @@ Original: [openai/codex](https://github.com/openai/codex),
 [Konfigurationsorte](https://developers.openai.com/codex/config-advanced.md),
 [Skills](https://developers.openai.com/codex/skills.md),
 [Authentifizierung](https://developers.openai.com/codex/auth.md).
-Reuse a suitable existing binary. Resolve and record its actual absolute path.
-If absent, report the shared prerequisite; do not install another runtime or a separate Codex per role.
+Read `codex-cli.source_release` and `codex-cli.source_revision` from the manifest as the defined CLI target.
+Resolve the actual binary path, installed version/source, ownership and shared consumers before writes.
+Reuse a compatible matching or newer CLI; do not upgrade or downgrade it merely to match the target release.
+Record the reuse decision and available required interfaces separately from exact asset-pin verification.
+If absent, include the official target release for the actual platform in upfront setup approval.
+Verify release provenance and artifact checksums before an approved first installation through the established native package route.
+Any existing/shared binary replacement needs concrete approval; do not install a separate Codex per role.
+At team-update time, obtain advance explicit approval for every CLI change, including a move to the manifest target.
+If the preserved CLI lacks a required interface, report that capability and defer dependent outputs until approval or a supported compatible route.
 
 Im tatsächlich aufgelösten Coderhome zwei eindeutig diesem Team zugeordnete
 Verzeichnisse anlegen: `devteam/codex-home` und `devteam/user-home`.
@@ -152,8 +169,14 @@ Repository mit `.hermes-plugin/plugin.yaml`, `.hermes-plugin/__init__.py`, gesam
 `skills/`-Baum und MIT-`LICENSE`. Aktuelle native Originalroute:
 
 ```sh
-hermes -p "$PLANNER" plugins install obra/superpowers --enable
+hermes -p "$PLANNER" plugins install obra/superpowers --ref "$SUPERPOWERS_REVISION" --enable
 ```
+
+Set `SUPERPOWERS_REVISION` from the manifest's `superpowers.source_revision`, not a branch, tag or catalog default.
+The installed native `plugins install --ref` accepts an immutable 40-character commit.
+For an approved replacement, the native pin-moving route is `plugins install <source> --force --ref <commit>`.
+Use it only after the companion backup, drift, shared-PM and scanner-approval checks; `--force` can also accept caution findings.
+If the installed interface cannot enforce the pin, stop that component without updating Hermes.
 
 Nach Aufnahme die native Pluginregistrierung und alle Originaldateien im Planner
 prüfen. Im neuen tatsächlichen Plannerkontext Bootstrap `using-superpowers/SKILL.md`
@@ -169,7 +192,7 @@ entfernen, ursprüngliche fremde Plugin-/PM-Bestände bewahren.
 Original: [mattpocock/skills](https://github.com/mattpocock/skills). Beide Skills sind
 Pflichtausstattung für die Planungsphase, keine zusätzliche Setupauswahl.
 
-1. Use the established available original source outside active discovery.
+1. Use the manifest's `grill-me.source_revision` outside active discovery.
    Check complete assets and provenance without searching for the newest upstream revision.
    Keep `skills/productivity/grill-me/` and `skills/productivity/grilling/` from the same revision, including `agents/openai.yaml` and all companion files.
    Check required skill references for delivery completeness. Report a changed or missing asset contract instead of inventing a replacement.
@@ -206,22 +229,54 @@ Skills, Hooks/Runtime-JavaScript und MIT-Lizenz beziehen. Node im Codex-Worker-P
 ist Voraussetzung der Originalhooks, nicht aus einer SOUL ableitbar.
 
 ```sh
-hermes -p "$CODER" plugins install DietrichGebert/ponytail --enable
+hermes -p "$CODER" plugins install DietrichGebert/ponytail --ref "$PONYTAIL_REVISION" --enable
 ```
 
-Nur beim vom Autor dokumentierten Root-`plugin.json`-/Manifestgate-Konflikt:
-aktuelle Originalanleitung prüfen, vollständiges **unverändertes** Repository im
-bestätigten `<Coderhome>/plugins/ponytail` bereitstellen, danach profilbezogen
-`hermes -p "$CODER" plugins enable ponytail`. Diese Verzeichnisroute ist eine
-Plugin-/PM-Aufnahme und braucht dieselbe Freigabe; kein Manifestfix/Trustbypass.
-Bei anderem Fehler anhalten statt die Ausnahme pauschal anzuwenden.
+Set `PONYTAIL_REVISION` from the manifest's `ponytail.source_revision` for both harnesses.
 
-Im gebundenen Team-Codex-Prozess:
+Only for the author's documented root-`plugin.json`/manifest-gate conflict, read the original instructions at the pinned commit.
+If that supported route applies, place the complete unchanged pinned repository at the confirmed `<Coderhome>/plugins/ponytail`.
+Then use profile-scoped `hermes -p "$CODER" plugins enable ponytail` within the same approved plugin/PM scope.
+Verify native registration and exact source bytes; do not patch manifests or bypass trust/scanner decisions.
+For another error or an unsupported route, preserve the partial state and report the concrete blocker.
+
+### Team-Codex pinned local source
+
+The upstream marketplace's nested plugin source uses `main`.
+Even `plugin marketplace add DietrichGebert/ponytail --ref "$PONYTAIL_REVISION"` pins only the marketplace checkout, not that nested plugin download.
+Use Codex's supported local-source marketplace registration instead.
+Keep the complete Ponytail repository unchanged at `<Coderhome>/devteam/sources/ponytail-marketplace/ponytail`, detached at the manifest commit.
+Compare all tracked paths and bytes, including hidden manifests, hooks, assets and `LICENSE`, before native registration.
+Keep this immutable source outside active skill/plugin discovery and separate from plugin runtime data.
+Set `PONYTAIL_MARKETPLACE` to its parent `ponytail-marketplace` directory.
+Create only the team-owned native registration file `$PONYTAIL_MARKETPLACE/.agents/plugins/marketplace.json` with these exact fields:
+
+```json
+{
+  "name": "team-ponytail",
+  "plugins": [{
+    "name": "ponytail",
+    "source": {"source": "local", "path": "./ponytail"},
+    "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"}
+  }]
+}
+```
+
+This registration metadata is outside the unchanged upstream repository; it is not a rewritten plugin manifest.
+After ownership/collision checks and installation approval, use the bound Team-Codex process:
 
 ```sh
-env HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" PONYTAIL_DEFAULT_MODE=full "$CODEX_BINARY" plugin marketplace add DietrichGebert/ponytail
-env HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" PONYTAIL_DEFAULT_MODE=full "$CODEX_BINARY" plugin add ponytail@ponytail
+env HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" PONYTAIL_DEFAULT_MODE=full "$CODEX_BINARY" plugin marketplace add "$PONYTAIL_MARKETPLACE"
+env HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" PONYTAIL_DEFAULT_MODE=full "$CODEX_BINARY" plugin add ponytail@team-ponytail
 ```
+
+Read back native marketplace/plugin registration, resolved local source, installed plugin root and complete original file/byte inventories at the pinned commit.
+Check project/personal registrations for shadowing; preserve unrelated bindings.
+On an existing team, include retirement of the exact old team-owned Ponytail binding in the approved companion scope and backup.
+Use only the installed native removal/replacement interface; do not leave competing enabled copies or delete personal plugins.
+If this CLI cannot register the exact local source or replace its old binding safely, report the concrete missing capability and keep Ponytail setup/update incomplete.
+Do not fall back to moving `main` or treat successful command exit as pin verification.
+Native source evidence: Codex `rust-v0.167.1`, `codex-rs/cli/src/marketplace_cmd.rs`, `codex-rs/cli/src/plugin_cmd.rs`, and `codex-rs/core-plugins/src/marketplace.rs` at the manifest CLI commit.
 
 Native Hookfreigabe über `/hooks` für die tatsächlichen Originaldefinitionen
 prüfen: SessionStart, SubagentStart und UserPromptSubmit. Keine Hookfreigabe als
@@ -287,6 +342,7 @@ For rollback, restore only recorded own skill trees and autoload changes after c
 
 <a id="find-skills"></a>
 Original [vercel-labs/skills](https://github.com/vercel-labs/skills): copy complete `skills/find-skills/` and MIT `LICENSE` to `<CODEX_PROCESS_HOME>/.agents/skills/find-skills/`.
+Use the manifest's `find-skills.source_revision` for new and reused copies.
 Compare the complete companion set with the selected source and verify native discovery/loading.
 Do not run a synthetic search during setup.
 Later `npx skills` use can download packages; search results do not authorize installation.
@@ -323,10 +379,10 @@ Native reference: [Custom Agents](https://developers.openai.com/codex/subagents.
 
 Original [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight/tree/main/hindsight-integrations/hermes),
 vollständiger Unterbaum `hindsight-integrations/hermes` samt benötigten übergeordneten
-Originallizenzen/Notices. Native Katalogaufnahme, keine private Pluginversion:
+Originallizenzen/Notices. Use the manifest's `hindsight.source_revision` as `HINDSIGHT_REVISION` for native admission:
 
 ```sh
-hermes -p "$PROFILE" plugins install hindsight
+hermes -p "$PROFILE" plugins install vectorize-io/hindsight/hindsight-integrations/hermes --ref "$HINDSIGHT_REVISION"
 hermes -p "$PROFILE" memory setup
 hermes -p "$PROFILE" config get memory.provider
 ```
@@ -336,7 +392,12 @@ Read back `memory.provider=hindsight`, native setup fields and actual bank ident
 Reuse the existing own bank on resume; do not provision an embedded server.
 The researched adapter 1.2.3 required Hermes >=0.21.4, Python >=3.11, `hindsight-client>=0.10.1,<1` and `hindsight-embed>=0.10.1,<1`.
 These are historical source facts, not an installation mandate.
-Use the established compatible catalog adapter and the authorized profile-local integration/PM scope.
+Use the complete pinned adapter and the authorized profile-local integration/PM scope.
+The native source shorthand selects the complete `hindsight-integrations/hermes` subtree at that exact repository commit.
+Preserve the root `LICENSE` separately if native subtree delivery omits it.
+Read back installed original subtree bytes, source/commit, native registration and effective provider in each assigned role.
+Adapter and SDK dependency changes can affect shared Hermes PM state; disclose and approve those effects before admission or update.
+Do not update, provision or restart the Hindsight service to enforce the adapter pin.
 
 Der Originaladapter liest profilbezogen `<Rollenhome>/hindsight/config.json`,
 dann legacy geteilte Konfiguration, dann Envfallback. Erstelle/merge deshalb nach

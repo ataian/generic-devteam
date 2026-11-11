@@ -762,6 +762,62 @@ class ReviewerEquipmentTests(unittest.TestCase):
             self.assertIn("#required-reviewer-skill-retirement-1122", (ROOT / relative).read_text())
 
 
+class UpstreamLockTests(unittest.TestCase):
+    """Static recipe contracts, not live plugin/runtime update evidence."""
+
+    def test_independent_assets_have_commit_targets_not_hermes_pins(self):
+        upstream = MANIFEST["upstream_components"]
+        native = {"hermes-core", "hermes-codex", "sdlc-review"}
+        for name, item in upstream.items():
+            with self.subTest(component=name):
+                if name in native:
+                    self.assertNotIn("source_revision", item)
+                    self.assertNotIn("source_release", item)
+                else:
+                    source = upstream[item["source_component"]] if "source_component" in item else item
+                    self.assertRegex(source.get("source_revision", ""), r"^[0-9a-f]{40}$")
+                    if name != "codex-cli":
+                        self.assertTrue(item.get("legal_files"), name)
+        self.assertEqual(upstream["codex-cli"].get("source_release"), "rust-v0.167.1")
+        graph = upstream["graphify"]
+        self.assertEqual(graph.get("source_revision"), graph["reviewed_revision"])
+        for bundle in graph["asset_bundles"].values():
+            self.assertEqual(set(bundle["source_to_target"]), set(bundle["sha256"]))
+
+    def test_setup_uses_native_pins_and_unchanged_local_codex_plugin_source(self):
+        recipe = (ROOT / "references/integrations.md").read_text()
+        self.assertIn('plugins install obra/superpowers --ref "$SUPERPOWERS_REVISION" --enable', recipe)
+        self.assertIn('plugins install DietrichGebert/ponytail --ref "$PONYTAIL_REVISION" --enable', recipe)
+        self.assertIn('plugins install vectorize-io/hindsight/hindsight-integrations/hermes --ref "$HINDSIGHT_REVISION"', recipe)
+        self.assertIn('plugin marketplace add "$PONYTAIL_MARKETPLACE"', recipe)
+        self.assertIn('plugin add ponytail@team-ponytail', recipe)
+        self.assertIn('"source": {"source": "local", "path": "./ponytail"}', recipe)
+        self.assertNotIn('plugin marketplace add DietrichGebert/ponytail\n', recipe)
+        self.assertIn("The upstream marketplace's nested plugin source uses `main`.", recipe)
+        self.assertIn("Keep the complete Ponytail repository unchanged", recipe)
+
+    def test_companion_update_covers_all_assets_before_completion(self):
+        text = (ROOT / "references/update.md").read_text()
+        self.assertIn("## Required upstream companion update\n", text)
+        section = text.split("## Required upstream companion update\n", 1)[1].split("\n## ", 1)[0]
+        for clause in (
+            "Compare every assigned upstream asset on every requested team update, even when the Maker version is unchanged.",
+            "Record missing historical provenance as unknown; never invent an installed revision or pristine baseline.",
+            "Obtain advance explicit approval once for the complete concrete plugin/runtime/CLI change set.",
+            "Pins are source targets, not operational permission.",
+            "Keep Hermes core and its distribution skills native-managed and outside Maker updates.",
+            "Keep the Hindsight service untouched.",
+            "The file-helper rollback does not restore companion assets or native bindings.",
+            "Report `files updated; team update incomplete` while required companion work is pending or deferred.",
+        ):
+            self.assertIn(clause, section)
+        ordered = ("1. **Inspect:", "2. **Approve:", "3. **Back up:",
+                   "4. **Apply:", "5. **Verify:", "6. **Rollback:")
+        self.assertEqual([section.index(x) for x in ordered], sorted(section.index(x) for x in ordered))
+        for relative in ("references/setup.md", "references/verification.md", "templates/setup-record.md"):
+            self.assertIn("source_revision", (ROOT / relative).read_text())
+
+
 class TicketDocumentationTests(unittest.TestCase):
     """Static instruction contracts, not live agent-behavior tests."""
 

@@ -14,7 +14,10 @@ Use English for development communication and artifacts. Preserve exact identifi
    Require `false` before release; scope authorized changes to the owner and selected team profiles.
 3. Check required interface and dependency availability through established read-only status/configuration paths.
    Do not qualify the project's toolchain or investigate general timeout, retry, or rate-limit behavior.
-   A missing Hindsight service or common runtime is an operator prerequisite issue, not permission to provision or repair it.
+   A missing Hindsight service or Hermes distribution prerequisite requires operator action; Maker does not install or repair them.
+   Inspect Codex and the selected analysis runtime's paths, versions, owners and shared consumers before proposing a first installation or change.
+   Read each independent asset's exact `source_revision` from the manifest without a new latest-version search.
+   Keep required pins separate from installed runtime versions and operational permission.
 4. Identify concrete shared bootstrap/PM effects before invoking CLI or adding plugins.
    Even help/bootstrap can sync dependencies; absolute plugin paths can alter shared PM inputs.
    Inspect other profiles only when a concrete shared effect requires it.
@@ -37,6 +40,15 @@ Do not require a new interview skill or product-planning workshop.
 | Shared objects | Existing service endpoints; intended board/bank names; create versus authorized reuse and ownership |
 | Communication | Mattermost server/team, intended Planner bot, human and any additional authorized users, allowed project channel, channel type and DM participants; existing IDs or explicit creation intent |
 | Execution scope | Exact local writes, profile assets, shared PM/configuration effects, external identity actions, and activation; protected access preparation where possible |
+
+Include complete pinned plugin packages and legal files in the preparation inventory.
+Check runtime/asset compatibility before accepting the setup scope.
+If Codex or the selected analysis runtime is absent, disclose its exact first-installation release/source, paths and effects in that scope.
+The accepted upfront scope covers that first installation without repetitive per-component version questions.
+Preserve existing/shared installations; disclose and obtain explicit approval for a concrete required change rather than silently upgrading during new team setup.
+Plugin admission can change shared Hermes PM dependencies; obtain that shared scope before invoking bootstrap or native installation.
+Keep Hermes core, distribution skills and the Hindsight service outside Maker installation/update/repair scope.
+If a pin conflicts with a preserved runtime, report the exact mismatch and obtain the required update/defer decision before dependent writes.
 
 Resolve workspace separately from project name; do not derive a path or move an existing repository.
 Keep `PROJECT_NAME` as a single segment without slash, backslash, or traversal.
@@ -215,6 +227,8 @@ Record authorizations, complete upfront dataset readiness, and disclosed technic
 For each completed step, record the native identity or exact own file path, previous state/hash,
 verified readback, and next prerequisite.
 Keep component source, revision, license, and complete file evidence in the target-readback section.
+Compare every assigned upstream asset with its manifest `source_revision`, complete file set and legal files; record required and observed sources separately.
+Record compatible runtime reuse separately from pinned asset delivery; unknown provenance is not a pristine baseline.
 Keep progress, blockers, and installation/update evidence in their respective sections.
 Do not add behavioral or research checks as record completion gates.
 
@@ -452,6 +466,7 @@ Excluded behavioral checks are outside scope, not pending gates.
 ## Record the installation baseline
 
 After complete setup delivery, configuration/file readbacks, and recovery binding pass, follow [Team updates](update.md#record-a-new-team).
+Complete all assigned pinned-asset and native-loading readbacks before claiming setup completion; file-helper initialization does not certify upstream assets.
 Save the actual role IDs and homes under `confirmed_bindings.roles` in the existing private setup JSON.
 Use the actual process HOME for the `team-codex` role.
 Run `update_team.py init` against the reviewed committed Maker source.

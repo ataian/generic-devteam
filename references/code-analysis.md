@@ -3,12 +3,16 @@
 Configure the **Graphify or CBM** alternative confirmed in [Setup](setup.md) for Planner, Coder and Team-Codex.
 For existing teams, follow the [required Reviewer skill retirement](update.md#required-reviewer-skill-retirement-1122) after file updates.
 Sources and licenses are listed in [Sources](upstream-sources.md#codeanalyse-genau-eine-alternative).
-Execute this recipe only during authorized target setup, not Maker authoring.
+Execute this recipe only during authorized target setup or the approved [upstream companion update](update.md#required-upstream-companion-update), not Maker authoring.
 
 ## Gemeinsame Vorbereitung
 
 1. Check the selected existing runtime, version, skills and integration availability through established interfaces.
-   If the common runtime is missing/incompatible, report the prerequisite; do not install or repair it.
+   Read the selected component's `source_revision` and release from the manifest for its complete original assets.
+   Preserve existing/shared runtimes; asset pins do not authorize runtime changes.
+   If absent, include the exact official first-installation target and effects in the upfront setup scope.
+   If existing assets/runtime cannot satisfy the pin together, report the concrete mismatch and obtain the required update/defer decision.
+   At team-update time, obtain advance explicit approval for any runtime change with actual versions, paths and shared effects.
 2. Reuse confirmed absolute role homes, `CODEX_HOME`, `CODEX_PROCESS_HOME` and target ownership from preparation.
    Preserve symlinks/local edits and back up affected own configuration before authorized changes.
 3. Consume the confirmed repository/corpus scope, roots, cache/output locations and optional watcher decision.
@@ -28,11 +32,12 @@ klären; bei Teilfehlern den tatsächlichen Zustand lesen statt blind erneut ins
 ### 1. Runtime und vollständige Skills bereitstellen
 
 Use the compatible existing Graphify runtime and its actual Python interpreter.
-If unavailable, report `graphifyy` and the required compatible runtime as prerequisites.
-Do not run `uv tool install` or qualify a shared runtime during setup.
+Read the manifest's `graphify.source_revision`, `source_release`, complete `asset_bundles` and legal hashes.
+If absent and first installation is in the approved setup scope, use the official `graphifyy` release from that pinned source through the established package route.
+Verify source/release provenance and installed path/version without indexing or a runtime qualification campaign.
+Do not run an unversioned install or change a reused runtime to match an asset pin.
 
-Runtime und Skilldateien müssen zusammenpassen. Aus demselben Bezugsstand die
-vollständigen Originalbäume nach folgender Zuordnung kopieren:
+Require runtime/skill compatibility before copying the complete original bundles from the pinned source:
 
 | Verbraucher | Originalhauptdatei → `SKILL.md` | Referenzen → `references/` | Zielverzeichnis |
 |---|---|---|---|
@@ -62,7 +67,9 @@ Semantic document/image processing requires its own approved data/provider scope
 ### 1. Gemeinsame Runtime bereitstellen
 
 Use the compatible existing original binary and record its exact path/version.
-If unavailable, report the missing runtime to the operator; do not download/install/repair it.
+Read the manifest's `codebase-memory.source_revision` and `source_release` as the required asset source.
+If absent and first installation is in the approved setup scope, use the matching official platform release and verify provenance/checksums.
+Preserve an existing/shared binary unless its concrete change was approved; do not repair the daemon or cache to enforce an asset pin.
 Retain its `LICENSE` and `THIRD_PARTY_NOTICES.md` provenance and use the existing runtime for profile-local client integration.
 
 CBM verwendet einen accountweit koordinierten Daemon. Vorhandenen Build, Cache und
@@ -118,6 +125,13 @@ Kontexten und ist nicht die Ursache.
 
 ### 2. Offizielle Clientintegration ausführen
 
+Before running a reused binary's integration writer, verify that its generated skill, pointer, hooks and Codex agents match the pinned source contract.
+Use the manifest's static source-derived evidence as source evidence, not proof of installed output.
+Compare all generated original assets and applicable release legal files, not only the two recorded static hashes.
+If the installed writer would produce a different asset revision, preserve it and report the exact mismatch before any write.
+Use compatible pinned original client assets only through a verified supported delivery route, or defer pending the required runtime-change decision.
+Do not silently update/downgrade the binary, accept different assets as current, or patch upstream bytes.
+
 Die vollständige Originalintegration verwenden, **einschließlich der CBM-eigenen
 Codex-Unteragenten**. Sie ergänzen die VoltAgent-Helfer innerhalb von Codex und
 ändern nicht die Hermes-Teamrollen.
@@ -163,10 +177,10 @@ ab und verweigert jeden Aufruf. Alle Teams tragen **dieselbe** Wurzel — den ei
 accountweiten Cache. Keine `env_vars`-Zeile ergänzen: sie bliebe leer und würde in
 `codex doctor` als MCP-Warnung erscheinen.
 
-Die Aufrufform ist am offiziellen CBM-Stand
-[v0.12.1, `src/cli/cli.c`](https://github.com/DeusData/codebase-memory-mcp/blob/v0.12.1/src/cli/cli.c)
-quellseitig geprüft, kein Versionszwang. Bei anderer Zielversion Optionen und
-Zielauflösung vor Ausführung abgleichen.
+The call form was statically checked against official CBM
+[v0.12.1, `src/cli/cli.c`](https://github.com/DeusData/codebase-memory-mcp/blob/v0.12.1/src/cli/cli.c).
+This is the manifest asset source, not a forced installed-runtime version.
+For a different existing runtime, verify options, target resolution and pinned generated-asset compatibility before execution.
 
 ### 3. Ergebnis, Arbeitskontext und Hooks prüfen
 

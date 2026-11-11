@@ -20,6 +20,8 @@ Report unverified items separately from successful checks.
 
 - Profiles: compare actual native IDs, ownership, canonical homes, workspace/board bindings and personalized SOUL bytes with the confirmed dataset and rendered output. Read back full SOUL loading through the established interface; file existence alone is insufficient.
 - Skills/components: compare complete assigned trees, companion/legal files and bytes with the selected recorded source/revision. Verify native discovery/loading through established interfaces. Reject multiple active paths for the same skill, even if their bytes match and loading succeeds. Keep all own skill bytes unchanged except the bound recovery launcher.
+- Upstream pins: resolve each independent component's manifest `source_revision` or inherited `source_component`. Compare complete original file sets and bytes, including hidden manifests, plugin packages, skill companions, all six VoltAgent TOMLs and legal files. Record required/observed revisions separately; a version label or successful native install does not prove a pin match.
+- Runtime boundary: record actual CBM/Graphify and Team-Codex binary paths, versions, shared consumers, compatibility/reuse decisions and approved changes separately from asset hashes. Do not force existing runtimes to asset pins or infer permission from a pin. Keep Hermes/distribution skills native-managed and the Hindsight service untouched.
 - Writing skills: verify pinned original `caveman` for all Hermes roles and Team-Codex, plus `caveman-review` for Reviewer. Read back Hermes autoload, each SOUL's use and persisted-prose scope, Reviewer format/procedure separation, and Coder propagation to every task/resume under [Caveman](integrations.md#caveman). File presence alone does not establish activation.
 - Models: read back actual native model/provider IDs, fixed Planner/Hermes-Coder reasoning, Reviewer/Team-Codex main-process default/max policy, and effective overrides. Compare all six VoltAgent TOMLs byte-for-byte with the manifest revision, including original model/reasoning settings. Verify discovery without same-name shadowing and supported levels/access availability without model calls. Do not silently switch model/provider.
 - Team-Codex: read back actual binary, separate process HOME and CODEX_HOME, config/skill roots, protected access status, Ponytail binding and Caveman per-task clause. Verify the own regular mode-0600 `.gitconfig`, source and effective author/committer identity under the bound process environment using [the concrete recipe](integrations.md#team-codex). Do not create artifacts or commits.
@@ -42,7 +44,7 @@ Keep proposals, backups and journals when the actual update operation requires t
 
 Use **Team configured; setup outputs verified** only after required outputs and the baseline are complete.
 Otherwise state the exact incomplete binding, preserved progress, next action and required authorization.
-A missing shared prerequisite is an operator issue, not an automatic install/repair task.
+A missing shared prerequisite is not an automatic install/repair task; use only the disclosed first-installation or separately approved change scope in [Integrations](integrations.md).
 On resume, reconcile saved setup data with relevant native objects; continue only the incomplete step.
 Correct stale prose without repeating confirmed choices or creates.
 
@@ -50,3 +52,5 @@ Setup verifies configuration, availability and delivered outputs. It does not qu
 Do not retain excluded source/SDK research, behavioral experiments, or general timeout/retry/rate-limit investigations as pending setup gates.
 For a requested file update, preserve the [update contract](update.md), including semantic review, activity/dependency decisions, local edits, legacy unknown baselines, journals and guarded rollback.
 Report `applied`, `skipped`, `failed` and retained files per team; a file update does not prove runtime reload.
+For each requested team update, read back the [mandatory upstream companion status](update.md#required-upstream-companion-update), even when the Maker version is unchanged.
+Deferred required assets or loading keep the team update incomplete; report them separately from successful file application.

@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Richte ein natives Hermes-Projektteam unter Linux ein.
-version: 2.0.3
+version: 2.0.4
 author: Max
 license: MIT
 platforms: [linux]
@@ -25,9 +25,14 @@ Before either operation, check your own wrapper or a local adaptation under [Mak
 Package authoring or review authorizes file work only, not installation or activation.
 Keep product planning and project onboarding as later explicit tasks.
 
-Require available Hermes, Mattermost, Hindsight, Codex, the selected analysis runtime, and suitable model access.
+Require available Hermes, Mattermost, Hindsight, and suitable model access.
 Use established supported interfaces and available component sources.
-Report a missing or incompatible prerequisite for the affected step; do not research, install, upgrade, or repair shared runtimes.
+Use the manifest's exact upstream asset commits without a fresh latest-version search.
+Keep Hermes core and its distribution skills native-managed; Maker does not pin, install, upgrade, or repair Hermes.
+Inspect and preserve existing Codex and selected analysis runtimes before setup.
+Disclose any first installation in the complete upfront setup scope; obtain approval before changing existing/shared runtimes.
+For team updates, obtain advance explicit approval for every plugin update and any CBM/Graphify runtime or Team-Codex CLI change.
+Report concrete incompatibilities and defer dependent outputs until the required decision and capability are resolved.
 Preserve ownership, local edits, native protection, and independent review boundaries.
 Keep secrets in protected native input/storage paths, outside chat, arguments, records, and Git.
 

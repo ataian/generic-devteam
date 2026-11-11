@@ -28,14 +28,43 @@ Werte ersetzen; den übrigen Inhalt erhalten.
 
 ## Fremdkomponenten
 
-Geeignete vorhandene Installationen wiederverwenden. Bei neuem Bezug den konkreten
-Originalstand und dessen Dateiumfang prüfen und Version/Revision im Setup-Protokoll
-festhalten. Die folgenden Repositorypfade benennen die Bezugsstellen, keine bereits
-nachgewiesenen Installationen. For Caveman and Codex-Custom-Agents, use the exact source revision in the manifest; other research anchors remain unpinned.
+Read `upstream_components` in the [manifest](../manifest.json) as the required source inventory.
+For independent assets, use `original_repo`, exact `source_revision`, complete `subpaths`, `legal_files`, and assigned `targets`.
+Resolve `source_component` before acquisition; `caveman-review` inherits the Caveman commit.
+Acquire those commits outside active discovery without searching for a newer version during setup or team updates.
+Compare complete file inventories and original bytes, including hidden files, companions, and applicable legal files above selected subtrees.
+For `subpaths: ["."]`, retain the complete plugin repository, not only its skills or entry manifest.
+Preserve native runtime state separately from immutable upstream package files.
+Record required source, observed installed source, hashes, targets and native readbacks separately in the existing private setup/update record.
+Unknown installed provenance stays unknown until resolved; matching current bytes do not prove an earlier pristine baseline.
 
-Vollständige Skill-/Pluginpakete samt benötigten Begleitdateien übernehmen, nicht
-nur einzelne Einstiegstexte. Die zum Bezugsstand gehörenden Lizenz- und
-Notice-Dateien erhalten, auch wenn sie oberhalb eines ausgewählten Unterbaums liegen.
+Hermes core, `hermes-codex` and `sdlc-review` are native-managed prerequisites without Maker pins.
+Maker does not install, upgrade, downgrade or repair Hermes or its distribution skills.
+The Hindsight pin covers only `hindsight-integrations/hermes` and legal files; its service remains outside Maker updates.
+Codex CLI has a release/source target, not an automatic shared-binary replacement instruction.
+CBM and Graphify asset pins do not force installed runtimes to that revision.
+Inspect existing/shared installations and compatibility before setup; preserve compatible installations.
+Use [Integrations](integrations.md) for initial-installation scope and [Team updates](update.md#required-upstream-companion-update) for advance update approval.
+
+### Pin maintenance
+
+Select latest appropriate upstream sources only during deliberate Maker maintenance.
+Resolve release tags to full commit IDs, including annotated-tag peeling.
+Prefer official releases for release-coupled assets; use current default-branch commits for independently shipped skill/plugin trees when appropriate.
+Verify selected paths, native manifests, complete bundles, legal files and any recorded hashes at that exact commit.
+Keep upstream bytes unchanged, including models, reasoning and skill metadata.
+Update pins, affected recipes and coupled hash evidence coherently through the normal Maker patch release.
+Do not infer individual skill or adapter versions from a repository release number.
+Pins are required source targets, not approval for operational changes.
+
+Maintenance provenance, checked 11 November 2026: Superpowers `v7.0.2`, Caveman `v4.1.0`, CBM `v0.12.1`, Graphify `v0.9.106` and Codex `rust-v0.167.1` resolve to the manifest commits.
+Graphify's default branch is `v8`, not `main`.
+Ponytail, Matt Pocock's two skills, the Hindsight adapter and find-skills use the inspected default-branch commits.
+Ponytail's plugin manifests identify `5.3.3`; the Hindsight adapter manifests identify `1.2.4`, independently of the service release.
+The six VoltAgent files retain the existing manifest commit, which matched upstream HEAD.
+Caveman's selected skill/legal bytes match the newer HEAD; retain the release commit.
+Graphify's bundle hashes now derive from the selected release, replacing the historical `86c57be8204673c2a1b9849a3292a7dd3ab373d8` evidence.
+CBM's existing static asset evidence derives from its selected `v0.12.1` source; it is not installer-output or live-runtime evidence.
 
 | Komponente | Originalquelle | Benötigter Umfang | Ziel |
 |---|---|---|---|
