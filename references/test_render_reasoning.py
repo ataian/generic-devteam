@@ -651,6 +651,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             "minimal-change-engineering": {"hermes": ["planner"]},
             "plan-versioning-semver": {"hermes": ["planner"]},
             "project-lib-versioning": {"hermes": ["planner", "coder"]},
+            "prototype": {"hermes": ["planner"]},
             "retro": {"hermes": ["planner"]},
             "screenshot-to-code": {"hermes": ["planner", "coder"], "codex": ["team-codex"]},
         }

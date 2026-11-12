@@ -178,6 +178,22 @@ Record saved-tree, discovery, and call-policy evidence separately in the existin
 These checks establish delivery and invocation policy, not actual diagnosis behavior or adoption by an already running conversation.
 For rollback, use the existing guarded file-update procedure; newly added files remain retained until separately authorized removal.
 
+<a id="prototype"></a>
+## Owned prototype — Planner only
+
+Use the complete owned `skills/prototype/` tree, including `LOGIC.md`, `UI.md`, NOTICE, and full MIT license.
+Before writing, inspect native names/commands and all resolved Planner skill candidates for `prototype` collisions.
+Reuse the same managed skill through the existing update comparison; resolve unrelated same-name targets before replacing or shadowing them.
+After existing ownership, local-edit, backup, and authorization checks, copy the complete tree unchanged to `<PLANNER_HOME>/skills/prototype/`.
+Use the normal `own_skills.targets` whole-tree mapping; no additional installer or upstream runtime component is needed.
+Before role personalization, compare the complete saved tree and read back one unambiguous native skill entry, full `SKILL.md`, `LOGIC.md`, and `UI.md`.
+After SOUL delivery, read back the Planner's direct-authoring exception and conditional grilling trigger.
+During updates, reconcile local rules that would send these aids through Codex or product-development gates within the approved update scope.
+Withhold the dependent Planner clauses if required delivery/loading or a local-rule conflict remains unresolved, including legacy SOUL-only updates.
+Record these results in the existing private setup/update record; do not build a demonstration as an installation check.
+Saved bytes and discovery establish delivery, not live behavior or an already running conversation's adoption.
+Use the existing guarded file-update rollback; added files remain retained until separately authorized removal.
+
 <a id="superpowers"></a>
 ## Superpowers — nur Planner
 

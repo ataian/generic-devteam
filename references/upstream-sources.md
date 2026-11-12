@@ -17,6 +17,7 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | <a id="own-diagnosis"></a>[diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | Team-Codex |
 | <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes-Planner |
 | <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Hermes-Planner |
+| <a id="own-prototype"></a>[prototype](../skills/prototype/SKILL.md) | Hermes-Planner |
 | <a id="own-lib-versioning"></a>[project-lib-versioning](../skills/project-lib-versioning/SKILL.md) | Planner and Coder |
 | <a id="own-retro"></a>[retro](../skills/retro/SKILL.md) | Hermes-Planner |
 | <a id="own-screenshot"></a>[screenshot-to-code](../skills/screenshot-to-code/SKILL.md) | Planner, Coder and Team-Codex |
@@ -31,6 +32,9 @@ Do not execute a retrospective as an installation test. Invocation requires an e
 The owned `diagnosing-bugs` adapts Matt Pocock's method with evidence-based direct-fix/full-diagnosis selection.
 Copy its complete tree, [NOTICE](../skills/diagnosing-bugs/NOTICE.md), original [MIT license](../skills/diagnosing-bugs/LICENSE), and method reference through the [owned-skill recipe](integrations.md#diagnosing-bugs).
 Coder routes and validates; Team-Codex owns the method. This is not an additional upstream runtime component.
+
+The owned `prototype` adapts Matt Pocock's logic/UI method for direct clarification during grilling.
+Deliver its complete tree and legal files only to the Planner through [the owned-skill recipe](integrations.md#prototype).
 
 <a id="own-roles"></a>
 Die SOUL-Vorlagen für [Planner](../templates/roles/planner.SOUL.md.template),

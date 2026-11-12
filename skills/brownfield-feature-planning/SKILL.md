@@ -20,6 +20,7 @@ Ground the plan in the current code, accepted requirements, and observable behav
 Use team clarification/design skills and their approval rules.
 Use the Planner's `domain-modeling` workflow.
 Apply the Planner's plan-synthesis, vocabulary, and accepted-ADR rules.
+For clarification demos, load Planner-only `prototype` with `skill_view(name="prototype")`.
 On an explicit request for an expert questionnaire, load the original `to-questionnaire` with `skill_view(name="to-questionnaire")`.
 It drafts for one recipient; sending and plan acceptance retain their existing authorization gates.
 Keep existing roles and execution policy.

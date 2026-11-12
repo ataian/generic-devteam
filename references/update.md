@@ -142,6 +142,7 @@ It merges nonconflicting text changes with `git merge-file`.
 It stops application on text conflicts, missing local files, or incompatible source mappings.
 New files in a managed skill tree are included automatically.
 New owned skills use the same existing whole-tree mapping from `own_skills.targets`, including Team-Codex's process-HOME `.agents/skills/`.
+For Planner-only `prototype`, use [its delivery recipe](integrations.md#prototype) for collision checks, complete-tree loading, dependent SOUL clauses, and local-rule reconciliation.
 For `diagnosing-bugs`, inspect collisions through [the owned-skill recipe](integrations.md#diagnosing-bugs) before preparing the normal proposal.
 Keep its complete tree and dependent Coder call clause in the same approved update; resolve missing target bindings or local conflicts before application.
 The existing legacy SOUL-only path still withholds skills with unknown baselines; reconcile that team's required diagnosis delivery within the approved scope before applying the dependent Coder policy.

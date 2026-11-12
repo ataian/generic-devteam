@@ -169,7 +169,29 @@ Route future concrete retro findings to an existing deterministic check or targe
 Running the existing Maker suite in CI was only an optional follow-up, not a required audit fix.
 Max explicitly chose to leave CI aside for now. No workflow was added; do not reopen it automatically.
 
-## Remaining discussion: other roles
+## Planner-only prototype — approved scope
+
+Max approved this clarification tool during the follow-up discussion and commissioned its Maker integration.
+This decision supersedes the earlier Team-Codex prototype recommendation in the original evaluation.
+
+- The Planner writes small throwaway demos itself during grilling to understand wishes and resolve the customer's uncertainty.
+- Store all demo files in the Planner's planning `docs/` beside the plan, including with separate planning/product repositories. Keep them out of the product directory.
+- No Coder/Team-Codex use, delegation, tickets, automated tests, independent review, extra approval rounds, required commit/branch, or separate report for these aids.
+- Directly open/use and adjust the demo in the conversation; simplify or return to verbal clarification when building no longer saves decision effort.
+- Use synthetic in-memory examples without live services, real mutations, sensitive data, or dependency installation.
+- Capture the learned decision in existing planning material. Normal plan acceptance, implementation testing and independent review apply to later product work, not the throwaway demo.
+- Owned `skills/prototype/` adapts Matt's complete logic/UI method with original MIT text and explicit provenance. Planner-only assignment; no original upstream runtime installation.
+
+Implementation baseline: `df9e3d756e121d4b8bf8c492b0affb317bd39b7e`, clean `v3` at start.
+Maker `2.8.0` implementation and package acceptance are complete, unstaged and uncommitted. Parent verification passed: prototype 7 tests, Brownfield 19 tests, renderer 66 tests; aggregate 205 tests, `OK (skipped=1)`.
+The sole aggregate skip is the negative delegation-guard case: `No delegation fence in this process`.
+Manifest inventory/version, exported links/anchors, changed Python syntax, original MIT bytes, unchanged upstream pins and unchanged Coder/Reviewer templates passed; `git diff --check` passed.
+Independent review: **SPEC / QUALITY-TAS: PASS**, no substantive findings. Report: `/home/mariko/.hermes/cache/scratch/planner-prototype-20261112/review.md`.
+Parent verified the actual report and unchanged reviewed implementation hashes; only this parent-owned status record changed afterward. These are Maker development checks, not a demo workflow requirement.
+Evidence area: `/home/mariko/.hermes/cache/scratch/planner-prototype-20261112/`.
+No live-team rollout, profile/runtime change, commit, push, or CI work is commissioned.
+
+## Deferred candidates
 
 Read [Matt-Pocock-Skill-Evaluation.md](Matt-Pocock-Skill-Evaluation.md) as the original full evaluation, not the current implementation ledger.
 Its pending recommendations for TAS, Retro and questionnaire are superseded by this handoff.
@@ -177,12 +199,11 @@ Its pending recommendations for TAS, Retro and questionnaire are superseded by t
 | Consumer | Candidate | Discussion boundary |
 |---|---|---|
 | Team-Codex | `tdd` | Deferred by Max; standalone discussion record: [THE-TDD-IDEA](THE-TDD-IDEA.md). No integration commissioned. |
-| Team-Codex | `prototype` | Only for an explicit design uncertainty, not routine production development. |
-| Authorized PR author | `pr` | Optional original helper; preserve repository templates and separate commit/push/publication authority. |
+| Authorized PR author | `pr` | Deferred by Max in the follow-up discussion; revisit only on request. Preserve repository templates and separate commit/push/publication authority. |
 | Independent Reviewer | `tdd` | Deferred with the TDD topic; no separate test-quality skill assignment commissioned. |
-| Planner, separately commissioned | `improve-codebase-architecture` | Architecture survey only; not another mandatory planning gate. |
+| Planner, separately commissioned | `improve-codebase-architecture` | Deferred by Max in the follow-up discussion; revisit only on request. Architecture survey only, not another mandatory planning gate. |
 
-None of these remaining candidates is commissioned or installed by this handoff. Diagnosis is implemented, tested, independently approved and committed. Review delegation is implemented, tested and independently approved, with changes unstaged and uncommitted. TDD is deferred; `handoff` is not adopted.
+None of these deferred candidates is commissioned or installed. Prototype has its separate approved scope above. Diagnosis is implemented, tested, independently approved and committed. Review delegation's earlier completion record remains above. TDD is deferred; `handoff` is not adopted.
 Matt's methods are a strong preferred baseline. Read the complete original and companions before judging; justify departures with concrete runtime differences, authority/safety conflicts or observed failure.
 Assess Max's ideas critically rather than agreeing automatically. Distinguish static consumer checks from measured model behavior or token savings.
 
@@ -215,4 +236,4 @@ Use existing development checks; keep package changes, saved target files, effec
 
 ## New-session starter
 
-> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md` and check current Git state. Diagnosis and earlier stages are committed; preserve them. Code-review delegation is implemented, tested and independently approved as Maker `2.7.0`; its changes remain unstaged and uncommitted. Continue with the remaining Matt candidates without repeating completed implementation or review. `handoff` was not adopted. TDD remains separately deferred in `docs/THE-TDD-IDEA.md`; resume it only when I request it. Continue with me in German. Preserve current local work. CI is deferred. Other candidate discussions authorize no implementation or installation; live-team updates remain separately authorized.
+> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md` and check current Git state. Preserve committed earlier work and current local changes. Planner-only prototype integration is complete, package-tested and independently approved as Maker `2.8.0`, unstaged and uncommitted; do not repeat its build or review. `pr`, `improve-codebase-architecture`, TDD and CI are deferred; revisit only on request. `handoff` was not adopted. Continue in German. Package authoring does not authorize live-team updates, installation, commit or push.

@@ -124,6 +124,10 @@ Tickets use concise user-story titles and structured bullets: goal/context, acce
 Cards remain understandable alone, aligned with the authoritative accepted plan, and subject to Coder implementation discretion.
 Plans and ticket text use glossary vocabulary and relevant accepted ADRs, including without active domain modelling.
 Plan synthesis states the user's problem and user-visible solution, concrete test seams and analogous tests, meaningful scope boundaries, and decisions clarified by actual prototypes.
+The Planner receives the owned [prototype skill](skills/prototype/SKILL.md) to clarify wishes and uncertainty during grilling.
+It writes small throwaway HTML aids itself in its planning `docs/` beside the plan, outside the product directory.
+These aids use no Coder/Codex pipeline, tickets, automated tests, independent review, extra approval rounds, or mandatory commits/branches/reports.
+Open and use the aid directly; carry the learned decision into planning. Later product work retains its normal gates.
 Broad mechanical changes use conditional Expand–Migrate–Contract planning with working, verified intermediate states and existing native dependency/review gates.
 These are bounded adaptations of Matt Pocock's `to-spec` and `to-tickets`, not installations of either skill or a new tracker/approval workflow.
 Team-Codex receives the owned [diagnosing-bugs](skills/diagnosing-bugs/README.md) adaptation; Coder explicitly invokes it and validates original evidence without repeating full diagnosis.

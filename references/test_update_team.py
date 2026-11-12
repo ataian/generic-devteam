@@ -462,6 +462,65 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual((self.state / 'baselines' / entry['baseline']).read_bytes(), original)
         self.assertEqual(record['maker_commit'], self.git('rev-parse', 'HEAD').strip())
 
+    def test_prototype_complete_tree_maps_only_to_planner(self):
+        record = self.initialize()
+        entries = [e for e in record['managed'] if e['source'].startswith('skills/prototype/')]
+        source = self.repo / 'skills/prototype'
+        self.assertEqual({e['source'] for e in entries},
+                         {p.relative_to(self.repo).as_posix() for p in source.rglob('*') if p.is_file()})
+        self.assertEqual({e['role'] for e in entries}, {'planner'})
+        for e in entries:
+            self.assertEqual(e['target'], str(self.home / e['source']))
+            self.assertEqual(e['transform'], 'copy-v1')
+            self.assertEqual(Path(e['target']).read_bytes(), (self.repo / e['source']).read_bytes())
+        main = self.home / 'skills/prototype/SKILL.md'
+        main.write_bytes(b'Approved local planning note\n' + main.read_bytes())
+        self.change('skills/prototype/SKILL.md', '\nUpdated prototype clarification instruction.\n')
+        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture prototype update reviewed')
+        self.assertTrue(main.read_bytes().startswith(b'Approved local planning note\n'))
+        self.assertTrue(main.read_bytes().endswith(b'Updated prototype clarification instruction.\n'))
+
+    def test_new_prototype_tree_collision_and_guarded_rollback(self):
+        path = self.repo / 'manifest.json'
+        manifest = json.loads(path.read_text())
+        entry = manifest['own_skills'].pop('prototype')
+        files = {p.relative_to(self.repo).as_posix(): p.read_bytes()
+                 for p in (self.repo / 'skills/prototype').rglob('*') if p.is_file()}
+        self.git('rm', '-r', 'skills/prototype')
+        path.write_text(json.dumps(manifest))
+        self.commit('fixture before prototype assignment')
+        target = self.home / 'skills/prototype'
+        shutil.rmtree(target)
+        self.initialize()
+        before = (self.state / 'installation.json').read_bytes()
+        manifest['own_skills']['prototype'] = entry
+        path.write_text(json.dumps(manifest))
+        for relative, content in files.items():
+            p = self.repo / relative
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(content)
+        self.commit('fixture add Planner-only prototype')
+        target.mkdir()
+        main = target / 'SKILL.md'
+        main.write_bytes(b'Unrelated local skill.\n')
+        plan = self.proposal()
+        self.assertIn(str(main), json.loads(plan.read_text())['conflicts'])
+        with self.assertRaisesRegex(ValueError, 'Text conflicts'):
+            u.apply(self.home, plan, decision='proceed', review='Fixture unresolved collision')
+        self.assertEqual(main.read_bytes(), b'Unrelated local skill.\n')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+        main.unlink()  # Fixture-only reconciliation, not a live retirement policy.
+        plan = self.proposal()
+        entries = [e for e in json.loads(plan.read_text())['entries'] if e['source'] in files]
+        self.assertEqual({e['source'] for e in entries}, set(files))
+        self.assertEqual({e['role'] for e in entries}, {'planner'})
+        result = u.apply(self.home, plan, decision='proceed', review='Fixture prototype addition reviewed')
+        for e in entries:
+            self.assertEqual(Path(e['target']).read_bytes(), files[e['source']])
+        restored = u.rollback(self.home, Path(result['run']), decision='proceed')
+        self.assertEqual(set(restored['retained_additions']), {e['target'] for e in entries})
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+
     def diagnosis_added_to_existing_team(self):
         """Synthetic prior install without this owned skill; no live discovery."""
         path = self.repo / 'manifest.json'

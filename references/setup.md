@@ -270,6 +270,7 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
    **den ganzen eigenen Skillbaum** aus `skills/` in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
    `screenshot-to-code` and `diagnosing-bugs` in its process HOME under `.agents/skills/`.
    Apply the [diagnosis delivery recipe](integrations.md#diagnosing-bugs) for collision checks, complete bytes, and native discovery before role personalization.
+   Deliver Planner-only `prototype` through [its recipe](integrations.md#prototype) before personalizing its dependent SOUL clauses.
    Keep all skill names and bytes unchanged except the recovery launcher.
    Bind that launcher through the Maker step below after copying the full tree.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.

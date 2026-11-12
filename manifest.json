@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -21,6 +21,7 @@
     "references/test_bound_recovery.py",
     "references/test_brownfield_planning.py",
     "references/test_diagnosing_bugs.py",
+    "references/test_prototype.py",
     "references/test_render_reasoning.py",
     "references/test_retro.py",
     "references/test_review_investigation.py",
@@ -48,6 +49,11 @@
     "skills/minimal-change-engineering/SKILL.md",
     "skills/plan-versioning-semver/SKILL.md",
     "skills/project-lib-versioning/SKILL.md",
+    "skills/prototype/LICENSE",
+    "skills/prototype/LOGIC.md",
+    "skills/prototype/NOTICE.md",
+    "skills/prototype/SKILL.md",
+    "skills/prototype/UI.md",
     "skills/retro/LICENSE",
     "skills/retro/NOTICE.md",
     "skills/retro/README.md",
@@ -230,6 +236,23 @@
       "license_path": null,
       "notice_path": "NOTICE.md",
       "skill_path": "skills/project-lib-versioning/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
+    "prototype": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "planner"
+        ]
+      },
+      "origin": "Owned Planner-only adaptation of Matt Pocock's prototype; exact source and approved differences in the skill NOTICE.",
+      "changes": "Copy the complete tree unchanged. Planner writes isolated clarification demos directly in planning docs/ during grilling, outside the product pipeline.",
+      "origin_ref": "references/upstream-sources.md#own-prototype",
+      "license_path": "skills/prototype/LICENSE",
+      "notice_path": "skills/prototype/NOTICE.md",
+      "skill_path": "skills/prototype/SKILL.md",
       "transport": {
         "SKILL.md": "SKILL.md"
       }

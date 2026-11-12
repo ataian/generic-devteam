@@ -31,6 +31,7 @@ Check JSON/TOML/YAML and shell/Python syntax where affected.
 Render synthetic role values through the existing renderer; compare nonplaceholder bytes.
 Review changed instructions under [upstream TAS](upstream-sources.md#tas), including their conditions and required references.
 Use `test_diagnosing_bugs.py` for static proportional-path, method-pointer, delivery/legal, and explicit Coder-call contracts, not model-behavior claims.
+Use `test_prototype.py` for Planner-only clarification authority, branch/legal coverage, delivery, and updater regressions; these package checks add no tests or review gate to throwaway demos.
 Use the existing updater fixtures for newly assigned Team-Codex diagnosis trees, collisions, dependency decisions, local edits, baselines, and retained rollback additions.
 Trace setup references semantically; a keyword scan alone does not establish scope.
 Walk missing dependencies, collisions, resume, defaults/overrides, model availability, and update dependency decisions.
