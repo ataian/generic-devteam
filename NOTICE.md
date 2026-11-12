@@ -32,6 +32,7 @@ Planversionen und spätere Zielprojektversionen sind unabhängig.
 | `brownfield-feature-planning` 1.0.1 | Im Auftrag von Max durch Mariko (Hermes Agent) aus der übernommenen Nutzerfassung in TAS überarbeitet. Generischer Planungskern und bedingt geladene Fachreferenzen; Recovery-Skripte unverändert. Bestehende MIT-Angabe im Frontmatter; keine separate Lizenz-/Notice-Datei im Skillbaum. |
 | `plan-versioning-semver` 1.0.0 | Übernommene, vom Nutzer bearbeitete Skillfassung, Autorenfeld `Mariko`. Kein Lizenzfeld und keine separate Lizenz-/Notice-Datei im Skillbaum. |
 | `project-lib-versioning` 1.0.0 | Übernommene, vom Nutzer bearbeitete Skillfassung. MIT-Angabe im Frontmatter; keine separate Lizenz-/Notice-Datei im Skillbaum. Der historische Autoren-/Auditverweis im Skill ist dadurch nicht zusätzlich belegt. |
+| `retro` 0.1.0 | Owned process/environment retrospective adapted from Matt Pocock's method, with full-process token economy. The complete [skill NOTICE](skills/retro/NOTICE.md) records the original revision and adaptations; its [MIT license](skills/retro/LICENSE) retains the original copyright and permission notice. No upstream runtime installation. |
 
 Die eigenen Skills liegen als fertige Bäume unter `skills/` und werden beim Setup
 einschließlich aller vorhandenen Begleitdateien unverändert kopiert. Die Paketlizenz
@@ -41,6 +42,9 @@ keine neue Rechtekette.
 Autorenprüfung und Integrationschecks sind kein unabhängiger Review.
 
 ## Fremdkomponenten und technische Grenzen
+
+TAS is an external authoring dependency from [ataian/tas](https://github.com/ataian/tas), identified in the manifest and [source recipe](references/upstream-sources.md#tas).
+The Maker ships no normative TAS copy and assigns no TAS team-role installation; the complete upstream package retains its own MIT and third-party notices.
 
 Fremdkomponenten sind Bezugsidentitäten mit dokumentierten Zielrezepten, keine
 mitexportierten Installationen. Ihre konkreten Bezugsstände behalten eigene

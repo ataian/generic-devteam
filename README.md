@@ -119,6 +119,10 @@ Necessary foundations trace to enabled stories; stories, phases, and tickets nee
 Tickets use concise user-story titles and structured bullets: goal/context, acceptance criteria, technical implementation, verification, dependencies and exact plan/phase/commit binding.
 Cards remain understandable alone, aligned with the authoritative accepted plan, and subject to Coder implementation discretion.
 Relevant module/interface choices use caller-contract, complexity-encapsulation, abstraction-removal, and present-variability checks within existing design work.
+The Planner also receives the owned [retro skill](skills/retro/README.md), adapted from Matt Pocock with full-process token economy.
+Request it with `/retro`, “Machen wir eine Retro zum letzten Lauf”, or a named historical session, ticket, or project.
+It proposes source-backed process/environment improvements, not product acceptance; it changes nothing automatically and remains separate from `/refine`.
+Setup and updates check native name/command collisions and load the complete skill tree without running a retrospective.
 Bei Unterbrechung den Maker mit dem privaten Setuprecord wieder aufrufen; er liest
 native Profile, Board und Dienstobjekte erneut und setzt am ersten offenen Gate
 fort. Kein blindes Wiederholen von Create, Login, Bank- oder Kanalanlage.
@@ -154,6 +158,10 @@ Report real incomplete bindings precisely. Excluded behavior tests are outside s
 The completion statement requires the private installation marker and pristine personalized baselines.
 
 ## Maker development and review
+
+For agent-instruction authoring/review, load the standalone [TAS upstream](references/upstream-sources.md#tas).
+This Maker contains no maintained TAS copy and installs no TAS into team roles.
+The manifest pin names the initial committed TAS package; the authoring branch distinguishes commissioned local changes from the pending publication/pin advancement.
 
 For explicitly requested authoring/review or separately commissioned behavioral qualification,
 use [Development verification](references/development-verification.md).

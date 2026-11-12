@@ -629,7 +629,7 @@ class UpdaterTests(unittest.TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(b'Local upstream asset; preserve edits.\n')
             external[str(target)] = target.read_bytes()
-        names = ('codex-cli', 'superpowers', 'grill-me', 'hindsight', 'ponytail',
+        names = ('tas', 'codex-cli', 'superpowers', 'grill-me', 'hindsight', 'ponytail',
                  'caveman', 'find-skills', 'codex-custom-agents', 'codebase-memory', 'graphify')
         for index, name in enumerate(names):
             with self.subTest(component=name):

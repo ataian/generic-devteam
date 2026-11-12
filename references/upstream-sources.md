@@ -17,7 +17,15 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes-Planner |
 | <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Hermes-Planner |
 | <a id="own-lib-versioning"></a>[project-lib-versioning](../skills/project-lib-versioning/SKILL.md) | Planner and Coder |
+| <a id="own-retro"></a>[retro](../skills/retro/SKILL.md) | Hermes-Planner |
 | <a id="own-screenshot"></a>[screenshot-to-code](../skills/screenshot-to-code/SKILL.md) | Planner, Coder and Team-Codex |
+
+The owned `retro` adapts Matt Pocock's method; retain its complete [NOTICE](../skills/retro/NOTICE.md), [MIT license](../skills/retro/LICENSE), and method reference.
+It is not an upstream runtime component. Copy its complete tree through the normal own-skill setup/update path.
+Before installing or updating it, check the target's native command registry and all resolved skill candidates for `retro` collisions.
+Reuse the same managed skill through the normal update comparison; resolve any unrelated same-name skill or built-in command with the user before writing, rather than silently renaming or shadowing it.
+Read back one unambiguous owned `retro` and its complete reference through native discovery/loading; distinguish slash-command availability from an existing conversation's cached catalog.
+Do not execute a retrospective as an installation test. Invocation requires an explicit user request, such as `/retro` or a natural-language retrospective request.
 
 <a id="own-roles"></a>
 Die SOUL-Vorlagen für [Planner](../templates/roles/planner.SOUL.md.template),
@@ -26,9 +34,28 @@ Die SOUL-Vorlagen für [Planner](../templates/roles/planner.SOUL.md.template),
 entsprechenden Hermes-Profil. Nur die vorgesehenen Platzhalter durch bestätigte
 Werte ersetzen; den übrigen Inhalt erhalten.
 
+<a id="tas"></a>
+## TAS authoring upstream
+
+TAS is maintained only in [ataian/tas](https://github.com/ataian/tas), not in this Maker.
+For Maker instruction authoring/review, read the selected TAS `SKILL.md` completely and follow all required references before drafting.
+Resolve its references against that TAS entrypoint, not the Maker checkout.
+Use the sibling `../tas/SKILL.md` relative to the Maker root when that checkout is the commissioned TAS working tree; verify its Git origin and record its HEAD plus local changes.
+Otherwise use a complete checkout of `upstream_components.tas.original_repo` at its manifest `source_revision`, outside active discovery.
+Reuse a verified checkout or obtain it only within the authorized file-work scope; reading these instructions does not authorize installation or checkout replacement.
+If the source or a required reference is missing or unreadable, report the exact path and stop the affected authoring step.
+Keep `SKILL.md`, `references/`, provenance, and all legal files together; maintain normative wording upstream rather than copying it back here.
+
+The current pin identifies the initial TAS `1.0.0` commit, not the local `1.1.0` writing-for-agents changes.
+Local authoring can consume that commissioned working tree; portable pin advancement requires Max's TAS commit/publication and verification of its actual identity before updating the manifest.
+Keep this publication dependency explicit; a local working-tree improvement is not a published source revision.
+TAS has no team-role targets and is not installed into Planner, Coder, Reviewer, or Team-Codex by setup or team updates.
+Their existing SOUL and Caveman contracts remain unchanged; ordinary team setup does not load this authoring branch.
+
 ## Fremdkomponenten
 
 Read `upstream_components` in the [manifest](../manifest.json) as the required source inventory.
+The TAS entry is an authoring dependency with empty `targets`; use its separate branch above, not the target-installation recipes.
 For independent assets, use `original_repo`, exact `source_revision`, complete `subpaths`, `legal_files`, and assigned `targets`.
 Resolve `source_component` before acquisition; `caveman-review` inherits the Caveman commit.
 Acquire those commits outside active discovery without searching for a newer version during setup or team updates.
@@ -68,6 +95,7 @@ CBM's existing static asset evidence derives from its selected `v0.12.1` source;
 
 | Komponente | Originalquelle | Benötigter Umfang | Ziel |
 |---|---|---|---|
+| TAS | [ataian/tas](https://github.com/ataian/tas) | Complete standalone root skill tree, provenance and all `third_party/` legal files; see [authoring branch](#tas) | Maker authoring/review only; no team-role installation |
 | <a id="hermes-core"></a>Hermes-Basis | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [Dokumentation](https://hermes-agent.nousresearch.com/docs/) | Vorhandene funktionsfähige Hermes-Installation | Alle Hermes-Rollen |
 | <a id="hermes-codex"></a>Hermes-codex | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Vollständiges `skills/autonomous-ai-agents/codex` | Hermes-Coder |
 | <a id="hermes-review"></a>sdlc-review | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Vollständiges `skills/devops/sdlc-review` | Hermes-Reviewer |

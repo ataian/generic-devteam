@@ -29,7 +29,7 @@ Check manifest file existence, sorted uniqueness, version equality, relative lin
 Compare component assignments, transforms, role fields, complete own skill bytes, helpers, and legal files with the approved baseline.
 Check JSON/TOML/YAML and shell/Python syntax where affected.
 Render synthetic role values through the existing renderer; compare nonplaceholder bytes.
-Review changed instructions under [TAS](tas-authoring-standard.md), including their conditions and required references.
+Review changed instructions under [upstream TAS](upstream-sources.md#tas), including their conditions and required references.
 Trace setup references semantically; a keyword scan alone does not establish scope.
 Walk missing dependencies, collisions, resume, defaults/overrides, model availability, and update dependency decisions.
 

@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -18,10 +18,10 @@
     "references/native-workflow.md",
     "references/render_text.py",
     "references/setup.md",
-    "references/tas-authoring-standard.md",
     "references/test_bound_recovery.py",
     "references/test_brownfield_planning.py",
     "references/test_render_reasoning.py",
+    "references/test_retro.py",
     "references/test_triage_recovery.py",
     "references/test_update_team.py",
     "references/update.md",
@@ -41,6 +41,11 @@
     "skills/minimal-change-engineering/SKILL.md",
     "skills/plan-versioning-semver/SKILL.md",
     "skills/project-lib-versioning/SKILL.md",
+    "skills/retro/LICENSE",
+    "skills/retro/NOTICE.md",
+    "skills/retro/README.md",
+    "skills/retro/SKILL.md",
+    "skills/retro/references/method.md",
     "skills/screenshot-to-code/LICENSE",
     "skills/screenshot-to-code/SKILL.md",
     "skills/screenshot-to-code/references/offline-export.md",
@@ -205,6 +210,23 @@
         "SKILL.md": "SKILL.md"
       }
     },
+    "retro": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "planner"
+        ]
+      },
+      "origin": "Owned process-retrospective adaptation of Matt Pocock's retro, with full-process token economy; exact source and changes in the skill NOTICE.",
+      "changes": "Copy the complete skill tree unchanged. Explicit user requests only; no upstream runtime dependency or automatic maintenance.",
+      "origin_ref": "references/upstream-sources.md#own-retro",
+      "license_path": "skills/retro/LICENSE",
+      "notice_path": "skills/retro/NOTICE.md",
+      "skill_path": "skills/retro/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
     "screenshot-to-code": {
       "status": "included",
       "targets": {
@@ -236,6 +258,21 @@
     }
   },
   "upstream_components": {
+    "tas": {
+      "original_repo": "https://github.com/ataian/tas",
+      "source_revision": "95c19de6f443f861a02fc0a71ecec0fd250adaf3",
+      "subpaths": [
+        "."
+      ],
+      "legal_files": [
+        "LICENSE",
+        "NOTICE.md",
+        "third_party"
+      ],
+      "targets": {},
+      "recipe_ref": "references/upstream-sources.md#tas",
+      "recipe_status": "documented"
+    },
     "hermes-core": {
       "original_repo": "https://github.com/NousResearch/hermes-agent",
       "subpaths": [

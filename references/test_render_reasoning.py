@@ -18,21 +18,36 @@ REASONING_FIELDS = {
 
 
 class TasPortabilityTests(unittest.TestCase):
-    def read_standard(self, root):
-        instructions = (root / "AGENTS.md").read_text()
-        link = re.search(r"Read \[TAS authoring standard\]\(([^)]+)\)", instructions)
-        if link is None:
-            self.fail("The required standard needs a relative Markdown link")
-        relative = Path(link[1])
-        self.assertFalse(relative.is_absolute())
-        target = (root / relative).resolve()
-        self.assertTrue(target.is_relative_to(root.resolve()))
-        return target.read_text()
+    """Authoring dependency contracts, not TAS model-behavior evidence."""
 
-    def test_required_standard_resolves_inside_maker(self):
-        self.assertTrue(self.read_standard(ROOT).strip())
+    def check_source_contract(self, root):
+        manifest = json.loads((root / "manifest.json").read_text())
+        self.assertFalse((root / "references/tas-authoring-standard.md").exists())
+        self.assertNotIn("references/tas-authoring-standard.md", manifest["files"])
+        component = manifest["upstream_components"].get("tas", {})
+        self.assertEqual(component.get("original_repo"), "https://github.com/ataian/tas")
+        self.assertRegex(component.get("source_revision", ""), r"^[0-9a-f]{40}$")
+        self.assertEqual(component.get("subpaths"), ["."])
+        self.assertEqual(component.get("targets"), {}, "Authoring dependency, not role equipment")
+        self.assertEqual(component.get("legal_files"), ["LICENSE", "NOTICE.md", "third_party"])
+        self.assertEqual(component.get("recipe_ref"), "references/upstream-sources.md#tas")
+        for relative in ("AGENTS.md", "HERMES.md", "references/development-verification.md"):
+            path = root / relative
+            if path.exists():
+                text = path.read_text()
+                self.assertIn("upstream-sources.md#tas", text)
+                self.assertNotIn("tas-authoring-standard.md", text)
+        source = (root / "references/upstream-sources.md").read_text()
+        recipe = source.split("## TAS authoring upstream\n", 1)[1].split("\n## ", 1)[0]
+        for clause in ("../tas/SKILL.md", "working tree", "source_revision", "SKILL.md",
+                       "required references", "missing or unreadable", "publication",
+                       "not installed into Planner, Coder, Reviewer, or Team-Codex"):
+            self.assertIn(clause, recipe)
 
-    def test_manifest_export_contains_instructions_and_standard_without_vault(self):
+    def test_required_standard_is_consumed_from_upstream(self):
+        self.check_source_contract(ROOT)
+
+    def test_manifest_export_keeps_authoring_pointer_without_maintained_copy(self):
         with tempfile.TemporaryDirectory(prefix="maker-tas-") as directory:
             export = Path(directory)
             for relative in MANIFEST["files"] + ["manifest.json"]:
@@ -41,11 +56,7 @@ class TasPortabilityTests(unittest.TestCase):
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(source, target)
             self.assertTrue((export / "AGENTS.md").is_file(), "Ship the package authoring instructions")
-            standard = self.read_standard(export)
-            self.assertNotIn("/home/", standard)
-            self.assertNotIn("obsidian_vault", standard)
-            self.assertNotIn("[[", standard)
-            self.assertTrue(standard.strip())
+            self.check_source_contract(export)
 
 
 class ReasoningContractTests(unittest.TestCase):
@@ -549,15 +560,14 @@ class ReasoningContractTests(unittest.TestCase):
             self.assertIn(clause, planner)
         self.assertNotIn("{{", planner)
         release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
-        standard = (ROOT / "references/tas-authoring-standard.md").read_text()
-        for text in (planner, release, standard):
+        for text in (planner, release):
             for obsolete in (
                 "Keep requirements, acceptance criteria, files, and commit boundaries in that plan instead of copying them.",
                 "Write a short goal and the exact plan/phase reference instead of copying phase text.",
                 "Bind tickets to the exact accepted plan and phase instead of copying requirements or routine procedures.",
             ):
                 self.assertNotIn(obsolete, text)
-        self.assertIn("Include concise story criteria and necessary technical context", standard)
+
 
     def test_selected_design_checks_stay_in_existing_conditional_workflow(self):
         planner = render_role(self.template("planner"), self.values("planner"), "planner")
@@ -602,6 +612,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             "minimal-change-engineering": {"hermes": ["planner"]},
             "plan-versioning-semver": {"hermes": ["planner"]},
             "project-lib-versioning": {"hermes": ["planner", "coder"]},
+            "retro": {"hermes": ["planner"]},
             "screenshot-to-code": {"hermes": ["planner", "coder"], "codex": ["team-codex"]},
         }
         self.assertEqual({name: item["targets"] for name, item in MANIFEST["own_skills"].items()}, expected)
@@ -616,6 +627,25 @@ class ReviewerEquipmentTests(unittest.TestCase):
             self.assertTrue((ROOT / item["skill_path"]).is_file(), name)
         self.assertIn("Use the installed `sdlc-review` skill for the detailed review checklist.", self.template("reviewer"))
 
+    def test_owned_retro_delivery_and_collision_contract(self):
+        item = MANIFEST["own_skills"]["retro"]
+        self.assertEqual(item["status"], "included")
+        self.assertEqual(item["targets"], {"hermes": ["planner"]})
+        self.assertEqual(item["transport"], {"SKILL.md": "SKILL.md"})
+        self.assertNotIn("retro", MANIFEST["upstream_components"])
+        for key in ("skill_path", "license_path", "notice_path"):
+            self.assertTrue((ROOT / item[key]).is_file(), key)
+        inventory = {path.relative_to(ROOT).as_posix()
+                     for path in (ROOT / "skills/retro").rglob("*") if path.is_file()}
+        self.assertTrue(inventory.issubset(MANIFEST["files"]))
+        self.assertIn("references/test_retro.py", MANIFEST["files"])
+        sources = (ROOT / "references/upstream-sources.md").read_text()
+        self.assertIn('id="own-retro"', sources)
+        self.assertIn("native command registry and all resolved skill candidates", sources)
+        self.assertIn("resolve any unrelated same-name skill or built-in command with the user before writing", sources)
+        self.assertIn("Read back one unambiguous owned `retro` and its complete reference", sources)
+        self.assertIn("Do not execute a retrospective as an installation test.", sources)
+
     def test_english_contract_at_each_consumer(self):
         for role in ("planner", "coder", "reviewer"):
             text = render_role(self.template(role), self.values(role), role)
@@ -626,7 +656,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
                 self.assertIn("Use English for role communication, tickets, handoffs, findings, technical project documentation, and agent instructions.", text)
                 self.assertIn("Preserve exact identifiers, quotations, error messages, and deliberately localized product text.", text)
                 self.assertNotIn("user's requested language", text)
-        for relative in ("SKILL.md", "references/setup.md", "references/tas-authoring-standard.md"):
+        for relative in ("SKILL.md", "references/setup.md"):
             text = (ROOT / relative).read_text()
             with self.subTest(source=relative):
                 self.assertIn("English for development communication and artifacts", text)

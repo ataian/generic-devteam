@@ -200,7 +200,7 @@ Conditional references add no scope.
 | Status, completion, review, or blocker notification | [Status inspection](references/kanban-status-inspection.md) |
 | Recovery from an interrupted run, resolved blocker, or automatic triage | [Recovery](references/kanban-triage-recovery.md) |
 | Operator tool or explicitly agreed operator-executed verification | [Operator acceptance](references/operator-script-acceptance.md) |
-| Explicit request for a retrospective | [Project retrospective](references/project-retrospectives.md) |
+| Explicit user request for a process retrospective | [Standalone retro routing](references/project-retrospectives.md) |
 
 ## Verification
 
