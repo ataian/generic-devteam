@@ -1,7 +1,8 @@
 # Codeanalyse einrichten
 
-Configure the **Graphify or CBM** alternative confirmed in [Setup](setup.md) for Planner, Coder and Team-Codex.
-For existing teams, follow the [required Reviewer skill retirement](update.md#required-reviewer-skill-retirement-1122) after file updates.
+Configure the **Graphify or CBM** alternative confirmed in [Setup](setup.md) for Planner, Coder, Reviewer and Team-Codex.
+For existing teams, restore missing selected analysis assets and bindings through the approved [upstream companion update](update.md#required-upstream-companion-update).
+The [required Reviewer skill retirement](update.md#required-reviewer-skill-retirement-1122) covers only the three unrelated retired skills.
 Sources and licenses are listed in [Sources](upstream-sources.md#codeanalyse-genau-eine-alternative).
 Execute this recipe only during authorized target setup or the approved [upstream companion update](update.md#required-upstream-companion-update), not Maker authoring.
 
@@ -41,7 +42,7 @@ Require runtime/skill compatibility before copying the complete original bundles
 
 | Verbraucher | Originalhauptdatei → `SKILL.md` | Referenzen → `references/` | Zielverzeichnis |
 |---|---|---|---|
-| Planner and Coder | `graphify/skill-claw.md` | `graphify/skills/claw/references/` vollständig | `<ROLE_HOME>/skills/graphify/` |
+| Planner, Coder and Reviewer | `graphify/skill-claw.md` | `graphify/skills/claw/references/` vollständig | `<ROLE_HOME>/skills/graphify/` |
 | Team-Codex | `graphify/skill-codex.md` | `graphify/skills/codex/references/` vollständig | `<CODEX_PROCESS_HOME>/.agents/skills/graphify/` |
 
 Die zum Paket gehörenden `LICENSE`, `LICENSE-MIT` und `NOTICE` beilegen. Ganze
@@ -52,7 +53,7 @@ beschreiben; für diese profilbezogene Skillablage deshalb die expliziten Ziele 
 
 ### 2. Bind and read back
 
-Verify native discovery/loading of the original `graphify` skill in each assigned harness.
+Verify native discovery/loading of the original `graphify` skill in Planner, Coder, Reviewer and Team-Codex.
 Bind the confirmed output CWD, corpus and runtime interpreter without generating a graph.
 For multiple repositories retain separate output locations.
 No additional MCP service is required for the normal skill/CLI route.
@@ -142,7 +143,7 @@ bestätigte absolute Pfade. Unter `CBM_BIN_DIR` liegt die tatsächlich verwendet
 Originalbinary `codebase-memory-mcp`.
 
 ```sh
-# Run for Planner and Coder with their respective ROLE_HOME.
+# Run for Planner, Coder and Reviewer with their respective ROLE_HOME.
 HERMES_HOME="$ROLE_HOME" \
   "$CBM_BIN_DIR/codebase-memory-mcp" install \
   --clients=hermes --skip-binary --dir="$CBM_BIN_DIR"
@@ -186,11 +187,12 @@ For a different existing runtime, verify options, target resolution and pinned g
 
 | Kontext | Erwartete Originalintegration |
 |---|---|
-| Planner and Coder | `skills/codebase-memory/SKILL.md`, MCP-Eintrag in `config.yaml`, Shellhook `hooks.pre_llm_call` |
+| Planner, Coder and Reviewer | `skills/codebase-memory/SKILL.md`, MCP-Eintrag in `config.yaml`, Shellhook `hooks.pre_llm_call` |
 | Team-Codex | MCP in `config.toml`, Aktivierungszeiger in `AGENTS.md`, `skills/codebase-memory/SKILL.md` |
 | Team-Codex-Unteragenten | `agents/codebase-memory-scout.toml`, `agents/codebase-memory.toml` (Verify), `agents/codebase-memory-auditor.toml` |
 | Team-Codex-Hooks | `SessionStart` und `SubagentStart`; vorhandene `hooks.json`, sonst native TOML-Ablage |
 
+- For each Hermes role, including Reviewer, read back its MCP command, environment/cache, repository CWD, original shellhook and native skill discovery/loading.
 - Installerausgabe und Dateien zurücklesen; Exitstatus allein genügt nicht.
   Andere MCP-Einträge, Hooks, Anweisungen und die VoltAgent-Helfer müssen erhalten sein.
 - Tatsächlichen Session-/MCP-CWD auf das jeweilige Repository binden. Der Installer
@@ -219,6 +221,7 @@ Do not add repeated reindexing on each call, message, commit, or review handoff.
 
 Read back the chosen integration, complete file set, native discovery, runtime/MCP command,
 CWD/roots, cache literal, hooks and approval state.
+Missing required Reviewer assets, configuration or native discovery keep setup or an authorized team update incomplete.
 A readback proves configuration/delivery, not graph accuracy or live hook behavior.
 Report an actual failed binding precisely; do not silently switch alternatives.
 

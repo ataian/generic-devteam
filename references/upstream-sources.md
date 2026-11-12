@@ -102,8 +102,8 @@ The Codex agent `reviewer` does not replace the independent Hermes Reviewer.
 
 | Komponente | Originalquelle | Benötigter Umfang | Ziel |
 |---|---|---|---|
-| <a id="codebase-memory"></a>Codebase-memory | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | Passendes offizielles Release und vollständige native Hermes-/Codex-Integration: Originalskill, MCP, Hooks sowie die zu CBM gehörenden Codex-Unteragenten; `LICENSE` und Release-`THIRD_PARTY_NOTICES.md` erhalten. | Planner, Coder and Team-Codex |
-| <a id="graphify"></a>Graphify | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Runtime; für Hermes `graphify/skill-claw.md` und vollständiges `graphify/skills/claw/references/`, für Codex `graphify/skill-codex.md` und vollständiges `graphify/skills/codex/references/`; `LICENSE`, `LICENSE-MIT` und `NOTICE` erhalten. | Planner, Coder and Team-Codex |
+| <a id="codebase-memory"></a>Codebase-memory | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | Passendes offizielles Release und vollständige native Hermes-/Codex-Integration: Originalskill, MCP, Hooks sowie die zu CBM gehörenden Codex-Unteragenten; `LICENSE` und Release-`THIRD_PARTY_NOTICES.md` erhalten. | Planner, Coder, Reviewer and Team-Codex |
+| <a id="graphify"></a>Graphify | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Runtime; für Hermes `graphify/skill-claw.md` und vollständiges `graphify/skills/claw/references/`, für Codex `graphify/skill-codex.md` und vollständiges `graphify/skills/codex/references/`; `LICENSE`, `LICENSE-MIT` und `NOTICE` erhalten. | Planner, Coder, Reviewer and Team-Codex |
 
 Use only the selected branch in [Code analysis](code-analysis.md).
 This source inventory does not replace its concrete setup recipe.

@@ -560,7 +560,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
         upstream = MANIFEST["upstream_components"]
         for name in ("graphify", "codebase-memory"):
             self.assertEqual(upstream[name]["targets"], {
-                "hermes": ["planner", "coder"], "codex": ["team-codex"],
+                "hermes": ["planner", "coder", "reviewer"], "codex": ["team-codex"],
             })
         self.assertEqual(upstream["sdlc-review"]["targets"], {"hermes": ["reviewer"]})
         self.assertEqual(upstream["sdlc-review"]["subpaths"], ["skills/devops/sdlc-review"])
@@ -586,16 +586,16 @@ class ReviewerEquipmentTests(unittest.TestCase):
                 self.assertNotIn("user's or project's language", text)
                 self.assertNotIn("follows the user or project setting", text)
 
-    def test_optional_graph_does_not_remove_structural_verification(self):
-        text = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
-        for clause in (
-            "Verify affected structure directly in source, callers, dependencies, contracts, and tests.",
-            "You can use an already available authorized graph for a concrete structural question.",
-            "Graph access is optional; an unavailable or stale graph alone does not block review.",
-            "Graph findings replace neither source review nor tests, and missing edges do not prove a missing dependency.",
-            "If a decision-relevant evidence gap remains unresolved, report the technical blocker.",
-        ):
-            self.assertIn(clause, text)
+    def test_reviewer_removes_graph_exception_without_replacing_review_policy(self):
+        source = self.template("reviewer")
+        text = render_role(source, self.values("reviewer"), "reviewer")
+        for candidate in (source, text):
+            procedure = candidate.split("## Review procedure\n", 1)[1].split("\n## ", 1)[0]
+            self.assertNotRegex(procedure.lower(), r"\b(?:graphs?|graphify|codebase-memory)\b")
+            self.assertEqual(re.findall(r"^(\d+)\. ", procedure, re.M),
+                             [str(i) for i in range(1, 12)])
+            self.assertIn("Form your own assessment from the diff, surrounding code, callers, tests, and relevant project contracts.", procedure)
+            self.assertIn("Verify acceptance criteria and project invariants.", procedure)
         self.assertNotIn("Use the approved structural analysis integration", text)
         self.assertNotIn("minimal-change-engineering", text)
         self.assertNotIn("screenshot-to-code", text)
@@ -626,9 +626,9 @@ class ReviewerEquipmentTests(unittest.TestCase):
 
     def test_equipment_recipes_use_positive_assignments(self):
         analysis = (ROOT / "references/code-analysis.md").read_text()
-        self.assertIn("| Planner and Coder | `graphify/skill-claw.md`", analysis)
-        self.assertIn("| Planner and Coder | `skills/codebase-memory/SKILL.md`", analysis)
-        self.assertIn("# Run for Planner and Coder with their respective ROLE_HOME.", analysis)
+        self.assertIn("| Planner, Coder and Reviewer | `graphify/skill-claw.md`", analysis)
+        self.assertIn("| Planner, Coder and Reviewer | `skills/codebase-memory/SKILL.md`", analysis)
+        self.assertIn("# Run for Planner, Coder and Reviewer with their respective ROLE_HOME.", analysis)
         self.assertNotIn("Jede Hermes-Rolle", analysis)
         sources = (ROOT / "references/upstream-sources.md").read_text()
         for name, targets in (
@@ -640,12 +640,12 @@ class ReviewerEquipmentTests(unittest.TestCase):
             self.assertTrue(row.endswith("| " + targets + " |"), row)
         for component in ("codebase-memory", "graphify"):
             row = next(line for line in sources.splitlines() if f'id="{component}"' in line)
-            self.assertTrue(row.endswith("| Planner, Coder and Team-Codex |"), row)
+            self.assertTrue(row.endswith("| Planner, Coder, Reviewer and Team-Codex |"), row)
         for relative in ("references/code-analysis.md", "references/integrations.md",
                          "references/setup.md", "references/native-workflow.md", "references/verification.md"):
             text = (ROOT / relative).read_text()
             with self.subTest(source=relative):
-                self.assertIn("Planner, Coder and Team-Codex", text)
+                self.assertIn("Planner, Coder, Reviewer and Team-Codex", text)
                 for obsolete in ("Reviewer receives neither", "Do not install it in Reviewer by default",
                                  "Do not install analysis components in Reviewer by default",
                                  "no default Reviewer integration", "Reviewer has no default analysis",
@@ -658,8 +658,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
         self.assertIn("## Required Reviewer skill retirement (1.1.22)\n", update)
         section = update.split("## Required Reviewer skill retirement (1.1.22)\n", 1)[1].split("\n## ", 1)[0]
         rows = re.findall(r"^\| `([^`]+)` \| `([^`]+)` \|$", section, re.M)
-        expected = ("minimal-change-engineering", "project-lib-versioning", "screenshot-to-code",
-                    "graphify", "codebase-memory")
+        expected = ("minimal-change-engineering", "project-lib-versioning", "screenshot-to-code")
         self.assertEqual(rows, [(name, f"<reviewer home>/skills/{name}/") for name in expected])
         self.assertIn("pre-update version below `1.1.22` to a target version at or above `1.1.22`", section)
         self.assertIn("This includes teams on `1.1.21`", section)
@@ -668,7 +667,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             item = MANIFEST["own_skills"].get(name) or MANIFEST["upstream_components"][name]
             self.assertNotIn("reviewer", item["targets"]["hermes"])
         for clause in (
-            "This migration overrides local-adaptation preservation only for these five Reviewer skill trees.",
+            "This migration overrides local-adaptation preservation only for these three Reviewer skill trees.",
             "Include learned files, references, hidden files, and local additions.",
             "Keep the native `sdlc-review` skill and its automatic integration unchanged.",
             "Preserve all other adaptations and all Planner, Coder and Team-Codex assets.",
@@ -687,7 +686,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             "Read back this private record before file application.",
             "Resume a pending retirement on later updates even if `installation.json` already reports `1.1.22` or a later version.",
             "Never infer migration completion from version alone.",
-            "For legacy or unknown versions, resolve the source evidence or explicitly reconcile these five identities within the approved scope.",
+            "For legacy or unknown versions, resolve the source evidence or explicitly reconcile these three identities within the approved scope.",
             "Do not silently skip an unknown version.",
             "Run the pending retirement after successful file application and before reporting a complete team update.",
             "Treat already absent skills as successful no-ops after native readback.",
@@ -709,7 +708,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
         for clause in (
             "Keep this discovery strictly read-only.",
             "Do not remove trees or change exclusions or bindings during discovery.",
-            "Inspect native discovery roots and every resolved source path for the five exact skill identities.",
+            "Inspect native discovery roots and every resolved source path for the three exact skill identities.",
             "Record source ownership, aliases, symlinks, and shared/external sources before selecting any removal path.",
             "determine the supported Reviewer-specific exclusion or unbinding from the installed interface without applying it.",
             "Record the concrete Reviewer-specific obsolete bindings for scope approval.",
@@ -738,7 +737,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
         self.assertFalse(between_drift_and_removal.strip(), "Drift check must immediately precede retirement writes")
         for clause in (
             "Resolve the exact Reviewer home from confirmed bindings and native profile inventory.",
-            "Inspect native discovery roots and every resolved source path for the five exact skill identities.",
+            "Inspect native discovery roots and every resolved source path for the three exact skill identities.",
             "Do not delete guessed paths or follow links into shared assets.",
             "determine the supported Reviewer-specific exclusion or unbinding",
             "If no supported isolation is available, stop this reconciliation with a concrete blocker.",
@@ -747,7 +746,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             "Recheck the inspected source bytes and bindings immediately before any removal, exclusion, or binding change",
             "Report each concrete retained instruction or autoload reference that would recreate or require a retired skill.",
             "Reconcile only the inventoried Reviewer-specific obsolete bindings within the approved update scope.",
-            "Verify absence of all five identities through native Reviewer discovery and source resolution.",
+            "Verify absence of all three identities through native Reviewer discovery and source resolution.",
             "Verify preservation of unaffected roles and assets against the pre-removal inventory.",
             "Mark retirement `complete` only after these readbacks pass",
             "The file-updater rollback does not restore this prose poststep's removed trees or bindings.",
@@ -760,6 +759,35 @@ class ReviewerEquipmentTests(unittest.TestCase):
         self.assertNotIn("Preserve existing installations unless a separate concrete reconciliation is authorized.", update)
         for relative in ("README.md", "references/code-analysis.md", "templates/setup-record.md"):
             self.assertIn("#required-reviewer-skill-retirement-1122", (ROOT / relative).read_text())
+
+    def test_selected_reviewer_analysis_requires_native_readbacks_before_completion(self):
+        analysis = (ROOT / "references/code-analysis.md").read_text()
+        graphify, cbm = analysis.split('<a id="codebase-memory"></a>', 1)
+        self.assertIn("Verify native discovery/loading of the original `graphify` skill in Planner, Coder, Reviewer and Team-Codex.", graphify)
+        self.assertIn("Bind the confirmed output CWD, corpus and runtime interpreter", graphify)
+        self.assertIn("MCP-Eintrag in `config.yaml`, Shellhook `hooks.pre_llm_call`", cbm)
+        self.assertIn("For each Hermes role, including Reviewer, read back its MCP command, environment/cache, repository CWD, original shellhook and native skill discovery/loading.", cbm)
+        self.assertIn("Read back actual native connection/configuration status", cbm)
+        self.assertIn("Missing required Reviewer assets, configuration or native discovery keep setup or an authorized team update incomplete.", analysis)
+
+    def test_selected_reviewer_analysis_restoration_covers_current_and_retired_teams(self):
+        update = (ROOT / "references/update.md").read_text()
+        section = update.split("## Required upstream companion update\n", 1)[1].split("\n## ", 1)[0]
+        for clause in (
+            "For the selected CBM or Graphify branch, inspect Planner, Coder, Reviewer and Team-Codex even when installation metadata is already current.",
+            "Include previously retired Reviewer analysis assets and missing MCP/CLI, cache, CWD, hook or discovery bindings in the concrete companion scope.",
+            "Preserve the confirmed alternative and nonselected assets; do not silently re-select.",
+            "Restore missing selected Reviewer assets and native bindings through the selected analysis recipe within the approved companion scope.",
+            "Keep selected-analysis work pending until required Reviewer assets, configuration and native discovery readbacks pass.",
+        ):
+            self.assertIn(clause, section)
+        retirement = update.split("## Required Reviewer skill retirement (1.1.22)\n", 1)[1].split("\n## ", 1)[0]
+        self.assertNotRegex(retirement, r"\| `(?:graphify|codebase-memory)` \|")
+        self.assertIn("Preserve CBM/Graphify skills and bindings; restore the selected Reviewer integration through the approved upstream companion update.", retirement)
+        for relative in ("README.md", "templates/setup-record.md"):
+            text = (ROOT / relative).read_text()
+            self.assertIn("selected Reviewer analysis", text)
+            self.assertNotIn("Reviewer has no default graph-tool prerequisite", text)
 
 
 class UpstreamLockTests(unittest.TestCase):

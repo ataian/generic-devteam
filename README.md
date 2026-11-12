@@ -99,7 +99,7 @@ Originalkomponenten werden mit Revision, Dateimenge und Lizenz nachgewiesen.
 The Reviewer uses a separate fresh-context pass for material security, data-integrity, transaction, or concurrency invariants.
 This requirement does not duplicate every test suite or restart the full review after each correction.
 The Reviewer reuses valid evidence and reruns affected checks while retaining required independent and final-state acceptance checks.
-Planner, Coder and Team-Codex retain the selected complete Graphify/CBM integration. Reviewer has no default graph-tool prerequisite and verifies structure directly; an unresolved evidence gap still blocks approval.
+Planner, Coder, Reviewer and Team-Codex receive the selected complete Graphify/CBM integration, including native configuration and discovery readbacks.
 Reviewer retains conditional library-version/consumer and independent visual acceptance checks without the three implementation-oriented skill bundles.
 Package changes do not activate these rules in existing teams; use the separately authorized team-update procedure.
 The Coder owns implementation decisions within the accepted goal and binding constraints.
@@ -132,6 +132,7 @@ It requires semantic review and an explicit activity decision before application
 It retains backups and provides a guarded rollback.
 The file helper does not install runtime components, stop workers, or restart sessions.
 The mandatory prose companion path compares all assigned upstream assets on every update, even at the same Maker version.
+Restore missing selected Reviewer analysis assets and bindings through that approved path, including previously retired assets and already-current installation metadata.
 Any full plugin update and any CBM/Graphify runtime or Team-Codex CLI change requires advance explicit approval of actual targets, versions and shared effects.
 Pins do not grant that permission; deferred required companion work leaves the team update incomplete.
 For the incompatible `2.0.0` routing change, use [Workflow migration](references/update.md#workflow-migration-200) before applying authority changes.

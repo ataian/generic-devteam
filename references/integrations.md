@@ -554,7 +554,7 @@ keine historische besondere Thread-Abnahme hinzufügen.
 
 ## Codeanalyse und Quellenstand
 
-Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to Planner, Coder and Team-Codex.
+Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to Planner, Coder, Reviewer and Team-Codex.
 Read only that branch of [Code analysis](code-analysis.md) as setup instructions.
 For CBM deliver the complete official Codex subagents alongside the six [unchanged VoltAgent helpers](#codex-agents).
 Verify setup targets, native discovery and connection/configuration readbacks without analysis experiments.

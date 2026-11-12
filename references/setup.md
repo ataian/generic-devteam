@@ -198,7 +198,7 @@ Bind `devteam/codex-home` and `devteam/user-home` inside the actual Coder home t
 For CBM, bind the canonical account cache as a literal in the team MCP TOML `env` before hook approval under [Code analysis](code-analysis.md#codebase-memory).
 Record the actual Codex binary and both homes for configuration readback.
 Deliver/configure the complete original components for the chosen analysis branch only.
-Read back analysis targets, assets, runtime binding and licenses for Planner, Coder and Team-Codex.
+Read back analysis targets, assets, runtime binding and licenses for Planner, Coder, Reviewer and Team-Codex.
 For CBM include its complete native Codex subagents alongside the six VoltAgent helpers.
 Bind authorized repository/MCP roots without indexing or querying product data.
 Do not create an artificial test workspace or switch analysis alternatives silently.
@@ -344,7 +344,7 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
    Read back the Reviewer's `caveman-review` trigger and preserved review procedure.
    Read back the Coder SOUL process binding, per-task `$caveman` clause, and scope/clarity propagation, including restart/resume.
    Record the installed path and exact readback. Verify configured modes without a synthetic worker experiment.
-   Verify the selected analysis integration, complete original skills and native activation for Planner, Coder and Team-Codex.
+   Verify the selected analysis integration, complete original skills and native activation for Planner, Coder, Reviewer and Team-Codex.
    Do not add a second alternative or leave only a Maker reference.
    Vor Home-/Dialog-/Aufgabenbearbeitung Loader-/Kontextgrenze am Ziel lesen und **vollständige effektive
    SOUL-Aufnahme** pro Rolle nachweisen; Länge und Dateiexistenz genügen nicht.

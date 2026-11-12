@@ -69,7 +69,7 @@ Do not infer live behavior from configuration or file checks.
 - Required shared dependency availability and established interface readbacks: pending.
 - Per-role model/provider/reasoning settings, effective overrides, and native configuration readbacks: pending.
 - Team-Codex process HOME, separate CODEX_HOME, binary, protected access location/status, and Git identity configuration readbacks: pending.
-- Board/workspace, bank ownership and per-role memory bindings, selected analysis integration and target paths: pending.
+- Board/workspace, bank ownership and per-role memory bindings, selected analysis integration and target paths for Planner, Coder, Reviewer and Team-Codex: pending.
 - Planner communication identity, authorized users/channels, subscriptions, dispatcher/notifier ownership, and activation state: pending.
 - Component source repository/subpath, exact revision, license, complete file inventory/hashes, actual target, and discovery/configuration readbacks for each assigned component: pending.
 
@@ -111,6 +111,7 @@ Follow [Team updates](../references/update.md) for initialization, existing-team
 For an existing-team update, record the pre-update version and pending status before file application under [required Reviewer skill retirement](../references/update.md#required-reviewer-skill-retirement-1122).
 Keep its approval, external backup, native readbacks, and pending/completed poststep evidence in this record's progress and update sections.
 On every requested update, follow [Required upstream companion update](../references/update.md#required-upstream-companion-update), even when the Maker version is unchanged.
+Record missing selected Reviewer analysis assets and native bindings, including previously retired assets, and their approved restoration/readbacks.
 Before file application, record pre-update Maker version/commit, required/observed asset sources, exact targets, differences, decisions and per-component `pending` status here.
 Keep complete backup inventories/bytes, modes, ownership, binding readbacks and guarded companion restoration evidence here.
 Mark a companion `complete` only after exact pinned bytes and required native readbacks pass; read back the saved evidence.

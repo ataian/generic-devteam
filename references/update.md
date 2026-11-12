@@ -210,6 +210,9 @@ Keep Hermes core and its distribution skills native-managed and outside Maker up
 Keep the Hindsight service untouched.
 
 1. **Inspect:** Resolve every assigned consumer, native registration/discovery root and actual source/target path before any write.
+   For the selected CBM or Graphify branch, inspect Planner, Coder, Reviewer and Team-Codex even when installation metadata is already current.
+   Include previously retired Reviewer analysis assets and missing MCP/CLI, cache, CWD, hook or discovery bindings in the concrete companion scope.
+   Preserve the confirmed alternative and nonselected assets; do not silently re-select.
    Compare exact commits and complete file/byte inventories, including hidden files, companions, legal files and local additions.
    Compare each installed asset against the required source, not merely its name, package version or earlier reviewed revision.
    Check native loading, duplicate/shadowed paths, ownership, modes, symlinks and shared consumers.
@@ -235,6 +238,7 @@ Keep the Hindsight service untouched.
    Keep the backup path and supported restoration route in the existing private record.
 4. **Apply:** Recheck all inspected targets and bindings for concurrent drift immediately before writes; stop on a difference.
    Apply only approved changes through [Integrations](integrations.md) and the selected [analysis recipe](code-analysis.md).
+   Restore missing selected Reviewer assets and native bindings through the selected analysis recipe within the approved companion scope.
    Keep complete upstream bytes unchanged; do not alter model/reasoning fields, plugin manifests or skill instructions.
    Keep shared runtime/PM mutations within the approved concrete scope; do not bootstrap or repair Hermes as a hidden prerequisite.
    Complete required assets and native loading before applying dependent role/skill file changes.
@@ -245,6 +249,7 @@ Keep the Hindsight service untouched.
    Distinguish exact asset matches, compatible runtime reuse, unresolved source provenance and unverified running-context loading.
    Verify unaffected roles/shared consumers against the pre-change inventory.
    Mark each companion `complete` only after all its required readbacks pass; save and read back that evidence.
+   Keep selected-analysis work pending until required Reviewer assets, configuration and native discovery readbacks pass.
    Resume pending work from the backup, prior evidence and actual native state on later updates, even after the Maker version advances.
    Report `files updated; team update incomplete` while required companion work is pending or deferred.
 6. **Rollback:** The file-helper rollback does not restore companion assets or native bindings.
@@ -373,7 +378,7 @@ Resume a pending retirement on later updates even if `installation.json` already
 Never infer migration completion from version alone.
 For a team created at or above `1.1.22`, use original setup and discovery evidence to establish that this crossing migration is not applicable.
 For an older team already reporting a newer version without completion evidence, resolve its pre-update evidence or reconcile the exact scope below.
-For legacy or unknown versions, resolve the source evidence or explicitly reconcile these five identities within the approved scope.
+For legacy or unknown versions, resolve the source evidence or explicitly reconcile these three identities within the approved scope.
 Do not silently skip an unknown version.
 
 The only removal targets are these exact Reviewer skill identities and their complete local trees:
@@ -383,11 +388,10 @@ The only removal targets are these exact Reviewer skill identities and their com
 | `minimal-change-engineering` | `<reviewer home>/skills/minimal-change-engineering/` |
 | `project-lib-versioning` | `<reviewer home>/skills/project-lib-versioning/` |
 | `screenshot-to-code` | `<reviewer home>/skills/screenshot-to-code/` |
-| `graphify` | `<reviewer home>/skills/graphify/` |
-| `codebase-memory` | `<reviewer home>/skills/codebase-memory/` |
 
-Confirm identities and recipe paths against the [manifest](../manifest.json), [own-skill recipe](setup.md#6-eigene-skills-rollen-und-textpersonalisierung), and [analysis recipes](code-analysis.md).
-This migration overrides local-adaptation preservation only for these five Reviewer skill trees.
+Confirm identities and recipe paths against the [manifest](../manifest.json) and [own-skill recipe](setup.md#6-eigene-skills-rollen-und-textpersonalisierung).
+This migration overrides local-adaptation preservation only for these three Reviewer skill trees.
+Preserve CBM/Graphify skills and bindings; restore the selected Reviewer integration through the approved upstream companion update.
 Include learned files, references, hidden files, and local additions.
 Do not copy retired methods into SOUL or other skills.
 Keep the native `sdlc-review` skill and its automatic integration unchanged.
@@ -405,7 +409,7 @@ Skill retirement does not authorize general integration or runtime cleanup.
 2. **Read-only discovery:** Resolve the exact Reviewer home from confirmed bindings and native profile inventory.
    Keep this discovery strictly read-only.
    Do not remove trees or change exclusions or bindings during discovery.
-   Inspect native discovery roots and every resolved source path for the five exact skill identities.
+   Inspect native discovery roots and every resolved source path for the three exact skill identities.
    Record source ownership, aliases, symlinks, and shared/external sources before selecting any removal path.
    Do not delete guessed paths or follow links into shared assets.
    If a shared or external source serves other roles, determine the supported Reviewer-specific exclusion or unbinding from the installed interface without applying it.
@@ -431,7 +435,7 @@ Skill retirement does not authorize general integration or runtime cleanup.
    Apply only the inspected, supported Reviewer-specific exclusions/unbindings for shared sources and obsolete references.
    Reconcile only the inventoried Reviewer-specific obsolete bindings within the approved update scope.
    Treat already absent skills as successful no-ops after native readback.
-5. **Verify and persist the result:** Verify absence of all five identities through native Reviewer discovery and source resolution.
+5. **Verify and persist the result:** Verify absence of all three identities through native Reviewer discovery and source resolution.
    Use an established fresh discovery/readback interface; stale session catalogs and missing files alone do not establish absence.
    Verify preservation of unaffected roles and assets against the pre-removal inventory.
    Read back affected Reviewer-specific bindings and the preserved native `sdlc-review` source/integration.
