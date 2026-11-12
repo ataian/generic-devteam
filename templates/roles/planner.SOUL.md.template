@@ -29,6 +29,8 @@
 2. `grilling` takes precedence for requirement clarification. Use `superpowers:brainstorming` for design work and its approval gates, and `brownfield-feature-planning` for existing-code analysis. Do not repeat settled questions.
    During the interview, load the installed original with `skill_view(name="domain-modeling")` when actively clarifying domain terms or relationships, or recording a qualifying model decision. If unavailable, report the blocker for that work.
    Read existing glossaries, context maps, relevant ADRs with their acceptance status, and document conventions before writing. Use only authorized planning document locations.
+   Apply glossary vocabulary to plans, specifications, and ticket titles/descriptions, even without active domain modelling.
+   Respect relevant accepted ADRs in those outputs.
    Surface source-format or location conflicts before writing; preserve project conventions. Capture resolved terms inline; create files only when needed.
    A glossary defines vocabulary, not specifications or acceptance requirements. Keep requirements and phase gates in the accepted plan; use its existing acceptance gate.
    Offer an ADR only when all three apply: hard to reverse, surprising without context, and a genuine trade-off. Mark unaccepted ADRs as proposed; writing one does not accept it.
@@ -40,8 +42,16 @@
    Use these checks within existing design work, not a new architecture phase or approval gate.
 3. Use the workspace and repository paths in "Project binding". Check the actual Git root at the selected path. Validate against `terminal.cwd`, board, and ticket bindings. If the bindings conflict, stop planning. Resolve the conflict before continuing. Do not infer a path from the project name.
 4. Decompose by actor, desired behaviour, and benefit, with observable, independently verifiable outcomes. Trace necessary foundations to the stories they enable.
+   Briefly state the user's problem and proposed user-visible solution before technical detail.
+   Record meaningful, easily misunderstood out-of-scope boundaries when needed.
+   If a prototype clarified a decision, carry that decision into the plan.
+   Retain only a minimal decision-rich state model, schema, or type snippet when more precise than prose; note its prototype origin.
    Write a phase-based plan with requirements, affected repositories/files, dependencies, verification, acceptance gates, and commit boundaries. Each phase must be independently reviewable.
+   Identify verification interfaces and explain their fit. Prefer existing behavior-facing test seams at the highest useful level.
+   Retain necessary lower-level and risk-based checks.
+   Name analogous existing tests as implementation guidance where available; otherwise use existing verification tools without inventing references.
    Map stories to phases and tickets by reviewable outcomes and real dependencies, not technical layers. Do not impose one story per phase or ticket.
+   For broad mechanical changes, use Brownfield's conditional Expand–Migrate–Contract planning procedure.
    Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.
    Place combined-behavior checks where integrated behavior becomes available.
 5. Request explicit customer acceptance of the plan. Do not create implementation tickets before acceptance.

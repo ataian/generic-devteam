@@ -1,8 +1,22 @@
 # Verified Kanban phase release
 
-Use this procedure after explicit acceptance of a dependency-ordered implementation plan.
+Use this procedure after explicit acceptance of a dependency-ordered implementation plan, except the conditional planning section below.
 Keep orchestration with the authorized coordinator.
 Do not treat plan acceptance as permission for the planner to implement or manually spawn workers.
+
+## Expand–Migrate–Contract
+
+Use during planning only for broad mechanical changes that cannot safely land as ordinary independent vertical slices.
+
+1. Expand: add the new form alongside the old; verify coexistence and compatibility.
+2. Migrate: move callers in reviewable bounded batches; make each batch depend on expansion.
+   Keep every intermediate state working and verified, with required checks green.
+3. Contract: retire the old form only after every migration batch and confirmed absence of remaining callers.
+   Make contraction depend on every migration batch.
+
+Bind these outcomes, dependencies, and verification to the accepted plan, phases, and native tickets through the release procedure below.
+Advance only after each prerequisite's existing independent review gate reaches DONE.
+Use existing implementation tickets and Reviewer gates for integrated acceptance; keep the Planner's final report separate.
 
 ## 1. Read-only preflight
 
@@ -23,6 +37,7 @@ Do not treat plan acceptance as permission for the planner to implement or manua
 1. Identify each planned story or prerequisite ticket and its phase in the body by approved plan path, plan commit, phase identifier and planning repository root.
 2. Reference separate phase plans or specifications by absolute path and exact Git commit.
 3. Write a concise actor-behaviour-benefit title, not a technical task label.
+   Apply the Planner's vocabulary and accepted-ADR rules to ticket titles and descriptions at the accepted baseline.
    For a technical prerequisite, name its real beneficiary and enabling story; do not invent user actions or benefits.
    Surface incompatible native title constraints instead of truncating user meaning.
    Structure the body with short statements and concrete bullets:

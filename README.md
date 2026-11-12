@@ -119,6 +119,10 @@ The Planner decomposes work by actor, behaviour, benefit, and independently veri
 Necessary foundations trace to enabled stories; stories, phases, and tickets need not map one-to-one.
 Tickets use concise user-story titles and structured bullets: goal/context, acceptance criteria, technical implementation, verification, dependencies and exact plan/phase/commit binding.
 Cards remain understandable alone, aligned with the authoritative accepted plan, and subject to Coder implementation discretion.
+Plans and ticket text use glossary vocabulary and relevant accepted ADRs, including without active domain modelling.
+Plan synthesis states the user's problem and user-visible solution, concrete test seams and analogous tests, meaningful scope boundaries, and decisions clarified by actual prototypes.
+Broad mechanical changes use conditional Expand–Migrate–Contract planning with working, verified intermediate states and existing native dependency/review gates.
+These are bounded adaptations of Matt Pocock's `to-spec` and `to-tickets`, not installations of either skill or a new tracker/approval workflow.
 Relevant module/interface choices use caller-contract, complexity-encapsulation, abstraction-removal, and present-variability checks within existing design work.
 The Planner also receives the owned [retro skill](skills/retro/README.md), adapted from Matt Pocock with full-process token economy.
 Request it with `/retro`, “Machen wir eine Retro zum letzten Lauf”, or a named historical session, ticket, or project.

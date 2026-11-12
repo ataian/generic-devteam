@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [

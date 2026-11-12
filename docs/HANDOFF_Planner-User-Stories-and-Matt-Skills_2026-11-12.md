@@ -6,18 +6,30 @@ Updated 12 November 2026 for the next discussion with Max, especially the remain
 Completed package work is not permission to change live teams.
 
 - Maker: `/home/mariko/projects/generic-devteam`, branch `v3`.
-- Observed Maker HEAD: `217ae6679945b51b0e9ec62c0bd1f5253ef5a815` (`TAS upstreamed, new retro skill`).
-- Committed Maker package: `2.3.0`; current working-tree candidate: `2.4.0`.
-- Max committed the earlier story-planning and TAS/Retro changes. The new questionnaire, TAS pin, coupled docs/tests and this handoff remain uncommitted.
+- Observed Maker HEAD: `2dc4ebf15ad7cce6f9a44c018c8251e6d0f7c9fc`.
+- Committed Maker package: `2.4.0`; current working-tree candidate: `2.5.0`.
+- Max committed the earlier story-planning, TAS/Retro, questionnaire and TAS-pin changes. The bounded planning adaptations below remain uncommitted.
 - TAS: `/home/mariko/projects/tas`, published `main` and clean local HEAD both `1f7bfeffdc5ddd0eb9a8be59e2153ce6394c4268`, package `1.1.0`.
 
 Re-read Git status, branch and HEAD on resumption. Preserve Max's commits and local changes.
 If HEAD moved during work, inspect the recorded baseline through current HEAD plus remaining working changes.
 The original handoff's older snapshots remain in Git history; they are not current work instructions.
 
+### Current bounded planning adaptation
+
+Max authorized selected `to-spec` and `to-tickets` methods as extensions of the existing Planner workflow, without installing either original skill.
+The `2.5.0` candidate adds glossary/accepted-ADR use in plans and tickets, user-facing problem/solution, concrete test seams and analogous tests, meaningful scope boundaries, and prototype-derived decisions.
+Conditional Expand–Migrate–Contract planning keeps intermediate states working and verified through native dependency and independent-review gates.
+Plan acceptance, story-first cards, Coder discretion, existing roles, and publication permissions remain unchanged.
+No integration-branch fallback, closing ticket, new tracker, live-team update, commit, or push is authorized by this change.
+Implementation evidence: `/home/mariko/.hermes/cache/scratch/planner-spec-tickets-20261112/implementation.md`.
+Independent review: **SPEC: PASS; QUALITY / TAS: PASS**, with no substantive findings. Report: `/home/mariko/.hermes/cache/scratch/planner-spec-tickets-20261112/review.md`.
+Parent verification: renderer 66 tests, OK; aggregate 173 tests, OK (skipped=1). The native transition scenarios skipped in the child ran successfully in the parent. The sole parent skip is the negative delegation-fence test, which passed in the child.
+Parent evidence: `/home/mariko/.hermes/cache/scratch/planner-spec-tickets-20261112/parent-test-results.json`. The reviewed implementation snapshot was verified unchanged before this status-only update. The review results below cover earlier changes only.
+
 ## Authorization and execution boundary
 
-Max commissioned these final actions: update this original handoff, integrate original `to-questionnaire` as a Planner upstream skill, and advance the Maker TAS pin to his published revision.
+The previous completed assignment covered this handoff, original `to-questionnaire` integration, and the published TAS pin.
 Those two implementation points are complete below. Final independent review status is recorded under Verification.
 CI was explicitly deferred; do not implement it.
 
@@ -115,7 +127,7 @@ Assess Max's ideas critically rather than agreeing automatically. Distinguish st
 
 ## Verification and evidence
 
-Current final package checks, not live-team qualification:
+Earlier questionnaire/TAS-pin package checks, not evidence for the current bounded adaptation or live-team qualification:
 
 - Maker focused: `65` tests, `OK`.
 - Maker aggregate: `169` tests, `OK (skipped=1)`.
@@ -142,4 +154,4 @@ Use existing development checks; keep package changes, saved target files, effec
 
 ## New-session starter
 
-> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md` and check the current Git state. Continue with me in German on the remaining Matt skill proposals for Coder, Team-Codex and Reviewer. Planner user stories, selected design questions, domain modelling, owned process Retro, original to-questionnaire and the published TAS pin are implemented; do not repeat them. Max committed earlier stages; preserve the remaining Maker working-tree changes. CI is deferred. Start as discussion, not installation or automatic implementation, and critically compare complete original methods with the current role contracts.
+> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md` and check the current Git state. Read the current bounded-adaptation evidence before continuing; its independent review is separate from earlier approvals. Continue with me in German on remaining Matt skill proposals for Coder, Team-Codex and Reviewer. Preserve committed earlier stages and current uncommitted work. CI is deferred. Start as discussion, not installation or automatic implementation, and critically compare complete original methods with current role contracts.

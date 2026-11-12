@@ -569,6 +569,44 @@ class ReasoningContractTests(unittest.TestCase):
                 self.assertNotIn(obsolete, text)
 
 
+    def test_planner_synthesis_carries_domain_context_and_test_seams(self):
+        """Static rendered contract; not a live planning or prototype exercise."""
+        planner = render_role(self.template("planner"), self.values("planner"), "planner")
+        workflow = planner.split("## Planning workflow\n", 1)[1].split("\n## ", 1)[0]
+        for clause in (
+            "Apply glossary vocabulary to plans, specifications, and ticket titles/descriptions, even without active domain modelling.",
+            "Respect relevant accepted ADRs in those outputs.",
+            "Read existing glossaries, context maps, relevant ADRs with their acceptance status, and document conventions before writing.",
+            "Mark unaccepted ADRs as proposed; writing one does not accept it.",
+            "A glossary defines vocabulary, not specifications or acceptance requirements.",
+            "Briefly state the user's problem and proposed user-visible solution before technical detail.",
+            "Identify verification interfaces and explain their fit.",
+            "Prefer existing behavior-facing test seams at the highest useful level.",
+            "Retain necessary lower-level and risk-based checks.",
+            "Name analogous existing tests as implementation guidance where available; otherwise use existing verification tools without inventing references.",
+            "Record meaningful, easily misunderstood out-of-scope boundaries when needed.",
+            "If a prototype clarified a decision, carry that decision into the plan.",
+            "Retain only a minimal decision-rich state model, schema, or type snippet when more precise than prose; note its prototype origin.",
+            "For broad mechanical changes, use Brownfield's conditional Expand–Migrate–Contract planning procedure.",
+            "Do not repeat settled questions.",
+            "Include relevant accepted glossary and ADR state in that baseline; bind exact paths and commits for separate records.",
+            "Do not create implementation tickets before acceptance.",
+        ):
+            with self.subTest(clause=clause):
+                self.assertIn(clause, workflow)
+        self.assertIn("Briefly state the user's problem", workflow)
+        self.assertLess(workflow.index("Briefly state the user's problem"), workflow.index("Write a phase-based plan"))
+        self.assertIn("Leave execution-time technical decisions within the accepted goal and constraints to Example.", planner)
+        for excluded in ("ideal number is one", "Check with the user that these seams", "ready-for-agent",
+                         'skill_view(name="to-spec")', 'skill_view(name="to-tickets")'):
+            self.assertNotIn(excluded, planner)
+        for name in ("to-spec", "to-tickets"):
+            self.assertNotIn(name, MANIFEST["upstream_components"])
+            self.assertNotIn(name, MANIFEST["own_skills"])
+            self.assertFalse((ROOT / "skills" / name).exists())
+            self.assertFalse(any(path.endswith("/" + name) for component in MANIFEST["upstream_components"].values()
+                                 for path in component.get("subpaths", [])))
+
     def test_selected_design_checks_stay_in_existing_conditional_workflow(self):
         planner = render_role(self.template("planner"), self.values("planner"), "planner")
         workflow = planner.split("## Planning workflow\n", 1)[1].split("\n## ", 1)[0]

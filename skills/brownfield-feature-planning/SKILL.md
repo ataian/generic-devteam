@@ -19,6 +19,7 @@ Use for a feature or correction that changes an existing application.
 Ground the plan in the current code, accepted requirements, and observable behavior.
 Use team clarification/design skills and their approval rules.
 Use the Planner's `domain-modeling` workflow.
+Apply the Planner's plan-synthesis, vocabulary, and accepted-ADR rules.
 On an explicit request for an expert questionnaire, load the original `to-questionnaire` with `skill_view(name="to-questionnaire")`.
 It drafts for one recipient; sending and plan acceptance retain their existing authorization gates.
 Keep existing roles and execution policy.
@@ -88,6 +89,7 @@ Keep unresolved source or behavior decisions explicit instead of introducing imp
 Do not adopt an earlier project's solution as a requirement.
 
 Define a finite acceptance path from the required behavior and concrete changed-code risks.
+Apply the Planner's test-seam rules to this acceptance path.
 Include relevant failure, repeat-run, privacy, and data-integrity cases.
 Use existing verification facilities before proposing new test infrastructure.
 Treat missing fixtures as bounded preparation work for the team.
@@ -105,6 +107,9 @@ Give each slice an observable, independently verifiable outcome across the relev
 Do not disguise database/API/UI layer tasks as stories by adding an actor prefix.
 Justify necessary foundations by the stories they enable and their verification gate.
 Choose phase and ticket boundaries for reviewability and real dependencies, not a one-story/one-phase/one-ticket rule.
+Include preparation or refactoring only when justified by the goal.
+Context-window fit can inform sizing; preserve coherent, independently reviewable outcomes without a fixed size cap.
+For broad mechanical changes that cannot safely land as independent vertical slices, load only [Expand–Migrate–Contract](references/kanban-phase-release.md#expandmigratecontract) during planning, before plan acceptance.
 Give each phase an independently reviewable deliverable with requirements, files, interfaces, dependencies, tests, gate, and commit boundary.
 Map gates to enabling changes.
 Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.

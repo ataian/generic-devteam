@@ -41,6 +41,41 @@ Bestandteile. Diese Notice dokumentiert den tatsächlichen Bestand und behauptet
 keine neue Rechtekette.
 Autorenprüfung und Integrationschecks sind kein unabhängiger Review.
 
+## Bounded planning adaptations: to-spec and to-tickets
+
+Planner synthesis and Brownfield migration planning adapt selected methods from [mattpocock/skills](https://github.com/mattpocock/skills) at `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`:
+- `skills/engineering/to-spec/SKILL.md` and `agents/openai.yaml`.
+- `skills/engineering/to-tickets/SKILL.md` and `agents/openai.yaml`.
+
+Adaptations retain domain vocabulary, accepted ADRs, user-facing problem/solution, concrete test seams, analogous tests, meaningful scope boundaries, and prototype-derived decisions.
+Wide mechanical changes use conditional Expand–Migrate–Contract with verified intermediate states and native dependencies/review gates.
+Existing story-first cards, accepted-plan authority, concrete technical context, Coder discretion, and role writing scope remain intact.
+Neither original skill is installed or bundled. Their tracker publication, extra approvals, one-seam ideal, blanket prefactoring, path/code ban, integration-branch fallback, and final integration ticket are not adopted.
+
+New adaptation text uses this package's MIT license. The original root MIT notice follows:
+
+> MIT License
+>
+> Copyright (c) 2026 Matt Pocock
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all
+> copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.
+
 ## Fremdkomponenten und technische Grenzen
 
 TAS is an external authoring dependency from [ataian/tas](https://github.com/ataian/tas), identified in the manifest and [source recipe](references/upstream-sources.md#tas).

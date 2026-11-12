@@ -43,7 +43,7 @@ class BrownfieldPackageTests(unittest.TestCase):
     def test_compact_core_has_operative_instructions(self):
         text = (SKILL / "SKILL.md").read_text()
         core_contract(text)
-        self.assertLessEqual(len(text.encode()), 14000)
+        self.assertLessEqual(len(text.encode()), 14500)
         for heading in ("## When to use", "## Planning procedure", "## Conditional references", "## Verification"):
             self.assertIn(heading, text)
         # Prevent a return to giant single-line incident histories.
@@ -127,9 +127,10 @@ class BrownfieldPackageTests(unittest.TestCase):
     def test_proposal_chain_budgets(self):
         core = (SKILL / "SKILL.md").stat().st_size
         # Bounded allowances, not assertions about token/monetary savings.
+        # Allow bounded synthesis pointers and conditional migration planning.
         for name, ceiling in (
-            ("data-discovery.md", 25000), ("replacement-imports.md", 28000),
-            ("operator-script-acceptance.md", 32000), ("kanban-status-inspection.md", 26000),
+            ("data-discovery.md", 25000), ("replacement-imports.md", 28500),
+            ("operator-script-acceptance.md", 32500), ("kanban-status-inspection.md", 26000),
             ("kanban-phase-release.md", 26000), ("kanban-triage-recovery.md", 29000),
         ):
             with self.subTest(reference=name):
@@ -188,6 +189,52 @@ class BrownfieldPackageTests(unittest.TestCase):
             self.assertIn(clause, release)
         for obsolete in ("create only missing phases", "complete accepted phase list", "Write a short goal"):
             self.assertNotIn(obsolete, release)
+
+    def test_synthesis_and_domain_rules_have_one_role_source(self):
+        text = (SKILL / "SKILL.md").read_text()
+        release = (SKILL / "references/kanban-phase-release.md").read_text()
+        for clause in (
+            "Apply the Planner's plan-synthesis, vocabulary, and accepted-ADR rules.",
+            "Apply the Planner's test-seam rules to this acceptance path.",
+        ):
+            with self.subTest(clause=clause):
+                self.assertIn(clause, text)
+        self.assertIn("Apply the Planner's vocabulary and accepted-ADR rules to ticket titles and descriptions at the accepted baseline.", release)
+
+    def test_wide_mechanical_changes_load_conditional_method_before_acceptance(self):
+        text = (SKILL / "SKILL.md").read_text()
+        phases = text.split("### 4. Build reviewable phases\n", 1)[1].split("\n### 5.", 1)[0]
+        self.assertIn(
+            "For broad mechanical changes that cannot safely land as independent vertical slices, load only "
+            "[Expand–Migrate–Contract](references/kanban-phase-release.md#expandmigratecontract) during planning, before plan acceptance.", phases)
+        self.assertIn("Include preparation or refactoring only when justified by the goal.", phases)
+        self.assertIn("Context-window fit can inform sizing; preserve coherent, independently reviewable outcomes without a fixed size cap.", phases)
+        self.assertIn("Do not create implementation tickets before explicit plan acceptance.", text)
+
+    def test_expand_migrate_contract_preserves_green_states_and_native_gates(self):
+        release = (SKILL / "references/kanban-phase-release.md").read_text()
+        heading = "## Expand–Migrate–Contract\n"
+        self.assertIn(heading, release)
+        section = release.split(heading, 1)[1].split("\n## ", 1)[0]
+        for clause in (
+            "Use during planning only for broad mechanical changes that cannot safely land as ordinary independent vertical slices.",
+            "Expand: add the new form alongside the old; verify coexistence and compatibility.",
+            "Migrate: move callers in reviewable bounded batches; make each batch depend on expansion.",
+            "Keep every intermediate state working and verified, with required checks green.",
+            "Contract: retire the old form only after every migration batch and confirmed absence of remaining callers.",
+            "Make contraction depend on every migration batch.",
+            "Bind these outcomes, dependencies, and verification to the accepted plan, phases, and native tickets through the release procedure below.",
+            "Advance only after each prerequisite's existing independent review gate reaches DONE.",
+            "Use existing implementation tickets and Reviewer gates for integrated acceptance; keep the Planner's final report separate.",
+        ):
+            with self.subTest(clause=clause):
+                self.assertIn(clause, section)
+        self.assertLess(section.index("Expand:"), section.index("Migrate:"))
+        self.assertLess(section.index("Migrate:"), section.index("Contract:"))
+        for excluded in ("integration branch", "ungreen", "integrate-and-verify", "ready-for-agent"):
+            self.assertNotIn(excluded, section)
+        self.assertIn("Use this procedure after explicit acceptance", release)
+        self.assertIn("Leave later advancement to the dispatcher and independent review gates.", release)
 
     def test_domain_clarification_uses_planner_workflow(self):
         text = (SKILL / "SKILL.md").read_text()
