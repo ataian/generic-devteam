@@ -434,7 +434,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(script['transform'], 'copy-v1')
         self.assertEqual(Path(script['target']).read_bytes(), (self.repo / script_source).read_bytes())
         self.assertIn(('team-codex', 'skills/screenshot-to-code/LICENSE'), mapped)
-        codex_entry = next(x for x in record['managed'] if x['role'] == 'team-codex' and x['source'].endswith('/LICENSE'))
+        codex_entry = next(x for x in record['managed'] if x['role'] == 'team-codex' and x['source'] == 'skills/screenshot-to-code/LICENSE')
         self.assertEqual(codex_entry['target'], str(Path(self.roles['team-codex']['home']) / '.agents/skills/screenshot-to-code/LICENSE'))
         self.assertEqual(record['maker_commit'], self.base)
         self.assertEqual((self.state / 'installation.json').stat().st_mode & 0o777, 0o600)
@@ -461,6 +461,89 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(entry['transform'], 'copy-v1')
         self.assertEqual((self.state / 'baselines' / entry['baseline']).read_bytes(), original)
         self.assertEqual(record['maker_commit'], self.git('rev-parse', 'HEAD').strip())
+
+    def diagnosis_added_to_existing_team(self):
+        """Synthetic prior install without this owned skill; no live discovery."""
+        path = self.repo / 'manifest.json'
+        manifest = json.loads(path.read_text())
+        self.assertIn('diagnosing-bugs', manifest['own_skills'], 'Missing owned diagnosis delivery')
+        source = self.repo / 'skills/diagnosing-bugs'
+        files = {p.relative_to(self.repo).as_posix(): p.read_bytes() for p in source.rglob('*') if p.is_file()}
+        self.assertEqual(set(files), {'skills/diagnosing-bugs/' + name for name in
+                                     ('SKILL.md', 'README.md', 'LICENSE', 'NOTICE.md', 'references/method.md')})
+        entry = manifest['own_skills'].pop('diagnosing-bugs')
+        self.git('rm', '-r', 'skills/diagnosing-bugs')
+        path.write_text(json.dumps(manifest))
+        self.commit('fixture prior installation without diagnosis')
+        target = Path(self.roles['team-codex']['home']) / '.agents/skills/diagnosing-bugs'
+        shutil.rmtree(target)
+        self.initialize()
+        before = (self.state / 'installation.json').read_bytes()
+        manifest['own_skills']['diagnosing-bugs'] = entry
+        path.write_text(json.dumps(manifest))
+        for relative, content in files.items():
+            p = self.repo / relative
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(content)
+        self.commit('fixture newly assigned whole diagnosis tree at same package version')
+        return files, target, before
+
+    def test_new_owned_diagnosis_tree_maps_only_to_codex_and_retains_rollback_additions(self):
+        files, target, before = self.diagnosis_added_to_existing_team()
+        unaffected = {str(p): p.read_bytes() for role in ('planner', 'coder', 'reviewer')
+                      for p in Path(self.roles[role]['home']).glob('SOUL.md')}
+        # A real operational recipe change retains the existing dependency gate.
+        self.change('references/setup.md', '\nDiagnosis delivery recipe fixture update.\n')
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertIn('references/setup.md', proposal['dependencies'])
+        entries = [e for e in proposal['entries'] if e['source'] in files]
+        self.assertEqual({e['source'] for e in entries}, set(files))
+        self.assertEqual({e['role'] for e in entries}, {'team-codex'})
+        for e in entries:
+            self.assertEqual(e['target'], str(target / Path(e['source']).relative_to('skills/diagnosing-bugs')))
+            self.assertEqual(e['transform'], 'copy-v1')
+            self.assertIsNone(e['before_hash'])
+            self.assertEqual(u.decoded(e['merged']), files[e['source']])
+        with self.assertRaisesRegex(ValueError, 'Operational dependency changes'):
+            u.apply(self.home, plan, decision='proceed', review='Fixture static review')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+        self.assertFalse(target.exists())
+        result = u.apply(self.home, plan, decision='proceed', review='Fixture static review',
+                         dependency_review='Approved synthetic file-only scope; no native activation')
+        self.assertEqual(result['status'], 'applied')
+        record = u.load_record(self.home)[2]
+        for e in entries:
+            self.assertEqual(Path(e['target']).read_bytes(), files[e['source']])
+            managed = next(x for x in record['managed'] if x['target'] == e['target'])
+            self.assertEqual((self.state / 'baselines' / managed['baseline']).read_bytes(), files[e['source']])
+        for p, content in unaffected.items():
+            self.assertEqual(Path(p).read_bytes(), content)
+        restored = u.rollback(self.home, Path(result['run']), decision='proceed')
+        self.assertEqual(set(restored['retained_additions']), {e['target'] for e in entries})
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+
+    def test_new_owned_diagnosis_collision_withholds_and_existing_local_edits_survive(self):
+        files, target, before = self.diagnosis_added_to_existing_team()
+        target.mkdir(parents=True)
+        main = target / 'SKILL.md'
+        main.write_bytes(b'Unrelated same-name local skill.\n')
+        plan = self.proposal()
+        self.assertIn(str(main), json.loads(plan.read_text())['conflicts'])
+        with self.assertRaisesRegex(ValueError, 'Text conflicts'):
+            u.apply(self.home, plan, decision='proceed', review='Collision unresolved')
+        self.assertEqual(main.read_bytes(), b'Unrelated same-name local skill.\n')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+        # Fixture-only reconciliation; real use requires the existing user decision.
+        main.unlink()
+        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture collision reconciled')
+        main.write_bytes(b'Local approved note\n' + main.read_bytes())
+        main.chmod(0o640)
+        self.change('skills/diagnosing-bugs/SKILL.md', '\nNew diagnosis instruction.\n')
+        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture local adaptation checked')
+        self.assertTrue(main.read_bytes().startswith(b'Local approved note\n'))
+        self.assertTrue(main.read_bytes().endswith(b'New diagnosis instruction.\n'))
+        self.assertEqual(u.file_mode(main), 0o640)
 
     def test_legacy_souls_preserve_drift_and_do_not_adopt_skills(self):
         original = Path(__file__).resolve().parents[1]

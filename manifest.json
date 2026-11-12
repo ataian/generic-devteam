@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -20,6 +20,7 @@
     "references/setup.md",
     "references/test_bound_recovery.py",
     "references/test_brownfield_planning.py",
+    "references/test_diagnosing_bugs.py",
     "references/test_render_reasoning.py",
     "references/test_retro.py",
     "references/test_triage_recovery.py",
@@ -38,6 +39,11 @@
     "skills/brownfield-feature-planning/references/replacement-imports.md",
     "skills/brownfield-feature-planning/scripts/recover-triage",
     "skills/brownfield-feature-planning/scripts/recover_triage.py",
+    "skills/diagnosing-bugs/LICENSE",
+    "skills/diagnosing-bugs/NOTICE.md",
+    "skills/diagnosing-bugs/README.md",
+    "skills/diagnosing-bugs/SKILL.md",
+    "skills/diagnosing-bugs/references/method.md",
     "skills/minimal-change-engineering/SKILL.md",
     "skills/plan-versioning-semver/SKILL.md",
     "skills/project-lib-versioning/SKILL.md",
@@ -153,6 +159,23 @@
       "license_path": null,
       "notice_path": "NOTICE.md",
       "skill_path": "skills/brownfield-feature-planning/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
+    "diagnosing-bugs": {
+      "status": "included",
+      "targets": {
+        "codex": [
+          "team-codex"
+        ]
+      },
+      "origin": "Owned proportional adaptation of Matt Pocock's diagnosing-bugs; exact source revision and changes in the skill NOTICE.",
+      "changes": "Copy the complete tree unchanged. Team-Codex classifies evidence before direct fix or full diagnosis; Coder explicitly invokes and validates results.",
+      "origin_ref": "references/upstream-sources.md#own-diagnosis",
+      "license_path": "skills/diagnosing-bugs/LICENSE",
+      "notice_path": "skills/diagnosing-bugs/NOTICE.md",
+      "skill_path": "skills/diagnosing-bugs/SKILL.md",
       "transport": {
         "SKILL.md": "SKILL.md"
       }

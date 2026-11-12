@@ -161,6 +161,23 @@ Separate homes reduce personal skill inheritance; they are not a sandbox.
 Preserve personal Codex files and project tool paths after the HOME change.
 Do not copy personal state to repair a binding.
 
+<a id="diagnosing-bugs"></a>
+## Owned diagnosing-bugs — Team-Codex
+
+Use the complete owned `skills/diagnosing-bugs/` tree from the selected Maker revision, including `references/method.md`, README, NOTICE, and full MIT license.
+Before writing, check native names/commands and all resolved skill candidates for `diagnosing-bugs`, including user, project/ancestor, config, admin, and system roots.
+Reuse the same managed skill through the normal update comparison; resolve unrelated same-name collisions with the user before replacing or shadowing a target.
+After the existing ownership, local-edit, backup, and authorization checks, copy it to `<CODEX_PROCESS_HOME>/.agents/skills/diagnosing-bugs/`.
+Keep every skill byte unchanged; use the existing whole-tree setup/update mapping, not another installer.
+
+Before role personalization, compare complete file sets and bytes and read back one unambiguous native discovery entry plus full `SKILL.md` and `references/method.md` content.
+Use the actual bound Team-Codex HOME/CODEX_HOME and established read-only discovery/loading interface, without a model call or bug experiment.
+After role delivery, read back the Coder's literal `$diagnosing-bugs` task/resume clause, emerging-regression instruction, and original-evidence validation.
+Keep its literal `$caveman` clause, process binding, native handoff, and independent-review requirements intact.
+Record saved-tree, discovery, and call-policy evidence separately in the existing private setup/update record.
+These checks establish delivery and invocation policy, not actual diagnosis behavior or adoption by an already running conversation.
+For rollback, use the existing guarded file-update procedure; newly added files remain retained until separately authorized removal.
+
 <a id="superpowers"></a>
 ## Superpowers — nur Planner
 

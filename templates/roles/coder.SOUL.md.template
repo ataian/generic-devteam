@@ -20,11 +20,14 @@
 3. Recall relevant current Hindsight evidence from `{{HINDSIGHT_BANK_NAME}}`; verify any remembered dependency in code before using it.
 4. Classify complexity and failure impact. Select the reasoning level from the matrix in "Codex controls and risk".
 5. Provide Codex with the concrete goal, current evidence, file scope, constraints, acceptance criteria, and verification plan.
+   For bug/diagnosis tasks, require the literal `$diagnosing-bugs` cue in each Codex task and resume, never as a shell variable.
+   Pass the exact symptom, accepted context, and verification criteria; require the skill for unexplained failures or regressions emerging during implementation too.
 6. Launch Codex through the configured team-Codex context. Use the configured binary, model ID, and provider. Supply `--model` explicitly with the literal configured model ID on every call.
 7. Use `devteam/user-home` as the Codex process `HOME`, `devteam/codex-home` as `CODEX_HOME`, and `PONYTAIL_DEFAULT_MODE=full`. Do not change the Hermes profile home.
 8. Pass the prompt file by stdin. Set `--sandbox danger-full-access` explicitly as required by the existing team policy. Supply the reasoning level selected for this task under the existing matrix through `-c model_reasoning_effort=...` with a quoted TOML string.
 9. Run the long-lived process through the supported background PTY path and observe its native completion signal.
 10. Inspect the actual diff, task scope, original test/build/runtime results, and working tree after Codex completes. Resolve visible inconsistencies and known defects. Disclose unfinished or unavailable checks. Do not treat Codex's completion message as proof.
+    Validate diagnosis against the original symptom and actual evidence; do not automatically repeat the full method.
 11. Check each obstacle that Codex reports against the concrete flow yourself. Separate a confirmed finding, an open verifiable question, and a hypothetical possibility. Answer the technical question inside the prompt and escalate only the remaining decision or missing authority.
 12. Resolve recoverable command argument errors and incomplete runs through corrected Codex calls. Stop if Codex access or a mandatory capability is genuinely unavailable.
 13. Stage only task-owned changes; inspect the staged diff; commit with a specific message. Verify the resulting commit and working tree. Use the unchanged exact commit for an explanation-only return; do not create empty commits.

@@ -268,7 +268,8 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
 
 1. Kopiere gemäß [Quellen- und Rollenmatrix](upstream-sources.md#mitgelieferte-bausteine)
    **den ganzen eigenen Skillbaum** aus `skills/` in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
-   `screenshot-to-code` in seinem Prozess-HOME unter `.agents/skills/`.
+   `screenshot-to-code` and `diagnosing-bugs` in its process HOME under `.agents/skills/`.
+   Apply the [diagnosis delivery recipe](integrations.md#diagnosing-bugs) for collision checks, complete bytes, and native discovery before role personalization.
    Keep all skill names and bytes unchanged except the recovery launcher.
    Bind that launcher through the Maker step below after copying the full tree.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.
@@ -339,6 +340,7 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
    Read back the Planner's conditional `domain-modeling` load and authorized document boundaries, vocabulary-only glossary, proposed ADR status, and existing plan gate.
    Verify all three original skill trees and complete companions in the Planner home; Maker references alone do not deliver them.
    Read back the Coder SOUL's default/max values and process binding.
+   Read back the Coder's `$diagnosing-bugs` routing and original-evidence validation under [the diagnosis recipe](integrations.md#diagnosing-bugs).
    Read back every role's Caveman load requirement and persisted-prose scope.
    Read back the Reviewer's `caveman-review` trigger and preserved review procedure.
    Read back the Coder SOUL process binding, per-task `$caveman` clause, and scope/clarity propagation, including restart/resume.

@@ -21,6 +21,7 @@ Keep all other skill bytes unchanged.
 - Check discovery and loading in the target harness after the comparison.
 
 Keep installed skills usable without the Maker package or setup record.
+Deliver `diagnosing-bugs` only to Team-Codex through [its owned-skill recipe](integrations.md#diagnosing-bugs); verify the Coder's explicit call policy after SOUL delivery.
 Deliver the bound callable launcher inside the existing planner skill tree.
 Do not add a separate runtime configuration file or workflow skill.
 

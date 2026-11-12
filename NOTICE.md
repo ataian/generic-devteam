@@ -33,6 +33,7 @@ Planversionen und spätere Zielprojektversionen sind unabhängig.
 | `plan-versioning-semver` 1.0.0 | Übernommene, vom Nutzer bearbeitete Skillfassung, Autorenfeld `Mariko`. Kein Lizenzfeld und keine separate Lizenz-/Notice-Datei im Skillbaum. |
 | `project-lib-versioning` 1.0.0 | Übernommene, vom Nutzer bearbeitete Skillfassung. MIT-Angabe im Frontmatter; keine separate Lizenz-/Notice-Datei im Skillbaum. Der historische Autoren-/Auditverweis im Skill ist dadurch nicht zusätzlich belegt. |
 | `retro` 0.1.0 | Owned process/environment retrospective adapted from Matt Pocock's method, with full-process token economy. The complete [skill NOTICE](skills/retro/NOTICE.md) records the original revision and adaptations; its [MIT license](skills/retro/LICENSE) retains the original copyright and permission notice. No upstream runtime installation. |
+| `diagnosing-bugs` 0.1.0 | Owned proportional diagnosis adaptation of Matt Pocock's complete method at `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`. Team-Codex only; compact classifier and conditionally required method. The [skill NOTICE](skills/diagnosing-bugs/NOTICE.md) records source companions and justified differences; its complete [MIT license](skills/diagnosing-bugs/LICENSE) retains Matt's original copyright/permission. No upstream runtime installation or automatic synchronization. |
 
 Die eigenen Skills liegen als fertige Bäume unter `skills/` und werden beim Setup
 einschließlich aller vorhandenen Begleitdateien unverändert kopiert. Die Paketlizenz

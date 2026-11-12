@@ -14,6 +14,7 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | Skill / lokale Quelle | Ziel |
 |---|---|
 | <a id="own-planning"></a>[brownfield-feature-planning](../skills/brownfield-feature-planning/SKILL.md) | Hermes-Planner |
+| <a id="own-diagnosis"></a>[diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | Team-Codex |
 | <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes-Planner |
 | <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Hermes-Planner |
 | <a id="own-lib-versioning"></a>[project-lib-versioning](../skills/project-lib-versioning/SKILL.md) | Planner and Coder |
@@ -26,6 +27,10 @@ Before installing or updating it, check the target's native command registry and
 Reuse the same managed skill through the normal update comparison; resolve any unrelated same-name skill or built-in command with the user before writing, rather than silently renaming or shadowing it.
 Read back one unambiguous owned `retro` and its complete reference through native discovery/loading; distinguish slash-command availability from an existing conversation's cached catalog.
 Do not execute a retrospective as an installation test. Invocation requires an explicit user request, such as `/retro` or a natural-language retrospective request.
+
+The owned `diagnosing-bugs` adapts Matt Pocock's method with evidence-based direct-fix/full-diagnosis selection.
+Copy its complete tree, [NOTICE](../skills/diagnosing-bugs/NOTICE.md), original [MIT license](../skills/diagnosing-bugs/LICENSE), and method reference through the [owned-skill recipe](integrations.md#diagnosing-bugs).
+Coder routes and validates; Team-Codex owns the method. This is not an additional upstream runtime component.
 
 <a id="own-roles"></a>
 Die SOUL-Vorlagen für [Planner](../templates/roles/planner.SOUL.md.template),

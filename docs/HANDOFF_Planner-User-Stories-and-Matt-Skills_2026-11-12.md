@@ -2,13 +2,13 @@
 
 ## Purpose and current snapshot
 
-Updated 12 November 2026 for the next discussion with Max, especially the remaining Coder, Team-Codex and Reviewer proposals.
+Updated 12 November 2026 for the commissioned proportional diagnosis adaptation and remaining Team-Codex/Reviewer proposals.
 Completed package work is not permission to change live teams.
 
 - Maker: `/home/mariko/projects/generic-devteam`, branch `v3`.
-- Observed Maker HEAD: `2dc4ebf15ad7cce6f9a44c018c8251e6d0f7c9fc`.
-- Committed Maker package: `2.4.0`; current working-tree candidate: `2.5.0`.
-- Max committed the earlier story-planning, TAS/Retro, questionnaire and TAS-pin changes. The bounded planning adaptations below remain uncommitted.
+- Diagnosis implementation start HEAD: `a2131704598e3864a4bde8882cc6ea2b69169474`.
+- Committed Maker package: `2.5.0`; current working-tree candidate: `2.6.0`.
+- Max committed the earlier story-planning, TAS/Retro, questionnaire, TAS-pin and bounded to-spec/to-tickets adaptations. Preserve their complete committed content.
 - TAS: `/home/mariko/projects/tas`, published `main` and clean local HEAD both `1f7bfeffdc5ddd0eb9a8be59e2153ce6394c4268`, package `1.1.0`.
 
 Re-read Git status, branch and HEAD on resumption. Preserve Max's commits and local changes.
@@ -18,7 +18,7 @@ The original handoff's older snapshots remain in Git history; they are not curre
 ### Current bounded planning adaptation
 
 Max authorized selected `to-spec` and `to-tickets` methods as extensions of the existing Planner workflow, without installing either original skill.
-The `2.5.0` candidate adds glossary/accepted-ADR use in plans and tickets, user-facing problem/solution, concrete test seams and analogous tests, meaningful scope boundaries, and prototype-derived decisions.
+Committed `2.5.0` adds glossary/accepted-ADR use in plans and tickets, user-facing problem/solution, concrete test seams and analogous tests, meaningful scope boundaries, and prototype-derived decisions.
 Conditional Expand–Migrate–Contract planning keeps intermediate states working and verified through native dependency and independent-review gates.
 Plan acceptance, story-first cards, Coder discretion, existing roles, and publication permissions remain unchanged.
 No integration-branch fallback, closing ticket, new tracker, live-team update, commit, or push is authorized by this change.
@@ -35,7 +35,26 @@ CI was explicitly deferred; do not implement it.
 
 This was package authoring and permitted offline/synthetic regression testing, not a Maker setup run.
 No live-team installation, profile/service change, deployment, commit or push was performed by Mariko.
-Further role changes begin as discussion and require their own agreed scope.
+The diagnosis extension below has its own explicit implementation mandate. Other role proposals remain discussion-only.
+
+### Proportional diagnosis adaptation — implemented and independently approved
+
+Max approved implementation through one bounded subagent with TAS; an independent read-only reviewer approved the candidate and the parent completed package acceptance.
+Owned `skills/diagnosing-bugs/` targets Team-Codex only, with a compact evidence classifier and conditionally required full method.
+Direct fixes require concrete symptom/cause evidence, a clear affected flow/correction, and an exact reproducible check.
+Unclear or competing causes, intermittent/state-dependent failures, performance isolation, and unresolved/recurring apparent fixes trigger full diagnosis without restarting completed work or adding approval rounds.
+The skill also covers unexplained failures/regressions emerging during ordinary implementation.
+Coder supplies a literal `$diagnosing-bugs` cue and validates original evidence without automatically repeating diagnosis; Planner/Reviewer contracts and native guards remain unchanged.
+Manifest, setup, native bindings, integration/readbacks, and the existing whole-tree updater carry complete method/legal bytes and the call policy together.
+Full Matt source and companions at the existing pin were read; NOTICE records proportionality, protected-data, and target-workflow adaptations.
+No original HITL helper is bundled: existing communication/protected input suffices for necessary last-resort human reproduction.
+
+Implementation, exact test results, hashes, full snapshots and diff: `/home/mariko/.hermes/cache/scratch/diagnosing-bugs-maker-20261112/implementation.md`.
+Independent review: **SPEC: PASS; QUALITY / TAS: PASS**, with no substantive findings. Report: `/home/mariko/.hermes/cache/scratch/diagnosing-bugs-maker-20261112/review.md`.
+Parent verification: renderer 66 tests, OK; aggregate 184 tests, OK (skipped=1); package/export checks passed. Native transitions unavailable in the child ran in the parent. The sole parent skip, `No delegation fence in this process`, is the negative guard test exercised in the child.
+Parent evidence: `/home/mariko/.hermes/cache/scratch/diagnosing-bugs-maker-20261112/parent-test-results.json`. All 21 scoped files matched the independently reviewed hashes before this status-only handoff update. Other reviewed implementation files remain unchanged.
+Package checks and independent instruction review do not prove live discovery, model behavior, or activation; those are outside this authoring assignment.
+Work remains unstaged and uncommitted. No live installation, profile/runtime/service change, commit, push, or CI work was performed.
 
 ## Completed decisions and implementations
 
@@ -112,8 +131,7 @@ Its pending recommendations for TAS, Retro and questionnaire are superseded by t
 
 | Consumer | Candidate | Discussion boundary |
 |---|---|---|
-| Hermes-Coder / Team-Codex | `diagnosing-bugs` | Reproduction, minimization, falsifiable hypotheses and targeted probes; compare the complete method with current coverage. |
-| Team-Codex | `tdd` | Independent expected values and small red/green slices; inspect original constraints before choosing an adaptation. |
+| Team-Codex | `tdd` | Deferred by Max; standalone discussion record: [THE-TDD-IDEA](THE-TDD-IDEA.md). No integration commissioned. |
 | Team-Codex | `prototype` | Only for an explicit design uncertainty, not routine production development. |
 | Authorized PR author | `pr` | Optional original helper; preserve repository templates and separate commit/push/publication authority. |
 | Independent Reviewer | `code-review` | Requirements versus standards compliance; compare with native `sdlc-review`, not a replacement by default. |
@@ -121,7 +139,7 @@ Its pending recommendations for TAS, Retro and questionnaire are superseded by t
 | Hermes-Coder / genuine session transfer | `handoff` | Optional helper, not an extra report per ticket or a narrative for biasing an independent pass. |
 | Planner, separately commissioned | `improve-codebase-architecture` | Architecture survey only; not another mandatory planning gate. |
 
-None of these remaining candidates is commissioned or installed by this handoff.
+None of these remaining candidates is commissioned or installed by this handoff. The separately commissioned diagnosis adaptation above is implemented, tested and independently approved at package level. TDD is deferred, not a pending implementation task.
 Matt's methods are a strong preferred baseline. Read the complete original and companions before judging; justify departures with concrete runtime differences, authority/safety conflicts or observed failure.
 Assess Max's ideas critically rather than agreeing automatically. Distinguish static consumer checks from measured model behavior or token savings.
 
@@ -154,4 +172,4 @@ Use existing development checks; keep package changes, saved target files, effec
 
 ## New-session starter
 
-> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md` and check the current Git state. Read the current bounded-adaptation evidence before continuing; its independent review is separate from earlier approvals. Continue with me in German on remaining Matt skill proposals for Coder, Team-Codex and Reviewer. Preserve committed earlier stages and current uncommitted work. CI is deferred. Start as discussion, not installation or automatic implementation, and critically compare complete original methods with current role contracts.
+> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md` and check the current Git state. The diagnosis adaptation is implemented, package-tested and independently approved; preserve its uncommitted work and evidence rather than restarting completed gates. Continue with me in German on remaining Matt skill proposals for Team-Codex and Reviewer. Preserve committed earlier stages and current uncommitted work. CI is deferred. TDD is separately deferred in `docs/THE-TDD-IDEA.md`; resume it only when I request it. Start remaining proposals as discussion, not installation or automatic implementation, and critically compare complete original methods with current role contracts. Live-team updates remain separately authorized.
