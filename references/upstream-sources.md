@@ -38,6 +38,9 @@ Die SOUL-Vorlagen für [Planner](../templates/roles/planner.SOUL.md.template),
 [Reviewer](../templates/roles/reviewer.SOUL.md.template) gehören jeweils zum
 entsprechenden Hermes-Profil. Nur die vorgesehenen Platzhalter durch bestätigte
 Werte ersetzen; den übrigen Inhalt erhalten.
+The Reviewer SOUL contains the proportional Spec/technical-quality investigation method; its [adaptation provenance](../NOTICE.md#bounded-review-adaptation-code-review) records the exact Matt source and differences.
+Render and deliver that SOUL through [Role bindings](native-workflow.md#2-rollen-souls-personalisieren), without a separate `code-review` skill or method file.
+Native `sdlc-review` remains the original review lifecycle prerequisite.
 
 <a id="tas"></a>
 ## TAS authoring upstream

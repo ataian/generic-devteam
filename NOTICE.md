@@ -77,6 +77,21 @@ New adaptation text uses this package's MIT license. The original root MIT notic
 > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 > SOFTWARE.
 
+## Bounded review adaptation: code-review
+
+The [Reviewer SOUL](templates/roles/reviewer.SOUL.md.template#proportional-investigation) adapts Matt Pocock's complete `skills/engineering/code-review/` method from [mattpocock/skills](https://github.com/mattpocock/skills) at `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`.
+Source read: `SKILL.md`, `agents/openai.yaml`, and root MIT `LICENSE`.
+The full original copyright and permission notice is retained above and applies to this source too.
+New adaptation text uses this package's MIT license.
+
+Retained: parallel fresh-context Spec and standards perspectives, distinct axes, documented conventions over smell heuristics, and no ritual manual duplication of mechanically enforced rules.
+Adapted: direct small-review path; broader technical correctness; mandatory accepted-plan and exact implementation-state binding; Reviewer validation, coverage and native verdict ownership; coordinated checks and correction evidence reuse.
+A qualified HIGH technical helper can satisfy the existing critical-invariant pass; all existing independence, coverage, model/provider and permission conditions remain mandatory.
+The original's tracker discovery/setup, optional missing Spec, committed three-dot diff restriction, fixed word budget, verbatim report aggregation and automatic refactoring suggestions are not adopted.
+No original `code-review` skill, OpenAI agent metadata, helper profile, or competing review workflow is delivered.
+The method travels in the existing rendered Reviewer SOUL; native `sdlc-review` remains unchanged and automatically preloaded.
+There is no automatic upstream synchronization or claim of measured review-quality/token improvements.
+
 ## Fremdkomponenten und technische Grenzen
 
 TAS is an external authoring dependency from [ataian/tas](https://github.com/ataian/tas), identified in the manifest and [source recipe](references/upstream-sources.md#tas).

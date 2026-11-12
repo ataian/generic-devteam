@@ -188,6 +188,10 @@ Read the proposal and the changed SOULs and skill files.
 Decode the proposal's `new_base` and `merged` fields as base64 if you inspect their bytes programmatically.
 Compare the candidate against neighboring instructions and local role rules.
 Record a concrete semantic review finding.
+For the Reviewer's proportional investigation, review direct/parallel selection, helper limits and exact code/plan binding, and conditional critical-invariant pass credit in the rendered SOUL.
+Preserve confirmed local model/reasoning and resource policies; resolve actual conflicts through the existing three-way review.
+Read back the full SOUL and subsequent-context loading after application under [Verification](verification.md); saved files do not establish live helper behavior.
+This method adds no skill tree, helper profile, runtime setting, or companion installation; preserve native `sdlc-review` management and preload.
 Do not treat a clean text merge as proof of semantic compatibility.
 If a conflict exists, preserve the proposal and resolve the affected local sections against the exact source revisions within the approved mandate.
 Prepare and review a new proposal after that resolution.

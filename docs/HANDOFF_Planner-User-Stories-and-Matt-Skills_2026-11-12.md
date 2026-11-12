@@ -2,12 +2,14 @@
 
 ## Purpose and current snapshot
 
-Updated 12 November 2026 for the commissioned proportional diagnosis adaptation and remaining Team-Codex/Reviewer proposals.
+Updated 12 November 2026 after implementation, independent review and parent acceptance of proportional two-axis review delegation.
 Completed package work is not permission to change live teams.
 
 - Maker: `/home/mariko/projects/generic-devteam`, branch `v3`.
 - Diagnosis implementation start HEAD: `a2131704598e3864a4bde8882cc6ea2b69169474`.
-- Committed Maker package: `2.5.0`; current working-tree candidate: `2.6.0`.
+- Max committed diagnosis and the TDD discussion record as Maker `2.6.0`; current implementation baseline is `018d899d4c6a4caf7c1e23ee6813e1207d0b8fe4`, branch `v3`.
+- Maker `2.7.0` review adaptation is complete, tested and independently approved; its changes remain unstaged and uncommitted.
+- The working tree was clean before this handoff update. Preserve that commit and subsequent local work; the review-delegation implementation has its own scope below.
 - Max committed the earlier story-planning, TAS/Retro, questionnaire, TAS-pin and bounded to-spec/to-tickets adaptations. Preserve their complete committed content.
 - TAS: `/home/mariko/projects/tas`, published `main` and clean local HEAD both `1f7bfeffdc5ddd0eb9a8be59e2153ce6394c4268`, package `1.1.0`.
 
@@ -35,7 +37,7 @@ CI was explicitly deferred; do not implement it.
 
 This was package authoring and permitted offline/synthetic regression testing, not a Maker setup run.
 No live-team installation, profile/service change, deployment, commit or push was performed by Mariko.
-The diagnosis extension below has its own explicit implementation mandate. Other role proposals remain discussion-only.
+Diagnosis is complete. Max separately commissioned the review-delegation extension below through a subagent with TAS. Other remaining role proposals are discussion-only.
 
 ### Proportional diagnosis adaptation — implemented and independently approved
 
@@ -54,7 +56,50 @@ Independent review: **SPEC: PASS; QUALITY / TAS: PASS**, with no substantive fin
 Parent verification: renderer 66 tests, OK; aggregate 184 tests, OK (skipped=1); package/export checks passed. Native transitions unavailable in the child ran in the parent. The sole parent skip, `No delegation fence in this process`, is the negative guard test exercised in the child.
 Parent evidence: `/home/mariko/.hermes/cache/scratch/diagnosing-bugs-maker-20261112/parent-test-results.json`. All 21 scoped files matched the independently reviewed hashes before this status-only handoff update. Other reviewed implementation files remain unchanged.
 Package checks and independent instruction review do not prove live discovery, model behavior, or activation; those are outside this authoring assignment.
-Work remains unstaged and uncommitted. No live installation, profile/runtime/service change, commit, push, or CI work was performed.
+Max subsequently committed this work in `018d899d4c6a4caf7c1e23ee6813e1207d0b8fe4`. Mariko performed no live installation, profile/runtime/service change, commit, push, or CI work.
+
+### Code-review — implemented, tested and independently approved
+
+Max approved the following design and commissioned its Maker implementation through one subagent.
+For the next skill discussion, treat `code-review` as settled and continue with the other candidates.
+The requested forward-looking assumption is now backed by completed implementation, tests and independent review. Live-team activation remains outside scope.
+
+- Keep the existing independent Reviewer as the sole owner of coverage and the final verdict. Native `sdlc-review`, dispatcher integration, same-card Coder return, and exact-commit completion remain in force.
+- Divide investigation rather than adding two full reviews to an unchanged third full review.
+- Small, clearly bounded corrections can be reviewed directly. Changes with multiple substantive behavior cases or technical interactions use two parallel fresh-context helpers when both have meaningful distinct work. Use judgment, not line/file-count thresholds.
+- **Spec / requirement fidelity:** check the complete accepted plan, assigned ticket criteria, missing or changed behavior, scope drift, and whether evidence supports claimed fulfillment.
+- **Technical quality / standards:** check correctness, applicable repository conventions, surrounding code and callers, failure paths, regressions, architecture, security, and data integrity. This deliberately broadens Matt's Standards axis so technical correctness is not orphaned.
+- Bind both helpers to the same exact code state and accepted plan baseline. Give neutral evidence/source access and distinct briefs, not the other helper's findings or the main Reviewer's provisional conclusions.
+- The Reviewer validates decisive findings, resolves contradictions, closes concrete coverage gaps, and obtains needed execution evidence. Do not repeat every investigation or test suite automatically. Keep findings evidence-backed and distinguish violations from preferences.
+- Preserve the two axes in the assessment; one successful axis cannot cancel a defect on the other. The Reviewer owns the combined disposition. No new tickets, approval rounds, mandatory report files, or review roles.
+- Re-review affected areas and prior requested changes while reusing still-valid evidence. Do not restart both axes merely because a correction round or commit changed.
+- Preserve configured model/provider, reasoning, access, read-only, resource and operational limits through delegation. Helpers investigate and report; they do not implement or issue Kanban verdicts.
+- A technical helper may also satisfy the existing critical-invariant separate pass only when it meets every existing condition: explicit invariant coverage, fresh context, required HIGH reasoning, same allowed model/provider and permissions, and no Coder narrative or prior review conclusions before its own assessment. Otherwise obtain the required targeted pass. Neither unconditional extra passes nor removal of that safeguard is approved.
+- Adapt this method into the existing Reviewer equipment. Do not install Matt's original `code-review`, tracker setup, or competing orchestration. Keep upstream `sdlc-review` unchanged and disclose any existing upstream wording tension rather than bypassing native loading.
+
+Matt source: `skills/engineering/code-review/SKILL.md` and `agents/openai.yaml` in the archived pinned checkout below. Its original two parallel Standards/Spec reports, project-overrides-smell baseline and evidence-based judgment are useful references. Its reference-only committed diff, tracker discovery, optional missing spec, fixed report word limit and separate aggregation workflow do not replace our accepted-plan binding, required checks, or native verdict.
+
+#### Execution ledger — final acceptance
+
+- Commissioned scope: package authoring and offline regression checks only; no live-team rollout, installation, runtime/profile changes, staging, commit, push or CI work.
+- Worker requirements and execution evidence: `/home/mariko/.hermes/cache/scratch/code-review-maker-20261112/brief.md` and `implementation.md` respectively.
+- Recorded initial baseline: `/home/mariko/.hermes/cache/scratch/code-review-maker-20261112/parent-start-state.json`.
+- Implementation worker dispatched: `deleg_09fd1ac3`, child `sa-0-bec737ab`. Transcript: `/home/mariko/.hermes/cache/delegation/live/deleg_09fd1ac3/task-0.log`.
+- Implementation completed as Maker `2.7.0`: twelve scoped files, including one new test file. Method lives in the existing Reviewer SOUL; no separate review skill or runtime equipment was added.
+- Independent read-only review: **SPEC: PASS; QUALITY / TAS: PASS**, with no substantive findings. Report: `/home/mariko/.hermes/cache/scratch/code-review-maker-20261112/review.md`; exact reviewed identities: `reviewed-hashes.json` in the same directory.
+- Parent verification: renderer 66 tests, OK; aggregate 196 tests, OK (skipped=1); package/export checks passed. The sixteen native cases skipped under the worker's delegation guard ran successfully in the parent. The sole parent skip, `No delegation fence in this process`, is the negative guard test that passed in the worker. Guards were preserved.
+- Independent reviewer additionally ran ten focused contract tests and two updater regressions successfully; it reused the state-bound parent suite evidence rather than repeating full suites.
+- Parent evidence: `/home/mariko/.hermes/cache/scratch/code-review-maker-20261112/parent-test-results.json`. Before this status update, all 74 reviewed repository files matched their recorded hashes, including all twelve implementation files. Only the parent-owned handoff changes after that comparison; implementation remains unchanged.
+- Package acceptance is complete. No implementation or review gate remains pending. Leave current work unstaged and uncommitted; no live installation, profile/runtime/service change, commit or push was performed.
+- These checks cover authored contracts, rendering, package delivery and synthetic updater behavior. Effective helper settings, real delegated review behavior and live activation were not tested and are not implied by acceptance.
+- Better quality or token savings from this review split are hypotheses, not measured outcomes.
+
+### Handoff skill — not adopted
+
+Max chose not to add Matt's `handoff` to the devteam equipment.
+Existing plan/ticket/Codex/review/resumption contracts already carry normal transitions. Another generic summary would mostly duplicate those records.
+A manually requested session/topic handoff remains possible; it does not require installing the skill or adding a mandatory report per ticket.
+Do not reopen adoption without a new request or a concrete missing transition.
 
 ## Completed decisions and implementations
 
@@ -134,12 +179,10 @@ Its pending recommendations for TAS, Retro and questionnaire are superseded by t
 | Team-Codex | `tdd` | Deferred by Max; standalone discussion record: [THE-TDD-IDEA](THE-TDD-IDEA.md). No integration commissioned. |
 | Team-Codex | `prototype` | Only for an explicit design uncertainty, not routine production development. |
 | Authorized PR author | `pr` | Optional original helper; preserve repository templates and separate commit/push/publication authority. |
-| Independent Reviewer | `code-review` | Requirements versus standards compliance; compare with native `sdlc-review`, not a replacement by default. |
-| Independent Reviewer | `tdd` | Test-quality lens, especially assertions capable of disagreeing with the implementation. |
-| Hermes-Coder / genuine session transfer | `handoff` | Optional helper, not an extra report per ticket or a narrative for biasing an independent pass. |
+| Independent Reviewer | `tdd` | Deferred with the TDD topic; no separate test-quality skill assignment commissioned. |
 | Planner, separately commissioned | `improve-codebase-architecture` | Architecture survey only; not another mandatory planning gate. |
 
-None of these remaining candidates is commissioned or installed by this handoff. The separately commissioned diagnosis adaptation above is implemented, tested and independently approved at package level. TDD is deferred, not a pending implementation task.
+None of these remaining candidates is commissioned or installed by this handoff. Diagnosis is implemented, tested, independently approved and committed. Review delegation is implemented, tested and independently approved, with changes unstaged and uncommitted. TDD is deferred; `handoff` is not adopted.
 Matt's methods are a strong preferred baseline. Read the complete original and companions before judging; justify departures with concrete runtime differences, authority/safety conflicts or observed failure.
 Assess Max's ideas critically rather than agreeing automatically. Distinguish static consumer checks from measured model behavior or token savings.
 
@@ -154,7 +197,7 @@ Earlier questionnaire/TAS-pin package checks, not evidence for the current bound
 - Package verifier: complete inventories, versions, Python/JSON/YAML checks, relative links/anchors, selected original Matt bytes, published TAS pin and unchanged protected assets.
 - Role SOUL templates, other owned skills and the TAS checkout remain unchanged by this final delta.
 - Final independent review of questionnaire/pin/handoff: `READY`; no critical, important or substantive minor findings. The parent verified all reviewed file hashes before replacing this status line.
-- Review transcript: `/home/mariko/.hermes/cache/delegation/live/deleg_c3cd0dd6/task-0.log`. Review and implementation are complete; no worker remains pending.
+- Review transcript: `/home/mariko/.hermes/cache/delegation/live/deleg_c3cd0dd6/task-0.log`. Review and implementation of that earlier questionnaire/pin stage are complete; this is not the status of the newly commissioned review-delegation worker.
 
 Original current evidence under `/home/mariko/.hermes/cache/scratch/`:
 
@@ -172,4 +215,4 @@ Use existing development checks; keep package changes, saved target files, effec
 
 ## New-session starter
 
-> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md` and check the current Git state. The diagnosis adaptation is implemented, package-tested and independently approved; preserve its uncommitted work and evidence rather than restarting completed gates. Continue with me in German on remaining Matt skill proposals for Team-Codex and Reviewer. Preserve committed earlier stages and current uncommitted work. CI is deferred. TDD is separately deferred in `docs/THE-TDD-IDEA.md`; resume it only when I request it. Start remaining proposals as discussion, not installation or automatic implementation, and critically compare complete original methods with current role contracts. Live-team updates remain separately authorized.
+> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md` and check current Git state. Diagnosis and earlier stages are committed; preserve them. Code-review delegation is implemented, tested and independently approved as Maker `2.7.0`; its changes remain unstaged and uncommitted. Continue with the remaining Matt candidates without repeating completed implementation or review. `handoff` was not adopted. TDD remains separately deferred in `docs/THE-TDD-IDEA.md`; resume it only when I request it. Continue with me in German. Preserve current local work. CI is deferred. Other candidate discussions authorize no implementation or installation; live-team updates remain separately authorized.

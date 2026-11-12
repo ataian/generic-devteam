@@ -42,6 +42,14 @@ The Maker Reviewer explicitly refines that routing: customer-decision questions 
 Only the Coder escalates unresolved customer decisions through the Planner.
 Genuine technical interruptions still block and recover unfinished review with its provenance.
 Keep upstream method, lenses, baseline checks, automatic loading, native guards, independent critical-invariant passes, and exact-commit approval unchanged.
+The Reviewer SOUL owns proportional investigation: direct small corrections or distinct parallel Spec/technical-quality axes, followed by decisive-evidence validation and gap closure, not an automatic third full review.
+Use `test_review_investigation.py` for rendered/exported instruction scenarios and operative-body/qualification mutations; these are static contracts, not executed model behavior.
+The updater fixtures exercise actual SOUL delivery, local-rule preservation/collisions, pristine baselines and rollback without another transport.
+Check ordinary, missing-plan, correction, qualified/unqualified HIGH helper and unavailable-capability paths against the same required coverage and native outcomes.
+Inspect the available native delegation schema and effective model/provider/reasoning before relying on helper evidence.
+The inspected built-in schema supports parallel `tasks` with separate `goal`/`context`; it has no generic per-task model/reasoning fields.
+Native route/configuration can override inherited settings; prompt requests alone do not establish the required HIGH level.
+Use only an existing permitted compatible path; do not add profile settings or bypass guards to make the policy pass.
 This is a team-specific policy refinement, not a claim of universal upstream compatibility or live compliance.
 Inspect the installed skill and transition semantics when qualifying that boundary; report concrete drift rather than patching, shadowing, or disabling upstream.
 The upstream startup instruction to read the handoff first and the artifact lens instruction to read cold retain their existing read-order tension.

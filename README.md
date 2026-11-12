@@ -96,7 +96,10 @@ den geschützten Zielweg; das Protokoll speichert nur Secretort/Prüfstatus.
 Die Rollen bekommen vollständige eigene Skillbäume, unveränderte Rollenpflichten,
 personalisierte SOULs und native Modell-/Reasoning-Konfiguration. Im Ziel bezogene
 Originalkomponenten werden mit Revision, Dateimenge und Lizenz nachgewiesen.
+The Reviewer owns coverage and the final verdict. Its SOUL carries proportional investigation: direct review for small bounded corrections, parallel Spec and technical-quality helpers when both have substantive distinct work.
+Helpers share exact code/plan binding and inherited limits; the Reviewer validates decisive evidence without an automatic third full review.
 The Reviewer uses a separate fresh-context pass for material security, data-integrity, transaction, or concurrency invariants.
+A technical helper can satisfy that pass only with all required HIGH-reasoning, independence, invariant-coverage and permission conditions, validated against returned evidence; otherwise a targeted pass remains required.
 This requirement does not duplicate every test suite or restart the full review after each correction.
 The Reviewer reuses valid evidence and reruns affected checks while retaining required independent and final-state acceptance checks.
 Planner, Coder, Reviewer and Team-Codex receive the selected complete Graphify/CBM integration, including native configuration and discovery readbacks.

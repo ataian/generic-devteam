@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -23,6 +23,7 @@
     "references/test_diagnosing_bugs.py",
     "references/test_render_reasoning.py",
     "references/test_retro.py",
+    "references/test_review_investigation.py",
     "references/test_triage_recovery.py",
     "references/test_update_team.py",
     "references/update.md",

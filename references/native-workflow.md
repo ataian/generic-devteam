@@ -65,6 +65,8 @@ Alle Nichtplatzhalterbytes der bestätigten Vorlage bleiben erhalten.
 Use the role personalization accepted during preparation.
 Compare the rendered output with that scope before writing only `SOUL.md` in each confirmed role home.
 Read back complete bytes against the generated output and check effective full loading through the established native interface.
+The rendered Reviewer SOUL carries the proportional investigation method and conditional critical-invariant helper credit.
+No separate method reference or helper profile needs delivery; preserve the native `sdlc-review` preload.
 Do not overwrite foreign or concurrently changed files.
 Ask again only for a newly observed conflict or scope change.
 

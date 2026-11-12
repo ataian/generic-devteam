@@ -566,6 +566,67 @@ class UpdaterTests(unittest.TestCase):
         skill = self.home / 'skills/brownfield-feature-planning/SKILL.md'
         self.assertNotIn('New upstream instruction.', skill.read_text())
 
+    def test_reviewer_investigation_reaches_existing_soul_and_preserves_local_policy(self):
+        """Actual old/new SOUL delivery; no runtime activation or model call."""
+        source = self.repo / 'templates/roles/reviewer.SOUL.md.template'
+        candidate = source.read_text()
+        heading = '## Proportional investigation\n'
+        self.assertIn(heading, candidate)
+        body = candidate.split(heading, 1)[1].split('\n## ', 1)[0]
+        source.write_text(candidate.replace(heading + body + '\n', '', 1))
+        self.commit('synthetic prior reviewer without investigation method')
+        self.base = self.git('rev-parse', 'HEAD').strip()
+        target = Path(self.roles['reviewer']['home']) / 'SOUL.md'
+        setup = u.setup_data(self.state)
+        old = next(e for e in u.desired(self.repo, self.base, self.roles,
+                                       setup['confirmed_values'], bindings=self.bindings)
+                   if e['role'] == 'reviewer' and e['transform'] == 'render-role-v1')
+        target.write_bytes(old['content'])
+        self.initialize()
+        local = '\nLocal customer resource cap remains binding.\n'
+        target.write_text(target.read_text() + local)
+        neighbors = {r: (Path(self.roles[r]['home']) / 'SOUL.md').read_bytes()
+                     for r in ('planner', 'coder')}
+        source.write_text(candidate)
+        self.commit('deliver candidate investigation through existing SOUL mapping')
+        proposal = self.proposal()
+        result = u.apply(self.home, proposal, decision='proceed', review='Static candidate and local-cap compatibility')
+        self.assertEqual(result['status'], 'applied')
+        self.assertIn(heading, target.read_text())
+        self.assertIn('Spec / requirement fidelity', target.read_text())
+        self.assertIn('Technical quality / standards', target.read_text())
+        self.assertTrue(target.read_text().endswith(local))
+        _, _, record = u.load_record(self.home)
+        managed = next(e for e in record['managed'] if e['target'] == str(target))
+        baseline = (self.state / 'baselines' / managed['baseline']).read_bytes()
+        self.assertEqual(target.read_bytes(), baseline + local.encode())
+        self.assertEqual(managed['transform'], 'render-role-v1')
+        self.assertEqual(managed['installed_hash'], u.digest(target.read_bytes()))
+        for role, before in neighbors.items():
+            self.assertEqual((Path(self.roles[role]['home']) / 'SOUL.md').read_bytes(), before)
+        self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
+        self.assertEqual(target.read_bytes(), old['content'] + local.encode())
+
+    def test_reviewer_investigation_local_rule_collision_withholds_all_writes(self):
+        self.initialize()
+        source = self.repo / 'templates/roles/reviewer.SOUL.md.template'
+        target = Path(self.roles['reviewer']['home']) / 'SOUL.md'
+        clause = 'Review small, clearly bounded corrections directly'
+        self.assertIn(clause, source.read_text())
+        target.write_text(target.read_text().replace(clause, 'Locally amended small-correction policy'))
+        source.write_text(source.read_text().replace(clause, 'Revised upstream small-correction policy'))
+        self.commit('synthetic conflicting reviewer policy')
+        before = {e['target']: Path(e['target']).read_bytes()
+                  for e in json.loads((self.state / 'installation.json').read_text())['managed']}
+        marker = (self.state / 'installation.json').read_bytes()
+        proposal = self.proposal()
+        self.assertTrue(json.loads(proposal.read_text())['conflicts'])
+        with self.assertRaises(ValueError):
+            u.apply(self.home, proposal, decision='proceed', review='Unresolved local policy collision')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+        for path, content in before.items():
+            self.assertEqual(Path(path).read_bytes(), content)
+
     def test_three_way_keeps_local_edits_and_pristine_new_baseline(self):
         self.initialize()
         target = self.home / 'skills/brownfield-feature-planning/SKILL.md'
