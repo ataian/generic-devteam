@@ -109,11 +109,12 @@ Technical interruptions preserve unfinished review; approval completes the exact
 Work continues while a justified next approach remains, within explicit customer limits, provider quotas, operational permissions, and native safeguards.
 After the last required ticket reaches DONE, the Planner sends a short customer report from existing results and independent verdicts, without a closing ticket or another technical review.
 The file helper retains obsolete copies. Complete the [required version-gated Reviewer skill retirement](references/update.md#required-reviewer-skill-retirement-1122) after file application within the approved team update; preserve all assets outside its exact scope.
-The Planner receives Matt Pocock's original `grill-me`, `grilling`, and complete `domain-modeling` skills at the same pinned revision.
+The Planner receives Matt Pocock's original `grill-me`, `grilling`, `domain-modeling`, and `to-questionnaire` skills at the same pinned revision.
 Its SOUL requires `grilling` for requirements and conditionally loads domain modelling during that interview.
 Glossaries capture vocabulary; requirements and phase gates remain in the accepted plan. Unaccepted ADRs remain proposed.
 Coder and Reviewer consume relevant accepted definitions through existing routing; role authority and native dispatch remain unchanged.
 Interview, design, and explicit plan acceptance remain separate. Acquisition and readbacks use the [integration recipe](references/integrations.md#grill-me).
+Use `to-questionnaire` on request to draft a Markdown questionnaire for one external expert; creation does not authorize sending or accepting new scope.
 The Planner decomposes work by actor, behaviour, benefit, and independently verifiable outcomes, not technical layers.
 Necessary foundations trace to enabled stories; stories, phases, and tickets need not map one-to-one.
 Tickets use concise user-story titles and structured bullets: goal/context, acceptance criteria, technical implementation, verification, dependencies and exact plan/phase/commit binding.
@@ -161,7 +162,7 @@ The completion statement requires the private installation marker and pristine p
 
 For agent-instruction authoring/review, load the standalone [TAS upstream](references/upstream-sources.md#tas).
 This Maker contains no maintained TAS copy and installs no TAS into team roles.
-The manifest pin names the initial committed TAS package; the authoring branch distinguishes commissioned local changes from the pending publication/pin advancement.
+The manifest pin identifies published TAS `1.1.0`, including its writing-for-agents adaptation; record any commissioned local changes separately.
 
 For explicitly requested authoring/review or separately commissioned behavioral qualification,
 use [Development verification](references/development-verification.md).

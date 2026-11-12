@@ -46,9 +46,9 @@ Reuse a verified checkout or obtain it only within the authorized file-work scop
 If the source or a required reference is missing or unreadable, report the exact path and stop the affected authoring step.
 Keep `SKILL.md`, `references/`, provenance, and all legal files together; maintain normative wording upstream rather than copying it back here.
 
-The current pin identifies the initial TAS `1.0.0` commit, not the local `1.1.0` writing-for-agents changes.
-Local authoring can consume that commissioned working tree; portable pin advancement requires Max's TAS commit/publication and verification of its actual identity before updating the manifest.
-Keep this publication dependency explicit; a local working-tree improvement is not a published source revision.
+The manifest pin identifies published TAS `1.1.0`, including the writing-for-agents adaptation.
+Pin maintenance requires verification of the actual published commit before advancing `source_revision`.
+Record local working-tree changes separately from that published identity.
 TAS has no team-role targets and is not installed into Planner, Coder, Reviewer, or Team-Codex by setup or team updates.
 Their existing SOUL and Caveman contracts remain unchanged; ordinary team setup does not load this authoring branch.
 
@@ -101,7 +101,7 @@ CBM's existing static asset evidence derives from its selected `v0.12.1` source;
 | <a id="hermes-review"></a>sdlc-review | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Vollständiges `skills/devops/sdlc-review` | Hermes-Reviewer |
 | <a id="codex-cli"></a>Codex CLI | [openai/codex](https://github.com/openai/codex) | Geeignete vorhandene Binary oder offizielles Release für das Zielsystem | Team-Codex |
 | <a id="superpowers"></a>Superpowers | [obra/superpowers](https://github.com/obra/superpowers) | Vollständiges Pluginrepository einschließlich `.hermes-plugin/plugin.yaml`, `__init__.py` und `skills/` | Hermes-Planner |
-| <a id="grill-me"></a>grill-me / grilling / domain-modeling | [mattpocock/skills](https://github.com/mattpocock/skills) | Complete `skills/productivity/grill-me`, `skills/productivity/grilling`, and `skills/engineering/domain-modeling` trees, including `GLOSSARY-FORMAT.md`, `ADR-FORMAT.md`, `agents/openai.yaml`, and applicable legal files including root MIT `LICENSE`; same manifest revision | Hermes-Planner |
+| <a id="grill-me"></a>grill-me / grilling / domain-modeling / to-questionnaire | [mattpocock/skills](https://github.com/mattpocock/skills) | Complete `skills/productivity/grill-me`, `skills/productivity/grilling`, `skills/engineering/domain-modeling`, and `skills/productivity/to-questionnaire` trees, including `GLOSSARY-FORMAT.md`, `ADR-FORMAT.md`, `agents/openai.yaml`, and applicable legal files including root MIT `LICENSE`; same manifest revision | Hermes-Planner |
 | <a id="hindsight"></a>Hindsight-Integration | [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) | Vollständiges `hindsight-integrations/hermes`; vorhandenen Hindsight-Dienst anbinden | Alle Hermes-Rollen |
 | <a id="ponytail"></a>Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Vollständiges Repository mit Hermes-Plugin, `.codex-plugin/plugin.json`, Skills und Hooks | Hermes-Coder und Team-Codex |
 | <a id="caveman"></a>Caveman | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Complete `skills/caveman`, root `LICENSE`, `LICENSE-MIT`, `NOTICE`; writing only | All Hermes roles and Team-Codex |

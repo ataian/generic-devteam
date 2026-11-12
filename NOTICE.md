@@ -45,6 +45,7 @@ Autorenprüfung und Integrationschecks sind kein unabhängiger Review.
 
 TAS is an external authoring dependency from [ataian/tas](https://github.com/ataian/tas), identified in the manifest and [source recipe](references/upstream-sources.md#tas).
 The Maker ships no normative TAS copy and assigns no TAS team-role installation; the complete upstream package retains its own MIT and third-party notices.
+Matt Pocock's `to-questionnaire` is an unchanged Planner-only upstream asset in the existing pinned Matt component, not an owned adaptation or bundled Maker copy. Preserve its complete tree and the original root MIT license through the integration recipe.
 
 Fremdkomponenten sind Bezugsidentitäten mit dokumentierten Zielrezepten, keine
 mitexportierten Installationen. Ihre konkreten Bezugsstände behalten eigene

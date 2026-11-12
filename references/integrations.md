@@ -187,17 +187,17 @@ Pluginpfadpatches. Rückweg: nur eigene Plannerregistrierung nativ deaktivieren/
 entfernen, ursprüngliche fremde Plugin-/PM-Bestände bewahren.
 
 <a id="grill-me"></a>
-## grill-me / grilling / domain-modeling — Planner only
+## grill-me / grilling / domain-modeling / to-questionnaire — Planner only
 
 Original: [mattpocock/skills](https://github.com/mattpocock/skills).
-These three skills are fixed Planner equipment, not an additional setup choice.
+These four skills are fixed Planner equipment, not an additional setup choice.
 
 1. Use the manifest's existing `grill-me.source_revision` outside active discovery.
    Check complete assets and provenance without searching for the newest upstream revision.
-   Keep complete `skills/productivity/grill-me/`, `skills/productivity/grilling/`, and `skills/engineering/domain-modeling/` trees from that same revision.
+   Keep complete `skills/productivity/grill-me/`, `skills/productivity/grilling/`, `skills/engineering/domain-modeling/`, and `skills/productivity/to-questionnaire/` trees from that same revision.
    Include every `agents/openai.yaml` and all companion files, including `GLOSSARY-FORMAT.md` and `ADR-FORMAT.md`.
    Check required skill references for delivery completeness. Report a changed or missing asset contract instead of inventing a replacement.
-2. After target/collision checks and setup approval, copy the unchanged trees into the actual resolved Planner home's `skills/grill-me/`, `skills/grilling/`, and `skills/domain-modeling/` respectively.
+2. After target/collision checks and setup approval, copy the unchanged trees into the actual resolved Planner home's `skills/grill-me/`, `skills/grilling/`, `skills/domain-modeling/`, and `skills/to-questionnaire/` respectively.
    Include the original root `LICENSE` in each target tree and preserve other applicable legal files.
    Record source, resolved revision, complete file inventories/hashes, and actual target paths in the private setup record.
    Preserve local adaptations; reuse matching complete originals.
@@ -208,8 +208,12 @@ These three skills are fixed Planner equipment, not an additional setup choice.
    `grill-with-docs` only routes to those two skills; do not install it or add another interview phase.
    Keep domain-document authority and conditional use in the delivered Planner SOUL, without a runtime dependency on the Maker.
    Surface any upstream source-format or location conflict with existing project conventions before document writes; preserve upstream skill bytes and resolve the conflict within authorized planning boundaries.
+   On an explicit questionnaire request, load the original `to-questionnaire` through Hermes `skill_view`.
+   Use it for one recipient who holds missing expertise; it is optional during planning, not another mandatory interview.
+   Preserve its metadata without treating `disable-model-invocation` as a verified Hermes access control.
+   Drafting does not authorize sending the questionnaire or accepting its answers as product scope; retain existing communication and plan-acceptance gates.
 4. Compare complete file sets and bytes with the selected source, including legal files.
-   Verify native discovery and complete loading of all three main files and required companions through established readbacks.
+   Verify native discovery and complete loading of all four main files and required companions through established readbacks.
    After role delivery, read back the Planner SOUL's grilling precedence, conditional domain load, document authority, and existing plan-acceptance gate.
    Do not run a planning interview, explicit skill invocation experiment, or resume conversation during setup.
 

@@ -214,8 +214,8 @@ Do not place communication credentials or targets in shared project instructions
 
 ## 6. Eigene Skills, Rollen und Textpersonalisierung
 
-Before role acceptance, deliver complete original [grill-me, grilling, and domain-modeling](integrations.md#grill-me) trees to the Planner alongside [Superpowers](integrations.md#superpowers).
-All three are fixed Planner equipment; record complete source/target checks privately.
+Before role acceptance, deliver complete original [grill-me, grilling, domain-modeling, and to-questionnaire](integrations.md#grill-me) trees to the Planner alongside [Superpowers](integrations.md#superpowers).
+All four are fixed Planner equipment; record complete source/target checks privately.
 If any required tree or companion is unavailable, withhold the dependent Planner output and report the missing asset.
 
 Continue the private record from [setup-record.md](../templates/setup-record.md)

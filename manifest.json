@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -260,7 +260,7 @@
   "upstream_components": {
     "tas": {
       "original_repo": "https://github.com/ataian/tas",
-      "source_revision": "95c19de6f443f861a02fc0a71ecec0fd250adaf3",
+      "source_revision": "1f7bfeffdc5ddd0eb9a8be59e2153ce6394c4268",
       "subpaths": [
         "."
       ],
@@ -357,6 +357,7 @@
         "skills/productivity/grill-me",
         "skills/productivity/grilling",
         "skills/engineering/domain-modeling",
+        "skills/productivity/to-questionnaire",
         "LICENSE"
       ],
       "targets": {

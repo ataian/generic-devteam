@@ -1,152 +1,145 @@
-# Handoff: Planner user stories and Matt Pocock skills
+# Handoff: Planner user stories, Matt skills, TAS and retrospective
 
-## Purpose and snapshot
+## Purpose and current snapshot
 
-Continue Max's discussion in a separate session while the originating session coordinates the authorized Maker edit and its independent review.
+Updated 12 November 2026 for the next discussion with Max, especially the remaining Coder, Team-Codex and Reviewer proposals.
+Completed package work is not permission to change live teams.
 
-Snapshot: `2026-11-12T02:53:36+01:00`.
-Repository: `/home/mariko/projects/generic-devteam`.
-Branch: `v3`.
-Observed HEAD: `68395c91120286e907532dd28bb25a16c9bdec52` (`added matt's domain-modeling`).
-Working tree was clean before this new handoff.
-Package version: `2.1.0`.
+- Maker: `/home/mariko/projects/generic-devteam`, branch `v3`.
+- Observed Maker HEAD: `217ae6679945b51b0e9ec62c0bd1f5253ef5a815` (`TAS upstreamed, new retro skill`).
+- Committed Maker package: `2.3.0`; current working-tree candidate: `2.4.0`.
+- Max committed the earlier story-planning and TAS/Retro changes. The new questionnaire, TAS pin, coupled docs/tests and this handoff remain uncommitted.
+- TAS: `/home/mariko/projects/tas`, published `main` and clean local HEAD both `1f7bfeffdc5ddd0eb9a8be59e2153ce6394c4268`, package `1.1.0`.
 
-Re-read actual Git state before relying on this snapshot. The implementer will change the working tree. Max may also commit during execution; preserve his commits and inspect the recorded starting commit through current HEAD plus remaining working changes.
+Re-read Git status, branch and HEAD on resumption. Preserve Max's commits and local changes.
+If HEAD moved during work, inspect the recorded baseline through current HEAD plus remaining working changes.
+The original handoff's older snapshots remain in Git history; they are not current work instructions.
 
-## Current authorization
+## Authorization and execution boundary
 
-Max's latest request:
+Max commissioned these final actions: update this original handoff, integrate original `to-questionnaire` as a Planner upstream skill, and advance the Maker TAS pin to his published revision.
+Those two implementation points are complete below. Final independent review status is recorded under Verification.
+CI was explicitly deferred; do not implement it.
 
-> perfekt. lass dies bitte von einem subagent erledigen. und schreib eine neue übergabe datei mit dem aktuellen arbeitsstand, damit ich das hier parallel dazu in einer neuen session weiter besprechen kann.
+This was package authoring and permitted offline/synthetic regression testing, not a Maker setup run.
+No live-team installation, profile/service change, deployment, commit or push was performed by Mariko.
+Further role changes begin as discussion and require their own agreed scope.
 
-Authorized now: one implementation subagent for the agreed user-story planning/ticket changes and selected codebase-design questions, package documentation/tests, then independent review. The parent writes this handoff. This is direct subagent coordination for this task, not a change to generated teams' native Kanban workflow.
+## Completed decisions and implementations
 
-No live-team updates, installations, service/profile changes, commit, push, deployment, or unrelated Maker redesign are authorized. The remaining Matt-skill proposals are discussion items only.
+### Domain modelling and user-story planning
 
-## Implementation and review complete
+Implemented and independently approved in the earlier package changes; already committed by Max.
 
-Implementation and independent review finished in the originating session. Package `2.2.0` is uncommitted and approved for the reviewed Maker delta. This supersedes the original snapshot's work status, not its recorded baseline.
+- Planner receives original `grill-me`, `grilling` and complete `domain-modeling` at the existing Matt pin.
+- Domain modelling is conditional within the requirements interview. Glossaries define vocabulary, not requirements. Qualifying ADRs remain proposed until accepted.
+- Coder and Reviewer consume accepted definitions; Reviewer remains read-only. Native dispatch and existing plan approval remain intact.
+- Decompose by actor, behaviour, benefit and independently verifiable outcomes before mapping to phases/tickets. Necessary foundations trace to enabled stories. No one-story/one-phase/one-ticket rule.
+- Ticket titles express concise actor–behaviour–benefit stories, not technical-layer tasks with actor prefixes.
+- Descriptions contain goal/context, acceptance criteria, technical implementation, verification, dependencies and exact plan/phase/commit binding.
+- Cards stand alone without duplicating the complete plan. Keep concise bullets, binding constraints distinct from suggestions, and Coder implementation discretion.
+- Existing Caveman applies to persisted role text with clarity and safety preserved; no arbitrary length cap or successful-check catalogue.
+- Selected design questions cover caller contracts, actual complexity encapsulation, complexity returning when an abstraction is removed, and variability justified by present needs.
+- The full `to-tickets` and `codebase-design` workflows were not installed. Their unrelated tracker, orchestration and test restrictions were not imported.
 
-- Delegation: `deleg_5e123813`.
-- Worker: `sa-0-c77dc463`.
-- Live transcript: `/home/mariko/.hermes/cache/delegation/live/deleg_5e123813/task-0.log`.
-- Assignment: user-story-oriented planning, concise story titles and structured ticket descriptions, selected codebase-design questions, coupled package docs/tests. No other Matt-skill adoption.
+Earlier story implementation/review evidence: `/home/mariko/.hermes/cache/scratch/planner-stories-20261112T025628/` and `/home/mariko/.hermes/cache/scratch/planner-stories-review/REVIEW.md`.
+These identify the earlier stage, not the final questionnaire tests below.
 
-Current candidate matches the worker's final file snapshot. Baseline and observed HEAD remain `68395c91120286e907532dd28bb25a16c9bdec52`.
+### TAS extraction and writing-for-agents adaptation
 
-- Implementation evidence: `/home/mariko/.hermes/cache/scratch/planner-stories-20261112T025628/`.
-- Original aggregate result: 155 tests, `OK (skipped=16)`, exit 0. Skips concern native Kanban recovery transitions denied by the delegated-child guard; new story/design contract tests ran.
-- Review delegation: `deleg_b381f6f4`.
-- Review worker: `sa-0-558f3f7b`.
-- Review transcript: `/home/mariko/.hermes/cache/delegation/live/deleg_b381f6f4/task-0.log`.
-- Review verdict: `APPROVE`; no actionable defects against the approved requirements.
-- Review report: `/home/mariko/.hermes/cache/scratch/planner-stories-review/REVIEW.md`.
-- Parent verified that the current implementation bytes still match the reviewed snapshot and that `git diff --check` passes.
-- No implementation or review worker remains pending for this assignment. Live behaviour and effective loading were outside this package review. No live rollout, installation, commit, or push occurred in this task.
+Implemented, independently reviewed and published by Max.
 
-The originating session completed implementation coordination and independent review. The new session can continue discussing the remaining proposals. Preserve the reviewed uncommitted work; further changes need their own explicit scope. Do not repeat this completed assignment.
+- Sole normative source: `/home/mariko/projects/tas`; Maker's own TAS copy was removed.
+- TAS `1.1.0` incorporates Matt's pointer/trigger, information-hierarchy, leading-word, completion and pruning method, with a skill-mechanics reference and complete provenance/legal files.
+- Maker consumes it through `references/upstream-sources.md#tas`; no TAS installation into team roles or additional runtime role was introduced.
+- **DONE: published pin adopted.** Maker `upstream_components.tas.source_revision` is `1f7bfeffdc5ddd0eb9a8be59e2153ce6394c4268`.
+- Parent independently compared GitHub `refs/heads/main`, local clean TAS HEAD and the actual committed package. The former TAS publication/pin blocker is closed.
+- Maker README and source recipe now describe the published pin, not the initial TAS package or pending publication.
 
-The completed delegation handles remain evidence locators, not active job instructions. This handoff preserves the decisions and outcome for a separate conversation.
+`docs/HANDOFF_TAS-Upstream_2026-11-12.md` records the intermediate pre-publication stage only; its old pin/open release dependency is historical.
 
-## Completed: domain-model integration
+### Owned process retrospective
 
-The Maker already includes original `domain-modeling` in its existing Matt component, Planner-only, alongside `grill-me` and `grilling`. All use upstream revision `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`.
+Implemented and independently approved at both skill and Maker-integration level; committed by Max.
 
-The existing interview conditionally loads active domain modelling. Glossaries remain vocabulary, not specifications. ADRs require a hard-to-reverse, surprising, genuine trade-off decision. Draft records do not imply acceptance. Coder/Reviewer consume accepted definitions; Reviewer remains read-only. Existing plan approval, native dispatch and Coder discretion remain intact.
+- Own `skills/retro/` package, Planner-only; Matt's method is adapted with NOTICE and retained MIT text, not installed as an upstream runtime dependency.
+- Explicit user request only: `/retro` or natural language, with current conversation as the default scope.
+- Diagnose process and working environment, not product acceptance or another code review. Retrieve relevant original/worker records and disclose evidence gaps.
+- Include navigation, automated checks versus judgment, instruction/tool friction and token economy across loading, context, output, duplicate analysis, retries and documentation.
+- Return a few source-backed priorities; separate observation from causal hypothesis. No-change is valid. Implementation needs its own authorization.
+- Brownfield's former acceptance-oriented retrospective now routes to the owned skill.
+- Setup/update recipes require collision checks, complete-tree delivery and native readbacks without running a retrospective.
+- Actual target `/retro` availability and live-agent behavior were not qualified by package tests.
 
-The prior implementation was independently approved. Original verification: renderer 60 tests OK; aggregate 151 tests OK with 16 native Kanban-transition skips caused by the delegated-child guard. No guard bypass or live qualification. Evidence:
+### Original to-questionnaire upstream helper
 
-- `/home/mariko/.hermes/cache/scratch/domain-modeling-20261112T020909/`
-- `/home/mariko/.hermes/cache/delegation/live/deleg_8e587b5f/task-0.log`
+**DONE: integrated into Maker `2.4.0` for the Planner.** This is package integration, not installation into an existing live Planner.
 
-These are historical package results, not tests of the new user-story changes. The current observed HEAD contains the completed domain-model change; no need to reimplement it.
+- Extended existing `upstream_components.grill-me.subpaths` with `skills/productivity/to-questionnaire`; kept the existing Matt revision `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d` and Planner-only targets.
+- Original tree contains `SKILL.md` and `agents/openai.yaml`; deliver both unchanged and preserve the original root MIT license.
+- Setup, sources, integration recipe, required upstream companion updates, verification, README and NOTICE cover this fourth Matt skill.
+- Brownfield has an explicit request-triggered `skill_view(name="to-questionnaire")` pointer. It is optional in planning, not another mandatory interview.
+- Original method: clarify recipient and needed answers, then write `to-questionnaire-<slug>.md` for one recipient holding missing knowledge. Partial answers are allowed.
+- Drafting authorizes neither sending nor accepting new product scope. Keep project document conventions and existing communication/plan gates.
+- Preserve upstream metadata; do not claim `disable-model-invocation` enforces an unverified Hermes invocation restriction.
+- Existing file updater still does not install upstream assets. Its dependency gate and the authorized prose companion path cover the added subtree; regression tests verify this boundary.
 
-## Accepted decisions for the current worker
+### Coder/Reviewer allocation audit and deferred CI
 
-### 1. Plan by user stories, not technical layers
+The separate read-only audit found no concrete rule block justifying a blanket transfer from Coder to Reviewer. No corresponding role-template changes were made.
+Keep implementation-critical knowledge with Coder and independent systematic assessment with Reviewer.
+Route future concrete retro findings to an existing deterministic check or targeted Reviewer guidance, rather than adding generic rules everywhere.
 
-Max and his team think in user stories. Previous ticket cuts were not understandable to him.
+Running the existing Maker suite in CI was only an optional follow-up, not a required audit fix.
+Max explicitly chose to leave CI aside for now. No workflow was added; do not reopen it automatically.
 
-The Planner cuts work by actor, desired behaviour and benefit. Each slice should have an observable, independently verifiable result. Technical work supports those stories. Necessary foundations remain valid when their enabling purpose is clear.
+## Remaining discussion: other roles
 
-This changes actual plan decomposition, not merely ticket labels. Avoid turning a database/API/UI layer list into apparent stories by adding an actor prefix. Keep accepted requirements, meaningful dependency gates, independent review and exact plan baselines. Do not impose a new one-story/one-phase/one-ticket rule.
+Read [Matt-Pocock-Skill-Evaluation.md](Matt-Pocock-Skill-Evaluation.md) as the original full evaluation, not the current implementation ledger.
+Its pending recommendations for TAS, Retro and questionnaire are superseded by this handoff.
 
-### 2. Ticket titles express the user story
-
-Max explicitly wants titles written as user stories. Follow the existing development-language contract: authored role tickets use English, preserving deliberately localized product text.
-
-Use a concise actor–behaviour–benefit sentence. Preserve the human purpose instead of replacing it with a technical task name. For a necessary technical prerequisite, identify its real beneficiary/enabling story rather than inventing a fictional end-user action. Respect actual native title constraints; surface an incompatibility instead of silently losing meaning.
-
-### 3. Ticket descriptions are structured and concise
-
-Approved content structure:
-
-1. Goal and context.
-2. Acceptance criteria.
-3. Technical implementation.
-4. Verification.
-5. Dependencies and exact plan/phase reference.
-
-The card must be understandable without opening the full plan. Include the story's concise criteria and necessary implementation context; retain the accepted plan for authoritative scope and exact revision. Distinguish binding requirements/constraints from implementation suggestions. Keep technical discretion with the Coder.
-
-Max clarified:
-
-> ja, aber "für mich verständlich" heisst nun nicht endlose prosa.
-
-Short statements and concrete bullets, no essay or repeated whole-plan narrative. Do not add routine team instructions, setup recipes, successful-test catalogues or log inventories. Keep safety conditions and required evidence. No arbitrary character budget or mandatory filler under headings.
-
-Existing original Caveman already applies to authored Planner tickets/comments/handoffs. Preserve that contract; no new style skill is needed. Current source: `templates/roles/planner.SOUL.md.template`, Communication section.
-
-### 4. Replace conflicting old ticket instructions
-
-The existing Planner workflow and phase-release reference favour a short goal and plan reference instead of copying acceptance criteria. The new choice deliberately changes that content-selection rule. Replace the conflicting clauses and regression assertions where they occur. Do not leave both contracts active or append a contradictory exception.
-
-Keep exact plan/phase/commit binding and native fields. Structured card content is not a second independent source of product requirements. Do not redesign storage, dispatcher, recovery, or review routing.
-
-### 5. Adopt selected codebase-design questions
-
-Max accepted the previously discussed questions:
-
-- What must callers know, including invariants, ordering, failure modes and configuration?
-- Does a proposed module actually concentrate complexity, or merely pass it through?
-- Would removing the abstraction move complexity back into its callers?
-- Is the proposed variability or interchangeable implementation justified by current needs?
-
-Apply these within existing Planner design work when module/interface choices matter. This is selective improvement of our method, not installation of the full Matt skill. No new architecture phase, mandatory alternative-design agents, terminology replacement, broad refactoring, test deletion or added customer approvals for ordinary Coder choices.
-
-## Still open: discuss, do not implement yet
-
-| Candidate | Earlier recommendation | Decision state |
+| Consumer | Candidate | Discussion boundary |
 |---|---|---|
-| `to-questionnaire` | Optional original Planner helper for an absent domain expert | Not commissioned |
-| `retro` | Improve existing requested retrospectives with automation-versus-judgment analysis | Not commissioned |
-| `improve-codebase-architecture` | Explicit architecture-survey assignment only | Not commissioned |
-| `writing-for-agents` | Optional Maker-maintainer reference, not another team role | Not commissioned |
-| Coding/review proposals (`diagnosing-bugs`, `tdd`, `prototype`, `pr`, `code-review`, `handoff`) | Selective role-specific ideas | Not commissioned |
+| Hermes-Coder / Team-Codex | `diagnosing-bugs` | Reproduction, minimization, falsifiable hypotheses and targeted probes; compare the complete method with current coverage. |
+| Team-Codex | `tdd` | Independent expected values and small red/green slices; inspect original constraints before choosing an adaptation. |
+| Team-Codex | `prototype` | Only for an explicit design uncertainty, not routine production development. |
+| Authorized PR author | `pr` | Optional original helper; preserve repository templates and separate commit/push/publication authority. |
+| Independent Reviewer | `code-review` | Requirements versus standards compliance; compare with native `sdlc-review`, not a replacement by default. |
+| Independent Reviewer | `tdd` | Test-quality lens, especially assertions capable of disagreeing with the implementation. |
+| Hermes-Coder / genuine session transfer | `handoff` | Optional helper, not an extra report per ticket or a narrative for biasing an independent pass. |
+| Planner, separately commissioned | `improve-codebase-architecture` | Architecture survey only; not another mandatory planning gate. |
 
-The full collection review found no reason to replace the existing Maker process wholesale. Do not treat favourable assessments as installation permission.
+None of these remaining candidates is commissioned or installed by this handoff.
+Matt's methods are a strong preferred baseline. Read the complete original and companions before judging; justify departures with concrete runtime differences, authority/safety conflicts or observed failure.
+Assess Max's ideas critically rather than agreeing automatically. Distinguish static consumer checks from measured model behavior or token savings.
 
-## Source map and verification requirements
+## Verification and evidence
 
-Read current `SKILL.md`, `HERMES.md`, `AGENTS.md`, `README.md`, and `references/tas-authoring-standard.md` before Maker changes. Load their required sources. Apply TAS only to the changed text; preserve the existing role and safety contracts.
+Current final package checks, not live-team qualification:
 
-Useful project sources:
+- Maker focused: `65` tests, `OK`.
+- Maker aggregate: `169` tests, `OK (skipped=1)`.
+- Single skip: negative delegated-guard case reports `No delegation fence in this process`; native synthetic transition checks ran in the parent. No guard was disabled or bypassed.
+- TAS: `11` tests, `OK`.
+- Package verifier: complete inventories, versions, Python/JSON/YAML checks, relative links/anchors, selected original Matt bytes, published TAS pin and unchanged protected assets.
+- Role SOUL templates, other owned skills and the TAS checkout remain unchanged by this final delta.
+- Final independent review of questionnaire/pin/handoff: `READY`; no critical, important or substantive minor findings. The parent verified all reviewed file hashes before replacing this status line.
+- Review transcript: `/home/mariko/.hermes/cache/delegation/live/deleg_c3cd0dd6/task-0.log`. Review and implementation are complete; no worker remains pending.
 
-- `docs/Matt-Pocock-Skill-Evaluation.md`: complete earlier 39-skill evaluation; its baseline is historical, not the current implementation state.
-- `templates/roles/planner.SOUL.md.template`: planning authority, ticket content and Caveman scope.
-- `skills/brownfield-feature-planning/SKILL.md`: current source-grounded planning and phase decomposition.
-- `skills/brownfield-feature-planning/references/kanban-phase-release.md`: actual card creation/release contract.
-- `references/tas-authoring-standard.md`: authoring source; its old no-copy wording may need the same narrow alignment.
-- `references/test_render_reasoning.py`, `references/test_brownfield_planning.py`, `references/test_update_team.py`: existing regression contracts.
-- `references/development-verification.md`: package verification; no live experiments implied.
+Original current evidence under `/home/mariko/.hermes/cache/scratch/`:
 
-Upstream source checkout, read-only input:
-`/home/mariko/archive/mattpocock-evaluation-20261112/skills` at `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`.
+- `questionnaire-tas-maker-focused.txt`
+- `questionnaire-tas-maker-aggregate.txt`
+- `questionnaire-tas-tests.txt`
+- `questionnaire-tas-package-check.json`
+- `verify_questionnaire_tas_published.py`
 
-Relevant upstream files: `skills/engineering/to-tickets/SKILL.md`; `skills/engineering/codebase-design/SKILL.md` and its companions. Read for ideas, not instructions to execute foreign workflows. Do not import their tracker setup, integration-branch orchestration, blanket test restrictions or unrelated assets.
-
-Current worker acceptance: coherent minimal instruction changes, coupled docs/tests, preserved native boundaries and Caveman scope, one package version bump in both sources under existing SemVer, focused then aggregate package tests, manifest/version/link checks and `git diff --check`. Distinguish real test results from static contract checks. Native guarded skips remain explicit. Independent review must assess the exact final delta before completion; live Planner behaviour is outside this task.
+For new Maker edits, read current root `SKILL.md`, `AGENTS.md`, `HERMES.md`, `README.md` and the TAS source branch in `references/upstream-sources.md#tas`.
+Do not reload the removed Maker-local TAS path.
+Relevant consumers: role templates, Brownfield entry/references, `references/integrations.md`, `references/update.md` and existing regression suites.
+Read-only Matt source checkout: `/home/mariko/archive/mattpocock-evaluation-20261112/skills` at the pinned revision above.
+Use existing development checks; keep package changes, saved target files, effective loading and live behavior distinct.
 
 ## New-session starter
 
-> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md`. Continue discussing the remaining Matt Pocock skill proposals with me in German. Domain modelling and the user-story/ticket/codebase-design changes are implemented and independently approved; the latter package delta remains uncommitted. Preserve it and do not repeat the completed work. Separate accepted decisions, implemented results and still-open proposals. This new session starts as discussion, not another installation or implementation task.
+> Read `/home/mariko/projects/generic-devteam/docs/HANDOFF_Planner-User-Stories-and-Matt-Skills_2026-11-12.md` and check the current Git state. Continue with me in German on the remaining Matt skill proposals for Coder, Team-Codex and Reviewer. Planner user stories, selected design questions, domain modelling, owned process Retro, original to-questionnaire and the published TAS pin are implemented; do not repeat them. Max committed earlier stages; preserve the remaining Maker working-tree changes. CI is deferred. Start as discussion, not installation or automatic implementation, and critically compare complete original methods with the current role contracts.

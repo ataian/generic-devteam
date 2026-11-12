@@ -612,6 +612,29 @@ class UpdaterTests(unittest.TestCase):
         self.assertFalse(any('domain-modeling' in entry['target']
                              for entry in u.load_record(self.home)[2]['managed']))
 
+    def test_questionnaire_addition_gates_files_without_installing_upstream(self):
+        """A new Matt subtree needs the approved upstream companion path."""
+        path = self.repo / 'manifest.json'
+        manifest = json.loads(path.read_text())
+        skill = 'skills/productivity/to-questionnaire'
+        manifest['upstream_components']['grill-me']['subpaths'].remove(skill)
+        path.write_text(json.dumps(manifest))
+        self.commit('fixture before questionnaire assignment')
+        self.initialize()
+        manifest['upstream_components']['grill-me']['subpaths'].insert(-1, skill)
+        path.write_text(json.dumps(manifest))
+        self.commit('fixture add questionnaire at same Matt revision and Maker version')
+        plan = self.proposal()
+        self.assertIn('manifest.json:upstream_components', json.loads(plan.read_text())['dependencies'])
+        marker = (self.state / 'installation.json').read_bytes()
+        with self.assertRaises(ValueError):
+            u.apply(self.home, plan, decision='proceed', review='checked')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+        for role in ('planner', 'coder', 'reviewer'):
+            self.assertFalse((Path(self.roles[role]['home']) / 'skills/to-questionnaire').exists())
+        self.assertFalse(any('to-questionnaire' in entry['target']
+                             for entry in u.load_record(self.home)[2]['managed']))
+
     def test_all_asset_pin_changes_gate_same_version_without_companion_writes(self):
         """Offline helper characterization; prose companion execution stays separate."""
         self.initialize()

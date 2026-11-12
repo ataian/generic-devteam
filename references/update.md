@@ -198,8 +198,9 @@ Obtain separate authorization to set and read back `skills.creation_nudge_interv
 ## Required upstream companion update
 
 This mandatory prose procedure covers independently delivered skills, all six VoltAgent TOMLs, complete plugins and the selected analysis assets.
-Include Superpowers, grill-me/grilling/domain-modeling, the Hindsight adapter, Ponytail in both harnesses, Caveman, caveman-review, find-skills and the selected CBM or Graphify integration.
+Include Superpowers, grill-me/grilling/domain-modeling/to-questionnaire, the Hindsight adapter, Ponytail in both harnesses, Caveman, caveman-review, find-skills and the selected CBM or Graphify integration.
 For the Planner's domain tree, include `GLOSSARY-FORMAT.md`, `ADR-FORMAT.md`, `agents/openai.yaml`, and all legal files through the existing [complete-tree recipe](integrations.md#grill-me).
+Include the complete original `to-questionnaire` tree, its `agents/openai.yaml`, and root MIT license through that same Planner-only recipe.
 Include Team-Codex CLI target/reuse assessment separately from asset replacement.
 Compare every assigned upstream asset on every requested team update, even when the Maker version is unchanged.
 Read `source_revision` or inherited `source_component`, `subpaths`, legal files, mappings and hashes from the target Maker manifest.

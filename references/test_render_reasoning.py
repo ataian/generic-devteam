@@ -40,7 +40,7 @@ class TasPortabilityTests(unittest.TestCase):
         source = (root / "references/upstream-sources.md").read_text()
         recipe = source.split("## TAS authoring upstream\n", 1)[1].split("\n## ", 1)[0]
         for clause in ("../tas/SKILL.md", "working tree", "source_revision", "SKILL.md",
-                       "required references", "missing or unreadable", "publication",
+                       "required references", "missing or unreadable", "published",
                        "not installed into Planner, Coder, Reviewer, or Team-Codex"):
             self.assertIn(clause, recipe)
 
@@ -881,7 +881,7 @@ class DomainModelingContractTests(unittest.TestCase):
         self.assertEqual(component["targets"], {"hermes": ["planner"]})
         self.assertEqual(component["subpaths"], [
             "skills/productivity/grill-me", "skills/productivity/grilling",
-            "skills/engineering/domain-modeling", "LICENSE",
+            "skills/engineering/domain-modeling", "skills/productivity/to-questionnaire", "LICENSE",
         ])
         self.assertEqual(component["legal_files"], ["LICENSE"])
         self.assertNotIn("domain-modeling", MANIFEST["own_skills"])
@@ -941,6 +941,56 @@ class DomainModelingContractTests(unittest.TestCase):
         self.assertIn("agents/openai.yaml", companion)
         self.assertIn("If an asset, approval or compatible runtime is unavailable, withhold dependent outputs", companion)
         self.assertIn("Complete required assets and native loading before applying dependent role/skill file changes.", companion)
+
+
+class QuestionnaireContractTests(unittest.TestCase):
+    """Static upstream delivery and explicit loading, not live skill behavior."""
+
+    def check_questionnaire_contract(self, root):
+        manifest = json.loads((root / "manifest.json").read_text())
+        component = manifest["upstream_components"]["grill-me"]
+        self.assertEqual(component["targets"], {"hermes": ["planner"]})
+        self.assertIn("skills/productivity/to-questionnaire", component["subpaths"])
+        self.assertIn("LICENSE", component["legal_files"])
+        self.assertNotIn("to-questionnaire", manifest["own_skills"])
+        self.assertFalse((root / "skills/to-questionnaire").exists())
+        recipe = (root / "references/integrations.md").read_text().split('<a id="grill-me"></a>', 1)[1].split('<a id="ponytail"></a>', 1)[0]
+        for clause in (
+            "skills/productivity/to-questionnaire/", "skills/to-questionnaire/",
+            "agents/openai.yaml", "root `LICENSE`", "complete file sets and bytes",
+            "native discovery", "complete loading of all four",
+            "On an explicit questionnaire request, load the original `to-questionnaire`",
+            "optional during planning", "Drafting does not authorize sending",
+            "without treating `disable-model-invocation` as a verified Hermes access control",
+        ):
+            self.assertIn(clause, recipe)
+        planning = (root / "skills/brownfield-feature-planning/SKILL.md").read_text()
+        self.assertIn('On an explicit request for an expert questionnaire, load the original `to-questionnaire` with `skill_view(name="to-questionnaire")`.', planning)
+        self.assertIn("sending and plan acceptance retain their existing authorization gates", planning)
+        for relative in ("references/setup.md", "references/update.md", "references/verification.md"):
+            self.assertIn("to-questionnaire", (root / relative).read_text())
+        self.assertIn("without generating or sending a questionnaire", (root / "references/verification.md").read_text())
+
+    def test_original_questionnaire_is_planner_only_and_request_driven(self):
+        self.check_questionnaire_contract(ROOT)
+
+    def test_removed_loading_instruction_fails_with_heading_intact(self):
+        with tempfile.TemporaryDirectory(prefix="maker-questionnaire-") as directory:
+            copy = Path(directory)
+            for relative in ("manifest.json", "references/integrations.md", "references/setup.md",
+                             "references/update.md", "references/verification.md",
+                             "skills/brownfield-feature-planning/SKILL.md"):
+                target = copy / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / relative, target)
+            self.check_questionnaire_contract(copy)
+            target = copy / "skills/brownfield-feature-planning/SKILL.md"
+            text = target.read_text()
+            pointer = 'On an explicit request for an expert questionnaire, load the original `to-questionnaire` with `skill_view(name="to-questionnaire")`.\n'
+            self.assertIn(pointer, text)
+            target.write_text(text.replace(pointer, "", 1))
+            with self.assertRaises(AssertionError):
+                self.check_questionnaire_contract(copy)
 
 
 class UpstreamLockTests(unittest.TestCase):
