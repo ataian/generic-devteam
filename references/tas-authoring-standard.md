@@ -51,7 +51,8 @@ Example: After `kanban_request_review`, verify the task status and reviewer assi
 ## Output contract
 
 - Use concrete paths, commits, tests, and states when needed. Give reviewers reproducible findings and coders testable acceptance criteria.
-- Bind tickets to the exact accepted plan and phase instead of copying requirements or routine procedures.
+- Bind tickets to the exact accepted plan, phase, and commits. Include concise story criteria and necessary technical context; keep excerpts aligned with that authoritative scope.
+- For ticket bodies, use short statements and concrete bullets; omit whole-plan repetition and routine procedures.
 - Keep decisions, accepted exceptions, consequential failures, blockers, outcomes, and verdicts on the existing card; omit routine command/log inventories and successful-test catalogues.
 
 ## Rewrite acceptance checks

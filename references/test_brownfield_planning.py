@@ -129,14 +129,14 @@ class BrownfieldPackageTests(unittest.TestCase):
         # Bounded allowances, not assertions about token/monetary savings.
         for name, ceiling in (
             ("data-discovery.md", 25000), ("replacement-imports.md", 28000),
-            ("operator-script-acceptance.md", 31000), ("kanban-status-inspection.md", 26000),
+            ("operator-script-acceptance.md", 32000), ("kanban-status-inspection.md", 26000),
             ("kanban-phase-release.md", 26000), ("kanban-triage-recovery.md", 29000),
         ):
             with self.subTest(reference=name):
                 self.assertLessEqual(core + (SKILL / "references" / name).stat().st_size, ceiling)
         # The original 55–80 kB target is advisory. Retained recovery, privacy,
-        # and receipt conditions justify this explicit bounded allowance.
-        self.assertLessEqual(sum(p.stat().st_size for p in SKILL.rglob("*") if p.is_file()), 90000)
+        # receipt conditions, and story/card contracts justify this bounded allowance.
+        self.assertLessEqual(sum(p.stat().st_size for p in SKILL.rglob("*") if p.is_file()), 93000)
 
 
     def test_plan_separates_binding_scope_from_coder_discretion(self):
@@ -150,6 +150,44 @@ class BrownfieldPackageTests(unittest.TestCase):
             "Preserve already-reviewed history and verify the returning worker's applicable baseline.",
         ):
             self.assertIn(clause, text)
+
+    def test_story_decomposition_precedes_phase_and_ticket_mapping(self):
+        text = (SKILL / "SKILL.md").read_text()
+        phases = text.split("### 4. Build reviewable phases\n", 1)[1].split("\n### 5.", 1)[0]
+        for clause in (
+            "Cut work by actor, desired behaviour, and benefit before mapping stories to phases and tickets.",
+            "Give each slice an observable, independently verifiable outcome across the relevant layers.",
+            "Do not disguise database/API/UI layer tasks as stories by adding an actor prefix.",
+            "Justify necessary foundations by the stories they enable and their verification gate.",
+            "Choose phase and ticket boundaries for reviewability and real dependencies, not a one-story/one-phase/one-ticket rule.",
+        ):
+            self.assertIn(clause, phases)
+        self.assertLess(phases.index("Cut work by actor"), phases.index("Give each phase"))
+        self.assertIn("apply the Planner's caller-contract and abstraction checks", text)
+
+    def test_phase_release_keeps_story_content_exact_bindings_and_recovery(self):
+        release = (SKILL / "references/kanban-phase-release.md").read_text()
+        for clause in (
+            "Write a concise actor-behaviour-benefit title, not a technical task label.",
+            "Surface incompatible native title constraints instead of truncating user meaning.",
+            "Goal/context: state the outcome and necessary context.",
+            "Acceptance criteria: list concrete observable success conditions.",
+            "Technical implementation: include necessary interfaces, affected areas, and constraints; label suggestions separately.",
+            "Verification: state the checks needed to establish these criteria, including relevant failure cases.",
+            "Dependencies and binding: name blockers, absolute accepted plan/phase paths, exact Git commits, phase identifier, and planning repository root.",
+            "Keep criteria and implementation context concise; align excerpts with the authoritative accepted plan.",
+            "Make the card understandable without opening the full plan; leave implementation discretion with the Coder.",
+            "Do not repeat the whole plan, routine team procedures, or successful-test catalogues.",
+            "Match persisted cards to the planned ticket identity, approved plan path, plan commit and phase identifier.",
+            "Reuse exact matching cards and create only missing planned tickets.",
+            "Check each story, criterion, technical constraint and exception against its phase scope, gate, commit boundary and reviewer binding.",
+            "--initial-status blocked", "idempotency key", "explicit completion contract",
+            "Read each returned exact card before further writes.",
+            "Leave later advancement to the dispatcher and independent review gates.",
+        ):
+            self.assertIn(clause, release)
+        for obsolete in ("create only missing phases", "complete accepted phase list", "Write a short goal"):
+            self.assertNotIn(obsolete, release)
 
     def test_domain_clarification_uses_planner_workflow(self):
         text = (SKILL / "SKILL.md").read_text()

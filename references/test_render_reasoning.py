@@ -522,10 +522,58 @@ class ReasoningContractTests(unittest.TestCase):
                 self.assertNotIn("the risk class, and the reasoning level used", text)
                 self.assertNotIn("For high-risk verdicts report:", text)
         release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
-        self.assertIn("Write a short goal and the exact plan/phase reference instead of copying phase text.", release)
+        self.assertIn("Keep criteria and implementation context concise; align excerpts with the authoritative accepted plan.", release)
         self.assertIn("Keep task-specific accepted exceptions in the body.", release)
         self.assertNotIn("implementer-only harness instructions", release)
         self.assertNotIn("Record the verified graph checkpoint on the first phase card", release)
+
+    def test_planner_story_and_card_contract_survives_rendering(self):
+        """Static authored instructions, not a live Planner decomposition trial."""
+        planner = render_role(self.template("planner"), self.values("planner"), "planner")
+        for clause in (
+            "Decompose by actor, desired behaviour, and benefit, with observable, independently verifiable outcomes.",
+            "Trace necessary foundations to the stories they enable.",
+            "Do not impose one story per phase or ticket.",
+            "Use a concise actor-behaviour-benefit sentence as each title, not a technical task label.",
+            "For technical prerequisites, name the real beneficiary and enabling story; do not invent user actions or benefits.",
+            "Structure concise bullets as goal/context, acceptance criteria, technical implementation, verification, and dependencies plus exact plan/phase/commit binding.",
+            "Make the card understandable without opening the full plan.",
+            "Keep excerpts aligned with the authoritative accepted plan; do not repeat the whole plan.",
+            "Distinguish binding requirements and architectural constraints from implementation suggestions.",
+            "Leave execution-time technical decisions within the accepted goal and constraints to Example.",
+            "Set assignee, reviewer, workspace, dependencies, and required runtime fields natively",
+            "This overrides Caveman's persisted-content exception.",
+            "Clarity takes precedence over word or line limits.",
+            "Do not create implementation tickets before acceptance.",
+        ):
+            self.assertIn(clause, planner)
+        self.assertNotIn("{{", planner)
+        release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
+        standard = (ROOT / "references/tas-authoring-standard.md").read_text()
+        for text in (planner, release, standard):
+            for obsolete in (
+                "Keep requirements, acceptance criteria, files, and commit boundaries in that plan instead of copying them.",
+                "Write a short goal and the exact plan/phase reference instead of copying phase text.",
+                "Bind tickets to the exact accepted plan and phase instead of copying requirements or routine procedures.",
+            ):
+                self.assertNotIn(obsolete, text)
+        self.assertIn("Include concise story criteria and necessary technical context", standard)
+
+    def test_selected_design_checks_stay_in_existing_conditional_workflow(self):
+        planner = render_role(self.template("planner"), self.values("planner"), "planner")
+        workflow = planner.split("## Planning workflow\n", 1)[1].split("\n## ", 1)[0]
+        design = workflow.split("For relevant module/interface choices during design:", 1)[1].split("\n3. ", 1)[0]
+        for clause in (
+            "Identify everything callers must know: invariants, ordering, failure modes, and required configuration.",
+            "Check whether the module encapsulates complexity or merely passes it through.",
+            "Imagine removing the abstraction: would callers inherit its complexity?",
+            "Justify proposed variability or interchangeable implementations from present needs.",
+            "Use these checks within existing design work, not a new architecture phase or approval gate.",
+        ):
+            self.assertIn(clause, design)
+        self.assertEqual(re.findall(r"^(\d+)\. ", workflow, re.M), [str(i) for i in range(1, 12)])
+        self.assertNotIn('skill_view(name="codebase-design")', planner)
+        self.assertNotIn("codebase-design", MANIFEST["upstream_components"])
 
     def test_caveman_update_cannot_be_claimed_from_file_application(self):
         text = (ROOT / "references/update.md").read_text()
@@ -939,12 +987,12 @@ class TicketDocumentationTests(unittest.TestCase):
         self.assertIn("Read the accepted specification and plan at their approved Git revisions.", self.release)
         self.assertIn("Verify that every plan reference resolves to its approved revision.", self.release)
         self.assertIn("Verify every notification binding against the intended destination.", self.release)
-        self.assertIn("Unblock descendants in reverse order and phase one last.", self.release)
+        self.assertIn("Unblock descendants in reverse order and the first ticket last.", self.release)
 
     def test_partial_creation_resumes_from_persisted_cards(self):
         self.assertIn("approved plan path, plan commit and phase identifier", self.release)
         self.assertIn("including archived cards", self.release)
-        self.assertIn("Reuse exact matching cards and create only missing phases.", self.release)
+        self.assertIn("Reuse exact matching cards and create only missing planned tickets.", self.release)
         self.assertIn("Read each returned exact card before further writes.", self.release)
         self.assertIn("Stop release on any unresolved mismatch", self.release)
 

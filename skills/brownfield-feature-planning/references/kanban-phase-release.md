@@ -10,7 +10,7 @@ Do not treat plan acceptance as permission for the planner to implement or manua
 2. Inspect the current repository HEAD, branch and working tree.
 3. Record the accepted revision separately from later documentation-only commits.
 4. Select the project board explicitly on every call.
-5. Inspect current native schemas or CLI help for creation, reads, subscriptions, links and release.
+5. Inspect current native schemas or CLI help for creation, title constraints, reads, subscriptions, links and release.
 6. Verify the running gateway's configuration context, dispatcher/review routing, assigned profiles and concurrency cap.
 7. Read only the required non-secret settings.
 8. Resolve the notification destination and authorized participant from project rules, session origin and current authorization settings.
@@ -20,16 +20,27 @@ Do not treat plan acceptance as permission for the planner to implement or manua
 
 ## 2. Create blocked cards and persist progress
 
-1. Identify each phase in its task body by approved plan path, plan commit, phase identifier and planning repository root.
+1. Identify each planned story or prerequisite ticket and its phase in the body by approved plan path, plan commit, phase identifier and planning repository root.
 2. Reference separate phase plans or specifications by absolute path and exact Git commit.
-3. Write a short goal and the exact plan/phase reference instead of copying phase text.
+3. Write a concise actor-behaviour-benefit title, not a technical task label.
+   For a technical prerequisite, name its real beneficiary and enabling story; do not invent user actions or benefits.
+   Surface incompatible native title constraints instead of truncating user meaning.
+   Structure the body with short statements and concrete bullets:
+   - Goal/context: state the outcome and necessary context.
+   - Acceptance criteria: list concrete observable success conditions.
+   - Technical implementation: include necessary interfaces, affected areas, and constraints; label suggestions separately.
+   - Verification: state the checks needed to establish these criteria, including relevant failure cases.
+   - Dependencies and binding: name blockers, absolute accepted plan/phase paths, exact Git commits, phase identifier, and planning repository root.
+   Keep criteria and implementation context concise; align excerpts with the authoritative accepted plan.
+   Make the card understandable without opening the full plan; leave implementation discretion with the Coder.
+   Do not repeat the whole plan, routine team procedures, or successful-test catalogues.
 4. Keep task-specific accepted exceptions in the body. Keep standard team procedures in role rules.
 5. Create each card with the intended assignee/workspace, `--initial-status blocked`, an idempotency key, required skill and explicit completion contract.
 6. Set explicit customer limits and required native runtime/retry fields without inventing discretionary attempt budgets.
 7. Check `--max-retries` semantics before setting a consecutive-failure limit.
 8. Do not interpret the failure number that trips a breaker as the number of extra attempts.
 9. Read each returned exact card before further writes.
-10. Verify its phase identity, approved references, body and native limits against the files at the approved revision.
+10. Verify its planned ticket and phase identity, title, approved references, body and native limits against the files at the approved revision.
 11. Use the persisted card as the creation checkpoint.
 12. Bind the verified notification destination.
 13. Read `notify-list --json` and compare platform, channel, chat type, participant, notifier profile and delivery mode literally.
@@ -42,28 +53,28 @@ Keep product and test/start documentation in its owning repository.
 ### Resume a partial batch
 
 1. Read the project board, including archived cards, before continuing creation.
-2. Match persisted task bodies to the approved plan path, plan commit and phase identifier.
+2. Match persisted cards to the planned ticket identity, approved plan path, plan commit and phase identifier.
 3. Resolve missing identity fields or ambiguous matches before further writes.
-4. Reuse exact matching cards and create only missing phases.
-5. Compare existing preparation with the complete accepted phase list.
+4. Reuse exact matching cards and create only missing planned tickets.
+5. Compare existing preparation with the complete accepted ticket-to-phase mapping.
 6. Complete missing bindings on blocked cards before graph verification.
 7. If a card was already released, reconcile its current run and dependencies without repeating its release.
 8. If a later operational blocker interrupted work, use [safe resumption](kanban-triage-recovery.md#resume-after-a-blocker-or-interrupted-run).
 
 ## 3. Verify the complete graph
 
-1. Link missing approved phase dependencies only after every card exists.
+1. Link missing approved ticket dependencies only after every card exists.
 2. Read each exact card to verify the complete graph.
 3. Use [bounded extraction](kanban-status-inspection.md#read-and-reduce-before-output-truncation) only if native reads cannot supply the required evidence.
 4. Before the first release, require every card to be blocked.
 5. On partial release, verify current runs and dependency gates for already released cards.
 6. Preserve completed release transitions.
 7. Verify each card's assignee, workspace, skill, runtime/retry fields and completion contract.
-8. Check each goal and exception against its phase scope, gate, commit boundary and reviewer binding.
+8. Check each story, criterion, technical constraint and exception against its phase scope, gate, commit boundary and reviewer binding.
 9. Verify that every plan reference resolves to its approved revision.
 10. Verify every notification binding against the intended destination.
-11. Verify that phase one has no parent and the final phase has no child in the approved chain.
-12. Verify each intermediate phase's intended predecessor and successor.
+11. Verify that the first ticket has no parent and the final ticket has no child in the approved chain.
+12. Verify each intermediate ticket's intended predecessor and successor.
 13. If a write succeeds but parsing fails, re-read its recorded exact ID instead of repeating the write.
 14. Stop release on any unresolved mismatch while preserving partial progress.
 
@@ -72,10 +83,10 @@ Keep product and test/start documentation in its owning repository.
 1. Verify the complete graph before release. Use native card/link state as the checkpoint; omit routine progress comments.
 2. Finish authorized planning commits before release.
 3. Do not leave planner metadata edits uncommitted in a directory workspace that a worker can immediately modify.
-4. Unblock descendants in reverse order and phase one last.
+4. Unblock descendants in reverse order and the first ticket last.
 5. On resume, apply this order only to pending initial releases.
 6. Read back each transition to verify that descendants remain `todo` while parents are incomplete.
-7. Read phase one as `ready` unless a real dispatcher claim already makes it `running`.
+7. Read the first ticket as `ready` unless a real dispatcher claim already makes it `running`.
 8. Use native board events as the release record.
 9. Record consequential discrepancies on the relevant card and verify each posted comment.
 10. Keep the historical pre-release checkpoint distinct from current task status.

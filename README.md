@@ -114,6 +114,11 @@ Its SOUL requires `grilling` for requirements and conditionally loads domain mod
 Glossaries capture vocabulary; requirements and phase gates remain in the accepted plan. Unaccepted ADRs remain proposed.
 Coder and Reviewer consume relevant accepted definitions through existing routing; role authority and native dispatch remain unchanged.
 Interview, design, and explicit plan acceptance remain separate. Acquisition and readbacks use the [integration recipe](references/integrations.md#grill-me).
+The Planner decomposes work by actor, behaviour, benefit, and independently verifiable outcomes, not technical layers.
+Necessary foundations trace to enabled stories; stories, phases, and tickets need not map one-to-one.
+Tickets use concise user-story titles and structured bullets: goal/context, acceptance criteria, technical implementation, verification, dependencies and exact plan/phase/commit binding.
+Cards remain understandable alone, aligned with the authoritative accepted plan, and subject to Coder implementation discretion.
+Relevant module/interface choices use caller-contract, complexity-encapsulation, abstraction-removal, and present-variability checks within existing design work.
 Bei Unterbrechung den Maker mit dem privaten Setuprecord wieder aufrufen; er liest
 native Profile, Board und Dienstobjekte erneut und setzt am ersten offenen Gate
 fort. Kein blindes Wiederholen von Create, Login, Bank- oder Kanalanlage.

@@ -79,6 +79,7 @@ An available source is not proof of connectivity, successful import, or authorit
 ### 3. Select the smallest viable integration
 
 Compare relevant approaches against existing interfaces, clients, data ownership, and deployment constraints.
+For relevant module/interface choices, apply the Planner's caller-contract and abstraction checks during this comparison.
 Reuse working commands and business logic rather than creating parallel implementations.
 Ask only consequential product questions that the code and accepted requirements do not answer.
 Keep unresolved source or behavior decisions explicit instead of introducing implied defaults.
@@ -97,6 +98,11 @@ Name the authorized isolated verification environment when tests are in scope.
 ### 4. Build reviewable phases
 
 State common constraints once.
+Cut work by actor, desired behaviour, and benefit before mapping stories to phases and tickets.
+Give each slice an observable, independently verifiable outcome across the relevant layers.
+Do not disguise database/API/UI layer tasks as stories by adding an actor prefix.
+Justify necessary foundations by the stories they enable and their verification gate.
+Choose phase and ticket boundaries for reviewability and real dependencies, not a one-story/one-phase/one-ticket rule.
 Give each phase an independently reviewable deliverable with requirements, files, interfaces, dependencies, tests, gate, and commit boundary.
 Map gates to enabling changes.
 Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.

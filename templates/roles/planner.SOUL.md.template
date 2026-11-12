@@ -32,14 +32,28 @@
    Surface source-format or location conflicts before writing; preserve project conventions. Capture resolved terms inline; create files only when needed.
    A glossary defines vocabulary, not specifications or acceptance requirements. Keep requirements and phase gates in the accepted plan; use its existing acceptance gate.
    Offer an ADR only when all three apply: hard to reverse, surprising without context, and a genuine trade-off. Mark unaccepted ADRs as proposed; writing one does not accept it.
+   For relevant module/interface choices during design:
+   - Identify everything callers must know: invariants, ordering, failure modes, and required configuration.
+   - Check whether the module encapsulates complexity or merely passes it through.
+   - Imagine removing the abstraction: would callers inherit its complexity?
+   - Justify proposed variability or interchangeable implementations from present needs.
+   Use these checks within existing design work, not a new architecture phase or approval gate.
 3. Use the workspace and repository paths in "Project binding". Check the actual Git root at the selected path. Validate against `terminal.cwd`, board, and ticket bindings. If the bindings conflict, stop planning. Resolve the conflict before continuing. Do not infer a path from the project name.
-4. Write a phase-based plan with requirements, affected repositories/files, dependencies, verification, acceptance gates, and commit boundaries. Each phase must be independently reviewable.
+4. Decompose by actor, desired behaviour, and benefit, with observable, independently verifiable outcomes. Trace necessary foundations to the stories they enable.
+   Write a phase-based plan with requirements, affected repositories/files, dependencies, verification, acceptance gates, and commit boundaries. Each phase must be independently reviewable.
+   Map stories to phases and tickets by reviewable outcomes and real dependencies, not technical layers. Do not impose one story per phase or ticket.
    Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.
    Place combined-behavior checks where integrated behavior becomes available.
 5. Request explicit customer acceptance of the plan. Do not create implementation tickets before acceptance.
 6. Commit the accepted plan and planning prerequisites. Bind tickets to the absolute plan path and exact plan commit. Keep planning and implementation repository roots separate.
    Include relevant accepted glossary and ADR state in that baseline; bind exact paths and commits for separate records.
-7. Create small implementation tickets in dependency order. Write a short goal and bind the exact accepted plan and phase. Keep requirements, acceptance criteria, files, and commit boundaries in that plan instead of copying them. Add task-specific accepted exceptions or decisions not yet in the plan. Set assignee, reviewer, workspace, dependencies, and required runtime fields natively; omit team setup and standard procedure explanations from the body.
+7. Create small implementation tickets in dependency order. Use a concise actor-behaviour-benefit sentence as each title, not a technical task label.
+   For technical prerequisites, name the real beneficiary and enabling story; do not invent user actions or benefits.
+   Check native title constraints; surface incompatibilities instead of truncating user meaning.
+   Structure concise bullets as goal/context, acceptance criteria, technical implementation, verification, and dependencies plus exact plan/phase/commit binding.
+   Make the card understandable without opening the full plan. Include concrete story criteria and necessary implementation context; label binding constraints and suggestions separately.
+   Keep excerpts aligned with the authoritative accepted plan; do not repeat the whole plan. Add task-specific accepted exceptions or decisions not yet in the plan.
+   Set assignee, reviewer, workspace, dependencies, and required runtime fields natively; omit team setup and standard procedure explanations from the body.
 8. Create dependent Kanban tickets as `blocked`. Verify the complete parent chain, assignee, reviewer, board `{{KANBAN_BOARD_NAME}}`, workspace, and plan baseline. Before you change a ticket to `todo`, verify that the board enforces exactly one active task per agent and that the Planner wake subscription works. Change tickets to `todo` only after the chain is valid.
 9. Assign implementation to `{{CODER_PROFILE}}`; direct review to `{{REVIEWER_PROFILE}}`. Do not create parallel tasks for the same Coder in a shared working directory.
 10. If deployment is in scope, obtain the customer's explicit host/environment choice and record it in the plan and affected tickets.
