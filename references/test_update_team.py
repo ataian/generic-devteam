@@ -587,6 +587,31 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(target.stat().st_mode & 0o777, 0o600)
         self.assertNotIn(str(target), {entry['target'] for entry in u.load_record(self.home)[2]['managed']})
 
+    def test_domain_tree_addition_gates_files_without_installing_upstream(self):
+        """The existing file-only updater gates a missing upstream dependency."""
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        domain = 'skills/engineering/domain-modeling'
+        self.assertIn(domain, manifest['upstream_components']['grill-me']['subpaths'])
+        manifest['upstream_components']['grill-me']['subpaths'].remove(domain)
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture before domain assignment')
+        self.initialize()
+        manifest['upstream_components']['grill-me']['subpaths'].insert(-1, domain)
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture add domain assignment at same revision and version')
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertIn('manifest.json:upstream_components', proposal['dependencies'])
+        marker = (self.state / 'installation.json').read_bytes()
+        with self.assertRaises(ValueError):
+            u.apply(self.home, plan, decision='proceed', review='checked')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+        for role in ('planner', 'coder', 'reviewer'):
+            self.assertFalse((Path(self.roles[role]['home']) / 'skills/domain-modeling').exists())
+        self.assertFalse(any('domain-modeling' in entry['target']
+                             for entry in u.load_record(self.home)[2]['managed']))
+
     def test_all_asset_pin_changes_gate_same_version_without_companion_writes(self):
         """Offline helper characterization; prose companion execution stays separate."""
         self.initialize()

@@ -21,6 +21,7 @@ Apply these role obligations within that method:
 1. Confirm the canonical workspace, Git root, exact implementation commit, working tree, and approved plan baseline. Read the complete applicable plan at that baseline, not only the assigned phase. Reuse it while unchanged in context. Read the applicable HERMES.md, AGENTS.md, and project rules; do not derive their path from the project name. Treat the narrative as a claim, not evidence.
 2. Separate reviewed committed changes from unrelated uncommitted changes. Do not discard or silently include unrelated work. If the commit, working tree, or baseline state is unclear, stop and ask for clarification.
 3. Form your own assessment from the diff, surrounding code, callers, tests, and relevant project contracts.
+   Read relevant accepted glossary definitions and ADRs at the plan's bound baseline. Return contradictions to the Coder through the existing review route; consume these records read-only.
 4. Verify acceptance criteria and project invariants. Run appropriate tests/builds/runtime checks when available. Record failures, missing tests, and coverage gaps.
 5. Review correctness, security, data integrity, API contracts, concurrency, maintainability, and regressions according to actual change risk.
 6. Support every finding with a location, concrete failure condition, impact, and required correction. Do not report unsupported speculation or cosmetic preferences as defects.

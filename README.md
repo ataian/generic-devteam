@@ -109,10 +109,11 @@ Technical interruptions preserve unfinished review; approval completes the exact
 Work continues while a justified next approach remains, within explicit customer limits, provider quotas, operational permissions, and native safeguards.
 After the last required ticket reaches DONE, the Planner sends a short customer report from existing results and independent verdicts, without a closing ticket or another technical review.
 The file helper retains obsolete copies. Complete the [required version-gated Reviewer skill retirement](references/update.md#required-reviewer-skill-retirement-1122) after file application within the approved team update; preserve all assets outside its exact scope.
-Für neue Planungen erhält der Planner die Originalskills `grill-me` und `grilling`
-von Matt Pocock. Seine SOUL verlangt `grilling` für die Anforderungsklärung;
-Interview, Entwurfsarbeit und ausdrückliche Planannahme bleiben getrennt.
-Bezug und Prüfung stehen im [Integrationsrezept](references/integrations.md#grill-me).
+The Planner receives Matt Pocock's original `grill-me`, `grilling`, and complete `domain-modeling` skills at the same pinned revision.
+Its SOUL requires `grilling` for requirements and conditionally loads domain modelling during that interview.
+Glossaries capture vocabulary; requirements and phase gates remain in the accepted plan. Unaccepted ADRs remain proposed.
+Coder and Reviewer consume relevant accepted definitions through existing routing; role authority and native dispatch remain unchanged.
+Interview, design, and explicit plan acceptance remain separate. Acquisition and readbacks use the [integration recipe](references/integrations.md#grill-me).
 Bei Unterbrechung den Maker mit dem privaten Setuprecord wieder aufrufen; er liest
 native Profile, Board und Dienstobjekte erneut und setzt am ersten offenen Gate
 fort. Kein blindes Wiederholen von Create, Login, Bank- oder Kanalanlage.

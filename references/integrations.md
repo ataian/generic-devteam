@@ -187,37 +187,34 @@ Pluginpfadpatches. Rückweg: nur eigene Plannerregistrierung nativ deaktivieren/
 entfernen, ursprüngliche fremde Plugin-/PM-Bestände bewahren.
 
 <a id="grill-me"></a>
-## grill-me / grilling — nur Planner
+## grill-me / grilling / domain-modeling — Planner only
 
-Original: [mattpocock/skills](https://github.com/mattpocock/skills). Beide Skills sind
-Pflichtausstattung für die Planungsphase, keine zusätzliche Setupauswahl.
+Original: [mattpocock/skills](https://github.com/mattpocock/skills).
+These three skills are fixed Planner equipment, not an additional setup choice.
 
-1. Use the manifest's `grill-me.source_revision` outside active discovery.
+1. Use the manifest's existing `grill-me.source_revision` outside active discovery.
    Check complete assets and provenance without searching for the newest upstream revision.
-   Keep `skills/productivity/grill-me/` and `skills/productivity/grilling/` from the same revision, including `agents/openai.yaml` and all companion files.
+   Keep complete `skills/productivity/grill-me/`, `skills/productivity/grilling/`, and `skills/engineering/domain-modeling/` trees from that same revision.
+   Include every `agents/openai.yaml` and all companion files, including `GLOSSARY-FORMAT.md` and `ADR-FORMAT.md`.
    Check required skill references for delivery completeness. Report a changed or missing asset contract instead of inventing a replacement.
-2. Nach Ziel-/Kollisionsprüfung und Setupfreigabe beide Bäume unverändert nach
-   `<tatsächlich aufgelöster Plannerhome>/skills/grill-me/` beziehungsweise
-   `skills/grilling/` kopieren. Die Original-`LICENSE` aus dem Repositoryroot jedem
-   Zielbaum beilegen; weitere geltende Notices erhalten. Keine Übernahme des gesamten
-   Skillkatalogs, keine zusätzliche Plugin-/Nodeinstallation und keine Ausführung des
-   Upstream-Setupskills. Quelle, aufgelöste Revision, vollständige Dateimengen/Hashes
-   und eigene Zielpfade im Setuprecord festhalten. Vorhandene lokale Anpassungen
-   nicht überschreiben; geeignete bytegleiche Bestände wiederverwenden.
-3. Der Originaleinstieg `grill-me` trägt `disable-model-invocation: true` und ruft
-   `grilling` auf. Metadaten und Text unverändert erhalten. Die Planner-SOUL verlangt
-   daher für die automatische Planungsphase direkt `skill_view(name="grilling")`;
-   bei ausdrücklichem Nutzeraufruf von `grill-me` entspricht dessen „Skill tool“ in
-   Hermes ebenfalls `skill_view`. Kein eigenes Wrapper-Skill und keine Abhängigkeit
-   auf den Maker im späteren Plannerdialog.
+2. After target/collision checks and setup approval, copy the unchanged trees into the actual resolved Planner home's `skills/grill-me/`, `skills/grilling/`, and `skills/domain-modeling/` respectively.
+   Include the original root `LICENSE` in each target tree and preserve other applicable legal files.
+   Record source, resolved revision, complete file inventories/hashes, and actual target paths in the private setup record.
+   Preserve local adaptations; reuse matching complete originals.
+   Acquire only these selected skills, without additional plugin or Node installation, catalog import, or upstream setup-skill execution.
+3. Preserve `grill-me` metadata, including `disable-model-invocation: true`; its explicit user entry calls `grilling`.
+   The Planner SOUL loads `grilling` directly for each new plan and conditionally loads `domain-modeling` during that interview.
+   Map upstream "Skill tool" calls to Hermes `skill_view`.
+   `grill-with-docs` only routes to those two skills; do not install it or add another interview phase.
+   Keep domain-document authority and conditional use in the delivered Planner SOUL, without a runtime dependency on the Maker.
+   Surface any upstream source-format or location conflict with existing project conventions before document writes; preserve upstream skill bytes and resolve the conflict within authorized planning boundaries.
 4. Compare complete file sets and bytes with the selected source, including legal files.
-   Verify native discovery and complete loading through established readbacks after role delivery.
-   Read back the `grilling` load requirement and interview precedence in the personalized Planner SOUL.
+   Verify native discovery and complete loading of all three main files and required companions through established readbacks.
+   After role delivery, read back the Planner SOUL's grilling precedence, conditional domain load, document authority, and existing plan-acceptance gate.
    Do not run a planning interview, explicit skill invocation experiment, or resume conversation during setup.
 
-Rückweg nur für die protokollierten eigenen Skillziele: vorherige eigene Stände
-wiederherstellen; Entfernen neu angelegter Dateien nur mit der geltenden
-Löschfreigabe. Fremde Skills, andere Profile und globale Konfiguration erhalten.
+Restore only recorded own skill targets from their preserved pre-change state within the applicable authorization.
+Removal of new files requires deletion approval; preserve other skills, profiles, and global configuration.
 
 <a id="ponytail"></a>
 ## Ponytail — Coder und Team-Codex separat

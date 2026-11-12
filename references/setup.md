@@ -214,10 +214,9 @@ Do not place communication credentials or targets in shared project instructions
 
 ## 6. Eigene Skills, Rollen und Textpersonalisierung
 
-Stelle im Planner vor der Rollenannahme die Originalskills
-[grill-me und grilling](integrations.md#grill-me) vollständig bereit, zusätzlich
-zu [Superpowers](integrations.md#superpowers). Beide gehören zur festen
-Planner-Ausstattung; Quelle und Zielprüfung im Setuprecord erfassen.
+Before role acceptance, deliver complete original [grill-me, grilling, and domain-modeling](integrations.md#grill-me) trees to the Planner alongside [Superpowers](integrations.md#superpowers).
+All three are fixed Planner equipment; record complete source/target checks privately.
+If any required tree or companion is unavailable, withhold the dependent Planner output and report the missing asset.
 
 Continue the private record from [setup-record.md](../templates/setup-record.md)
 at `<actual planner home>/devteam/setup.md` after Planner creation.
@@ -336,9 +335,9 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
    wirksame native Konfiguration und protokollierte Einschränkungen. Vergleiche
    Skilldateimenge und Bytes vollständig mit der Quelle.
    Compare the recovery launcher against its bound Maker output instead of the generic template.
-   Lies in der Planner-SOUL die Ladepflicht für `grilling`, dessen Vorrang im
-   Interviewabschnitt und die getrennte Planannahme zurück. Beide Originalskills
-   müssen im Plannerhome vollständig vorliegen; Makerverweise allein genügen nicht.
+   Read back the Planner's `grilling` load requirement, interview precedence, and separate plan acceptance.
+   Read back the Planner's conditional `domain-modeling` load and authorized document boundaries, vocabulary-only glossary, proposed ADR status, and existing plan gate.
+   Verify all three original skill trees and complete companions in the Planner home; Maker references alone do not deliver them.
    Read back the Coder SOUL's default/max values and process binding.
    Read back every role's Caveman load requirement and persisted-prose scope.
    Read back the Reviewer's `caveman-review` trigger and preserved review procedure.

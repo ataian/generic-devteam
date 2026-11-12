@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -319,6 +319,7 @@
       "subpaths": [
         "skills/productivity/grill-me",
         "skills/productivity/grilling",
+        "skills/engineering/domain-modeling",
         "LICENSE"
       ],
       "targets": {

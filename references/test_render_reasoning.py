@@ -790,6 +790,81 @@ class ReviewerEquipmentTests(unittest.TestCase):
             self.assertNotIn("Reviewer has no default graph-tool prerequisite", text)
 
 
+class DomainModelingContractTests(unittest.TestCase):
+    """Static delivery/loading/authority contracts, not live Planner behavior."""
+
+    template = ReasoningContractTests.template
+    values = ReasoningContractTests.values
+
+    def test_original_domain_tree_is_planner_only_in_existing_component(self):
+        component = MANIFEST["upstream_components"]["grill-me"]
+        self.assertEqual(component["original_repo"], "https://github.com/mattpocock/skills")
+        self.assertEqual(component["source_revision"], "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d")
+        self.assertEqual(component["targets"], {"hermes": ["planner"]})
+        self.assertEqual(component["subpaths"], [
+            "skills/productivity/grill-me", "skills/productivity/grilling",
+            "skills/engineering/domain-modeling", "LICENSE",
+        ])
+        self.assertEqual(component["legal_files"], ["LICENSE"])
+        self.assertNotIn("domain-modeling", MANIFEST["own_skills"])
+        self.assertFalse((ROOT / "skills/domain-modeling").exists())
+        recipe = (ROOT / "references/integrations.md").read_text().split('<a id="grill-me"></a>', 1)[1].split('<a id="ponytail"></a>', 1)[0]
+        for clause in (
+            "GLOSSARY-FORMAT.md", "ADR-FORMAT.md", "agents/openai.yaml",
+            "skills/engineering/domain-modeling/", "skills/domain-modeling/",
+            "complete file sets and bytes", "including legal files",
+            "native discovery", "complete loading", "source-format or location conflict",
+        ):
+            self.assertIn(clause, recipe)
+        self.assertIn("grill-with-docs", recipe)
+        self.assertIn("do not install it", recipe)
+
+    def test_planner_loads_domain_workflow_without_new_approval_phase(self):
+        planner = render_role(self.template("planner"), self.values("planner"), "planner")
+        for clause in (
+            'skill_view(name="grilling")',
+            '`grilling` takes precedence for requirement clarification.',
+            'skill_view(name="domain-modeling")',
+            "when actively clarifying domain terms or relationships, or recording a qualifying model decision",
+            "Read existing glossaries, context maps, relevant ADRs with their acceptance status, and document conventions before writing.",
+            "Use only authorized planning document locations.",
+            "Surface source-format or location conflicts before writing; preserve project conventions.",
+            "Capture resolved terms inline; create files only when needed.",
+            "A glossary defines vocabulary, not specifications or acceptance requirements.",
+            "Offer an ADR only when all three apply: hard to reverse, surprising without context, and a genuine trade-off.",
+            "Mark unaccepted ADRs as proposed; writing one does not accept it.",
+            "Keep requirements and phase gates in the accepted plan; use its existing acceptance gate.",
+            "Include relevant accepted glossary and ADR state in that baseline; bind exact paths and commits for separate records.",
+            "Leave execution-time technical decisions within the accepted goal and constraints",
+            "Do not create implementation tickets before acceptance.",
+        ):
+            self.assertIn(clause, planner)
+        setup = (ROOT / "references/setup.md").read_text()
+        role_write = setup.index('then write `soul_text` only to the confirmed role home `SOUL.md`.')
+        self.assertGreater(setup.index("Read back the Planner's conditional `domain-modeling` load"), role_write)
+        self.assertIn("If any required tree or companion is unavailable, withhold the dependent Planner output", setup)
+
+    def test_consumers_read_accepted_definitions_without_mutating_domain_workflow(self):
+        for role in ("coder", "reviewer"):
+            text = render_role(self.template(role), self.values(role), role)
+            self.assertIn("Read relevant accepted glossary definitions and ADRs at the plan's bound baseline.", text)
+            self.assertNotIn('skill_view(name="domain-modeling")', text)
+        coder = self.template("coder")
+        self.assertIn("Pass these definitions to Codex; route contradictions through existing exception routing instead of rewriting the product model.", coder)
+        reviewer = self.template("reviewer")
+        self.assertIn("Return contradictions to the Coder through the existing review route; consume these records read-only.", reviewer)
+
+    def test_update_includes_domain_companions_before_dependent_files(self):
+        update = (ROOT / "references/update.md").read_text()
+        companion = update.split("## Required upstream companion update\n", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("grill-me/grilling/domain-modeling", companion)
+        self.assertIn("GLOSSARY-FORMAT.md", companion)
+        self.assertIn("ADR-FORMAT.md", companion)
+        self.assertIn("agents/openai.yaml", companion)
+        self.assertIn("If an asset, approval or compatible runtime is unavailable, withhold dependent outputs", companion)
+        self.assertIn("Complete required assets and native loading before applying dependent role/skill file changes.", companion)
+
+
 class UpstreamLockTests(unittest.TestCase):
     """Static recipe contracts, not live plugin/runtime update evidence."""
 

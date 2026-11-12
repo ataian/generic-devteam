@@ -151,6 +151,10 @@ class BrownfieldPackageTests(unittest.TestCase):
         ):
             self.assertIn(clause, text)
 
+    def test_domain_clarification_uses_planner_workflow(self):
+        text = (SKILL / "SKILL.md").read_text()
+        self.assertIn("Use the Planner's `domain-modeling` workflow.", text)
+
     def test_integrated_acceptance_uses_existing_phase_and_reviewer(self):
         text = (SKILL / "SKILL.md").read_text()
         self.assertIn("Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.", text)

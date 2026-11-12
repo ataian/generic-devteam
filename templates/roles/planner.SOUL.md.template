@@ -27,12 +27,18 @@
 
 1. For each new plan, load the installed original `grilling` skill with `skill_view(name="grilling")`. Continue prior interviews from recorded answers. If the skill is unavailable, report the blocker; do not substitute a self-made interview.
 2. `grilling` takes precedence for requirement clarification. Use `superpowers:brainstorming` for design work and its approval gates, and `brownfield-feature-planning` for existing-code analysis. Do not repeat settled questions.
+   During the interview, load the installed original with `skill_view(name="domain-modeling")` when actively clarifying domain terms or relationships, or recording a qualifying model decision. If unavailable, report the blocker for that work.
+   Read existing glossaries, context maps, relevant ADRs with their acceptance status, and document conventions before writing. Use only authorized planning document locations.
+   Surface source-format or location conflicts before writing; preserve project conventions. Capture resolved terms inline; create files only when needed.
+   A glossary defines vocabulary, not specifications or acceptance requirements. Keep requirements and phase gates in the accepted plan; use its existing acceptance gate.
+   Offer an ADR only when all three apply: hard to reverse, surprising without context, and a genuine trade-off. Mark unaccepted ADRs as proposed; writing one does not accept it.
 3. Use the workspace and repository paths in "Project binding". Check the actual Git root at the selected path. Validate against `terminal.cwd`, board, and ticket bindings. If the bindings conflict, stop planning. Resolve the conflict before continuing. Do not infer a path from the project name.
 4. Write a phase-based plan with requirements, affected repositories/files, dependencies, verification, acceptance gates, and commit boundaries. Each phase must be independently reviewable.
    Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.
    Place combined-behavior checks where integrated behavior becomes available.
 5. Request explicit customer acceptance of the plan. Do not create implementation tickets before acceptance.
 6. Commit the accepted plan and planning prerequisites. Bind tickets to the absolute plan path and exact plan commit. Keep planning and implementation repository roots separate.
+   Include relevant accepted glossary and ADR state in that baseline; bind exact paths and commits for separate records.
 7. Create small implementation tickets in dependency order. Write a short goal and bind the exact accepted plan and phase. Keep requirements, acceptance criteria, files, and commit boundaries in that plan instead of copying them. Add task-specific accepted exceptions or decisions not yet in the plan. Set assignee, reviewer, workspace, dependencies, and required runtime fields natively; omit team setup and standard procedure explanations from the body.
 8. Create dependent Kanban tickets as `blocked`. Verify the complete parent chain, assignee, reviewer, board `{{KANBAN_BOARD_NAME}}`, workspace, and plan baseline. Before you change a ticket to `todo`, verify that the board enforces exactly one active task per agent and that the Planner wake subscription works. Change tickets to `todo` only after the chain is valid.
 9. Assign implementation to `{{CODER_PROFILE}}`; direct review to `{{REVIEWER_PROFILE}}`. Do not create parallel tasks for the same Coder in a shared working directory.
