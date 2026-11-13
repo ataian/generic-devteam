@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Richte ein natives Hermes-Projektteam unter Linux ein.
-version: 2.8.1
+version: 2.8.2
 author: Max
 license: MIT
 platforms: [linux]
@@ -25,7 +25,7 @@ Before either operation, check your own wrapper or a local adaptation under [Mak
 Package authoring or review authorizes file work only, not installation or activation.
 Keep product planning and project onboarding as later explicit tasks.
 
-Require available Hermes, Mattermost, Hindsight, and suitable model access.
+Require available Hermes, Mattermost, Hindsight, a working Codex shell sandbox, and suitable model access.
 Use established supported interfaces and available component sources.
 Use the manifest's exact upstream asset commits without a fresh latest-version search.
 Keep Hermes core and its distribution skills native-managed; Maker does not pin, install, upgrade, or repair Hermes.

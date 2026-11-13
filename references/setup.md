@@ -16,6 +16,10 @@ Use English for development communication and artifacts. Preserve exact identifi
    Do not qualify the project's toolchain or investigate general timeout, retry, or rate-limit behavior.
    A missing Hindsight service or Hermes distribution prerequisite requires operator action; Maker does not install or repair them.
    Inspect Codex and the selected analysis runtime's paths, versions, owners and shared consumers before proposing a first installation or change.
+   Check the Codex shell sandbox before any write, because the independent Review passes depend on it.
+   Run `bwrap --unshare-user --ro-bind / / --dev /dev -- /bin/true` and require exit status 0.
+   On Ubuntu 24.04, `kernel.apparmor_restrict_unprivileged_userns=1` blocks `/usr/bin/bwrap` until an AppArmor profile grants `userns`, as the packaged `linux-sandbox` profile does.
+   A blocked sandbox is an operator prerequisite: report the missing capability, and keep Codex sandbox and approval settings unchanged.
    Read each independent asset's exact `source_revision` from the manifest without a new latest-version search.
    Keep required pins separate from installed runtime versions and operational permission.
 4. Identify concrete shared bootstrap/PM effects before invoking CLI or adding plugins.
@@ -482,6 +486,7 @@ Keep the following targeted recovery cases:
 | Halbfertiges eigenes Setup | Bereits belegte Profile, Board, Bank, Quellen und Hashes | Drift mit nativen Objekten abgleichen; erstes offenes Gate erfolgreich prüfen | Nur dokumentierte eigene Dateiversion/Configeinträge zurücknehmen |
 | PM-Wirkung nicht freigegeben | Bezogene Quellen außerhalb Discovery | Gemeinsamen Scope genehmigen; neue Generation und bestehende Profile verifizieren | Eigene Pluginaufnahme nativ zurücknehmen, keine gemeinsame Runtime entfernen |
 | Hindsight/Mattermost unavailable | Verified profiles, files and own bank/channel | Operator restores required service/access; established availability and configuration readbacks pass | Reset only authorized own connection entries; preserve bank/channel contents |
+| Codex-Sandbox nicht startfähig | Inventar und bestätigte Werte | Operator stellt die bwrap-Fähigkeit hostweit her; der Prüfbefehl endet mit Status 0 | Teamkonfiguration unverändert lassen; Sandbox- und Approval-Regeln nicht abschwächen |
 | Selected Team-Codex model or reasoning level unavailable | Original helper sources and existing verified setup | Authorized compatible access and exact configuration/inventory readbacks | Preserve the confirmed selection and report the affected incomplete capability |
 | Persönliche Codex-Skillwurzel wirksam | Persönliche Ausstattung unangetastet | Doppelbindung und echte Workerauflösung korrigieren; Teamroots nachweisen | Nur eigene Prozessbindung/Skillkopien zurücknehmen |
 | Falscher Wake-Owner | Karte blocked, Arbeitsstand erhalten | Eigene Subscription korrekt neu anlegen und nachlesen | Nur exakte zugeordnete Subscription nativ entfernen |
