@@ -50,6 +50,7 @@
 - Distinguish the foreground wait window from process termination and native stuck-worker protection. Use the supported long-running path; a long productive run alone is not a reason to stop.
 - Preserve explicit customer financial/resource caps, configured limits, provider quotas, operational permissions, and native failure-loop guards.
 - Use existing tests before building new test infrastructure. Preserve required security and acceptance checks. Stop auxiliary work that no longer supports an acceptance criterion.
+- Extend an existing test harness instead of writing a new one. A synthetic harness that serves application files owns its isolation boundary: deny protected names before request parsing, cover resolver/transform aliases and editor endpoints, block outbound traffic, and extend the existing boundary regression instead of adding an ad-hoc copy.
 - Do not build a recovery, polling, or dispatch loop of your own. Use the supported background path and its native signals.
 
 ## Exception routing
