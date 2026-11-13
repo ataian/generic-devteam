@@ -36,6 +36,7 @@ Report unverified items separately from successful checks.
 - Board: compare actual board ID/default workspace/DB and dispatcher/notifier ownership. Use the [known resolver](kanban-block-triage-escalation.md) with the active gateway PM interpreter for effective `kanban.auto_decompose=false`. Accept a correct central value; do not repair graphs or create test cards. Retain the later operational subscription recipe without creating a subscription to an invented task.
 - Protection: verify effective `security.protected_instruction_files=false` and its management source for each selected role. Accept a correct centrally managed value without a duplicate override. Report real restrictions without bypassing them.
 - Planner skill maintenance: read back effective `skills.creation_nudge_interval=0` in the Planner profile.
+- Planner Kanban tools: require `kanban` enabled through native `tools list` for `cli`, `mattermost`, and `api_server` under [the recipe](setup.md#planner-kanban-tools). Check `agent.disabled_toolsets`, stripping warnings, and context overrides; compare unrelated enabled/disabled selections with the pre-change inventory. Configuration does not prove adoption by running conversations; do not create tasks or model calls.
 - Recovery: compare installed generic script bytes and generated launcher bytes against `bind_recovery.render_launcher`, mode 0700, interpreter, DB, script and Planner ID. Keep task ID as the sole runtime argument; do not invoke a recovery transition.
 
 ## Baseline and completion

@@ -14,7 +14,7 @@ Resolve missing or contradictory bindings before writing that team's files.
 Do not create a cron job or watcher.
 Do not stop workers or restart sessions.
 Do not change models, plugins, integrations, configuration, or external services through the file helper.
-The required [upstream companion update](#required-upstream-companion-update) and [Reviewer skill retirement](#required-reviewer-skill-retirement-1122) use separate approved prose steps, not the file helper.
+The required [Planner Kanban binding](#planner-kanban-tools), [upstream companion update](#required-upstream-companion-update), and [Reviewer skill retirement](#required-reviewer-skill-retirement-1122) use separate approved prose steps, not the file helper.
 Do not run a new setup or pipeline test card as part of a file update.
 
 Use Python 3.11 or later and local Git for this helper.
@@ -130,6 +130,7 @@ Preserve local SOUL drift through the same three-way comparison as a recorded in
 ## Prepare and review one team
 
 Inspect all assigned upstream assets under [Required upstream companion update](#required-upstream-companion-update) before presenting the complete update scope.
+Inspect [Planner Kanban tools](#planner-kanban-tools) before that same scope decision.
 Perform that comparison even for a same-version or no-op file proposal.
 
 ```sh
@@ -206,6 +207,22 @@ It does not authorize runtime configuration or integration changes.
 For the Planner skill-maintenance policy, report the separate configuration step in [Setup](setup.md#3-frische-profile-bestätigte-modelle).
 The file updater delivers the Planner template change but does not set `skills.creation_nudge_interval`.
 Obtain separate authorization to set and read back `skills.creation_nudge_interval=0` in the existing Planner profile.
+
+## Planner Kanban tools
+
+Check Planner Kanban availability on every requested team update, including same-version and no-op file updates.
+Use the native scope, commands, and complete readbacks in [Planner Kanban tools](setup.md#planner-kanban-tools).
+The file helper does not enable tools or change native configuration; installation metadata does not certify this binding.
+Include missing Planner tool selections in the complete update scope before the approval decision.
+Obtain authorization before changing native configuration; `--dependency-decision` alone does not grant it.
+Back up the affected configuration and native tool selections in the existing private update area.
+Preserve unrelated enabled and disabled tools, global suppression entries, and MCP bindings under the setup recipe.
+Recheck for concurrent drift before enabling only the missing authorized selections through the native commands.
+Read back all three platform selections and compare preservation against the captured state.
+Save and read back completion evidence in the existing private setup/update record.
+Keep the binding `pending` if authorization, availability, or preservation remains unresolved, even after the Maker version advances.
+Report `files updated; team update incomplete` while this required binding remains pending.
+Configuration readbacks do not establish adoption by running sessions; preserve the existing no-restart boundary.
 
 ## Required upstream companion update
 
@@ -499,6 +516,7 @@ Do not repeat removed behavioral experiments or treat them as pending setup gate
 Preserve the operational dependency-decision gate when recipes or component metadata change, including changes that remove tests.
 
 For an authorized target update, read back the exact installation record, result journal, and changed targets.
+Read back [Planner Kanban tools](#planner-kanban-tools), including unchanged-version checks and preservation evidence, before claiming a complete team update.
 Read back all required upstream companion statuses and native evidence, including unchanged-version comparisons, before claiming a complete team update.
 Read back the required retirement status and native evidence for affected teams before claiming the team update is complete.
 Read back workflow migration progress and subsequent-context loading evidence for affected teams; report missing evidence as an open step.

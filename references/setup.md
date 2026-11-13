@@ -179,6 +179,40 @@ Check environment/YAML, session/per-model/CLI overrides, fallbacks and required 
 Use the correct native profile for protected login and model configuration readback.
 A stored key or warning alone does not establish its effective value.
 
+### Planner Kanban tools
+
+Kanban is default-off; board configuration and a working `hermes kanban` CLI do not enable model tools.
+Enable it explicitly in the confirmed Planner profile for all three entry surfaces below.
+Desktop/TUI use `cli`; Mattermost uses `mattermost`; OpenAI-compatible WebUI calls use `api_server`.
+Before enabling, capture each platform's native tool selection and the saved `platform_toolsets`, root `toolsets`, and `agent.disabled_toolsets`.
+Preserve unrelated enabled and disabled tools, including MCP selections and global suppression entries.
+If native enable would broaden unrelated permissions, such as clearing a `no_mcp` sentinel, stop for a supported, scoped resolution.
+Do not replace `platform_toolsets` or root `toolsets` with a Kanban-only list.
+
+```sh
+hermes -p "$PLANNER" tools list --platform cli
+hermes -p "$PLANNER" tools list --platform mattermost
+hermes -p "$PLANNER" tools list --platform api_server
+hermes -p "$PLANNER" config get platform_toolsets
+hermes -p "$PLANNER" config get toolsets
+hermes -p "$PLANNER" config get agent.disabled_toolsets
+hermes -p "$PLANNER" tools enable kanban --platform cli
+hermes -p "$PLANNER" tools enable kanban --platform mattermost
+hermes -p "$PLANNER" tools enable kanban --platform api_server
+hermes -p "$PLANNER" tools list --platform cli
+hermes -p "$PLANNER" tools list --platform mattermost
+hermes -p "$PLANNER" tools list --platform api_server
+hermes -p "$PLANNER" config get platform_toolsets
+hermes -p "$PLANNER" config get toolsets
+hermes -p "$PLANNER" config get agent.disabled_toolsets
+```
+
+Require `kanban` enabled without stripping warnings on every listed platform; compare the complete before/after selections and suppression entries.
+Resolve conflicting session/tool-selection overrides before claiming availability in that context.
+Record readbacks in the existing private setup record; keep the binding incomplete if required availability or preservation fails.
+These readbacks establish configuration, not adoption by a running conversation; do not start model calls, tasks, or service/session restarts.
+Keep native Kanban guards, the single active task, and the fixed independent Reviewer unchanged.
+
 ## 4. Eigenes Board und Team-Codex
 
 Nur bei fehlendem eigenem Board und bestätigter Identität:

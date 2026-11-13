@@ -638,6 +638,68 @@ class ReasoningContractTests(unittest.TestCase):
             self.assertTrue(expected == output, role)
 
 
+class PlannerKanbanToolsetTests(unittest.TestCase):
+    """Static recipe/readback contracts; no live profile or model execution."""
+
+    def test_new_planner_explicitly_enables_native_kanban_on_each_surface(self):
+        setup = (ROOT / "references/setup.md").read_text()
+        configuration = setup.split("## 3. ", 1)[1].split("\n## 4. ", 1)[0]
+        for platform in ("cli", "mattermost", "api_server"):
+            with self.subTest(platform=platform):
+                enable = f'hermes -p "$PLANNER" tools enable kanban --platform {platform}'
+                readback = f'hermes -p "$PLANNER" tools list --platform {platform}'
+                self.assertIn(enable, configuration)
+                self.assertIn(readback, configuration)
+                self.assertLess(configuration.index(enable), configuration.rindex(readback))
+        for clause in (
+            "Kanban is default-off",
+            "Desktop/TUI use `cli`",
+            "OpenAI-compatible WebUI calls use `api_server`",
+            "Before enabling, capture each platform's native tool selection",
+            "Preserve unrelated enabled and disabled tools",
+            "compare the complete before/after selections",
+            "Do not replace `platform_toolsets` or root `toolsets` with a Kanban-only list",
+            "such as clearing a `no_mcp` sentinel",
+            "Keep native Kanban guards, the single active task, and the fixed independent Reviewer unchanged.",
+        ):
+            self.assertIn(clause, configuration)
+
+    def test_existing_team_updates_require_separate_authorized_kanban_reconciliation(self):
+        update = (ROOT / "references/update.md").read_text()
+        self.assertIn("## Planner Kanban tools\n", update)
+        section = update.split("## Planner Kanban tools\n", 1)[1].split("\n## ", 1)[0]
+        for clause in (
+            "every requested team update, including same-version and no-op file updates",
+            "setup.md#planner-kanban-tools",
+            "The file helper does not enable tools",
+            "Include missing Planner tool selections in the complete update scope",
+            "Obtain authorization before changing native configuration",
+            "Back up the affected configuration and native tool selections",
+            "Recheck for concurrent drift before enabling",
+            "Preserve unrelated enabled and disabled tools",
+            "pending",
+            "files updated; team update incomplete",
+        ):
+            self.assertIn(clause, section)
+        handoff = update.split("## Verify and hand off\n", 1)[1]
+        self.assertIn("#planner-kanban-tools", handoff)
+        preparation = update.split("## Prepare and review one team\n", 1)[1]
+        self.assertLess(preparation.index("Inspect [Planner Kanban tools](#planner-kanban-tools)"),
+                        preparation.index("references/update_team.py plan"))
+
+    def test_setup_readback_requires_kanban_availability_not_only_board_settings(self):
+        verification = (ROOT / "references/verification.md").read_text()
+        self.assertIn("- Planner Kanban tools:", verification)
+        row = next(line for line in verification.splitlines()
+                   if line.startswith("- Planner Kanban tools:"))
+        for clause in (
+            "`cli`", "`mattermost`", "`api_server`", "tools list", "enabled",
+            "agent.disabled_toolsets", "unrelated enabled/disabled selections",
+            "setup.md#planner-kanban-tools", "not prove", "running",
+        ):
+            self.assertIn(clause, row)
+
+
 class ReviewerEquipmentTests(unittest.TestCase):
     """Static package contracts; no target integration or model calls."""
 
