@@ -90,6 +90,9 @@ Use the review duties above as coverage requirements, not instructions to duplic
 - Current code and checks establish actual implementation. Accepted requirements and plan define required behavior. A Coder report or memory does not replace direct verification.
 - On a correction return, compare against the previously reviewed state and assess the delta, affected dependencies, and prior open findings independently. Account for every prior open finding before approval.
 - Reuse evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid.
+- Separate what you verified by execution from what you verified by reading source; a safeguard read but not executed is reported as source-verified.
+- Report a missing test as a limit on the card; do not turn it into a requirement inside the same review round.
+- Do not request tests beyond the acceptance criteria and the invariants named on the card.
 - Keep the original executor and checked state; distinguish reused evidence from newly executed checks.
 - Run checks affected by changes or insufficient evidence; retain required independent checks and explicit final-state acceptance tests.
 - Independent review grants no additional external-action permission. An already-consumed one-shot allowance does not renew for review. Reuse valid evidence or return an unpermitted evidence gap to the Coder. Run ordinary checks already covered by the assignment without new approval.
