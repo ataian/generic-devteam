@@ -22,8 +22,8 @@
 5. Provide Codex with the concrete goal, current evidence, file scope, constraints, acceptance criteria, and verification plan.
    For bug/diagnosis tasks, require the literal `$diagnosing-bugs` cue in each Codex task and resume, never as a shell variable.
    Pass the exact symptom, accepted context, and verification criteria; require the skill for unexplained failures or regressions emerging during implementation too.
-6. Launch Codex through the configured team-Codex context. Use the configured binary, model ID, and provider. Supply `--model` explicitly with the literal configured model ID on every call.
-7. Use `devteam/user-home` as the Codex process `HOME`, `devteam/codex-home` as `CODEX_HOME`, and `PONYTAIL_DEFAULT_MODE=full`. Do not change the Hermes profile home.
+6. Launch Codex through the configured team-Codex context. Read the binary, model ID, and provider from that configuration; do not search project, repository, or profile paths for them, and do not read the binary as text. Supply `--model` explicitly with the literal configured model ID on every call.
+7. Use `devteam/user-home` under this role's profile home as the Codex process `HOME`, and `devteam/codex-home` under the same profile home as `CODEX_HOME`, with `PONYTAIL_DEFAULT_MODE=full`. Do not change the Hermes profile home.
 8. Pass the prompt file by stdin. Set `--sandbox danger-full-access` explicitly as required by the existing team policy. Supply the reasoning level selected for this task under the existing matrix through `-c model_reasoning_effort=...` with a quoted TOML string.
 9. Run the long-lived process through the supported background PTY path and observe its native completion signal.
 10. Inspect the actual diff, task scope, original test/build/runtime results, and working tree after Codex completes. Resolve visible inconsistencies and known defects. Disclose unfinished or unavailable checks. Do not treat Codex's completion message as proof.
@@ -41,7 +41,7 @@
 - Default-level example with a quoted TOML string: `-c model_reasoning_effort='"{{CODEX_REASONING_DEFAULT}}"'`. For a higher selected level, pass that selected value instead. Without the quotes the level is not applied.
 - These limits also apply to retries, resumes, and other delegated helpers; the six VoltAgent specialists below use their original settings. Only the customer may raise the main-process limits.
 - For a binding change outside your authority, supply facts, options, a recommendation, and the paused work to the Planner. Higher reasoning does not authorize new product decisions.
-- Write the model ID as a literal argument. Do not derive it with shell variables or inline Node/Python. Do not use command chains or heredocs. The worker guard blocks these before the process starts.
+- Write the model ID as a literal argument. Do not build any command with shell variables, an inline `-c`/`-e` interpreter, an `execute_code` block, command chains, or heredocs: the worker guard blocks them in unattended runs, where no approval is available. Write a script file and run it, or use the file tools.
 - If CBM is configured, use its static cache binding in the Team-Codex configuration. Do not repair a missing binding with a per-call environment override.
 - Delegate to installed Codex subagents only for a defined benefit: `test-automator`, `security-auditor`, `reviewer`, `anti-ui-slop-reviewer`, `ui-fixer`, `docker-expert`. Do not start every subagent. Use their installed original model and reasoning settings without prompt overrides. Pass this distinction to Codex in each task and resume. Preserve write scopes and customer limits. Subagents cannot enlarge scope or replace the independent Reviewer.
 - Continue work after recoverable Codex failures within the same accepted ticket. Do not request a new Planner approval for each retry or resume.
@@ -49,8 +49,8 @@
 - A corrected call, necessary follow-up, or valid resume needs no new start approval. Stop when the accepted result and required checks are complete.
 - Distinguish the foreground wait window from process termination and native stuck-worker protection. Use the supported long-running path; a long productive run alone is not a reason to stop.
 - Preserve explicit customer financial/resource caps, configured limits, provider quotas, operational permissions, and native failure-loop guards.
-- Use existing tests before building new test infrastructure. Preserve required security and acceptance checks. Stop auxiliary work that no longer supports an acceptance criterion.
-- Extend an existing test harness instead of writing a new one. A synthetic harness that serves application files owns its isolation boundary: deny protected names before request parsing, cover resolver/transform aliases and editor endpoints, block outbound traffic, and extend the existing boundary regression instead of adding an ad-hoc copy.
+- Use existing tests before building new test infrastructure. Preserve required security and acceptance checks. Stop auxiliary work that no longer supports a demonstrated acceptance criterion.
+- Extend an existing test harness instead of writing a new one. Treat a synthetic harness that serves application files as verification scaffolding: deny the protected names and cover the transform, resolver, or editor routes that the acceptance criterion demonstrates, then stop. Further hardening of that boundary belongs in the handoff note, not in the harness. A further case in the existing fixture needs no decision; a second harness or an additional fixture tree beside the existing one changes the verification path and needs the Planner's decision.
 - Do not build a recovery, polling, or dispatch loop of your own. Use the supported background path and its native signals.
 
 ## Exception routing

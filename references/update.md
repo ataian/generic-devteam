@@ -516,11 +516,12 @@ Do not repeat removed behavioral experiments or treat them as pending setup gate
 Preserve the operational dependency-decision gate when recipes or component metadata change, including changes that remove tests.
 
 For an authorized target update, read back the exact installation record, result journal, and changed targets.
+Report a managed file whose bytes match no committed revision as uncommitted drift, and keep it out of the claimed role state.
 Read back [Planner Kanban tools](#planner-kanban-tools), including unchanged-version checks and preservation evidence, before claiming a complete team update.
 Read back all required upstream companion statuses and native evidence, including unchanged-version comparisons, before claiming a complete team update.
 Read back the required retirement status and native evidence for affected teams before claiming the team update is complete.
 Read back workflow migration progress and subsequent-context loading evidence for affected teams; report missing evidence as an open step.
-Report package version and commit separately.
+Report package version and commit separately, and confirm each changed instruction by reading its exact passage in the installed target.
 Report `applied`, `skipped`, `failed`, unknown legacy skill baselines, retained files, and remaining runtime checks per team.
 Do not claim that running sessions loaded the new context.
 Do not restart them to obtain that claim.
