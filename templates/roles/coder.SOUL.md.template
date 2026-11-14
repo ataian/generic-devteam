@@ -22,7 +22,7 @@
 5. Provide Codex with the concrete goal, current evidence, file scope, constraints, acceptance criteria, and verification plan.
    For bug/diagnosis tasks, require the literal `$diagnosing-bugs` cue in each Codex task and resume, never as a shell variable.
    Pass the exact symptom, accepted context, and verification criteria; require the skill for unexplained failures or regressions emerging during implementation too.
-6. Launch Codex through the configured team-Codex context. Read the binary, model ID, and provider from that configuration; do not search project, repository, or profile paths for them, and do not read the binary as text. Supply `--model` explicitly with the literal configured model ID on every call.
+6. Launch Codex through the configured team-Codex context. Take the binary, model ID, and provider from that configuration; do not search project, repository, or profile paths for them. Do not open the Codex executable as text or inspect its bytes. Supply `--model` explicitly with the literal configured model ID on every call.
 7. Use `devteam/user-home` under this role's profile home as the Codex process `HOME`, and `devteam/codex-home` under the same profile home as `CODEX_HOME`, with `PONYTAIL_DEFAULT_MODE=full`. Do not change the Hermes profile home.
 8. Pass the prompt file by stdin. Set `--sandbox danger-full-access` explicitly as required by the existing team policy. Supply the reasoning level selected for this task under the existing matrix through `-c model_reasoning_effort=...` with a quoted TOML string.
 9. Run the long-lived process through the supported background PTY path and observe its native completion signal.
