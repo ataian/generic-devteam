@@ -58,7 +58,7 @@ Reuse a verified checkout or obtain it only within the authorized file-work scop
 If the source or a required reference is missing or unreadable, report the exact path and stop the affected authoring step.
 Keep `SKILL.md`, `references/`, provenance, and all legal files together; maintain normative wording upstream rather than copying it back here.
 
-The manifest pin identifies published TAS `1.1.0`, including the writing-for-agents adaptation.
+The manifest pin identifies published TAS `1.2.0`, including the writing-for-agents adaptation and the addition-reconciliation rule.
 Pin maintenance requires verification of the actual published commit before advancing `source_revision`.
 Record local working-tree changes separately from that published identity.
 TAS has no team-role targets and is not installed into Planner, Coder, Reviewer, or Team-Codex by setup or team updates.

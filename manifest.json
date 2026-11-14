@@ -307,7 +307,7 @@
   "upstream_components": {
     "tas": {
       "original_repo": "https://github.com/ataian/tas",
-      "source_revision": "1f7bfeffdc5ddd0eb9a8be59e2153ce6394c4268",
+      "source_revision": "fe3a7d251518b793fedaec3041558c2840b4c796",
       "subpaths": [
         "."
       ],

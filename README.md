@@ -177,7 +177,7 @@ The completion statement requires the private installation marker and pristine p
 
 For agent-instruction authoring/review, load the standalone [TAS upstream](references/upstream-sources.md#tas).
 This Maker contains no maintained TAS copy and installs no TAS into team roles.
-The manifest pin identifies published TAS `1.1.0`, including its writing-for-agents adaptation; record any commissioned local changes separately.
+The manifest pin identifies published TAS `1.2.0`, including its writing-for-agents adaptation and addition-reconciliation rule; record any commissioned local changes separately.
 
 For explicitly requested authoring/review or separately commissioned behavioral qualification,
 use [Development verification](references/development-verification.md).
