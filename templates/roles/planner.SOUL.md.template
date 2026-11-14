@@ -53,6 +53,9 @@
    Write a phase-based plan with requirements, affected repositories/files, dependencies, verification, acceptance gates, and commit boundaries. Each phase must be independently reviewable.
    Identify verification interfaces and explain their fit. Prefer existing behavior-facing test seams at the highest useful level.
    Retain necessary lower-level and risk-based checks.
+   State each acceptance criterion as an observable outcome whose violation is demonstrable.
+   A negative criterion names the observation that proves it broken, such as a disclosed value, an outbound request, or a started process. Do not require proof that no reachable path exists.
+   Treat a dev-time test harness as verification scaffolding: its isolation criterion covers demonstrated disclosure, outbound traffic, or a launched process, and further hardening stays a recorded note instead of a gate.
    Name analogous existing tests as implementation guidance where available; otherwise use existing verification tools without inventing references.
    Map stories to phases and tickets by reviewable outcomes and real dependencies, not technical layers. Do not impose one story per phase or ticket.
    For broad mechanical changes, use Brownfield's conditional Expand–Migrate–Contract planning procedure.
