@@ -409,7 +409,7 @@ Resume a pending retirement on later updates even if `installation.json` already
 Never infer migration completion from version alone.
 For a team created at or above `1.1.22`, use original setup and discovery evidence to establish that this crossing migration is not applicable.
 For an older team already reporting a newer version without completion evidence, resolve its pre-update evidence or reconcile the exact scope below.
-For legacy or unknown versions, resolve the source evidence or explicitly reconcile these three identities within the approved scope.
+For legacy or unknown versions, resolve the source evidence or explicitly reconcile these two identities within the approved scope.
 Do not silently skip an unknown version.
 
 The only removal targets are these exact Reviewer skill identities and their complete local trees:
@@ -417,11 +417,10 @@ The only removal targets are these exact Reviewer skill identities and their com
 | Native skill identity | Recipe path to resolve, not a guessed deletion target |
 |---|---|
 | `minimal-change-engineering` | `<reviewer home>/skills/minimal-change-engineering/` |
-| `project-lib-versioning` | `<reviewer home>/skills/project-lib-versioning/` |
 | `screenshot-to-code` | `<reviewer home>/skills/screenshot-to-code/` |
 
-Confirm identities and recipe paths against the [manifest](../manifest.json) and [own-skill recipe](setup.md#6-own-skills-roles-and-text-personalization).
-This migration overrides local-adaptation preservation only for these three Reviewer skill trees.
+Confirm identities and recipe paths against the [manifest](../manifest.json) and [own-skill recipe](setup.md#6-own-skills-roles-and-text-personalization); where the manifest no longer carries an identity, this table is the migration's record of its path.
+This migration overrides local-adaptation preservation only for these two Reviewer skill trees.
 Preserve CBM/Graphify skills and bindings; restore the selected Reviewer integration through the approved upstream companion update.
 Include learned files, references, hidden files, and local additions.
 Do not copy retired methods into SOUL or other skills.

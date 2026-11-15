@@ -16,9 +16,8 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | <a id="own-planning"></a>[brownfield-feature-planning](../skills/brownfield-feature-planning/SKILL.md) | Hermes Planner |
 | <a id="own-diagnosis"></a>[diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | Team-Codex |
 | <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes Planner |
-| <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Hermes Planner |
+| <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Planner and Coder |
 | <a id="own-prototype"></a>[prototype](../skills/prototype/SKILL.md) | Hermes Planner |
-| <a id="own-lib-versioning"></a>[project-lib-versioning](../skills/project-lib-versioning/SKILL.md) | Planner and Coder |
 | <a id="own-retro"></a>[retro](../skills/retro/SKILL.md) | Hermes Planner |
 | <a id="own-devteam-cleanup"></a>[devteam-cleanup](../skills/devteam-cleanup/SKILL.md) | Hermes Planner |
 | <a id="own-screenshot"></a>[screenshot-to-code](../skills/screenshot-to-code/SKILL.md) | Planner, Coder and Team-Codex |

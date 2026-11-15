@@ -209,7 +209,7 @@ class ReasoningContractTests(unittest.TestCase):
         result = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
         for text in [
             "Inspect existing validation commands for included test and build phases before selecting checks.",
-            "Read existing result artifacts instead of rerunning a successful check only to obtain a clearer summary.",
+            "Rerun a check only when your own valid evidence does not already cover the change; a clearer summary is no reason to repeat it.",
             "Check existing runtime paths, inputs, and permitted access before starting a custom probe or review helper.",
             "After a deterministic argument or permission error, correct the call or use an existing permitted path before retrying.",
             "Do not repeat an unchanged failed call or bypass a native guard.",
@@ -239,11 +239,13 @@ class ReasoningContractTests(unittest.TestCase):
         for role in ("coder", "reviewer"):
             text = render_role(self.template(role), self.values(role), role)
             with self.subTest(role=role):
-                self.assertIn("Reuse evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid.", text)
                 self.assertIn("Keep the original executor and checked state; distinguish reused evidence from newly executed checks.", text)
                 self.assertIn("Run checks affected by changes or insufficient evidence; retain required independent checks and explicit final-state acceptance tests.", text)
-        self.assertIn("On resume, reconcile the current assignment, working tree, and blockers; continue unfinished work instead of repeating completed preparation.", self.template("coder"))
+        coder = render_role(self.template("coder"), self.values("coder"), "coder")
+        self.assertIn("Reuse evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid.", coder)
         reviewer = self.template("reviewer")
+        self.assertIn("Reuse your own evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid; evidence from the implementing side is a claim to verify, not coverage.", reviewer)
+        self.assertIn("On resume, reconcile the current assignment, working tree, and blockers; continue unfinished work instead of repeating completed preparation.", self.template("coder"))
         self.assertIn("On a correction return, compare against the previously reviewed state and assess the delta, affected dependencies, and prior open findings independently.", reviewer)
         self.assertIn("Deliver a verdict against the exact reviewed commit", reviewer)
 
@@ -429,7 +431,7 @@ class ReasoningContractTests(unittest.TestCase):
             "A question is not automatically a proven defect.",
             "Only the Coder escalates an unresolved customer decision through the Planner.",
             "Assess an explanation without requiring a project edit or an empty commit.",
-            "A Coder answer or customer decision does not itself approve the implementation.",
+            "A Coder answer or customer decision does not itself approve the implementation; it closes the finding it answers, and the implementation still needs its own evidence.",
             "Successful review completes the ticket directly; DONE has no return to the Coder.",
             "Respect the Coder's in-scope implementation discretion.",
         ):
@@ -712,8 +714,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             "brownfield-feature-planning": {"hermes": ["planner"]},
             "diagnosing-bugs": {"codex": ["team-codex"]},
             "minimal-change-engineering": {"hermes": ["planner"]},
-            "plan-versioning-semver": {"hermes": ["planner"]},
-            "project-lib-versioning": {"hermes": ["planner", "coder"]},
+            "plan-versioning-semver": {"hermes": ["planner", "coder"]},
             "prototype": {"hermes": ["planner"]},
             "retro": {"hermes": ["planner"]},
             "devteam-cleanup": {"hermes": ["planner"]},
@@ -815,11 +816,13 @@ class ReviewerEquipmentTests(unittest.TestCase):
         sources = (ROOT / "references/upstream-sources.md").read_text()
         for name, targets in (
             ("minimal-change-engineering", "Hermes Planner"),
-            ("project-lib-versioning", "Planner and Coder"),
+            ("plan-versioning-semver", "Planner and Coder"),
             ("screenshot-to-code", "Planner, Coder and Team-Codex"),
         ):
             row = next(line for line in sources.splitlines() if "]" in line and f"[{name}]" in line)
             self.assertTrue(row.endswith("| " + targets + " |"), row)
+        self.assertNotIn("project-lib-versioning", sources)
+        self.assertNotIn('id="own-lib-versioning"', sources)
         for component in ("codebase-memory", "graphify"):
             row = next(line for line in sources.splitlines() if f'id="{component}"' in line)
             self.assertTrue(row.endswith("| Planner, Coder, Reviewer and Team-Codex |"), row)
@@ -840,7 +843,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
         self.assertIn("## Required Reviewer skill retirement (1.1.22)\n", update)
         section = update.split("## Required Reviewer skill retirement (1.1.22)\n", 1)[1].split("\n## ", 1)[0]
         rows = re.findall(r"^\| `([^`]+)` \| `([^`]+)` \|$", section, re.M)
-        expected = ("minimal-change-engineering", "project-lib-versioning", "screenshot-to-code")
+        expected = ("minimal-change-engineering", "screenshot-to-code")
         self.assertEqual(rows, [(name, f"<reviewer home>/skills/{name}/") for name in expected])
         self.assertIn("pre-update version below `1.1.22` to a target version at or above `1.1.22`", section)
         self.assertIn("This includes teams on `1.1.21`", section)
@@ -848,8 +851,10 @@ class ReviewerEquipmentTests(unittest.TestCase):
         for name in expected:
             item = MANIFEST["own_skills"].get(name) or MANIFEST["upstream_components"][name]
             self.assertNotIn("reviewer", item["targets"]["hermes"])
+        self.assertNotIn("project-lib-versioning", MANIFEST["own_skills"])
+        self.assertNotIn("project-lib-versioning", section)
         for clause in (
-            "This migration overrides local-adaptation preservation only for these three Reviewer skill trees.",
+            "This migration overrides local-adaptation preservation only for these two Reviewer skill trees.",
             "Include learned files, references, hidden files, and local additions.",
             "Keep the native `sdlc-review` skill and its automatic integration unchanged.",
             "Preserve all other adaptations and all Planner, Coder and Team-Codex assets.",
@@ -868,7 +873,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             "Read back this private record before file application.",
             "Resume a pending retirement on later updates even if `installation.json` already reports `1.1.22` or a later version.",
             "Never infer migration completion from version alone.",
-            "For legacy or unknown versions, resolve the source evidence or explicitly reconcile these three identities within the approved scope.",
+            "For legacy or unknown versions, resolve the source evidence or explicitly reconcile these two identities within the approved scope.",
             "Do not silently skip an unknown version.",
             "Run the pending retirement after successful file application and before reporting a complete team update.",
             "Treat already absent skills as successful no-ops after native readback.",

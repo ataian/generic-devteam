@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.8.16",
+  "version": "2.8.17",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -50,7 +50,6 @@
     "skills/diagnosing-bugs/references/method.md",
     "skills/minimal-change-engineering/SKILL.md",
     "skills/plan-versioning-semver/SKILL.md",
-    "skills/project-lib-versioning/SKILL.md",
     "skills/prototype/LICENSE",
     "skills/prototype/LOGIC.md",
     "skills/prototype/NOTICE.md",
@@ -227,7 +226,8 @@
       "status": "included",
       "targets": {
         "hermes": [
-          "planner"
+          "planner",
+          "coder"
         ]
       },
       "origin": "Übernommene, vom Nutzer bearbeitete Skillfassung; Autorenfeld Mariko, kein Lizenzfeld im Frontmatter.",
@@ -236,25 +236,6 @@
       "license_path": null,
       "notice_path": "NOTICE.md",
       "skill_path": "skills/plan-versioning-semver/SKILL.md",
-      "transport": {
-        "SKILL.md": "SKILL.md"
-      }
-    },
-    "project-lib-versioning": {
-      "status": "included",
-      "targets": {
-        "hermes": [
-          "planner",
-          "coder"
-        ]
-      },
-      "codex_instruction_only": true,
-      "origin": "Übernommene, vom Nutzer bearbeitete Skillfassung; MIT-Angabe im Frontmatter, historischer Autoren-/Auditverweis nicht zusätzlich belegt.",
-      "changes": "Aktuelle Nutzerfassung; beim Setup den vollständigen Skillbaum unverändert kopieren.",
-      "origin_ref": "references/upstream-sources.md#own-lib-versioning",
-      "license_path": null,
-      "notice_path": "NOTICE.md",
-      "skill_path": "skills/project-lib-versioning/SKILL.md",
       "transport": {
         "SKILL.md": "SKILL.md"
       }

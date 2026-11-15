@@ -1,7 +1,7 @@
 ---
 name: plan-versioning-semver
-description: "Use when versioning: plan names, app SemVer, changelog, API."
-version: 1.2.0
+description: "Use when naming plans or app/library SemVer, changelog, API."
+version: 1.3.0
 author: Mariko
 platforms: [linux]
 metadata:
@@ -10,10 +10,10 @@ metadata:
     category: devops
 ---
 
-# Versioning plans and applications
+# Versioning plans, applications and libraries
 
 Four rules stand on their own: plan-file names, the version API, the CHANGELOG, and SemVer
-for the application version. Each one applies whenever its situation occurs — while
+for the application version and each self-owned library. Each one applies whenever its situation occurs — while
 writing a plan, in a ticket, or in a conversation. Writing a plan is not a prerequisite.
 
 ## When to use
@@ -21,7 +21,7 @@ writing a plan, in a ticket, or in a conversation. Writing a plan is not a prere
 - Name or rename a plan, review, ADR, handoff or specification file.
 - Create or change the version API of a project.
 - Create or change the `CHANGELOG.md` of a project.
-- Set, classify or discuss the version of an application.
+- Set, classify or discuss the version of an application or a self-owned library.
 
 ## Plan file naming scheme
 
@@ -91,7 +91,7 @@ File in the repository root, Keep-a-Changelog style:
 - Categories: `Added`, `Changed`, `Fixed`, `Removed`.
 - Maintain it with every release (part of the definition of done).
 
-## Application version
+## Application and library versions
 
 The application version follows SemVer:
 
@@ -102,3 +102,5 @@ The application version follows SemVer:
 Classify each change of the application version by these three cases. The same rule applies
 when the version is decided in conversation, in a ticket, or while planning — a plan is not
 needed for a version decision.
+
+The three classes apply to the application version and to each self-owned library. A changed library carries its own version step; a consumer library that needs one after its dependency changes carries it as well, and its own consumers follow.

@@ -898,7 +898,8 @@ class UpdaterTests(unittest.TestCase):
         """The file helper retains trees; the required prose poststep is separate."""
         manifest_path = self.repo / 'manifest.json'
         manifest = json.loads(manifest_path.read_text())
-        names = ('minimal-change-engineering', 'project-lib-versioning', 'screenshot-to-code')
+        names = ('minimal-change-engineering', 'screenshot-to-code')
+        self.assertNotIn('project-lib-versioning', manifest['own_skills'])
         for name in names:
             manifest['own_skills'][name]['targets']['hermes'].append('reviewer')
         manifest_path.write_text(json.dumps(manifest))
