@@ -21,6 +21,8 @@ Keep all other skill bytes unchanged.
 - Check discovery and loading in the target harness after the comparison.
 
 Keep installed skills usable without the Maker package or setup record.
+Deliver `diagnosing-bugs` only to Team-Codex through [its owned-skill recipe](integrations.md#diagnosing-bugs); verify the Coder's explicit call policy after SOUL delivery.
+Deliver `prototype` only to the Planner through [its owned-skill recipe](integrations.md#prototype); verify the direct clarification exception after SOUL delivery.
 Deliver the bound callable launcher inside the existing planner skill tree.
 Do not add a separate runtime configuration file or workflow skill.
 
@@ -64,6 +66,8 @@ Alle Nichtplatzhalterbytes der bestätigten Vorlage bleiben erhalten.
 Use the role personalization accepted during preparation.
 Compare the rendered output with that scope before writing only `SOUL.md` in each confirmed role home.
 Read back complete bytes against the generated output and check effective full loading through the established native interface.
+The rendered Reviewer SOUL carries the proportional investigation method and conditional critical-invariant helper credit.
+No separate method reference or helper profile needs delivery; preserve the native `sdlc-review` preload.
 Do not overwrite foreign or concurrently changed files.
 Ask again only for a newly observed conflict or scope change.
 
@@ -77,7 +81,7 @@ Ask again only for a newly observed conflict or scope change.
 | Bank | Effective provider/bank and exact per-role tags/match settings |
 | Models/reasoning | Native configuration and effective overrides; existing role default/max fields |
 | Team-Codex | Actual binary, separate process/config homes, access and identity under [Integrations](integrations.md#team-codex) |
-| Analysis | Planner, Coder and Team-Codex: exactly the confirmed branch, complete assets and native connection/configuration readbacks |
+| Analysis | Planner, Coder, Reviewer and Team-Codex: exactly the confirmed branch, complete assets and native connection/configuration readbacks |
 | Communication | Planner-only bot, exact authorized user/channel/DM IDs and genuine Home binding; later task subscriptions remain operational |
 
 Reuse the confirmed workspace as `PROJECT_DIR` in the Planner SOUL.
@@ -89,7 +93,11 @@ Bind the workspace natively as `terminal.cwd` and the board default workspace.
 Keep the current Git-root, cwd, board, and ticket checks in the Planner workflow.
 Render the confirmed technical `PLANNER_PROFILE` directly into the Coder SOUL.
 Check that ID against the native profile registration.
-Use that bound ID for the existing clarification and TIMER routes.
+Use that bound ID for the existing Planner wake and TIMER routes.
+For a missing customer decision, the Coder keeps assignment and blocks the same card with `kind="needs_input"`.
+The existing subscription wakes the Planner for Mattermost coordination.
+After recording the sufficient answer, the Planner uses ordinary unblock or guarded triage recovery.
+Keep `kanban_request_review` bound to the independent Reviewer, not customer clarification.
 Do not derive paths from display names. Derive only new profile IDs under the setup normalization rule; preserve confirmed IDs.
 Do not ask the user to repeat confirmed values.
 If bindings conflict, resolve the conflict before writing role files.
@@ -98,7 +106,8 @@ Do not generate a second runtime binding file.
 
 Keep fixed Planner/Hermes-Coder reasoning in native configuration.
 Keep Reviewer/Team-Codex default and maximum in the existing role fields.
-Resolve native model IDs, supported levels, helper model/reasoning bindings, and limits during preparation.
+Resolve native model IDs, supported levels, and limits during preparation.
+For the six VoltAgent specialists, verify unchanged TOMLs and original model/reasoning availability through [their recipe](integrations.md#codex-agents).
 Read back actual configuration and overrides; do not probe reasoning boundaries with model calls.
 A role maximum is a policy rule, not a technical execution barrier.
 

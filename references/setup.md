@@ -14,7 +14,14 @@ Use English for development communication and artifacts. Preserve exact identifi
    Require `false` before release; scope authorized changes to the owner and selected team profiles.
 3. Check required interface and dependency availability through established read-only status/configuration paths.
    Do not qualify the project's toolchain or investigate general timeout, retry, or rate-limit behavior.
-   A missing Hindsight service or common runtime is an operator prerequisite issue, not permission to provision or repair it.
+   A missing Hindsight service or Hermes distribution prerequisite requires operator action; Maker does not install or repair them.
+   Inspect Codex and the selected analysis runtime's paths, versions, owners and shared consumers before proposing a first installation or change.
+   Check the Codex shell sandbox before any write, because the independent Review passes depend on it.
+   Run `bwrap --unshare-user --ro-bind / / --dev /dev -- /bin/true` and require exit status 0.
+   On Ubuntu 24.04, `kernel.apparmor_restrict_unprivileged_userns=1` blocks `/usr/bin/bwrap` until an AppArmor profile grants `userns`, as the packaged `linux-sandbox` profile does.
+   A blocked sandbox is an operator prerequisite: report the missing capability, and keep Codex sandbox and approval settings unchanged.
+   Read each independent asset's exact `source_revision` from the manifest without a new latest-version search.
+   Keep required pins separate from installed runtime versions and operational permission.
 4. Identify concrete shared bootstrap/PM effects before invoking CLI or adding plugins.
    Even help/bootstrap can sync dependencies; absolute plugin paths can alter shared PM inputs.
    Inspect other profiles only when a concrete shared effect requires it.
@@ -32,11 +39,20 @@ Do not require a new interview skill or product-planning workshop.
 | Group | Complete before starting |
 |---|---|
 | Project and roles | Separate project name and canonical absolute workspace; repository boundaries or confirmed absence; display names for Planner (`PLANER_NAME`), Coder (`CODER_NAME`), Reviewer (`REVIEWER_NAME`); selectable homes and collision resolutions |
-| Models and analysis | Combined default set below or confirmed overrides; actual native model/provider IDs and supported reasoning; helper model/reasoning bindings to the confirmed Team-Codex policy; exactly one of CBM or Graphify; repository/corpus scope, roots, cache/output paths and any optional watcher intent |
+| Models and analysis | Combined default set below or confirmed overrides; actual native model/provider IDs and supported reasoning; availability of original VoltAgent model/reasoning settings at the manifest revision; exactly one of CBM or Graphify; repository/corpus scope, roots, cache/output paths and any optional watcher intent |
 | Codex identity | Explicitly authorized `user.name`/`user.email` reuse, provenance, access method and protected login route; discovery alone is not consent |
 | Shared objects | Existing service endpoints; intended board/bank names; create versus authorized reuse and ownership |
 | Communication | Mattermost server/team, intended Planner bot, human and any additional authorized users, allowed project channel, channel type and DM participants; existing IDs or explicit creation intent |
 | Execution scope | Exact local writes, profile assets, shared PM/configuration effects, external identity actions, and activation; protected access preparation where possible |
+
+Include complete pinned plugin packages and legal files in the preparation inventory.
+Check runtime/asset compatibility before accepting the setup scope.
+If Codex or the selected analysis runtime is absent, disclose its exact first-installation release/source, paths and effects in that scope.
+The accepted upfront scope covers that first installation without repetitive per-component version questions.
+Preserve existing/shared installations; disclose and obtain explicit approval for a concrete required change rather than silently upgrading during new team setup.
+Plugin admission can change shared Hermes PM dependencies; obtain that shared scope before invoking bootstrap or native installation.
+Keep Hermes core, distribution skills and the Hindsight service outside Maker installation/update/repair scope.
+If a pin conflicts with a preserved runtime, report the exact mismatch and obtain the required update/defer decision before dependent writes.
 
 Resolve workspace separately from project name; do not derive a path or move an existing repository.
 Keep `PROJECT_NAME` as a single segment without slash, backslash, or traversal.
@@ -73,9 +89,9 @@ Resolve Sol separately to the actual supported native model/provider identifier 
 Record the actual Codex model ID as `CODEX_MODEL` and reasoning separately.
 If the selected model, provider, or reasoning level is unavailable or incompatible, resolve that conflict during preparation.
 Preserve accepted overrides. Do not silently change provider/model or choose the highest supported level.
-Use the Team-Codex model for all six helpers.
-Assign default reasoning or `high` capped by the confirmed maximum through [the helper recipe](integrations.md#codex-agents).
-Do not require access to the upstream model pins or a second provider.
+Use the six VoltAgent specialists' original model and reasoning settings under [the helper recipe](integrations.md#codex-agents).
+Resolve their availability and any conflicting customer limits before setup; preserve the pinned originals.
+The Team-Codex model and default/maximum matrix govern the main process, not these six specialists.
 Validate defaults against maxima using the chosen target's supported semantics, including nonstandard or nonconfigurable reasoning.
 
 Keep Hermes Coder fixed reasoning separate from task-selected Codex reasoning.
@@ -167,6 +183,40 @@ Check environment/YAML, session/per-model/CLI overrides, fallbacks and required 
 Use the correct native profile for protected login and model configuration readback.
 A stored key or warning alone does not establish its effective value.
 
+### Planner Kanban tools
+
+Kanban is default-off; board configuration and a working `hermes kanban` CLI do not enable model tools.
+Enable it explicitly in the confirmed Planner profile for all three entry surfaces below.
+Desktop/TUI use `cli`; Mattermost uses `mattermost`; OpenAI-compatible WebUI calls use `api_server`.
+Before enabling, capture each platform's native tool selection and the saved `platform_toolsets`, root `toolsets`, and `agent.disabled_toolsets`.
+Preserve unrelated enabled and disabled tools, including MCP selections and global suppression entries.
+If native enable would broaden unrelated permissions, such as clearing a `no_mcp` sentinel, stop for a supported, scoped resolution.
+Do not replace `platform_toolsets` or root `toolsets` with a Kanban-only list.
+
+```sh
+hermes -p "$PLANNER" tools list --platform cli
+hermes -p "$PLANNER" tools list --platform mattermost
+hermes -p "$PLANNER" tools list --platform api_server
+hermes -p "$PLANNER" config get platform_toolsets
+hermes -p "$PLANNER" config get toolsets
+hermes -p "$PLANNER" config get agent.disabled_toolsets
+hermes -p "$PLANNER" tools enable kanban --platform cli
+hermes -p "$PLANNER" tools enable kanban --platform mattermost
+hermes -p "$PLANNER" tools enable kanban --platform api_server
+hermes -p "$PLANNER" tools list --platform cli
+hermes -p "$PLANNER" tools list --platform mattermost
+hermes -p "$PLANNER" tools list --platform api_server
+hermes -p "$PLANNER" config get platform_toolsets
+hermes -p "$PLANNER" config get toolsets
+hermes -p "$PLANNER" config get agent.disabled_toolsets
+```
+
+Require `kanban` enabled without stripping warnings on every listed platform; compare the complete before/after selections and suppression entries.
+Resolve conflicting session/tool-selection overrides before claiming availability in that context.
+Record readbacks in the existing private setup record; keep the binding incomplete if required availability or preservation fails.
+These readbacks establish configuration, not adoption by a running conversation; do not start model calls, tasks, or service/session restarts.
+Keep native Kanban guards, the single active task, and the fixed independent Reviewer unchanged.
+
 ## 4. Eigenes Board und Team-Codex
 
 Nur bei fehlendem eigenem Board und bestätigter Identität:
@@ -186,7 +236,7 @@ Bind `devteam/codex-home` and `devteam/user-home` inside the actual Coder home t
 For CBM, bind the canonical account cache as a literal in the team MCP TOML `env` before hook approval under [Code analysis](code-analysis.md#codebase-memory).
 Record the actual Codex binary and both homes for configuration readback.
 Deliver/configure the complete original components for the chosen analysis branch only.
-Read back analysis targets, assets, runtime binding and licenses for Planner, Coder and Team-Codex.
+Read back analysis targets, assets, runtime binding and licenses for Planner, Coder, Reviewer and Team-Codex.
 For CBM include its complete native Codex subagents alongside the six VoltAgent helpers.
 Bind authorized repository/MCP roots without indexing or querying product data.
 Do not create an artificial test workspace or switch analysis alternatives silently.
@@ -202,10 +252,9 @@ Do not place communication credentials or targets in shared project instructions
 
 ## 6. Eigene Skills, Rollen und Textpersonalisierung
 
-Stelle im Planner vor der Rollenannahme die Originalskills
-[grill-me und grilling](integrations.md#grill-me) vollständig bereit, zusätzlich
-zu [Superpowers](integrations.md#superpowers). Beide gehören zur festen
-Planner-Ausstattung; Quelle und Zielprüfung im Setuprecord erfassen.
+Before role acceptance, deliver complete original [grill-me, grilling, domain-modeling, and to-questionnaire](integrations.md#grill-me) trees to the Planner alongside [Superpowers](integrations.md#superpowers).
+All four are fixed Planner equipment; record complete source/target checks privately.
+If any required tree or companion is unavailable, withhold the dependent Planner output and report the missing asset.
 
 Continue the private record from [setup-record.md](../templates/setup-record.md)
 at `<actual planner home>/devteam/setup.md` after Planner creation.
@@ -215,6 +264,8 @@ Record authorizations, complete upfront dataset readiness, and disclosed technic
 For each completed step, record the native identity or exact own file path, previous state/hash,
 verified readback, and next prerequisite.
 Keep component source, revision, license, and complete file evidence in the target-readback section.
+Compare every assigned upstream asset with its manifest `source_revision`, complete file set and legal files; record required and observed sources separately.
+Record compatible runtime reuse separately from pinned asset delivery; unknown provenance is not a pristine baseline.
 Keep progress, blockers, and installation/update evidence in their respective sections.
 Do not add behavioral or research checks as record completion gates.
 
@@ -255,14 +306,17 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
 
 1. Kopiere gemäß [Quellen- und Rollenmatrix](upstream-sources.md#mitgelieferte-bausteine)
    **den ganzen eigenen Skillbaum** aus `skills/` in `<Rollenhome>/skills/<name>/`; Team-Codex bekommt
-   `screenshot-to-code` in seinem Prozess-HOME unter `.agents/skills/`.
+   `screenshot-to-code` and `diagnosing-bugs` in its process HOME under `.agents/skills/`.
+   Apply the [diagnosis delivery recipe](integrations.md#diagnosing-bugs) for collision checks, complete bytes, and native discovery before role personalization.
+   Deliver Planner-only `prototype` through [its recipe](integrations.md#prototype) before personalizing its dependent SOUL clauses.
    Keep all skill names and bytes unchanged except the recovery launcher.
    Bind that launcher through the Maker step below after copying the full tree.
    Lizenzen, Notices und Referenzen gehören dazu. Keine Discovery im Quellprofil.
-2. Read back the native Hermes/Codex model and reasoning settings, permitted limits, helper routes and adapted model/reasoning settings against the preparation dataset.
+2. Read back the native Hermes/Codex settings, permitted limits, and helper routes against the preparation dataset.
+   Compare the six VoltAgent TOMLs byte-for-byte with the manifest revision, including their original model and reasoning settings.
    Record configuration sources, authorization and actual readbacks privately.
    Keep the native Codex model ID outside role render fields.
-   Read back the Coder SOUL's default/max values, process binding and `$caveman` clause for every new task and resume.
+   Verify Caveman source, installed trees, autoload, and native skill discovery/loading through [the writing-skill recipe](integrations.md#caveman).
    Bind only the chosen [analysis branch](code-analysis.md) for all assigned consumers; record roots and the installed operational update reference.
 3. Verwende den reinen Textweg für die Rollenpersonalisierung:
    [references/render_text.py](render_text.py). Er liest/schreibt keine Dateien,
@@ -321,12 +375,16 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
    wirksame native Konfiguration und protokollierte Einschränkungen. Vergleiche
    Skilldateimenge und Bytes vollständig mit der Quelle.
    Compare the recovery launcher against its bound Maker output instead of the generic template.
-   Lies in der Planner-SOUL die Ladepflicht für `grilling`, dessen Vorrang im
-   Interviewabschnitt und die getrennte Planannahme zurück. Beide Originalskills
-   müssen im Plannerhome vollständig vorliegen; Makerverweise allein genügen nicht.
-   Read back the Coder SOUL process binding and `$caveman` clause for every new task, including restart/resume.
+   Read back the Planner's `grilling` load requirement, interview precedence, and separate plan acceptance.
+   Read back the Planner's conditional `domain-modeling` load and authorized document boundaries, vocabulary-only glossary, proposed ADR status, and existing plan gate.
+   Verify all three original skill trees and complete companions in the Planner home; Maker references alone do not deliver them.
+   Read back the Coder SOUL's default/max values and process binding.
+   Read back the Coder's `$diagnosing-bugs` routing and original-evidence validation under [the diagnosis recipe](integrations.md#diagnosing-bugs).
+   Read back every role's Caveman load requirement and persisted-prose scope.
+   Read back the Reviewer's `caveman-review` trigger and preserved review procedure.
+   Read back the Coder SOUL process binding, per-task `$caveman` clause, and scope/clarity propagation, including restart/resume.
    Record the installed path and exact readback. Verify configured modes without a synthetic worker experiment.
-   Verify the selected analysis integration, complete original skills and native activation for Planner, Coder and Team-Codex.
+   Verify the selected analysis integration, complete original skills and native activation for Planner, Coder, Reviewer and Team-Codex.
    Do not add a second alternative or leave only a Maker reference.
    Vor Home-/Dialog-/Aufgabenbearbeitung Loader-/Kontextgrenze am Ziel lesen und **vollständige effektive
    SOUL-Aufnahme** pro Rolle nachweisen; Länge und Dateiexistenz genügen nicht.
@@ -428,6 +486,7 @@ Keep the following targeted recovery cases:
 | Halbfertiges eigenes Setup | Bereits belegte Profile, Board, Bank, Quellen und Hashes | Drift mit nativen Objekten abgleichen; erstes offenes Gate erfolgreich prüfen | Nur dokumentierte eigene Dateiversion/Configeinträge zurücknehmen |
 | PM-Wirkung nicht freigegeben | Bezogene Quellen außerhalb Discovery | Gemeinsamen Scope genehmigen; neue Generation und bestehende Profile verifizieren | Eigene Pluginaufnahme nativ zurücknehmen, keine gemeinsame Runtime entfernen |
 | Hindsight/Mattermost unavailable | Verified profiles, files and own bank/channel | Operator restores required service/access; established availability and configuration readbacks pass | Reset only authorized own connection entries; preserve bank/channel contents |
+| Codex-Sandbox nicht startfähig | Inventar und bestätigte Werte | Operator stellt die bwrap-Fähigkeit hostweit her; der Prüfbefehl endet mit Status 0 | Teamkonfiguration unverändert lassen; Sandbox- und Approval-Regeln nicht abschwächen |
 | Selected Team-Codex model or reasoning level unavailable | Original helper sources and existing verified setup | Authorized compatible access and exact configuration/inventory readbacks | Preserve the confirmed selection and report the affected incomplete capability |
 | Persönliche Codex-Skillwurzel wirksam | Persönliche Ausstattung unangetastet | Doppelbindung und echte Workerauflösung korrigieren; Teamroots nachweisen | Nur eigene Prozessbindung/Skillkopien zurücknehmen |
 | Falscher Wake-Owner | Karte blocked, Arbeitsstand erhalten | Eigene Subscription korrekt neu anlegen und nachlesen | Nur exakte zugeordnete Subscription nativ entfernen |
@@ -448,6 +507,7 @@ Excluded behavioral checks are outside scope, not pending gates.
 ## Record the installation baseline
 
 After complete setup delivery, configuration/file readbacks, and recovery binding pass, follow [Team updates](update.md#record-a-new-team).
+Complete all assigned pinned-asset and native-loading readbacks before claiming setup completion; file-helper initialization does not certify upstream assets.
 Save the actual role IDs and homes under `confirmed_bindings.roles` in the existing private setup JSON.
 Use the actual process HOME for the `team-codex` role.
 Run `update_team.py init` against the reviewed committed Maker source.

@@ -69,9 +69,18 @@ Do not infer live behavior from configuration or file checks.
 - Required shared dependency availability and established interface readbacks: pending.
 - Per-role model/provider/reasoning settings, effective overrides, and native configuration readbacks: pending.
 - Team-Codex process HOME, separate CODEX_HOME, binary, protected access location/status, and Git identity configuration readbacks: pending.
-- Board/workspace, bank ownership and per-role memory bindings, selected analysis integration and target paths: pending.
+- Board/workspace, bank ownership and per-role memory bindings, selected analysis integration and target paths for Planner, Coder, Reviewer and Team-Codex: pending.
 - Planner communication identity, authorized users/channels, subscriptions, dispatcher/notifier ownership, and activation state: pending.
 - Component source repository/subpath, exact revision, license, complete file inventory/hashes, actual target, and discovery/configuration readbacks for each assigned component: pending.
+
+For each independent component, record the manifest's required `source_revision` or inherited `source_component` separately from observed installed provenance.
+Include complete plugin/skill trees, hidden files, companions, six VoltAgent TOMLs and legal files in the inventories.
+Record native registration and complete main/reference loading for every assigned consumer.
+Record missing historical provenance as unknown; do not label a local backup as a pristine upstream baseline.
+Record actual Codex/CBM/Graphify runtime paths, versions, shared consumers and compatibility/reuse decisions separately from asset pins.
+Include approved first installations in upfront setup scope; preserve existing/shared installations unless their concrete change is explicitly approved.
+For team updates, retain advance explicit approval of each concrete plugin/runtime/CLI change batch and its shared PM effects.
+Keep Hermes/distribution skills native-managed and the Hindsight service untouched.
 
 Generate the recovery launcher with `references/bind_recovery.py` after copying the complete skill tree.
 Keep its task ID as the only runtime argument.
@@ -101,6 +110,13 @@ Initialize only after complete delivery, configuration/file readbacks, and recov
 Follow [Team updates](../references/update.md) for initialization, existing-team baselines, and authorized updates.
 For an existing-team update, record the pre-update version and pending status before file application under [required Reviewer skill retirement](../references/update.md#required-reviewer-skill-retirement-1122).
 Keep its approval, external backup, native readbacks, and pending/completed poststep evidence in this record's progress and update sections.
+On every requested update, follow [Required upstream companion update](../references/update.md#required-upstream-companion-update), even when the Maker version is unchanged.
+Record missing selected Reviewer analysis assets and native bindings, including previously retired assets, and their approved restoration/readbacks.
+Before file application, record pre-update Maker version/commit, required/observed asset sources, exact targets, differences, decisions and per-component `pending` status here.
+Keep complete backup inventories/bytes, modes, ownership, binding readbacks and guarded companion restoration evidence here.
+Mark a companion `complete` only after exact pinned bytes and required native readbacks pass; read back the saved evidence.
+Resume pending work even after installation metadata advances; helper rollback does not restore companion assets/bindings.
+Report `files updated; team update incomplete` while required companion work is pending or deferred.
 Keep `installation.json` and pristine personalized `baselines/<sha256>` under the Planner's private `devteam/` directory.
 Keep package SemVer and exact Maker commit distinct from the record schema.
 Preserve baseline provenance, role bindings, managed source/target mappings, transform identifiers, and hashes.

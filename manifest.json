@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "1.1.22",
+  "version": "2.8.12",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -18,10 +18,14 @@
     "references/native-workflow.md",
     "references/render_text.py",
     "references/setup.md",
-    "references/tas-authoring-standard.md",
     "references/test_bound_recovery.py",
     "references/test_brownfield_planning.py",
+    "references/test_diagnosing_bugs.py",
+    "references/test_prototype.py",
     "references/test_render_reasoning.py",
+    "references/test_devteam_cleanup.py",
+    "references/test_retro.py",
+    "references/test_review_investigation.py",
     "references/test_triage_recovery.py",
     "references/test_update_team.py",
     "references/update.md",
@@ -38,9 +42,25 @@
     "skills/brownfield-feature-planning/references/replacement-imports.md",
     "skills/brownfield-feature-planning/scripts/recover-triage",
     "skills/brownfield-feature-planning/scripts/recover_triage.py",
+    "skills/devteam-cleanup/SKILL.md",
+    "skills/diagnosing-bugs/LICENSE",
+    "skills/diagnosing-bugs/NOTICE.md",
+    "skills/diagnosing-bugs/README.md",
+    "skills/diagnosing-bugs/SKILL.md",
+    "skills/diagnosing-bugs/references/method.md",
     "skills/minimal-change-engineering/SKILL.md",
     "skills/plan-versioning-semver/SKILL.md",
     "skills/project-lib-versioning/SKILL.md",
+    "skills/prototype/LICENSE",
+    "skills/prototype/LOGIC.md",
+    "skills/prototype/NOTICE.md",
+    "skills/prototype/SKILL.md",
+    "skills/prototype/UI.md",
+    "skills/retro/LICENSE",
+    "skills/retro/NOTICE.md",
+    "skills/retro/README.md",
+    "skills/retro/SKILL.md",
+    "skills/retro/references/method.md",
     "skills/screenshot-to-code/LICENSE",
     "skills/screenshot-to-code/SKILL.md",
     "skills/screenshot-to-code/references/offline-export.md",
@@ -152,6 +172,40 @@
         "SKILL.md": "SKILL.md"
       }
     },
+    "devteam-cleanup": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "planner"
+        ]
+      },
+      "origin": "Owned cleanup procedure for a finished delivery. Separate from the delivery flow; customer-invoked only.",
+      "changes": "Copy the skill unchanged. The customer names the scope; the Planner removes only approved, reversible items and keeps branches, commits and evidence.",
+      "origin_ref": "references/upstream-sources.md#own-devteam-cleanup",
+      "license_path": null,
+      "notice_path": "NOTICE.md",
+      "skill_path": "skills/devteam-cleanup/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
+    "diagnosing-bugs": {
+      "status": "included",
+      "targets": {
+        "codex": [
+          "team-codex"
+        ]
+      },
+      "origin": "Owned proportional adaptation of Matt Pocock's diagnosing-bugs; exact source revision and changes in the skill NOTICE.",
+      "changes": "Copy the complete tree unchanged. Team-Codex classifies evidence before direct fix or full diagnosis; Coder explicitly invokes and validates results.",
+      "origin_ref": "references/upstream-sources.md#own-diagnosis",
+      "license_path": "skills/diagnosing-bugs/LICENSE",
+      "notice_path": "skills/diagnosing-bugs/NOTICE.md",
+      "skill_path": "skills/diagnosing-bugs/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
     "minimal-change-engineering": {
       "status": "included",
       "targets": {
@@ -205,6 +259,40 @@
         "SKILL.md": "SKILL.md"
       }
     },
+    "prototype": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "planner"
+        ]
+      },
+      "origin": "Owned Planner-only adaptation of Matt Pocock's prototype; exact source and approved differences in the skill NOTICE.",
+      "changes": "Copy the complete tree unchanged. Planner writes isolated clarification demos directly in planning docs/ during grilling, outside the product pipeline.",
+      "origin_ref": "references/upstream-sources.md#own-prototype",
+      "license_path": "skills/prototype/LICENSE",
+      "notice_path": "skills/prototype/NOTICE.md",
+      "skill_path": "skills/prototype/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
+    "retro": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "planner"
+        ]
+      },
+      "origin": "Owned process-retrospective adaptation of Matt Pocock's retro, with full-process token economy; exact source and changes in the skill NOTICE.",
+      "changes": "Copy the complete skill tree unchanged. Explicit user requests only; no upstream runtime dependency or automatic maintenance.",
+      "origin_ref": "references/upstream-sources.md#own-retro",
+      "license_path": "skills/retro/LICENSE",
+      "notice_path": "skills/retro/NOTICE.md",
+      "skill_path": "skills/retro/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
     "screenshot-to-code": {
       "status": "included",
       "targets": {
@@ -236,6 +324,21 @@
     }
   },
   "upstream_components": {
+    "tas": {
+      "original_repo": "https://github.com/ataian/tas",
+      "source_revision": "fe3a7d251518b793fedaec3041558c2840b4c796",
+      "subpaths": [
+        "."
+      ],
+      "legal_files": [
+        "LICENSE",
+        "NOTICE.md",
+        "third_party"
+      ],
+      "targets": {},
+      "recipe_ref": "references/upstream-sources.md#tas",
+      "recipe_status": "documented"
+    },
     "hermes-core": {
       "original_repo": "https://github.com/NousResearch/hermes-agent",
       "subpaths": [
@@ -279,6 +382,8 @@
     },
     "codex-cli": {
       "original_repo": "https://github.com/openai/codex",
+      "source_release": "rust-v0.167.1",
+      "source_revision": "0a94398fa60c4fac0e7659e4213a0a36e613dd46",
       "subpaths": [
         "."
       ],
@@ -292,6 +397,11 @@
     },
     "superpowers": {
       "original_repo": "https://github.com/obra/superpowers",
+      "source_release": "v7.0.2",
+      "source_revision": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "legal_files": [
+        "LICENSE"
+      ],
       "subpaths": [
         "."
       ],
@@ -305,9 +415,15 @@
     },
     "grill-me": {
       "original_repo": "https://github.com/mattpocock/skills",
+      "source_revision": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+      "legal_files": [
+        "LICENSE"
+      ],
       "subpaths": [
         "skills/productivity/grill-me",
         "skills/productivity/grilling",
+        "skills/engineering/domain-modeling",
+        "skills/productivity/to-questionnaire",
         "LICENSE"
       ],
       "targets": {
@@ -320,6 +436,10 @@
     },
     "hindsight": {
       "original_repo": "https://github.com/vectorize-io/hindsight",
+      "source_revision": "289fb421bdb438861480720e947874551ac42ff7",
+      "legal_files": [
+        "LICENSE"
+      ],
       "subpaths": [
         "hindsight-integrations/hermes"
       ],
@@ -335,6 +455,10 @@
     },
     "ponytail": {
       "original_repo": "https://github.com/DietrichGebert/ponytail",
+      "source_revision": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
+      "legal_files": [
+        "LICENSE"
+      ],
       "subpaths": [
         "."
       ],
@@ -351,12 +475,21 @@
     },
     "caveman": {
       "original_repo": "https://github.com/JuliusBrussee/caveman",
+      "source_release": "v4.1.0",
+      "source_revision": "1e91f1306d602d4ca23618701b1185575ae1869b",
       "subpaths": [
         "skills/caveman"
       ],
+      "legal_files": [
+        "LICENSE",
+        "LICENSE-MIT",
+        "NOTICE"
+      ],
       "targets": {
         "hermes": [
-          "coder"
+          "planner",
+          "coder",
+          "reviewer"
         ],
         "codex": [
           "team-codex"
@@ -365,8 +498,31 @@
       "recipe_ref": "references/integrations.md#caveman",
       "recipe_status": "documented"
     },
+    "caveman-review": {
+      "original_repo": "https://github.com/JuliusBrussee/caveman",
+      "source_component": "caveman",
+      "subpaths": [
+        "skills/caveman-review"
+      ],
+      "legal_files": [
+        "LICENSE",
+        "LICENSE-MIT",
+        "NOTICE"
+      ],
+      "targets": {
+        "hermes": [
+          "reviewer"
+        ]
+      },
+      "recipe_ref": "references/integrations.md#caveman",
+      "recipe_status": "documented"
+    },
     "find-skills": {
       "original_repo": "https://github.com/vercel-labs/skills",
+      "source_revision": "e781cb4d07433dfe1d19e924ed45cc61738c55ec",
+      "legal_files": [
+        "LICENSE"
+      ],
       "subpaths": [
         "skills/find-skills"
       ],
@@ -380,6 +536,7 @@
     },
     "codex-custom-agents": {
       "original_repo": "https://github.com/VoltAgent/awesome-codex-subagents",
+      "source_revision": "9abe3279a0aa4ee518381af800ca1062398f5433",
       "subpaths": [
         "categories/04-quality-security/test-automator.toml",
         "categories/04-quality-security/security-auditor.toml",
@@ -387,6 +544,9 @@
         "categories/04-quality-security/anti-ui-slop-reviewer.toml",
         "categories/01-core-development/ui-fixer.toml",
         "categories/03-infrastructure/docker-expert.toml"
+      ],
+      "legal_files": [
+        "LICENSE"
       ],
       "targets": {
         "codex": [
@@ -398,6 +558,11 @@
     },
     "codebase-memory": {
       "original_repo": "https://github.com/DeusData/codebase-memory-mcp",
+      "source_release": "v0.12.1",
+      "source_revision": "a7158ac2f48ca646b4527341b76f930f2aeff87e",
+      "legal_files": [
+        "LICENSE"
+      ],
       "subpaths": [
         ".",
         "src/cli/cli.c",
@@ -412,7 +577,8 @@
       "targets": {
         "hermes": [
           "planner",
-          "coder"
+          "coder",
+          "reviewer"
         ],
         "codex": [
           "team-codex"
@@ -442,6 +608,8 @@
     },
     "graphify": {
       "original_repo": "https://github.com/Graphify-Labs/graphify",
+      "source_release": "v0.9.106",
+      "source_revision": "35d1d2038b9e9d470f117bf8f2473d415b5f5358",
       "subpaths": [
         ".",
         "graphify/skill-claw.md",
@@ -452,7 +620,8 @@
       "targets": {
         "hermes": [
           "planner",
-          "coder"
+          "coder",
+          "reviewer"
         ],
         "codex": [
           "team-codex"
@@ -461,7 +630,7 @@
       "selection": "code-analysis-alternative",
       "recipe_ref": "references/code-analysis.md#graphify",
       "recipe_status": "documented",
-      "reviewed_revision": "86c57be8204673c2a1b9849a3292a7dd3ab373d8",
+      "reviewed_revision": "35d1d2038b9e9d470f117bf8f2473d415b5f5358",
       "legal_files": [
         "LICENSE",
         "LICENSE-MIT",
@@ -482,15 +651,15 @@
             "graphify/skills/claw/references/update.md": "references/update.md"
           },
           "sha256": {
-            "graphify/skill-claw.md": "5cb49d000d8c81add200c92083fa98bcb1c2c6cf56f0970a1b4a99c24be08eeb",
+            "graphify/skill-claw.md": "0520f1c034f92bfd2ba8221e4589e93389f558af9097d9069b4f14a2ab70146f",
             "graphify/skills/claw/references/add-watch.md": "1e77351815547334c7e030f018dba513b303d397bf73d11fac47df03ace3b3f4",
             "graphify/skills/claw/references/exports.md": "c39a2f8062be9a5ac319220d6e66ca586ed0b0798292b1321206834be74c1b33",
-            "graphify/skills/claw/references/extraction-spec.md": "32d7decad42d58129c6694ea4e4ce1f72a531bc5161827d2095787e9448735e9",
+            "graphify/skills/claw/references/extraction-spec.md": "885a36ae2c168b53fe9a35c29cdd1c9663275966738ec5df6afc73ec01946f2a",
             "graphify/skills/claw/references/github-and-merge.md": "e5ebd90c7686f50363ff7a535556bc2f596d4c47ec1e6c8b95e11e36a0dfea2b",
-            "graphify/skills/claw/references/hooks.md": "b9a4e9f66813c6fc720589f1071d1a03c95756ab7101447e14e57291fe7844e5",
-            "graphify/skills/claw/references/query.md": "e99011beeff0cf40dc1775b1e0cd2eab0e5f950deeeb8353ae01cbe57adbff00",
+            "graphify/skills/claw/references/hooks.md": "c3141e7124be8d1f0e96ff3895220a1b6318a644c4c6a60120e4aa6b1cd92d4a",
+            "graphify/skills/claw/references/query.md": "314e98daa21478e697643ec5b7cef5a35d04c4eb410037b37e22ac457610a147",
             "graphify/skills/claw/references/transcribe.md": "676a1e39aa6d43cdfcc416ec56616e36f7bad74066a82bd33a9485515b9a865c",
-            "graphify/skills/claw/references/update.md": "c76b855ef9380d766b1a0b271b49bc7b40cf5b5b72558be1a021f99f9a9ea1cc"
+            "graphify/skills/claw/references/update.md": "66a13120e96344c0c5c39c54d899b94244c1f50dad6b093af3d633f0a44a3654"
           }
         },
         "codex": {
@@ -507,15 +676,15 @@
             "graphify/skills/codex/references/update.md": "references/update.md"
           },
           "sha256": {
-            "graphify/skill-codex.md": "594991c24b0d8e363a9634d5231ba6ea205097ae09daca618da748ce05985f97",
+            "graphify/skill-codex.md": "4d630cad0691ed805f80becd4245c2c15a219c8458c87fdaa7cb6c32ffba615f",
             "graphify/skills/codex/references/add-watch.md": "1e77351815547334c7e030f018dba513b303d397bf73d11fac47df03ace3b3f4",
             "graphify/skills/codex/references/exports.md": "c39a2f8062be9a5ac319220d6e66ca586ed0b0798292b1321206834be74c1b33",
-            "graphify/skills/codex/references/extraction-spec.md": "32d7decad42d58129c6694ea4e4ce1f72a531bc5161827d2095787e9448735e9",
+            "graphify/skills/codex/references/extraction-spec.md": "9525ca4e865711dc73406aa978600acda81e3a0f4ad164d707b87b5cdef2ba7b",
             "graphify/skills/codex/references/github-and-merge.md": "e5ebd90c7686f50363ff7a535556bc2f596d4c47ec1e6c8b95e11e36a0dfea2b",
-            "graphify/skills/codex/references/hooks.md": "b9a4e9f66813c6fc720589f1071d1a03c95756ab7101447e14e57291fe7844e5",
-            "graphify/skills/codex/references/query.md": "e99011beeff0cf40dc1775b1e0cd2eab0e5f950deeeb8353ae01cbe57adbff00",
+            "graphify/skills/codex/references/hooks.md": "c3141e7124be8d1f0e96ff3895220a1b6318a644c4c6a60120e4aa6b1cd92d4a",
+            "graphify/skills/codex/references/query.md": "314e98daa21478e697643ec5b7cef5a35d04c4eb410037b37e22ac457610a147",
             "graphify/skills/codex/references/transcribe.md": "676a1e39aa6d43cdfcc416ec56616e36f7bad74066a82bd33a9485515b9a865c",
-            "graphify/skills/codex/references/update.md": "c76b855ef9380d766b1a0b271b49bc7b40cf5b5b72558be1a021f99f9a9ea1cc"
+            "graphify/skills/codex/references/update.md": "66a13120e96344c0c5c39c54d899b94244c1f50dad6b093af3d633f0a44a3654"
           }
         }
       },

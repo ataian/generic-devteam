@@ -1,14 +1,24 @@
 # Original integrations in the confirmed target context
 
-Execute these recipes only during an authorized setup.
+Execute these recipes only during an authorized setup or the approved [upstream companion update](update.md#required-upstream-companion-update).
 Consume the complete preparation dataset from [Setup](setup.md); do not reopen confirmed choices.
-Use established available sources and compatible installed components, without a newest-upstream search.
+Read the manifest's exact `source_revision` for each independent component under [Sources](upstream-sources.md#fremdkomponenten).
+Use complete pinned source trees and compatible installed runtimes, without a newest-upstream search.
 Record source/revision, complete file inventory/hashes, licenses/notices, targets and exact readbacks.
 Historical research anchors are provenance, not installation pins or behavioral evidence.
 Check ownership and preserve local edits before writes.
 Obtain authorized profile-local installation, hook and shared PM effects before activation.
-If a common runtime is missing or incompatible, report the concrete prerequisite and operator action.
-Do not install, upgrade, repair or investigate shared runtimes as part of ordinary setup.
+Inspect existing binaries, owners, consumers, paths and versions before proposing runtime installation or replacement.
+Include an absent Codex or selected analysis runtime's exact first-installation target in the complete upfront setup scope.
+That accepted scope needs no repeated version question for each file or role.
+Preserve existing/shared installations during new team setup; obtain explicit approval for a concrete required change.
+For a team update, obtain advance explicit approval for any full plugin update, CBM/Graphify runtime change or Team-Codex CLI change.
+Disclose actual targets, versions, shared consumers and PM dependency-generation effects together before that approval.
+Use the supported native PM path only within that approved scope; do not hide bootstrap repair in plugin admission.
+Keep Hermes and its distribution skills outside Maker pinning, installation, upgrades and repair.
+Keep the Hindsight service untouched; its independently pinned adapter can change only within the approved plugin scope.
+If pinned assets cannot work with the preserved runtime, report the concrete mismatch and obtain an update/defer decision.
+Do not change the runtime silently or claim dependent outputs current while they remain deferred.
 Do not copy private profile components or invent replacement plugins.
 
 <a id="installation-output"></a>
@@ -41,7 +51,7 @@ Project preparation belongs to a later explicit project task.
 Original: [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent).
 Resolve the complete distribution tree `skills/autonomous-ai-agents/codex` for Coder and `skills/devops/sdlc-review` for Reviewer.
 Reuse the natively managed distribution skills and their canonical license/companion files; verify the actual subpaths.
-If an already-authorized distribution copy is required, preserve its path relative to `skills/` under the target skill root: `autonomous-ai-agents/codex` or `devops/sdlc-review`.
+Keep the native distribution's category-relative paths and existing management; do not install private distribution copies through Maker.
 If a skill is missing from native discovery, report the prerequisite; do not repair the shared distribution or install a flattened private replacement.
 
 Später je Rolle Katalog, Hauptskill und alle benötigten Referenzen im tatsächlichen
@@ -57,8 +67,15 @@ Original: [openai/codex](https://github.com/openai/codex),
 [Konfigurationsorte](https://developers.openai.com/codex/config-advanced.md),
 [Skills](https://developers.openai.com/codex/skills.md),
 [Authentifizierung](https://developers.openai.com/codex/auth.md).
-Reuse a suitable existing binary. Resolve and record its actual absolute path.
-If absent, report the shared prerequisite; do not install another runtime or a separate Codex per role.
+Read `codex-cli.source_release` and `codex-cli.source_revision` from the manifest as the defined CLI target.
+Resolve the actual binary path, installed version/source, ownership and shared consumers before writes.
+Reuse a compatible matching or newer CLI; do not upgrade or downgrade it merely to match the target release.
+Record the reuse decision and available required interfaces separately from exact asset-pin verification.
+If absent, include the official target release for the actual platform in upfront setup approval.
+Verify release provenance and artifact checksums before an approved first installation through the established native package route.
+Any existing/shared binary replacement needs concrete approval; do not install a separate Codex per role.
+At team-update time, obtain advance explicit approval for every CLI change, including a move to the manifest target.
+If the preserved CLI lacks a required interface, report that capability and defer dependent outputs until approval or a supported compatible route.
 
 Im tatsächlich aufgelösten Coderhome zwei eindeutig diesem Team zugeordnete
 Verzeichnisse anlegen: `devteam/codex-home` und `devteam/user-home`.
@@ -138,11 +155,44 @@ Preserve unrelated entries. The Coder reads the configured model; reasoning defa
 Keep `CODEX_REASONING_MAX` in the existing Coder SOUL policy, without a new technical maximum key.
 A default does not limit CLI overrides. Check supported levels and access through native availability/configuration readbacks, without higher-reasoning experiments.
 
-Place skills at `CODEX_PROCESS_HOME/.agents/skills/<name>/` and the adapted [VoltAgent installation copies](#codex-agents) at `CODEX_HOME/agents/`.
+Place skills at `CODEX_PROCESS_HOME/.agents/skills/<name>/` and the unchanged [VoltAgent originals](#codex-agents) at `CODEX_HOME/agents/`.
 Read back effective config/skill roots, including compatible `CODEX_HOME/skills`, project/ancestor `.agents/skills`, project configuration, admin/system sources and inherited overrides.
 Separate homes reduce personal skill inheritance; they are not a sandbox.
 Preserve personal Codex files and project tool paths after the HOME change.
 Do not copy personal state to repair a binding.
+
+<a id="diagnosing-bugs"></a>
+## Owned diagnosing-bugs — Team-Codex
+
+Use the complete owned `skills/diagnosing-bugs/` tree from the selected Maker revision, including `references/method.md`, README, NOTICE, and full MIT license.
+Before writing, check native names/commands and all resolved skill candidates for `diagnosing-bugs`, including user, project/ancestor, config, admin, and system roots.
+Reuse the same managed skill through the normal update comparison; resolve unrelated same-name collisions with the user before replacing or shadowing a target.
+After the existing ownership, local-edit, backup, and authorization checks, copy it to `<CODEX_PROCESS_HOME>/.agents/skills/diagnosing-bugs/`.
+Keep every skill byte unchanged; use the existing whole-tree setup/update mapping, not another installer.
+
+Before role personalization, compare complete file sets and bytes and read back one unambiguous native discovery entry plus full `SKILL.md` and `references/method.md` content.
+Use the actual bound Team-Codex HOME/CODEX_HOME and established read-only discovery/loading interface, without a model call or bug experiment.
+After role delivery, read back the Coder's literal `$diagnosing-bugs` task/resume clause, emerging-regression instruction, and original-evidence validation.
+Keep its literal `$caveman` clause, process binding, native handoff, and independent-review requirements intact.
+Record saved-tree, discovery, and call-policy evidence separately in the existing private setup/update record.
+These checks establish delivery and invocation policy, not actual diagnosis behavior or adoption by an already running conversation.
+For rollback, use the existing guarded file-update procedure; newly added files remain retained until separately authorized removal.
+
+<a id="prototype"></a>
+## Owned prototype — Planner only
+
+Use the complete owned `skills/prototype/` tree, including `LOGIC.md`, `UI.md`, NOTICE, and full MIT license.
+Before writing, inspect native names/commands and all resolved Planner skill candidates for `prototype` collisions.
+Reuse the same managed skill through the existing update comparison; resolve unrelated same-name targets before replacing or shadowing them.
+After existing ownership, local-edit, backup, and authorization checks, copy the complete tree unchanged to `<PLANNER_HOME>/skills/prototype/`.
+Use the normal `own_skills.targets` whole-tree mapping; no additional installer or upstream runtime component is needed.
+Before role personalization, compare the complete saved tree and read back one unambiguous native skill entry, full `SKILL.md`, `LOGIC.md`, and `UI.md`.
+After SOUL delivery, read back the Planner's direct-authoring exception and conditional grilling trigger.
+During updates, reconcile local rules that would send these aids through Codex or product-development gates within the approved update scope.
+Withhold the dependent Planner clauses if required delivery/loading or a local-rule conflict remains unresolved, including legacy SOUL-only updates.
+Record these results in the existing private setup/update record; do not build a demonstration as an installation check.
+Saved bytes and discovery establish delivery, not live behavior or an already running conversation's adoption.
+Use the existing guarded file-update rollback; added files remain retained until separately authorized removal.
 
 <a id="superpowers"></a>
 ## Superpowers — nur Planner
@@ -152,8 +202,14 @@ Repository mit `.hermes-plugin/plugin.yaml`, `.hermes-plugin/__init__.py`, gesam
 `skills/`-Baum und MIT-`LICENSE`. Aktuelle native Originalroute:
 
 ```sh
-hermes -p "$PLANNER" plugins install obra/superpowers --enable
+hermes -p "$PLANNER" plugins install obra/superpowers --ref "$SUPERPOWERS_REVISION" --enable
 ```
+
+Set `SUPERPOWERS_REVISION` from the manifest's `superpowers.source_revision`, not a branch, tag or catalog default.
+The installed native `plugins install --ref` accepts an immutable 40-character commit.
+For an approved replacement, the native pin-moving route is `plugins install <source> --force --ref <commit>`.
+Use it only after the companion backup, drift, shared-PM and scanner-approval checks; `--force` can also accept caution findings.
+If the installed interface cannot enforce the pin, stop that component without updating Hermes.
 
 Nach Aufnahme die native Pluginregistrierung und alle Originaldateien im Planner
 prüfen. Im neuen tatsächlichen Plannerkontext Bootstrap `using-superpowers/SKILL.md`
@@ -164,37 +220,38 @@ Pluginpfadpatches. Rückweg: nur eigene Plannerregistrierung nativ deaktivieren/
 entfernen, ursprüngliche fremde Plugin-/PM-Bestände bewahren.
 
 <a id="grill-me"></a>
-## grill-me / grilling — nur Planner
+## grill-me / grilling / domain-modeling / to-questionnaire — Planner only
 
-Original: [mattpocock/skills](https://github.com/mattpocock/skills). Beide Skills sind
-Pflichtausstattung für die Planungsphase, keine zusätzliche Setupauswahl.
+Original: [mattpocock/skills](https://github.com/mattpocock/skills).
+These four skills are fixed Planner equipment, not an additional setup choice.
 
-1. Use the established available original source outside active discovery.
+1. Use the manifest's existing `grill-me.source_revision` outside active discovery.
    Check complete assets and provenance without searching for the newest upstream revision.
-   Keep `skills/productivity/grill-me/` and `skills/productivity/grilling/` from the same revision, including `agents/openai.yaml` and all companion files.
+   Keep complete `skills/productivity/grill-me/`, `skills/productivity/grilling/`, `skills/engineering/domain-modeling/`, and `skills/productivity/to-questionnaire/` trees from that same revision.
+   Include every `agents/openai.yaml` and all companion files, including `GLOSSARY-FORMAT.md` and `ADR-FORMAT.md`.
    Check required skill references for delivery completeness. Report a changed or missing asset contract instead of inventing a replacement.
-2. Nach Ziel-/Kollisionsprüfung und Setupfreigabe beide Bäume unverändert nach
-   `<tatsächlich aufgelöster Plannerhome>/skills/grill-me/` beziehungsweise
-   `skills/grilling/` kopieren. Die Original-`LICENSE` aus dem Repositoryroot jedem
-   Zielbaum beilegen; weitere geltende Notices erhalten. Keine Übernahme des gesamten
-   Skillkatalogs, keine zusätzliche Plugin-/Nodeinstallation und keine Ausführung des
-   Upstream-Setupskills. Quelle, aufgelöste Revision, vollständige Dateimengen/Hashes
-   und eigene Zielpfade im Setuprecord festhalten. Vorhandene lokale Anpassungen
-   nicht überschreiben; geeignete bytegleiche Bestände wiederverwenden.
-3. Der Originaleinstieg `grill-me` trägt `disable-model-invocation: true` und ruft
-   `grilling` auf. Metadaten und Text unverändert erhalten. Die Planner-SOUL verlangt
-   daher für die automatische Planungsphase direkt `skill_view(name="grilling")`;
-   bei ausdrücklichem Nutzeraufruf von `grill-me` entspricht dessen „Skill tool“ in
-   Hermes ebenfalls `skill_view`. Kein eigenes Wrapper-Skill und keine Abhängigkeit
-   auf den Maker im späteren Plannerdialog.
+2. After target/collision checks and setup approval, copy the unchanged trees into the actual resolved Planner home's `skills/grill-me/`, `skills/grilling/`, `skills/domain-modeling/`, and `skills/to-questionnaire/` respectively.
+   Include the original root `LICENSE` in each target tree and preserve other applicable legal files.
+   Record source, resolved revision, complete file inventories/hashes, and actual target paths in the private setup record.
+   Preserve local adaptations; reuse matching complete originals.
+   Acquire only these selected skills, without additional plugin or Node installation, catalog import, or upstream setup-skill execution.
+3. Preserve `grill-me` metadata, including `disable-model-invocation: true`; its explicit user entry calls `grilling`.
+   The Planner SOUL loads `grilling` directly for each new plan and conditionally loads `domain-modeling` during that interview.
+   Map upstream "Skill tool" calls to Hermes `skill_view`.
+   `grill-with-docs` only routes to those two skills; do not install it or add another interview phase.
+   Keep domain-document authority and conditional use in the delivered Planner SOUL, without a runtime dependency on the Maker.
+   Surface any upstream source-format or location conflict with existing project conventions before document writes; preserve upstream skill bytes and resolve the conflict within authorized planning boundaries.
+   On an explicit questionnaire request, load the original `to-questionnaire` through Hermes `skill_view`.
+   Use it for one recipient who holds missing expertise; it is optional during planning, not another mandatory interview.
+   Preserve its metadata without treating `disable-model-invocation` as a verified Hermes access control.
+   Drafting does not authorize sending the questionnaire or accepting its answers as product scope; retain existing communication and plan-acceptance gates.
 4. Compare complete file sets and bytes with the selected source, including legal files.
-   Verify native discovery and complete loading through established readbacks after role delivery.
-   Read back the `grilling` load requirement and interview precedence in the personalized Planner SOUL.
+   Verify native discovery and complete loading of all four main files and required companions through established readbacks.
+   After role delivery, read back the Planner SOUL's grilling precedence, conditional domain load, document authority, and existing plan-acceptance gate.
    Do not run a planning interview, explicit skill invocation experiment, or resume conversation during setup.
 
-Rückweg nur für die protokollierten eigenen Skillziele: vorherige eigene Stände
-wiederherstellen; Entfernen neu angelegter Dateien nur mit der geltenden
-Löschfreigabe. Fremde Skills, andere Profile und globale Konfiguration erhalten.
+Restore only recorded own skill targets from their preserved pre-change state within the applicable authorization.
+Removal of new files requires deletion approval; preserve other skills, profiles, and global configuration.
 
 <a id="ponytail"></a>
 ## Ponytail — Coder und Team-Codex separat
@@ -206,22 +263,54 @@ Skills, Hooks/Runtime-JavaScript und MIT-Lizenz beziehen. Node im Codex-Worker-P
 ist Voraussetzung der Originalhooks, nicht aus einer SOUL ableitbar.
 
 ```sh
-hermes -p "$CODER" plugins install DietrichGebert/ponytail --enable
+hermes -p "$CODER" plugins install DietrichGebert/ponytail --ref "$PONYTAIL_REVISION" --enable
 ```
 
-Nur beim vom Autor dokumentierten Root-`plugin.json`-/Manifestgate-Konflikt:
-aktuelle Originalanleitung prüfen, vollständiges **unverändertes** Repository im
-bestätigten `<Coderhome>/plugins/ponytail` bereitstellen, danach profilbezogen
-`hermes -p "$CODER" plugins enable ponytail`. Diese Verzeichnisroute ist eine
-Plugin-/PM-Aufnahme und braucht dieselbe Freigabe; kein Manifestfix/Trustbypass.
-Bei anderem Fehler anhalten statt die Ausnahme pauschal anzuwenden.
+Set `PONYTAIL_REVISION` from the manifest's `ponytail.source_revision` for both harnesses.
 
-Im gebundenen Team-Codex-Prozess:
+Only for the author's documented root-`plugin.json`/manifest-gate conflict, read the original instructions at the pinned commit.
+If that supported route applies, place the complete unchanged pinned repository at the confirmed `<Coderhome>/plugins/ponytail`.
+Then use profile-scoped `hermes -p "$CODER" plugins enable ponytail` within the same approved plugin/PM scope.
+Verify native registration and exact source bytes; do not patch manifests or bypass trust/scanner decisions.
+For another error or an unsupported route, preserve the partial state and report the concrete blocker.
+
+### Team-Codex pinned local source
+
+The upstream marketplace's nested plugin source uses `main`.
+Even `plugin marketplace add DietrichGebert/ponytail --ref "$PONYTAIL_REVISION"` pins only the marketplace checkout, not that nested plugin download.
+Use Codex's supported local-source marketplace registration instead.
+Keep the complete Ponytail repository unchanged at `<Coderhome>/devteam/sources/ponytail-marketplace/ponytail`, detached at the manifest commit.
+Compare all tracked paths and bytes, including hidden manifests, hooks, assets and `LICENSE`, before native registration.
+Keep this immutable source outside active skill/plugin discovery and separate from plugin runtime data.
+Set `PONYTAIL_MARKETPLACE` to its parent `ponytail-marketplace` directory.
+Create only the team-owned native registration file `$PONYTAIL_MARKETPLACE/.agents/plugins/marketplace.json` with these exact fields:
+
+```json
+{
+  "name": "team-ponytail",
+  "plugins": [{
+    "name": "ponytail",
+    "source": {"source": "local", "path": "./ponytail"},
+    "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"}
+  }]
+}
+```
+
+This registration metadata is outside the unchanged upstream repository; it is not a rewritten plugin manifest.
+After ownership/collision checks and installation approval, use the bound Team-Codex process:
 
 ```sh
-env HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" PONYTAIL_DEFAULT_MODE=full "$CODEX_BINARY" plugin marketplace add DietrichGebert/ponytail
-env HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" PONYTAIL_DEFAULT_MODE=full "$CODEX_BINARY" plugin add ponytail@ponytail
+env HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" PONYTAIL_DEFAULT_MODE=full "$CODEX_BINARY" plugin marketplace add "$PONYTAIL_MARKETPLACE"
+env HOME="$CODEX_PROCESS_HOME" CODEX_HOME="$CODEX_HOME" PONYTAIL_DEFAULT_MODE=full "$CODEX_BINARY" plugin add ponytail@team-ponytail
 ```
+
+Read back native marketplace/plugin registration, resolved local source, installed plugin root and complete original file/byte inventories at the pinned commit.
+Check project/personal registrations for shadowing; preserve unrelated bindings.
+On an existing team, include retirement of the exact old team-owned Ponytail binding in the approved companion scope and backup.
+Use only the installed native removal/replacement interface; do not leave competing enabled copies or delete personal plugins.
+If this CLI cannot register the exact local source or replace its old binding safely, report the concrete missing capability and keep Ponytail setup/update incomplete.
+Do not fall back to moving `main` or treat successful command exit as pin verification.
+Native source evidence: Codex `rust-v0.167.1`, `codex-rs/cli/src/marketplace_cmd.rs`, `codex-rs/cli/src/plugin_cmd.rs`, and `codex-rs/core-plugins/src/marketplace.rs` at the manifest CLI commit.
 
 Native Hookfreigabe über `/hooks` für die tatsächlichen Originaldefinitionen
 prüfen: SessionStart, SubagentStart und UserPromptSubmit. Keine Hookfreigabe als
@@ -253,71 +342,66 @@ Rückweg: eigene Pluginregistrierung/Hookfreigabe und zugeordnete Modusdateien
 gezielt zurücknehmen; keine gemeinsamen Runtimes oder persönlichen Plugins löschen.
 
 <a id="caveman"></a>
-## Caveman und find-skills
+## Caveman writing skills
 
-Original [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman): exakt
-vollständigen Hauptskill `skills/caveman/SKILL.md` **und** `README.md` beziehen,
-Original-`LICENSE`, `LICENSE-MIT`, `NOTICE` erhalten. Der recherchierte Original-
-Alias `full` wird auf `caveman` abgebildet (`src/hooks/caveman-config.js`). Aktuellen
-Dateibaum/Mapping bestätigen; kein zusätzliches CLI-/Proxy-/Routingprodukt.
+Use the original [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) release and exact revision in the manifest's `caveman.source_release` and `caveman.source_revision`.
+Use that same revision for `caveman-review`, whose `source_component` is `caveman`.
+Fetch the complete `skills/caveman/` and `skills/caveman-review/` trees outside active discovery.
+Keep their `SKILL.md`, `README.md`, and root `LICENSE`, `LICENSE-MIT`, and `NOTICE` unchanged.
+Compare reused copies against this source; an older skill with the same name is not sufficient.
+Install only these writing skills; exclude Read less, CLI/engine, hooks, proxy, routing, cloud features, `ultracave`, and `megacave`.
 
-Nach `<Coderhome>/skills/caveman/` und `<CODEX_PROCESS_HOME>/.agents/skills/caveman/`
-mit vollständigen Begleitdateien bereitstellen. Nur für das Coderprofil
-`skills.auto_load` gezielt um `caveman` erweitern; bestehende Liste zunächst lesen,
-duplikatfrei mergen und als JSON-Liste über
-`hermes -p "$PROFILE" config set skills.auto_load "$AUTO_LOAD_JSON"` setzen,
-danach `config get skills.auto_load`. Nicht die ganze vorhandene Liste ersetzen.
-Das Reviewerprofil erhält weder die Skillkopie noch den Autoload-Eintrag; seine
-SOUL verlangt sachliche Klartextbefunde, damit Reviewbefunde nicht durch
-Kürzung mehrdeutig werden.
-Verify native discovery/loading without a style conversation.
-Team-Codex receives `$caveman` in every new task, including restart/resume.
-Read back that durable clause in the personalized [Coder SOUL](../templates/roles/coder.SOUL.md.template).
-Do not make its later use depend on reloading this Maker.
+| Consumer | Skill trees | Activation |
+|---|---|---|
+| Planner | `<Plannerhome>/skills/caveman/` | `skills.auto_load`: `caveman` |
+| Coder | `<Coderhome>/skills/caveman/` | `skills.auto_load`: `caveman` |
+| Reviewer | `<Reviewerhome>/skills/caveman/`, `<Reviewerhome>/skills/caveman-review/` | `skills.auto_load`: `caveman`; SOUL loads `caveman-review` for findings |
+| Team-Codex | `<CODEX_PROCESS_HOME>/.agents/skills/caveman/` | Literal `$caveman` in each task and resume |
 
-Nur Chat wird verkürzt. Code, Dokumentation, Commits, Memory und Sicherheitsklarheit
-bleiben normal verständlich. Planner bleibt normale Sprache. Rückweg entfernt nur
-die eigenen identifizierten Skillkopien und den eigenen Autoload-Eintrag.
+Resolve each home from confirmed native bindings before copying complete trees and legal files.
+For each Hermes role, read `skills.auto_load` and merge `caveman` without duplicates or loss of existing entries.
+Set the merged JSON list through `hermes -p "$PROFILE" config set skills.auto_load "$AUTO_LOAD_JSON"`.
+Read it back with `hermes -p "$PROFILE" config get skills.auto_load`.
+Preserve local adaptations; resolve collisions before replacing any installed copy.
+
+Before role personalization, verify complete source/target file sets and bytes, autoload configuration, and native skill discovery/loading without a style conversation.
+After writing the personalized SOULs, perform the following readbacks in setup section 6, step 6.
+Read back each personalized SOUL's Caveman use and persisted-prose scope.
+Read back the Reviewer's `caveman-review` load trigger and separation of formatting from review procedure.
+Read back the Coder's per-task `$caveman` clause and propagation of scope and clarity safeguards, including restart/resume.
+These SOUL clauses extend upstream style to authored tickets, documentation, and other persisted prose; preserve technical payload and safety exceptions.
+The upstream skills remain unchanged. Their use must not depend on reloading this Maker.
+Record source revision, inventories, hashes, target paths, and loading evidence in the existing private setup record.
+For rollback, restore only recorded own skill trees and autoload changes after checking current drift; preserve unrelated entries and obtain required deletion approval.
 
 <a id="find-skills"></a>
 Original [vercel-labs/skills](https://github.com/vercel-labs/skills): copy complete `skills/find-skills/` and MIT `LICENSE` to `<CODEX_PROCESS_HOME>/.agents/skills/find-skills/`.
+Use the manifest's `find-skills.source_revision` for new and reused copies.
 Compare the complete companion set with the selected source and verify native discovery/loading.
 Do not run a synthetic search during setup.
 Later `npx skills` use can download packages; search results do not authorize installation.
 Route component suggestions through Coder to Planner instead of installing automatically.
 
 <a id="codex-agents"></a>
-## Six custom agents with Team-Codex model bindings
+## Six unchanged upstream custom agents
 
 Obtain exactly the six original agent files listed in the [manifest](../manifest.json) from
 [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents).
+Use the exact `codex-custom-agents.source_revision` from that manifest for setup and updates.
 Preserve the MIT `LICENSE` and original source bytes, revision, and hashes outside active agent discovery.
 Do not install other agent packages as part of this step.
 
-Use `CODEX_MODEL`, `CODEX_REASONING_DEFAULT`, and `CODEX_REASONING_MAX` from the confirmed setup data.
-Set `model` to `CODEX_MODEL` in each of the six installation copies.
-Set `model_reasoning_effort` by this fixed assignment:
+Keep all six TOMLs unchanged, including `model`, `model_reasoning_effort`, and instructions.
+The Team-Codex main-process model and reasoning matrix do not override these specialist settings.
+Resolve unavailable original models, unsupported reasoning, or conflicting customer limits during preparation.
+Preserve the originals and report the affected capability; do not substitute model or reasoning values.
+Compare reused sources against the pinned revision; older originals are not sufficient.
+Write the unchanged files to `CODEX_HOME/agents/` under their original basenames after ownership and collision checks.
 
-| Agents | Confirmed reasoning value |
-|---|---|
-| `test-automator`, `ui-fixer`, `docker-expert` | `CODEX_REASONING_DEFAULT` |
-| `reviewer`, `security-auditor`, `anti-ui-slop-reviewer` | `high`, capped by `CODEX_REASONING_MAX` |
-
-For the review helpers, use `high` if the confirmed maximum is `high` or higher.
-If the maximum is below `high`, use that maximum.
-Compare levels using the selected model/provider semantics, not lexical order.
-For example, maximum `medium` selects `medium`; maximum `ultra` selects `high`.
-Keep `CODEX_REASONING_DEFAULT` unchanged for the default group, even if it is above `high`.
-Resolve unsupported model or reasoning settings during preparation; do not substitute another model or level.
-Do not require availability of the original upstream model pins.
-Change only `model` and `model_reasoning_effort` in the installation copies.
-Preserve all other original fields and instructions.
-Write the adapted copies to `CODEX_HOME/agents/` under their original basenames after ownership and collision checks.
-
-During the existing file/configuration readback, compare each installed TOML with its original source.
-Confirm that only the two assigned fields differ and that all six assignments match the confirmed values.
-Record the original and installed hashes separately with the actual targets and source revision.
+Compare complete installed bytes with the pinned originals, including model and reasoning fields.
+Record the matching source/target hashes, actual targets, and source revision in the existing private setup record.
 Read back the installed inventory, native discovery, and configuration/access availability in the actual Team-Codex context.
+Check project-scoped or same-name agents for shadowing of these originals.
 Keep provider, approval, and MCP inheritance from the parent; an agent TOML sandbox field is not a separate security boundary.
 Do not add model probes, specialist calls, or generated test artifacts to setup.
 No helper replaces the independent Hermes Reviewer.
@@ -329,10 +413,10 @@ Native reference: [Custom Agents](https://developers.openai.com/codex/subagents.
 
 Original [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight/tree/main/hindsight-integrations/hermes),
 vollständiger Unterbaum `hindsight-integrations/hermes` samt benötigten übergeordneten
-Originallizenzen/Notices. Native Katalogaufnahme, keine private Pluginversion:
+Originallizenzen/Notices. Use the manifest's `hindsight.source_revision` as `HINDSIGHT_REVISION` for native admission:
 
 ```sh
-hermes -p "$PROFILE" plugins install hindsight
+hermes -p "$PROFILE" plugins install vectorize-io/hindsight/hindsight-integrations/hermes --ref "$HINDSIGHT_REVISION"
 hermes -p "$PROFILE" memory setup
 hermes -p "$PROFILE" config get memory.provider
 ```
@@ -342,7 +426,12 @@ Read back `memory.provider=hindsight`, native setup fields and actual bank ident
 Reuse the existing own bank on resume; do not provision an embedded server.
 The researched adapter 1.2.3 required Hermes >=0.21.4, Python >=3.11, `hindsight-client>=0.10.1,<1` and `hindsight-embed>=0.10.1,<1`.
 These are historical source facts, not an installation mandate.
-Use the established compatible catalog adapter and the authorized profile-local integration/PM scope.
+Use the complete pinned adapter and the authorized profile-local integration/PM scope.
+The native source shorthand selects the complete `hindsight-integrations/hermes` subtree at that exact repository commit.
+Preserve the root `LICENSE` separately if native subtree delivery omits it.
+Read back installed original subtree bytes, source/commit, native registration and effective provider in each assigned role.
+Adapter and SDK dependency changes can affect shared Hermes PM state; disclose and approve those effects before admission or update.
+Do not update, provision or restart the Hindsight service to enforce the adapter pin.
 
 Der Originaladapter liest profilbezogen `<Rollenhome>/hindsight/config.json`,
 dann legacy geteilte Konfiguration, dann Envfallback. Erstelle/merge deshalb nach
@@ -499,9 +588,9 @@ keine historische besondere Thread-Abnahme hinzufügen.
 
 ## Codeanalyse und Quellenstand
 
-Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to Planner, Coder and Team-Codex.
+Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to Planner, Coder, Reviewer and Team-Codex.
 Read only that branch of [Code analysis](code-analysis.md) as setup instructions.
-For CBM deliver the complete official Codex subagents alongside the six [VoltAgent helpers with Team-Codex model bindings](#codex-agents).
+For CBM deliver the complete official Codex subagents alongside the six [unchanged VoltAgent helpers](#codex-agents).
 Verify setup targets, native discovery and connection/configuration readbacks without analysis experiments.
 Keep provenance in [Sources](upstream-sources.md).
 

@@ -14,7 +14,7 @@ Resolve missing or contradictory bindings before writing that team's files.
 Do not create a cron job or watcher.
 Do not stop workers or restart sessions.
 Do not change models, plugins, integrations, configuration, or external services through the file helper.
-The required prose [Reviewer skill retirement](#required-reviewer-skill-retirement-1122) is the narrow post-file-update exception for approved removal and Reviewer-specific obsolete bindings.
+The required [Planner Kanban binding](#planner-kanban-tools), [upstream companion update](#required-upstream-companion-update), and [Reviewer skill retirement](#required-reviewer-skill-retirement-1122) use separate approved prose steps, not the file helper.
 Do not run a new setup or pipeline test card as part of a file update.
 
 Use Python 3.11 or later and local Git for this helper.
@@ -129,6 +129,10 @@ Preserve local SOUL drift through the same three-way comparison as a recorded in
 
 ## Prepare and review one team
 
+Inspect all assigned upstream assets under [Required upstream companion update](#required-upstream-companion-update) before presenting the complete update scope.
+Inspect [Planner Kanban tools](#planner-kanban-tools) before that same scope decision.
+Perform that comparison even for a same-version or no-op file proposal.
+
 ```sh
 python3 -B references/update_team.py plan --home /actual/planner-home --target HEAD
 ```
@@ -138,6 +142,14 @@ It compares the old pristine baseline, current target, and new personalized Make
 It merges nonconflicting text changes with `git merge-file`.
 It stops application on text conflicts, missing local files, or incompatible source mappings.
 New files in a managed skill tree are included automatically.
+New owned skills use the same existing whole-tree mapping from `own_skills.targets`, including Team-Codex's process-HOME `.agents/skills/`.
+For Planner-only `prototype`, use [its delivery recipe](integrations.md#prototype) for collision checks, complete-tree loading, dependent SOUL clauses, and local-rule reconciliation.
+For `diagnosing-bugs`, inspect collisions through [the owned-skill recipe](integrations.md#diagnosing-bugs) before preparing the normal proposal.
+Keep its complete tree and dependent Coder call clause in the same approved update; resolve missing target bindings or local conflicts before application.
+The existing legacy SOUL-only path still withholds skills with unknown baselines; reconcile that team's required diagnosis delivery within the approved scope before applying the dependent Coder policy.
+Withhold dependent outputs if required skill delivery or native loading remains unresolved; do not infer completion from advanced installation metadata.
+Read back its complete saved tree, unambiguous Codex discovery, and the Coder's explicit call policy separately.
+Saved files and discovery do not establish actual diagnosis behavior.
 The manifest's `recovery_launcher` uses `bound-recovery-v1` instead of `copy-v1`.
 The updater renders both source baselines with the team's recorded `confirmed_bindings.triage_recovery`.
 It preserves that binding when it renews the launcher from a new template.
@@ -178,6 +190,10 @@ Read the proposal and the changed SOULs and skill files.
 Decode the proposal's `new_base` and `merged` fields as base64 if you inspect their bytes programmatically.
 Compare the candidate against neighboring instructions and local role rules.
 Record a concrete semantic review finding.
+For the Reviewer's proportional investigation, review direct/parallel selection, helper limits and exact code/plan binding, and conditional critical-invariant pass credit in the rendered SOUL.
+Preserve confirmed local model/reasoning and resource policies; resolve actual conflicts through the existing three-way review.
+Read back the full SOUL and subsequent-context loading after application under [Verification](verification.md); saved files do not establish live helper behavior.
+This method adds no skill tree, helper profile, runtime setting, or companion installation; preserve native `sdlc-review` management and preload.
 Do not treat a clean text merge as proof of semantic compatibility.
 If a conflict exists, preserve the proposal and resolve the affected local sections against the exact source revisions within the approved mandate.
 Prepare and review a new proposal after that resolution.
@@ -192,11 +208,149 @@ For the Planner skill-maintenance policy, report the separate configuration step
 The file updater delivers the Planner template change but does not set `skills.creation_nudge_interval`.
 Obtain separate authorization to set and read back `skills.creation_nudge_interval=0` in the existing Planner profile.
 
-If the helper recipe changed, report the required Team-Codex model and helper reasoning assignments from [the recipe](integrations.md#codex-agents).
+## Planner Kanban tools
+
+Check Planner Kanban availability on every requested team update, including same-version and no-op file updates.
+Use the native scope, commands, and complete readbacks in [Planner Kanban tools](setup.md#planner-kanban-tools).
+The file helper does not enable tools or change native configuration; installation metadata does not certify this binding.
+Include missing Planner tool selections in the complete update scope before the approval decision.
+Obtain authorization before changing native configuration; `--dependency-decision` alone does not grant it.
+Back up the affected configuration and native tool selections in the existing private update area.
+Preserve unrelated enabled and disabled tools, global suppression entries, and MCP bindings under the setup recipe.
+Recheck for concurrent drift before enabling only the missing authorized selections through the native commands.
+Read back all three platform selections and compare preservation against the captured state.
+Save and read back completion evidence in the existing private setup/update record.
+Keep the binding `pending` if authorization, availability, or preservation remains unresolved, even after the Maker version advances.
+Report `files updated; team update incomplete` while this required binding remains pending.
+Configuration readbacks do not establish adoption by running sessions; preserve the existing no-restart boundary.
+
+## Required upstream companion update
+
+This mandatory prose procedure covers independently delivered skills, all six VoltAgent TOMLs, complete plugins and the selected analysis assets.
+Include Superpowers, grill-me/grilling/domain-modeling/to-questionnaire, the Hindsight adapter, Ponytail in both harnesses, Caveman, caveman-review, find-skills and the selected CBM or Graphify integration.
+For the Planner's domain tree, include `GLOSSARY-FORMAT.md`, `ADR-FORMAT.md`, `agents/openai.yaml`, and all legal files through the existing [complete-tree recipe](integrations.md#grill-me).
+Include the complete original `to-questionnaire` tree, its `agents/openai.yaml`, and root MIT license through that same Planner-only recipe.
+Include Team-Codex CLI target/reuse assessment separately from asset replacement.
+Compare every assigned upstream asset on every requested team update, even when the Maker version is unchanged.
+Read `source_revision` or inherited `source_component`, `subpaths`, legal files, mappings and hashes from the target Maker manifest.
+Use those exact commits without a fresh latest-version search.
+The existing file helper remains file-only for role templates and `own_skills`; it does not install or reconcile these upstream components.
+Keep pending/completed companion evidence in the existing private `devteam/setup.md` progress/update sections, not another registry or helper schema.
+Pins are source targets, not operational permission.
+Keep Hermes core and its distribution skills native-managed and outside Maker updates.
+Keep the Hindsight service untouched.
+
+1. **Inspect:** Resolve every assigned consumer, native registration/discovery root and actual source/target path before any write.
+   For the selected CBM or Graphify branch, inspect Planner, Coder, Reviewer and Team-Codex even when installation metadata is already current.
+   Include previously retired Reviewer analysis assets and missing MCP/CLI, cache, CWD, hook or discovery bindings in the concrete companion scope.
+   Preserve the confirmed alternative and nonselected assets; do not silently re-select.
+   Compare exact commits and complete file/byte inventories, including hidden files, companions, legal files and local additions.
+   Compare each installed asset against the required source, not merely its name, package version or earlier reviewed revision.
+   Check native loading, duplicate/shadowed paths, ownership, modes, symlinks and shared consumers.
+   Read current CBM/Graphify runtimes and Team-Codex binary paths, versions and shared use separately from the asset inventory.
+   Preserve compatible existing runtimes; never change them automatically to enforce asset pins.
+   Do not blindly upgrade or downgrade a reused matching/newer CLI.
+   If pinned assets require an unavailable capability, name the exact runtime/asset mismatch and required update/defer decision.
+   Record missing historical provenance as unknown; never invent an installed revision or pristine baseline.
+   Use verified current bytes as a pre-change backup, not as an asserted pristine upstream baseline.
+   Capture the pre-update Maker version/commit and per-component required/observed sources, differences, proposed actions and `pending` status before file application.
+   Preserve earlier pending evidence when installation metadata already advanced.
+2. **Approve:** Present the complete file and companion scope, including all concrete paths, source/target versions, local-edit decisions and native binding changes.
+   Obtain advance explicit approval once for the complete concrete plugin/runtime/CLI change set.
+   Any full Superpowers, Ponytail or Hindsight-adapter update requires that approval, even when only profile/team-local paths appear to change.
+   Disclose dependency resolution, shared Hermes PM generations and affected other consumers before plugin approval.
+   Include every proposed CBM/Graphify runtime and Team-Codex CLI change with its actual versions, paths and shared effects.
+   Include required autoload, hooks, MCP and old team-owned registration replacements in that same scope.
+   Preserve local edits unless their exact reconciliation is approved; do not ask again for each file within the approved batch.
+   Record approval or deferral before mutations; `--dependency-decision` records the dependent-file decision, not permission by itself.
+3. **Back up:** Save complete affected installed trees and native bindings outside all discovery roots before replacement.
+   Preserve bytes/hashes, inventories, ownership, modes, link metadata, original provenance evidence and runtime state separately.
+   Verify complete backup inventories and bytes against the inspected targets before proceeding.
+   Keep the backup path and supported restoration route in the existing private record.
+4. **Apply:** Recheck all inspected targets and bindings for concurrent drift immediately before writes; stop on a difference.
+   Apply only approved changes through [Integrations](integrations.md) and the selected [analysis recipe](code-analysis.md).
+   Restore missing selected Reviewer assets and native bindings through the selected analysis recipe within the approved companion scope.
+   Keep complete upstream bytes unchanged; do not alter model/reasoning fields, plugin manifests or skill instructions.
+   Keep shared runtime/PM mutations within the approved concrete scope; do not bootstrap or repair Hermes as a hidden prerequisite.
+   Complete required assets and native loading before applying dependent role/skill file changes.
+   If an asset, approval or compatible runtime is unavailable, withhold dependent outputs and keep the companion status `pending`.
+   After file application, read back affected personalized scope/use clauses through their existing recipes.
+5. **Verify:** Compare every delivered source/target path and byte with the required commit, including complete file sets and legal files.
+   Read back native registration, actual loaded source paths, required main/reference content and affected configuration/hooks in each assigned consumer.
+   Distinguish exact asset matches, compatible runtime reuse, unresolved source provenance and unverified running-context loading.
+   Verify unaffected roles/shared consumers against the pre-change inventory.
+   Mark each companion `complete` only after all its required readbacks pass; save and read back that evidence.
+   Keep selected-analysis work pending until required Reviewer assets, configuration and native discovery readbacks pass.
+   Resume pending work from the backup, prior evidence and actual native state on later updates, even after the Maker version advances.
+   Report `files updated; team update incomplete` while required companion work is pending or deferred.
+6. **Rollback:** The file-helper rollback does not restore companion assets or native bindings.
+   Obtain the applicable restoration scope and inspect current bytes/bindings for later edits before using the verified backup.
+   Restore only recorded affected trees, modes and native registrations/configuration without overwriting later work or shared assets.
+   Restore a runtime or PM generation only through its supported route within explicit shared-effect approval.
+   Read back restored files, native registration/loading and unaffected consumers separately from helper rollback.
+   Record restored state and renewed `pending` status; do not leave a completion claim for reverted assets.
+   Keep deletion and service/session restarts separately authorized.
+
+For VoltAgent, use [the original-file recipe](integrations.md#codex-agents).
+Read the target Maker manifest's `codex-custom-agents.source_revision`, `subpaths`, and `legal_files` as the required version inventory.
 The file updater does not manage the six upstream agent TOMLs.
-Obtain separate authorization before adapting installed helper files.
-Reuse the team's confirmed `CODEX_MODEL`, `CODEX_REASONING_DEFAULT`, and `CODEX_REASONING_MAX`; preserve other fields and local edits.
+Compare all six installed files with that revision as part of every requested team update.
+Include replacement of old Maker model/reasoning overrides with unchanged originals in the explicit team-update authorization.
+Resolve other local edits or conflicting customer rules before replacement; preserve unresolved files.
+Back up all six installed files and record their paths, bytes/hashes, modes, and source provenance before authorized replacement.
+Recheck drift before writing; preserve ownership and modes.
+Keep the companion update pending until all six files match the pinned originals and native discovery/access readbacks pass.
+Record revision, matching hashes, and completion in the existing private update record; resume pending work on later updates.
+For rollback, restore the verified backup after a drift check and read back the restored files.
 If the required runtime capability is absent, defer the dependent proposal.
+
+For Caveman changes, inspect each assigned consumer under [the writing-skill recipe](integrations.md#caveman).
+The file updater does not install Caveman skills or change `skills.auto_load`.
+Include the exact skill targets, source revision, autoload changes, backups, and readbacks in the explicit team-update authorization.
+Preserve local adaptations and historical tickets.
+Defer the dependent SOUL changes until the required skills and loading bindings are verified.
+Read back each delivered scope clause and the Coder's per-task propagation after file application.
+Record subsequent-context loading separately; do not restart sessions or claim that running contexts adopted the change.
+
+## Workflow migration (2.0.0)
+
+Use this procedure during an explicitly authorized team update from a pre-update version below `2.0.0` to a target at or above `2.0.0`.
+Resume an unfinished migration even after installation metadata advances.
+Resolve unknown legacy provenance instead of assuming completion.
+Keep migration progress in the existing private setup/update record.
+The file helper does not migrate cards or certify loaded instructions.
+
+1. **Inspect before authority changes:** Read affected cards, actual phase/assignment, current runs and claims, latest `review_requested` provenance, blockers, decisions, and parent gates.
+   Record the pre-update package version, exact Maker commit, affected card IDs, and unfinished migration steps in the existing update record.
+2. **Settle active old-contract work:** Let active workers finish under their existing contract or obtain a separately scoped transition decision.
+   Do not mix old and new loaded roles on one active handoff.
+   For an active legacy Planner review run, let that owner use the established native `kanban_request_changes` return to its original Coder.
+   This is a migration-only completion, not the route for new questions.
+   A wake session cannot take over that run or reopen an active card.
+3. **Resolve parked legacy cards:** Require no active run or competing claim.
+   Resolve the actual blocker and use ordinary unblock or guarded triage recovery to restore its source phase first.
+   If clarification is complete and Coder continuation is required, use the guarded review-reopen procedure in [Review-provenance special case](../skills/brownfield-feature-planning/references/kanban-triage-recovery.md#review-provenance-special-case).
+   Inspect installed public help and native source semantics before using that procedure.
+   Preserve pending independent review and unresolved `CHANGES_REQUESTED` findings.
+   Do not reopen pending review indiscriminately.
+4. **Reconcile local authority:** Reconcile old Planner-review clarification routes and fixed discretionary retry approvals within the approved update mandate.
+   Preserve explicit customer financial/resource caps, operational permissions, native guards, and unrelated local adaptations.
+   Do not silently transfer or enlarge a separate customer-approved mandate.
+   Obtain a customer decision only for genuinely conflicting explicit mandates.
+5. **Review and apply files:** Prepare the normal three-way proposal and review changed instructions with neighboring local rules.
+   Recheck current runs and claims immediately before application; defer if the settled state changed.
+   Use the existing activity decision, semantic review, backups, and exact-target verification below.
+   Complete the fixed `1.1.22` retirement procedure when applicable; this workflow migration does not replace it.
+6. **Read back the same cards:** Verify card identity, recorded decisions, implementation owner, review provenance, counters, parent gates, and actual phase.
+   Keep the same card and its history.
+   Update contradictory active instructions and affected baseline bindings through supported operations within the approved scope.
+   For the next Coder handoff, bind the independent Reviewer explicitly; retain historical Planner provenance.
+   New customer-decision questions use Reviewer → Coder → needs-input → Planner/Mattermost → Coder → Reviewer.
+7. **Verify subsequent instruction loading:** Verify effective loading in subsequent execution contexts separately from saved file bytes.
+   Confirm the applicable plan and role baseline before the next handoff.
+   Do not restart a gateway or session merely because files changed.
+   Report file application, card migration, and effective-loading evidence separately.
+   Keep unresolved steps open instead of inferring completion from a package version or queued run.
 
 ## Activity and application
 
@@ -210,6 +364,8 @@ Obtain an explicit proceed or skip decision for that team.
 The CLI conservatively requires this decision for every application and rollback.
 Do not fabricate an inactivity result to avoid the question.
 Before file application, complete the pre-apply record and approval steps in [required Reviewer skill retirement](#required-reviewer-skill-retirement-1122).
+Before applying workflow authority changes, complete steps 1–4 of [Workflow migration](#workflow-migration-200).
+Before dependent file application, complete the approved asset/loading requirements in [Required upstream companion update](#required-upstream-companion-update).
 
 ```sh
 python3 -B references/update_team.py apply --home /actual/planner-home \
@@ -253,7 +409,7 @@ Resume a pending retirement on later updates even if `installation.json` already
 Never infer migration completion from version alone.
 For a team created at or above `1.1.22`, use original setup and discovery evidence to establish that this crossing migration is not applicable.
 For an older team already reporting a newer version without completion evidence, resolve its pre-update evidence or reconcile the exact scope below.
-For legacy or unknown versions, resolve the source evidence or explicitly reconcile these five identities within the approved scope.
+For legacy or unknown versions, resolve the source evidence or explicitly reconcile these three identities within the approved scope.
 Do not silently skip an unknown version.
 
 The only removal targets are these exact Reviewer skill identities and their complete local trees:
@@ -263,11 +419,10 @@ The only removal targets are these exact Reviewer skill identities and their com
 | `minimal-change-engineering` | `<reviewer home>/skills/minimal-change-engineering/` |
 | `project-lib-versioning` | `<reviewer home>/skills/project-lib-versioning/` |
 | `screenshot-to-code` | `<reviewer home>/skills/screenshot-to-code/` |
-| `graphify` | `<reviewer home>/skills/graphify/` |
-| `codebase-memory` | `<reviewer home>/skills/codebase-memory/` |
 
-Confirm identities and recipe paths against the [manifest](../manifest.json), [own-skill recipe](setup.md#6-eigene-skills-rollen-und-textpersonalisierung), and [analysis recipes](code-analysis.md).
-This migration overrides local-adaptation preservation only for these five Reviewer skill trees.
+Confirm identities and recipe paths against the [manifest](../manifest.json) and [own-skill recipe](setup.md#6-eigene-skills-rollen-und-textpersonalisierung).
+This migration overrides local-adaptation preservation only for these three Reviewer skill trees.
+Preserve CBM/Graphify skills and bindings; restore the selected Reviewer integration through the approved upstream companion update.
 Include learned files, references, hidden files, and local additions.
 Do not copy retired methods into SOUL or other skills.
 Keep the native `sdlc-review` skill and its automatic integration unchanged.
@@ -285,7 +440,7 @@ Skill retirement does not authorize general integration or runtime cleanup.
 2. **Read-only discovery:** Resolve the exact Reviewer home from confirmed bindings and native profile inventory.
    Keep this discovery strictly read-only.
    Do not remove trees or change exclusions or bindings during discovery.
-   Inspect native discovery roots and every resolved source path for the five exact skill identities.
+   Inspect native discovery roots and every resolved source path for the three exact skill identities.
    Record source ownership, aliases, symlinks, and shared/external sources before selecting any removal path.
    Do not delete guessed paths or follow links into shared assets.
    If a shared or external source serves other roles, determine the supported Reviewer-specific exclusion or unbinding from the installed interface without applying it.
@@ -311,7 +466,7 @@ Skill retirement does not authorize general integration or runtime cleanup.
    Apply only the inspected, supported Reviewer-specific exclusions/unbindings for shared sources and obsolete references.
    Reconcile only the inventoried Reviewer-specific obsolete bindings within the approved update scope.
    Treat already absent skills as successful no-ops after native readback.
-5. **Verify and persist the result:** Verify absence of all five identities through native Reviewer discovery and source resolution.
+5. **Verify and persist the result:** Verify absence of all three identities through native Reviewer discovery and source resolution.
    Use an established fresh discovery/readback interface; stale session catalogs and missing files alone do not establish absence.
    Verify preservation of unaffected roles and assets against the pre-removal inventory.
    Read back affected Reviewer-specific bindings and the preserved native `sdlc-review` source/integration.
@@ -361,8 +516,12 @@ Do not repeat removed behavioral experiments or treat them as pending setup gate
 Preserve the operational dependency-decision gate when recipes or component metadata change, including changes that remove tests.
 
 For an authorized target update, read back the exact installation record, result journal, and changed targets.
+Report a managed file whose bytes match no committed revision as uncommitted drift, and keep it out of the claimed role state.
+Read back [Planner Kanban tools](#planner-kanban-tools), including unchanged-version checks and preservation evidence, before claiming a complete team update.
+Read back all required upstream companion statuses and native evidence, including unchanged-version comparisons, before claiming a complete team update.
 Read back the required retirement status and native evidence for affected teams before claiming the team update is complete.
-Report package version and commit separately.
+Read back workflow migration progress and subsequent-context loading evidence for affected teams; report missing evidence as an open step.
+Report package version and commit separately, and confirm each changed instruction by reading its exact passage in the installed target.
 Report `applied`, `skipped`, `failed`, unknown legacy skill baselines, retained files, and remaining runtime checks per team.
 Do not claim that running sessions loaded the new context.
 Do not restart them to obtain that claim.

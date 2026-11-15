@@ -244,7 +244,9 @@ class UpdaterTests(unittest.TestCase):
         self.assertIn("`/synthetic/client's workspace`", target.read_text())
         self.assertIn("`Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code`", target.read_text())
         coder = (Path(self.roles['coder']['home']) / 'SOUL.md').read_text()
-        self.assertIn('Route the same task to `fixture-planner`', coder)
+        self.assertIn('kanban_block(kind="needs_input", reason=...)', coder)
+        self.assertIn('Keep the same card and Coder assignment.', coder)
+        self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder)
         self.assertIn('Send one TIMER request to `fixture-planner`', coder)
         record = json.loads((self.state / 'installation.json').read_text())
         self.assertEqual(record['confirmed_values']['PROJECT_DIR'], setup['confirmed_values']['PROJECT_DIR'])
@@ -252,6 +254,65 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(record['confirmed_values']['PLANNER_PROFILE'], 'fixture-planner')
         (self.state / 'setup.md').rename(self.state / 'audit-only.md')
         self.assertFalse(json.loads(self.proposal().read_text())['conflicts'])
+
+    def pre200_installation(self):
+        """Exact local source fixture, not an inferred package-version baseline."""
+        original = Path(__file__).resolve().parents[1]
+        commit = 'bd7664b531250c5583dec58d21570de1cace1120'
+        self.git('fetch', '-q', str(original), commit)
+        setup = u.setup_data(self.state)
+        self.assertEqual(u.package_version(self.repo, commit), '1.1.22')
+        for entry in u.desired(self.repo, commit, self.roles, setup['confirmed_values'], bindings=self.bindings):
+            target = Path(entry['target'])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(entry['content'])
+            target.chmod(entry['mode'])
+        return u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=commit,
+                            basis_evidence='Synthetic exact 1.1.22 source and complete managed-tree installation')
+
+    def test_pre200_update_preserves_local_caps_and_pending_migration_record(self):
+        target_version = json.loads((self.repo / 'manifest.json').read_text())['version']
+        record = self.pre200_installation()
+        self.assertEqual(record['maker_version'], '1.1.22')
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        local = 'Local approved resource cap: 40 EUR; no deployment permission.\n\n'
+        coder.write_text(local + coder.read_text())
+        setup = self.state / 'setup.md'
+        setup.write_text(setup.read_text() + '\nWorkflow migration 2.0.0: pending; old-card ownership unresolved.\n')
+        before_setup = setup.read_bytes()
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertEqual(proposal['maker_version'], target_version)
+        self.assertFalse(proposal['conflicts'])
+        result = u.apply(self.home, plan, decision='proceed',
+                         review='Checked local cap preservation; card migration and loading remain pending',
+                         dependency_review='Authorized fixture file-only changes; no live transition or runtime change')
+        self.assertEqual(result['status'], 'applied')
+        updated = u.load_record(self.home)[2]
+        self.assertEqual(updated['maker_version'], target_version)
+        self.assertEqual(updated['roles'], self.roles)
+        self.assertEqual(updated['confirmed_bindings'], self.bindings)
+        self.assertTrue(coder.read_text().startswith(local))
+        self.assertIn('kanban_block(kind="needs_input", reason=...)', coder.read_text())
+        self.assertNotIn('through native `kanban_request_review`', coder.read_text())
+        reviewer = (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text()
+        self.assertIn('only the Coder escalates it through the Planner.', reviewer)
+        self.assertEqual(setup.read_bytes(), before_setup)
+
+    def test_pre200_conflicting_local_planner_route_withholds_file_application(self):
+        self.pre200_installation()
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        old = 'Route the same task to `fixture-planner` through native `kanban_request_review`.'
+        self.assertIn(old, coder.read_text())
+        coder.write_text(coder.read_text().replace(old, 'Local binding mandate: route all decisions to Planner review.'))
+        before = coder.read_bytes()
+        metadata = (self.state / 'installation.json').read_bytes()
+        plan = self.proposal()
+        self.assertIn(str(coder), json.loads(plan.read_text())['conflicts'])
+        with self.assertRaises(ValueError):
+            u.apply(self.home, plan, decision='proceed', review='Unresolved explicit local route conflict')
+        self.assertEqual(coder.read_bytes(), before)
+        self.assertEqual((self.state / 'installation.json').read_bytes(), metadata)
 
     def test_113_installation_adopts_confirmed_role_bindings(self):
         self.check_historical_binding_upgrade('da11a12710aace9a0522c88fd8fb3ef378711d0c')
@@ -373,7 +434,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(script['transform'], 'copy-v1')
         self.assertEqual(Path(script['target']).read_bytes(), (self.repo / script_source).read_bytes())
         self.assertIn(('team-codex', 'skills/screenshot-to-code/LICENSE'), mapped)
-        codex_entry = next(x for x in record['managed'] if x['role'] == 'team-codex' and x['source'].endswith('/LICENSE'))
+        codex_entry = next(x for x in record['managed'] if x['role'] == 'team-codex' and x['source'] == 'skills/screenshot-to-code/LICENSE')
         self.assertEqual(codex_entry['target'], str(Path(self.roles['team-codex']['home']) / '.agents/skills/screenshot-to-code/LICENSE'))
         self.assertEqual(record['maker_commit'], self.base)
         self.assertEqual((self.state / 'installation.json').stat().st_mode & 0o777, 0o600)
@@ -401,6 +462,148 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual((self.state / 'baselines' / entry['baseline']).read_bytes(), original)
         self.assertEqual(record['maker_commit'], self.git('rev-parse', 'HEAD').strip())
 
+    def test_prototype_complete_tree_maps_only_to_planner(self):
+        record = self.initialize()
+        entries = [e for e in record['managed'] if e['source'].startswith('skills/prototype/')]
+        source = self.repo / 'skills/prototype'
+        self.assertEqual({e['source'] for e in entries},
+                         {p.relative_to(self.repo).as_posix() for p in source.rglob('*') if p.is_file()})
+        self.assertEqual({e['role'] for e in entries}, {'planner'})
+        for e in entries:
+            self.assertEqual(e['target'], str(self.home / e['source']))
+            self.assertEqual(e['transform'], 'copy-v1')
+            self.assertEqual(Path(e['target']).read_bytes(), (self.repo / e['source']).read_bytes())
+        main = self.home / 'skills/prototype/SKILL.md'
+        main.write_bytes(b'Approved local planning note\n' + main.read_bytes())
+        self.change('skills/prototype/SKILL.md', '\nUpdated prototype clarification instruction.\n')
+        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture prototype update reviewed')
+        self.assertTrue(main.read_bytes().startswith(b'Approved local planning note\n'))
+        self.assertTrue(main.read_bytes().endswith(b'Updated prototype clarification instruction.\n'))
+
+    def test_new_prototype_tree_collision_and_guarded_rollback(self):
+        path = self.repo / 'manifest.json'
+        manifest = json.loads(path.read_text())
+        entry = manifest['own_skills'].pop('prototype')
+        files = {p.relative_to(self.repo).as_posix(): p.read_bytes()
+                 for p in (self.repo / 'skills/prototype').rglob('*') if p.is_file()}
+        self.git('rm', '-r', 'skills/prototype')
+        path.write_text(json.dumps(manifest))
+        self.commit('fixture before prototype assignment')
+        target = self.home / 'skills/prototype'
+        shutil.rmtree(target)
+        self.initialize()
+        before = (self.state / 'installation.json').read_bytes()
+        manifest['own_skills']['prototype'] = entry
+        path.write_text(json.dumps(manifest))
+        for relative, content in files.items():
+            p = self.repo / relative
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(content)
+        self.commit('fixture add Planner-only prototype')
+        target.mkdir()
+        main = target / 'SKILL.md'
+        main.write_bytes(b'Unrelated local skill.\n')
+        plan = self.proposal()
+        self.assertIn(str(main), json.loads(plan.read_text())['conflicts'])
+        with self.assertRaisesRegex(ValueError, 'Text conflicts'):
+            u.apply(self.home, plan, decision='proceed', review='Fixture unresolved collision')
+        self.assertEqual(main.read_bytes(), b'Unrelated local skill.\n')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+        main.unlink()  # Fixture-only reconciliation, not a live retirement policy.
+        plan = self.proposal()
+        entries = [e for e in json.loads(plan.read_text())['entries'] if e['source'] in files]
+        self.assertEqual({e['source'] for e in entries}, set(files))
+        self.assertEqual({e['role'] for e in entries}, {'planner'})
+        result = u.apply(self.home, plan, decision='proceed', review='Fixture prototype addition reviewed')
+        for e in entries:
+            self.assertEqual(Path(e['target']).read_bytes(), files[e['source']])
+        restored = u.rollback(self.home, Path(result['run']), decision='proceed')
+        self.assertEqual(set(restored['retained_additions']), {e['target'] for e in entries})
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+
+    def diagnosis_added_to_existing_team(self):
+        """Synthetic prior install without this owned skill; no live discovery."""
+        path = self.repo / 'manifest.json'
+        manifest = json.loads(path.read_text())
+        self.assertIn('diagnosing-bugs', manifest['own_skills'], 'Missing owned diagnosis delivery')
+        source = self.repo / 'skills/diagnosing-bugs'
+        files = {p.relative_to(self.repo).as_posix(): p.read_bytes() for p in source.rglob('*') if p.is_file()}
+        self.assertEqual(set(files), {'skills/diagnosing-bugs/' + name for name in
+                                     ('SKILL.md', 'README.md', 'LICENSE', 'NOTICE.md', 'references/method.md')})
+        entry = manifest['own_skills'].pop('diagnosing-bugs')
+        self.git('rm', '-r', 'skills/diagnosing-bugs')
+        path.write_text(json.dumps(manifest))
+        self.commit('fixture prior installation without diagnosis')
+        target = Path(self.roles['team-codex']['home']) / '.agents/skills/diagnosing-bugs'
+        shutil.rmtree(target)
+        self.initialize()
+        before = (self.state / 'installation.json').read_bytes()
+        manifest['own_skills']['diagnosing-bugs'] = entry
+        path.write_text(json.dumps(manifest))
+        for relative, content in files.items():
+            p = self.repo / relative
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(content)
+        self.commit('fixture newly assigned whole diagnosis tree at same package version')
+        return files, target, before
+
+    def test_new_owned_diagnosis_tree_maps_only_to_codex_and_retains_rollback_additions(self):
+        files, target, before = self.diagnosis_added_to_existing_team()
+        unaffected = {str(p): p.read_bytes() for role in ('planner', 'coder', 'reviewer')
+                      for p in Path(self.roles[role]['home']).glob('SOUL.md')}
+        # A real operational recipe change retains the existing dependency gate.
+        self.change('references/setup.md', '\nDiagnosis delivery recipe fixture update.\n')
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertIn('references/setup.md', proposal['dependencies'])
+        entries = [e for e in proposal['entries'] if e['source'] in files]
+        self.assertEqual({e['source'] for e in entries}, set(files))
+        self.assertEqual({e['role'] for e in entries}, {'team-codex'})
+        for e in entries:
+            self.assertEqual(e['target'], str(target / Path(e['source']).relative_to('skills/diagnosing-bugs')))
+            self.assertEqual(e['transform'], 'copy-v1')
+            self.assertIsNone(e['before_hash'])
+            self.assertEqual(u.decoded(e['merged']), files[e['source']])
+        with self.assertRaisesRegex(ValueError, 'Operational dependency changes'):
+            u.apply(self.home, plan, decision='proceed', review='Fixture static review')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+        self.assertFalse(target.exists())
+        result = u.apply(self.home, plan, decision='proceed', review='Fixture static review',
+                         dependency_review='Approved synthetic file-only scope; no native activation')
+        self.assertEqual(result['status'], 'applied')
+        record = u.load_record(self.home)[2]
+        for e in entries:
+            self.assertEqual(Path(e['target']).read_bytes(), files[e['source']])
+            managed = next(x for x in record['managed'] if x['target'] == e['target'])
+            self.assertEqual((self.state / 'baselines' / managed['baseline']).read_bytes(), files[e['source']])
+        for p, content in unaffected.items():
+            self.assertEqual(Path(p).read_bytes(), content)
+        restored = u.rollback(self.home, Path(result['run']), decision='proceed')
+        self.assertEqual(set(restored['retained_additions']), {e['target'] for e in entries})
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+
+    def test_new_owned_diagnosis_collision_withholds_and_existing_local_edits_survive(self):
+        files, target, before = self.diagnosis_added_to_existing_team()
+        target.mkdir(parents=True)
+        main = target / 'SKILL.md'
+        main.write_bytes(b'Unrelated same-name local skill.\n')
+        plan = self.proposal()
+        self.assertIn(str(main), json.loads(plan.read_text())['conflicts'])
+        with self.assertRaisesRegex(ValueError, 'Text conflicts'):
+            u.apply(self.home, plan, decision='proceed', review='Collision unresolved')
+        self.assertEqual(main.read_bytes(), b'Unrelated same-name local skill.\n')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+        # Fixture-only reconciliation; real use requires the existing user decision.
+        main.unlink()
+        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture collision reconciled')
+        main.write_bytes(b'Local approved note\n' + main.read_bytes())
+        main.chmod(0o640)
+        self.change('skills/diagnosing-bugs/SKILL.md', '\nNew diagnosis instruction.\n')
+        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture local adaptation checked')
+        self.assertTrue(main.read_bytes().startswith(b'Local approved note\n'))
+        self.assertTrue(main.read_bytes().endswith(b'New diagnosis instruction.\n'))
+        self.assertEqual(u.file_mode(main), 0o640)
+
     def test_legacy_souls_preserve_drift_and_do_not_adopt_skills(self):
         original = Path(__file__).resolve().parents[1]
         # Fetch only from the local source repository into the isolated fixture.
@@ -421,6 +624,67 @@ class UpdaterTests(unittest.TestCase):
         self.assertTrue(target.read_text().startswith('Local team note'))
         skill = self.home / 'skills/brownfield-feature-planning/SKILL.md'
         self.assertNotIn('New upstream instruction.', skill.read_text())
+
+    def test_reviewer_investigation_reaches_existing_soul_and_preserves_local_policy(self):
+        """Actual old/new SOUL delivery; no runtime activation or model call."""
+        source = self.repo / 'templates/roles/reviewer.SOUL.md.template'
+        candidate = source.read_text()
+        heading = '## Proportional investigation\n'
+        self.assertIn(heading, candidate)
+        body = candidate.split(heading, 1)[1].split('\n## ', 1)[0]
+        source.write_text(candidate.replace(heading + body + '\n', '', 1))
+        self.commit('synthetic prior reviewer without investigation method')
+        self.base = self.git('rev-parse', 'HEAD').strip()
+        target = Path(self.roles['reviewer']['home']) / 'SOUL.md'
+        setup = u.setup_data(self.state)
+        old = next(e for e in u.desired(self.repo, self.base, self.roles,
+                                       setup['confirmed_values'], bindings=self.bindings)
+                   if e['role'] == 'reviewer' and e['transform'] == 'render-role-v1')
+        target.write_bytes(old['content'])
+        self.initialize()
+        local = '\nLocal customer resource cap remains binding.\n'
+        target.write_text(target.read_text() + local)
+        neighbors = {r: (Path(self.roles[r]['home']) / 'SOUL.md').read_bytes()
+                     for r in ('planner', 'coder')}
+        source.write_text(candidate)
+        self.commit('deliver candidate investigation through existing SOUL mapping')
+        proposal = self.proposal()
+        result = u.apply(self.home, proposal, decision='proceed', review='Static candidate and local-cap compatibility')
+        self.assertEqual(result['status'], 'applied')
+        self.assertIn(heading, target.read_text())
+        self.assertIn('Spec / requirement fidelity', target.read_text())
+        self.assertIn('Technical quality / standards', target.read_text())
+        self.assertTrue(target.read_text().endswith(local))
+        _, _, record = u.load_record(self.home)
+        managed = next(e for e in record['managed'] if e['target'] == str(target))
+        baseline = (self.state / 'baselines' / managed['baseline']).read_bytes()
+        self.assertEqual(target.read_bytes(), baseline + local.encode())
+        self.assertEqual(managed['transform'], 'render-role-v1')
+        self.assertEqual(managed['installed_hash'], u.digest(target.read_bytes()))
+        for role, before in neighbors.items():
+            self.assertEqual((Path(self.roles[role]['home']) / 'SOUL.md').read_bytes(), before)
+        self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
+        self.assertEqual(target.read_bytes(), old['content'] + local.encode())
+
+    def test_reviewer_investigation_local_rule_collision_withholds_all_writes(self):
+        self.initialize()
+        source = self.repo / 'templates/roles/reviewer.SOUL.md.template'
+        target = Path(self.roles['reviewer']['home']) / 'SOUL.md'
+        clause = 'Review small, clearly bounded corrections directly'
+        self.assertIn(clause, source.read_text())
+        target.write_text(target.read_text().replace(clause, 'Locally amended small-correction policy'))
+        source.write_text(source.read_text().replace(clause, 'Revised upstream small-correction policy'))
+        self.commit('synthetic conflicting reviewer policy')
+        before = {e['target']: Path(e['target']).read_bytes()
+                  for e in json.loads((self.state / 'installation.json').read_text())['managed']}
+        marker = (self.state / 'installation.json').read_bytes()
+        proposal = self.proposal()
+        self.assertTrue(json.loads(proposal.read_text())['conflicts'])
+        with self.assertRaises(ValueError):
+            u.apply(self.home, proposal, decision='proceed', review='Unresolved local policy collision')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+        for path, content in before.items():
+            self.assertEqual(Path(path).read_bytes(), content)
 
     def test_three_way_keeps_local_edits_and_pristine_new_baseline(self):
         self.initialize()
@@ -499,6 +763,124 @@ class UpdaterTests(unittest.TestCase):
             u.apply(self.home, plan, decision='proceed', review='checked')
         result = u.apply(self.home, plan, decision='proceed', review='checked', dependency_review='User approved file-only changes; runtime remains unchanged')
         self.assertEqual(result['status'], 'applied')
+
+    def test_voltagent_revision_change_requires_decision_without_writing_agent_files(self):
+        """Pinned metadata gates file updates; external TOMLs stay operator-owned."""
+        self.initialize()
+        agents = self.root / 'coder/devteam/codex-home/agents'
+        agents.mkdir(parents=True)
+        original = b'name = "reviewer"\nmodel = "local-model"\n'
+        target = agents / 'reviewer.toml'
+        target.write_bytes(original)
+        target.chmod(0o600)
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        # Synthetic commit identifier; this offline fixture never fetches upstream.
+        manifest['upstream_components']['codex-custom-agents']['source_revision'] = 'a' * 40
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture change pinned VoltAgent revision')
+        plan = self.proposal()
+        self.assertIn('manifest.json:upstream_components', json.loads(plan.read_text())['dependencies'])
+        with self.assertRaises(ValueError):
+            u.apply(self.home, plan, decision='proceed', review='checked')
+        result = u.apply(self.home, plan, decision='proceed', review='checked',
+                         dependency_review='Approved file-only update; VoltAgent companion update pending')
+        self.assertEqual(result['status'], 'applied')
+        self.assertEqual(target.read_bytes(), original)
+        self.assertEqual(target.stat().st_mode & 0o777, 0o600)
+        self.assertNotIn(str(target), {entry['target'] for entry in u.load_record(self.home)[2]['managed']})
+
+    def test_domain_tree_addition_gates_files_without_installing_upstream(self):
+        """The existing file-only updater gates a missing upstream dependency."""
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        domain = 'skills/engineering/domain-modeling'
+        self.assertIn(domain, manifest['upstream_components']['grill-me']['subpaths'])
+        manifest['upstream_components']['grill-me']['subpaths'].remove(domain)
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture before domain assignment')
+        self.initialize()
+        manifest['upstream_components']['grill-me']['subpaths'].insert(-1, domain)
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture add domain assignment at same revision and version')
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertIn('manifest.json:upstream_components', proposal['dependencies'])
+        marker = (self.state / 'installation.json').read_bytes()
+        with self.assertRaises(ValueError):
+            u.apply(self.home, plan, decision='proceed', review='checked')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+        for role in ('planner', 'coder', 'reviewer'):
+            self.assertFalse((Path(self.roles[role]['home']) / 'skills/domain-modeling').exists())
+        self.assertFalse(any('domain-modeling' in entry['target']
+                             for entry in u.load_record(self.home)[2]['managed']))
+
+    def test_questionnaire_addition_gates_files_without_installing_upstream(self):
+        """A new Matt subtree needs the approved upstream companion path."""
+        path = self.repo / 'manifest.json'
+        manifest = json.loads(path.read_text())
+        skill = 'skills/productivity/to-questionnaire'
+        manifest['upstream_components']['grill-me']['subpaths'].remove(skill)
+        path.write_text(json.dumps(manifest))
+        self.commit('fixture before questionnaire assignment')
+        self.initialize()
+        manifest['upstream_components']['grill-me']['subpaths'].insert(-1, skill)
+        path.write_text(json.dumps(manifest))
+        self.commit('fixture add questionnaire at same Matt revision and Maker version')
+        plan = self.proposal()
+        self.assertIn('manifest.json:upstream_components', json.loads(plan.read_text())['dependencies'])
+        marker = (self.state / 'installation.json').read_bytes()
+        with self.assertRaises(ValueError):
+            u.apply(self.home, plan, decision='proceed', review='checked')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+        for role in ('planner', 'coder', 'reviewer'):
+            self.assertFalse((Path(self.roles[role]['home']) / 'skills/to-questionnaire').exists())
+        self.assertFalse(any('to-questionnaire' in entry['target']
+                             for entry in u.load_record(self.home)[2]['managed']))
+
+    def test_all_asset_pin_changes_gate_same_version_without_companion_writes(self):
+        """Offline helper characterization; prose companion execution stays separate."""
+        self.initialize()
+        setup = self.state / 'setup.md'
+        setup.write_text(setup.read_text() + '\nUpstream companion update: pending; provenance unknown.\n')
+        before_setup = setup.read_bytes()
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        version = manifest['version']
+        external = {}
+        for relative in ('coder/devteam/codex-home/agents/reviewer.toml',
+                         'planner/plugins/superpowers/local.txt',
+                         'coder/skills/graphify/SKILL.md'):
+            target = self.root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(b'Local upstream asset; preserve edits.\n')
+            external[str(target)] = target.read_bytes()
+        names = ('tas', 'codex-cli', 'superpowers', 'grill-me', 'hindsight', 'ponytail',
+                 'caveman', 'find-skills', 'codex-custom-agents', 'codebase-memory', 'graphify')
+        for index, name in enumerate(names):
+            with self.subTest(component=name):
+                item = manifest['upstream_components'][name]
+                self.assertRegex(item.get('source_revision', ''), r'^[0-9a-f]{40}$')
+                # Synthetic identifiers, never fetched or presented as upstream evidence.
+                item['source_revision'] = f'{index + 1:040x}'
+                manifest_path.write_text(json.dumps(manifest))
+                self.commit('fixture change asset pin ' + name)
+                plan = self.proposal()
+                proposal = json.loads(plan.read_text())
+                self.assertEqual(proposal['maker_version'], version)
+                self.assertIn('manifest.json:upstream_components', proposal['dependencies'])
+                marker = (self.state / 'installation.json').read_bytes()
+                with self.assertRaises(ValueError):
+                    u.apply(self.home, plan, decision='proceed', review='checked')
+                self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
+                result = u.apply(self.home, plan, decision='proceed', review='checked',
+                                 dependency_review='Approved file-only fixture; companion remains pending')
+                self.assertEqual(result['status'], 'applied')
+                self.assertEqual(setup.read_bytes(), before_setup)
+                managed = {x['target'] for x in u.load_record(self.home)[2]['managed']}
+                for target, original in external.items():
+                    self.assertNotIn(target, managed)
+                    self.assertEqual(Path(target).read_bytes(), original)
 
     def test_obsolete_file_is_retained_and_reported(self):
         self.initialize()

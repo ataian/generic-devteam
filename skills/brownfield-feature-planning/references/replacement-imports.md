@@ -179,7 +179,7 @@ Source permission is separate from plan approval, implementation dispatch, and m
 6. Read credentials locally only when needed for the next authorized operation.
    Keep source content and credentials out of Git, chat, delegates, task attachments, memory, and reusable fixtures.
    Protect necessary local copies and clean only owned test resources.
-   Report the exact code commit, neutral alias, source/target mode, assertions, and gaps on the existing task.
+   Report the exact commit, neutral alias, source/target mode, result, and verification gaps on the existing task.
    Directory inventory or connectivity is not end-to-end acceptance.
    Retain independent review and separate execution/publication gates.
 

@@ -1,8 +1,22 @@
 # Verified Kanban phase release
 
-Use this procedure after explicit acceptance of a dependency-ordered implementation plan.
+Use this procedure after explicit acceptance of a dependency-ordered implementation plan, except the conditional planning section below.
 Keep orchestration with the authorized coordinator.
 Do not treat plan acceptance as permission for the planner to implement or manually spawn workers.
+
+## Expand–Migrate–Contract
+
+Use during planning only for broad mechanical changes that cannot safely land as ordinary independent vertical slices.
+
+1. Expand: add the new form alongside the old; verify coexistence and compatibility.
+2. Migrate: move callers in reviewable bounded batches; make each batch depend on expansion.
+   Keep every intermediate state working and verified, with required checks green.
+3. Contract: retire the old form only after every migration batch and confirmed absence of remaining callers.
+   Make contraction depend on every migration batch.
+
+Bind these outcomes, dependencies, and verification to the accepted plan, phases, and native tickets through the release procedure below.
+Advance only after each prerequisite's existing independent review gate reaches DONE.
+Use existing implementation tickets and Reviewer gates for integrated acceptance; keep the Planner's final report separate.
 
 ## 1. Read-only preflight
 
@@ -10,74 +24,83 @@ Do not treat plan acceptance as permission for the planner to implement or manua
 2. Inspect the current repository HEAD, branch and working tree.
 3. Record the accepted revision separately from later documentation-only commits.
 4. Select the project board explicitly on every call.
-5. Inspect current native schemas or CLI help for creation, reads, subscriptions, links and release.
-6. Verify the running gateway's configuration context, dispatcher/review routing, assigned profiles and concurrency cap.
-7. Read only the required non-secret settings.
-8. Resolve the notification destination and authorized participant from project rules, session origin and current authorization settings.
-9. Do not infer the destination from an old subscription or the current desktop conversation.
-10. Verify the required skill and reference-file identities at each consuming runtime.
-11. Do not assume that one role's skill load transfers to another role or coding harness.
+5. Inspect native help after a rejected call; setup established the surface.
+6. Read the configured notification destination and participant from the project rules. Re-derive them only when the project binding changed.
+7. Do not infer the destination from an old subscription or the current desktop conversation. Gateway, dispatcher, adapter ownership, routing and file identity are setup facts; do not re-check them per release.
 
 ## 2. Create blocked cards and persist progress
 
-1. Identify each phase in its task body by approved plan path, plan commit, phase identifier and planning repository root.
-2. Reference the accepted plan, phase plan and any separate specification by absolute path and exact Git commit.
-3. Build each body from accepted common constraints and the phase's files, interfaces, tests, gate, dependencies and commit boundary.
-4. Include absolute source paths, approval provenance, implementer-only harness instructions and the independent reviewer handoff.
+1. Identify each planned story or prerequisite ticket and its phase in the body by approved plan path, plan commit, phase identifier and planning repository root.
+2. Reference separate phase plans or specifications by absolute path and exact Git commit.
+3. Write a concise actor-behaviour-benefit title, not a technical task label.
+   Apply the Planner's vocabulary and accepted-ADR rules to ticket titles and descriptions at the accepted baseline.
+   For a technical prerequisite, name its real beneficiary and enabling story; do not invent user actions or benefits.
+   Surface incompatible native title constraints instead of truncating user meaning.
+   Structure the body with short statements and concrete bullets:
+   - Goal/context: state the outcome and necessary context.
+   - Acceptance criteria: list concrete observable success conditions.
+   - Technical implementation: include necessary interfaces, affected areas, and constraints; label suggestions separately.
+   - Verification: state the checks needed to establish these criteria, including relevant failure cases.
+   - Dependencies and binding: name blockers, absolute accepted plan/phase paths, exact Git commits, phase identifier, and planning repository root.
+   Keep criteria and implementation context concise; align excerpts with the authoritative accepted plan.
+   Make the card understandable without opening the full plan; leave implementation discretion with the Coder.
+   Do not repeat the whole plan, routine team procedures, or successful-test catalogues.
+4. Keep task-specific accepted exceptions in the body. Keep standard team procedures in role rules.
 5. Create each card with the intended assignee/workspace, `--initial-status blocked`, an idempotency key, required skill and explicit completion contract.
-6. Set the approved runtime and retry fields explicitly.
+6. Set explicit customer limits and required native runtime/retry fields without inventing discretionary attempt budgets.
 7. Check `--max-retries` semantics before setting a consecutive-failure limit.
 8. Do not interpret the failure number that trips a breaker as the number of extra attempts.
 9. Read each returned exact card before further writes.
-10. Verify its phase identity, approved references, body and native limits against the files at the approved revision.
+10. Verify its planned ticket and phase identity, title, approved references, body and native limits against the files at the approved revision.
 11. Use the persisted card as the creation checkpoint.
-12. Bind the verified notification destination.
-13. Read `notify-list --json` and compare platform, channel, chat type, participant, notifier profile and delivery mode literally.
+12. Create the branch from the confirmed start commit and record it on the card; read both back. A customer name overrides a convention.
+13. Bind the verified notification destination.
+14. Read `notify-list --json` and compare platform, channel, chat type, participant, notifier profile and delivery mode literally.
 
-Keep ticket instructions, decisions, handoffs, blockers, verification and review outcomes on the existing card.
+Keep development decisions, consequential failures and remedies, blockers, concise outcomes, and review verdicts on the existing card.
 Attribute evidence to its executor and checked code state.
-Use native run logs for detailed execution output.
-Keep product documentation in its owning repository.
+Native run outputs remain available evidence, not an authored run-log duty.
+Keep product and test/start documentation in its owning repository.
 
 ### Resume a partial batch
 
 1. Read the project board, including archived cards, before continuing creation.
-2. Match persisted task bodies to the approved plan path, plan commit and phase identifier.
+2. Match persisted cards to the planned ticket identity, approved plan path, plan commit and phase identifier.
 3. Resolve missing identity fields or ambiguous matches before further writes.
-4. Reuse exact matching cards and create only missing phases.
-5. Compare existing preparation with the complete accepted phase list.
+4. Reuse exact matching cards and create only missing planned tickets.
+5. Compare existing preparation with the complete accepted ticket-to-phase mapping.
 6. Complete missing bindings on blocked cards before graph verification.
 7. If a card was already released, reconcile its current run and dependencies without repeating its release.
 8. If a later operational blocker interrupted work, use [safe resumption](kanban-triage-recovery.md#resume-after-a-blocker-or-interrupted-run).
 
 ## 3. Verify the complete graph
 
-1. Link missing approved phase dependencies only after every card exists.
+1. Link missing approved ticket dependencies only after every card exists.
 2. Read each exact card to verify the complete graph.
 3. Use [bounded extraction](kanban-status-inspection.md#read-and-reduce-before-output-truncation) only if native reads cannot supply the required evidence.
 4. Before the first release, require every card to be blocked.
 5. On partial release, verify current runs and dependency gates for already released cards.
 6. Preserve completed release transitions.
 7. Verify each card's assignee, workspace, skill, runtime/retry fields and completion contract.
-8. Verify each body's approved scope, gate, commit boundary and reviewer handoff.
+8. Check each story, criterion, technical constraint and exception against its phase scope, gate, commit boundary and reviewer binding.
 9. Verify that every plan reference resolves to its approved revision.
 10. Verify every notification binding against the intended destination.
-11. Verify that phase one has no parent and the final phase has no child in the approved chain.
-12. Verify each intermediate phase's intended predecessor and successor.
+11. Verify that the first ticket has no parent and the final ticket has no child in the approved chain.
+12. Verify each intermediate ticket's intended predecessor and successor.
 13. If a write succeeds but parsing fails, re-read its recorded exact ID instead of repeating the write.
 14. Stop release on any unresolved mismatch while preserving partial progress.
 
 ## 4. Release without racing the dispatcher
 
-1. Record the verified graph checkpoint on the first phase card and read it back.
+1. Verify the complete graph before release. Use native card/link state as the checkpoint; omit routine progress comments.
 2. Finish authorized planning commits before release.
 3. Do not leave planner metadata edits uncommitted in a directory workspace that a worker can immediately modify.
-4. Unblock descendants in reverse order and phase one last.
+4. Unblock descendants in reverse order and the first ticket last.
 5. On resume, apply this order only to pending initial releases.
 6. Read back each transition to verify that descendants remain `todo` while parents are incomplete.
-7. Read phase one as `ready` unless a real dispatcher claim already makes it `running`.
+7. Read the first ticket as `ready` unless a real dispatcher claim already makes it `running`.
 8. Use native board events as the release record.
-9. Add missing readback findings to the relevant card and verify each posted comment.
+9. Record consequential discrepancies on the relevant card and verify each posted comment.
 10. Keep the historical pre-release checkpoint distinct from current task status.
 11. Read the whole project board again after release.
 12. Leave later advancement to the dispatcher and independent review gates.
@@ -85,6 +108,9 @@ Keep product documentation in its owning repository.
 
 A release handoff proves neither completed implementation nor customer acceptance.
 It does not guarantee execution-service availability.
+
+Send handoff and closing report with `hermes send --to mattermost:<channel-id> --json` and read the returned message ID back.
+`--list mattermost` finds no channels without a channel directory: not a probe. Take the channel ID from the project binding.
 
 ## Narrow scope without stopping the accepted delivery
 
@@ -95,7 +121,7 @@ Do not use scope narrowing to resume cancelled work, add functionality, bypass a
 2. Report whether work is running, ready or idle and whether input is genuinely missing.
 3. If newer documentation obscured the agreed instructions, recover their accepted baseline.
 4. Map the remaining instructions to existing implementation rather than rewriting working code or building a new test platform.
-5. Record the bounded inputs, executable output, files, safety checks, finite verification, commit and independent review on the existing coding card.
+5. Bind the accepted bounded scope on the existing card. Record the narrowing decision and exceptions missing from the plan.
 6. Park obsolete runnable successors with the supported `assign <obsolete-task> none` operation before release.
 7. Replace their active body instructions with an explicit hold and historical-reference status.
 8. Do not falsely complete parked work.
