@@ -472,7 +472,7 @@ class ReasoningContractTests(unittest.TestCase):
             "Distinguish binding requirements and architectural constraints from implementation suggestions.",
             "Expected file lists are guidance unless explicitly marked as hard boundaries.",
             "Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.",
-            "Place combined-behavior checks where integrated behavior becomes available.",
+            "Place combined-behavior checks in the phase where integrated behavior becomes available.",
             "Maintain the amended versioned plan after the required customer decision.",
             "Update affected current and future ticket bindings before release.",
             "Preserve already-reviewed history.",

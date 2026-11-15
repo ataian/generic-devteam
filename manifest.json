@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.8.13",
+  "version": "2.8.14",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -305,7 +305,7 @@
         ]
       },
       "origin": "Kanonisches eigenständiges Paket screenshot-to-code 1.0.0; Max, Mariko (Hermes Agent); MIT mit vollständiger eigener LICENSE.",
-      "changes": "Alle sechs kanonischen Dateien bytegleich; vollständiger Skillbaum ohne Rendering oder Umbenennung.",
+      "changes": "Vollständiger Skillbaum ohne Rendering oder Umbenennung; Fassung 1.0.1 ist die englische Fassung nach TAS-Sprachvorgabe. `source_sha256` nennt die kanonischen Dateiidentitäten 1.0.0, nicht den ausgelieferten Stand.",
       "origin_ref": "references/upstream-sources.md#own-screenshot",
       "license_path": "skills/screenshot-to-code/LICENSE",
       "notice_path": "NOTICE.md",

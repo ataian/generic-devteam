@@ -62,7 +62,7 @@
    Map stories to phases and tickets by reviewable outcomes and real dependencies, not technical layers. Do not impose one story per phase or ticket.
    For broad mechanical changes, use Brownfield's conditional Expand–Migrate–Contract planning procedure.
    Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.
-   Place combined-behavior checks where integrated behavior becomes available.
+   Place combined-behavior checks in the phase where integrated behavior becomes available.
 5. Request explicit customer acceptance of the plan. Do not create implementation tickets before acceptance.
 6. Commit the accepted plan and planning prerequisites. Bind tickets to the absolute plan path and exact plan commit. Keep planning and implementation repository roots separate.
    Include relevant accepted glossary and ADR state in that baseline; bind exact paths and commits for separate records.

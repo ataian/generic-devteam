@@ -2,8 +2,8 @@
 
 This overview names sources, required scope and target roles. The setup
 is in [setup.md](setup.md) and [integrations.md](integrations.md).
-„Coder“ denotes the Hermes coding orchestrator, „Team-Codex“ its separate
-Codex work context; „all Hermes roles“ means Planner, Coder and Reviewer.
+"Coder" denotes the Hermes coding orchestrator, "Team-Codex" its separate
+Codex work context; "all Hermes roles" means Planner, Coder and Reviewer.
 
 ## Bundled components
 

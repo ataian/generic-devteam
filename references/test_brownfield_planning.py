@@ -267,7 +267,7 @@ class BrownfieldPackageTests(unittest.TestCase):
         soul = (ROOT / "templates/roles/planner.SOUL.md.template").read_text()
         # Phase and reviewer assignment are SOUL rules; the skill repeats neither.
         self.assertIn("Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.", soul)
-        self.assertIn("Place combined-behavior checks where integrated behavior becomes available.", soul)
+        self.assertIn("Place combined-behavior checks in the phase where integrated behavior becomes available.", soul)
         self.assertNotIn("Assign each acceptance criterion", text)
         self.assertNotIn("Place combined-behavior checks", text)
         self.assertIn("Use existing results for the Planner's final customer report, not a new technical review or closing ticket.", text)
