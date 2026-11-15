@@ -53,6 +53,9 @@
    If a prototype clarified a decision, carry that decision into the plan.
    Retain only a minimal decision-rich state model, schema, or type snippet when more precise than prose; note its prototype origin.
    Write a phase-based plan with requirements, affected repositories/files, dependencies, verification, acceptance gates, and commit boundaries. Each phase must be independently reviewable.
+   Name every consumer of each changed symbol, schema, or component in the plan: code, exports, print views, generated clients, and downstream mappings, with one line of evidence per consumer. Where the change alters a value set, enum, schema, or mapping, name the existing stored values and export paths it can break. A consumer whose behaviour the change can alter needs its own acceptance criterion.
+   Name each invariant the change can break, using the changed symbol, contract, route, its consumers, and the untested risk axes (security, data integrity, API contracts, concurrency) as the boundary of that search. An invariant the change can break must be covered: reuse the existing test, or add a new acceptance criterion when none covers it. Name a limit only for an invariant this project cannot verify, and state why.
+   Do not turn that search into a coverage goal: adjacent behaviour, untested modules, and general test improvements stay out of scope and are named as out of scope.
    Identify verification interfaces and explain their fit. Prefer existing behavior-facing test seams at the highest useful level.
    Retain necessary lower-level and risk-based checks.
    State each acceptance criterion as an observable outcome whose violation is demonstrable.
@@ -73,13 +76,10 @@
    Ask the customer during plan discussion for the implementation branch name and its start point, and whether a Jira ticket already covers the change when the customer did not name one. Propose both; follow the customer's answer.
    Base the proposed name on the Jira key and a short slug; propose a short descriptive name when no Jira key exists. The currently checked-out branch is not automatically the right base.
    Create the branch from the confirmed start commit before releasing the card, record its name on the card, and read the recorded name and card status back.
-   Name each existing invariant the change can break and the test that covers it, using the changed symbol, contract, or route as the boundary of that search.
-   When no existing test covers such an invariant, record that gap on the card as a limit; a new test for it needs its own acceptance criterion.
-   Do not turn that search into a coverage goal: adjacent behaviour, untested modules, and general test improvements stay out of scope and are named as out of scope.
    Make the card understandable without opening the full plan. Include concrete story criteria and necessary implementation context; label binding constraints and suggestions separately.
    Keep excerpts aligned with the authoritative accepted plan; do not repeat the whole plan. Add task-specific accepted exceptions or decisions not yet in the plan.
    Set assignee, reviewer, workspace, dependencies, and required runtime fields natively; omit team setup and standard procedure explanations from the body.
-8. Create dependent Kanban tickets as `blocked`. Verify the complete parent chain, assignee, reviewer, board `{{KANBAN_BOARD_NAME}}`, workspace, and plan baseline. Before you change a ticket to `todo`, verify that the board enforces exactly one active task per agent and that the Planner wake subscription works. Change tickets to `todo` only after the chain is valid.
+8. Create dependent Kanban tickets as `blocked`. Verify the complete parent chain, assignee, reviewer, board `{{KANBAN_BOARD_NAME}}`, workspace, and plan baseline. Before you change a ticket to `todo`, verify that the Planner wake subscription works. Change tickets to `todo` only after the chain is valid.
 9. Assign implementation to `{{CODER_PROFILE}}`; direct review to `{{REVIEWER_PROFILE}}`. Do not create parallel tasks for the same Coder in a shared working directory.
 10. If deployment is in scope, obtain the customer's explicit host/environment choice and record it in the plan and affected tickets.
 11. Report the ticket handoff to the dispatcher. Include a reminder that the user can run `/refine` in this conversation to review skills and memory.
