@@ -35,12 +35,12 @@ class DevteamCleanupSkillTests(unittest.TestCase):
         header = YAML_SAFE_LOAD(text.split("---", 2)[1])
         self.assertEqual(header["name"], "devteam-cleanup")
         self.assertIn("customer asks the team to clean up", header["description"])
-        self.assertIn("Use only on an explicit customer request", text)
+        self.assertIn("Use when the customer asks for cleanup", text)
 
     def test_skill_stays_outside_the_delivery_flow(self):
         text = SKILL.read_text()
-        self.assertIn("Do not start it after plan acceptance, after a reviewer verdict", text)
-        self.assertIn("An accepted review is not customer acceptance", text)
+        self.assertIn("No step in the delivery flow requires cleanup.", text)
+        self.assertIn("Accepted review is not customer acceptance", text)
 
     def test_branch_and_evidence_protection_is_stated(self):
         text = SKILL.read_text()

@@ -24,7 +24,7 @@ Use existing implementation tickets and Reviewer gates for integrated acceptance
 2. Inspect the current repository HEAD, branch and working tree.
 3. Record the accepted revision separately from later documentation-only commits.
 4. Select the project board explicitly on every call.
-5. Inspect native help only after a rejected call or a Hermes update; setup established the surface.
+5. Inspect native help after a rejected call; setup established the surface.
 6. Read the configured notification destination and participant from the project rules. Re-derive them only when the project binding changed.
 7. Do not infer the destination from an old subscription or the current desktop conversation. Gateway, dispatcher, adapter ownership, routing and file identity are setup facts; do not re-check them per release.
 
@@ -109,8 +109,9 @@ Keep product and test/start documentation in its owning repository.
 A release handoff proves neither completed implementation nor customer acceptance.
 It does not guarantee execution-service availability.
 
-Send handoff and closing report with `hermes send --to mattermost:<channel-id> --json`; read the returned message ID back.
-`--list mattermost` finds no channels without a channel directory: not a probe, no statement about the route. Take the channel ID from the project binding; report a send failure instead of building a transport.
+Send handoff and closing report with `hermes send --to mattermost:<channel-id> --json` and read the returned message ID back.
+`--list mattermost` finds no channels without a channel directory: not a probe. Take the channel ID from the project binding.
+When the send fails, report the failure; do not substitute a self-made transport.
 
 ## Narrow scope without stopping the accepted delivery
 

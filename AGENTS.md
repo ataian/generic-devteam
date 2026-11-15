@@ -14,7 +14,7 @@ Apply TAS to every new or changed instruction in those files.
 Keep role-template changes and live-team rollout as separate authorizations.
 Run `python3 -B -m unittest discover -s references -p 'test_*.py'` before committing package changes.
 
-Budget agent-context prose: `test_brownfield_planning` enforces a combined byte ceiling for `skills/brownfield-feature-planning/SKILL.md` plus each of its references. Run that test before adding prose there.
+Budget agent-context prose: `test_brownfield_planning` enforces a combined byte ceiling for `skills/brownfield-feature-planning/SKILL.md` plus each of its references. Measure that pair with `wc -c` before and after a prose edit, and run the test before committing. `kanban-phase-release.md` has almost no slack; prune or split there instead of raising a ceiling.
 Put durable role decision rules in the SOUL templates instead of growing the skill.
 Contract tests assert existing phrases word for word; re-run the suite after any deletion.
 

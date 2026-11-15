@@ -15,9 +15,9 @@ metadata:
 
 ## When to use
 
-Use only on an explicit customer request: `/devteam-cleanup`, "clean up", "räum auf", or an equivalent instruction naming cleanup.
+Use when the customer asks for cleanup: `/devteam-cleanup`, "clean up", "räum auf", or an equivalent instruction naming cleanup.
 
-Cleanup is not part of the delivery flow. Do not start it after plan acceptance, after a reviewer verdict, or after a closing report. An accepted review is not customer acceptance, and corrections may continue on the same branch.
+No step in the delivery flow requires cleanup. Accepted review is not customer acceptance, and corrections may continue on the same branch.
 
 ## What cleanup covers
 
