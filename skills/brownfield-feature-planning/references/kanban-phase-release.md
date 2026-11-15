@@ -111,7 +111,6 @@ It does not guarantee execution-service availability.
 
 Send handoff and closing report with `hermes send --to mattermost:<channel-id> --json` and read the returned message ID back.
 `--list mattermost` finds no channels without a channel directory: not a probe. Take the channel ID from the project binding.
-When the send fails, report the failure; do not substitute a self-made transport.
 
 ## Narrow scope without stopping the accepted delivery
 
