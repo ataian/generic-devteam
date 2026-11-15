@@ -1,7 +1,7 @@
 ---
 name: plan-versioning-semver
-description: "Use when naming plan files: Typ_Appversion_Name_vN.md."
-version: 1.1.0
+description: "Use when versioning: plan names, app SemVer, changelog, API."
+version: 1.2.0
 author: Mariko
 platforms: [linux]
 metadata:
@@ -10,13 +10,20 @@ metadata:
     category: devops
 ---
 
-# Versioning plan files
+# Versioning plans and applications
 
-Project plans and specifications carry their own version number in the filename, separate
-from the SemVer version of the project they apply to. Document type and revision are
-readable from the name without opening the file.
+Four rules stand on their own: plan-file names, the version API, the CHANGELOG, and SemVer
+for the application version. Each one applies whenever its situation occurs — while
+writing a plan, in a ticket, or in a conversation. Writing a plan is not a prerequisite.
 
-## Naming scheme
+## When to use
+
+- Name or rename a plan, review, ADR, handoff or specification file.
+- Create or change the version API of a project.
+- Create or change the `CHANGELOG.md` of a project.
+- Set, classify or discuss the version of an application.
+
+## Plan file naming scheme
 
 ```
 <TYP>_<Appversion>_<Name>_v<Number>.md
@@ -29,8 +36,8 @@ readable from the name without opening the file.
 - **Name:** one or two words, readable, without version numbers. The project name appears
   only on the first plan file; after that the name identifies the feature.
 - **Number** last, always with `v`: `v1` for the first revision, `v2` after the first
-  change. Plans, reviews and handoffs count whole numbers; SemVer applies to the project
-  itself.
+  change. Plans, reviews and handoffs count whole numbers; SemVer applies to the
+  application itself.
 - Example: `PLAN_1.3.0_API-Returncode_v1.md`.
 
 ## Rules
@@ -50,13 +57,9 @@ readable from the name without opening the file.
 - Point AGENTS.md at the current plan name (binding specification).
 - Update the README.md structure block to the versioned files.
 
-## Standard: version API and CHANGELOG
+## Version API
 
-Base equipment for every project.
-
-### 1) Version API
-
-Only for projects that provide an API.
+Base equipment for every project that provides an API.
 A public endpoint that serves the application version — without auth, because the version
 must be readable for health checks and compatibility without a key:
 
@@ -68,7 +71,7 @@ GET /api/version
 - One source for the version number; do not maintain it in several places.
 - Test: the endpoint answers 200 without a key even when auth is enabled.
 
-### 2) CHANGELOG.md
+## CHANGELOG.md
 
 File in the repository root, Keep-a-Changelog style:
 
@@ -88,16 +91,14 @@ File in the repository root, Keep-a-Changelog style:
 - Categories: `Added`, `Changed`, `Fixed`, `Removed`.
 - Maintain it with every release (part of the definition of done).
 
-### 3) Application version (SemVer) versus plan version
+## Application version
 
-The application version follows SemVer: MAJOR for an incompatible API change, MINOR for a
-new feature, PATCH for a bugfix.
+The application version follows SemVer:
 
-A plan file carries two versions in its name: the appversion of the project state from
-which the change is planned, and, at the end, the running number of the document's own
-revisions. An application change does not rename the plan file.
+- **MAJOR** for an incompatible change of API or behavior,
+- **MINOR** for a backward-compatible feature,
+- **PATCH** for a backward-compatible fix.
 
-Example: the application stands at 1.3.0. The plan covers the incompatible change of the
-API return code 303→201. The plan file is named `PLAN_1.3.0_API-Returncode_v1.md`; a
-revision of the same plan becomes `…_v2.md`. The application receives the MAJOR bump to
-2.0.0 during implementation; the filename stays.
+Classify each change of the application version by these three cases. The same rule applies
+when the version is decided in conversation, in a ticket, or while planning — a plan is not
+needed for a version decision.
