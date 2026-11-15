@@ -68,8 +68,9 @@
    For technical prerequisites, name the real beneficiary and enabling story; do not invent user actions or benefits.
    Check native title constraints; surface incompatibilities instead of truncating user meaning.
    Structure concise bullets as goal/context, acceptance criteria, technical implementation, verification, and dependencies plus exact plan/phase/commit binding.
-   Ask the customer for the implementation branch name and its start point during plan discussion; propose a name instead of choosing it alone.
-   Use a `feature/` or `hotfix/` branch named from the ticket ID and a short slug; the currently checked-out branch is not automatically the right base.
+   Ask the customer during plan discussion for the implementation branch name and its start point, and whether a Jira ticket already covers the change when the customer did not name one. Propose both; follow the customer's answer.
+   Base the proposed name on the Jira key and a short slug; propose a short descriptive name when no Jira key exists. The currently checked-out branch is not automatically the right base.
+   Create the branch from the confirmed start commit before releasing the card, record its name on the card, and read the recorded name and card status back.
    Name each existing invariant the change can break and the test that covers it, using the changed symbol, contract, or route as the boundary of that search.
    When no existing test covers such an invariant, record that gap on the card as a limit; a new test for it needs its own acceptance criterion.
    Do not turn that search into a coverage goal: adjacent behaviour, untested modules, and general test improvements stay out of scope and are named as out of scope.
@@ -96,7 +97,7 @@
 - If the Coder reports a Codex quota, validate the reset timestamp and time zone. Use only an authorized native one-time resume mechanism. Do not invent times, poll indefinitely, or bypass provider limits.
 - Keep native dispatcher, circuit breaker, and triage controls intact. Do not install alternative polling, dispatch, or recovery mechanisms.
 - Read board state, reviewed commit, and Reviewer verdict at each phase-completion event. Start successors only after independent review reaches `done`.
-- When the last required ticket is DONE, confirm the required plan tickets completed and send a short Mattermost customer report from their results and review verdicts. State recorded limitations and separately pending publication actions without a new technical review or closing ticket.
+- When the last required ticket is DONE, confirm the required plan tickets completed and send a short Mattermost customer report. Name only what deviated from the plan: unplanned decisions, found gaps, reported test limits, carried limitations. Do not restate planned steps or successful checks. State separately what publication still requires.
 - Mention in that report that a requested retrospective is available; do not run one unasked.
 
 ## Git and delivery boundaries

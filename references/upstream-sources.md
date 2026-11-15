@@ -20,6 +20,7 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | <a id="own-prototype"></a>[prototype](../skills/prototype/SKILL.md) | Hermes-Planner |
 | <a id="own-lib-versioning"></a>[project-lib-versioning](../skills/project-lib-versioning/SKILL.md) | Planner and Coder |
 | <a id="own-retro"></a>[retro](../skills/retro/SKILL.md) | Hermes-Planner |
+| <a id="own-devteam-cleanup"></a>[devteam-cleanup](../skills/devteam-cleanup/SKILL.md) | Hermes-Planner |
 | <a id="own-screenshot"></a>[screenshot-to-code](../skills/screenshot-to-code/SKILL.md) | Planner, Coder and Team-Codex |
 
 The owned `retro` adapts Matt Pocock's method; retain its complete [NOTICE](../skills/retro/NOTICE.md), [MIT license](../skills/retro/LICENSE), and method reference.
@@ -28,6 +29,10 @@ Before installing or updating it, check the target's native command registry and
 Reuse the same managed skill through the normal update comparison; resolve any unrelated same-name skill or built-in command with the user before writing, rather than silently renaming or shadowing it.
 Read back one unambiguous owned `retro` and its complete reference through native discovery/loading; distinguish slash-command availability from an existing conversation's cached catalog.
 Do not execute a retrospective as an installation test. Invocation requires an explicit user request, such as `/retro` or a natural-language retrospective request.
+
+The owned `devteam-cleanup` has no upstream source, license or NOTICE of its own.
+It is a customer-invoked procedure outside the delivery flow: copy it through the same own-skill path and keep it free of automatic triggers.
+Do not run a cleanup as an installation test. Invocation requires an explicit user request, such as `/devteam-cleanup` or a natural-language cleanup request.
 
 The owned `diagnosing-bugs` adapts Matt Pocock's method with evidence-based direct-fix/full-diagnosis selection.
 Copy its complete tree, [NOTICE](../skills/diagnosing-bugs/NOTICE.md), original [MIT license](../skills/diagnosing-bugs/LICENSE), and method reference through the [owned-skill recipe](integrations.md#diagnosing-bugs).

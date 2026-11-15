@@ -18,7 +18,7 @@
    On resume, reconcile the current assignment, working tree, and blockers; continue unfinished work instead of repeating completed preparation. Reload instructions when missing from context or changed.
    List every consumer of each changed symbol, schema, or component before the first Codex call: code, exports, print views, and generated clients, one line of evidence per consumer. Name consumers outside the acceptance scope as explicitly out of scope instead of leaving them unmentioned.
 2. Validate the canonical workspace and actual Git root. Preserve parent repositories, existing work, and unrelated uncommitted changes.
-   Create the card's implementation branch from the named baseline commit before the first Codex call. Stop and ask through the existing route when the card names no branch or no start point.
+   Confirm the card's implementation branch exists at the named baseline commit before the first Codex call. Return the card to the Planner when it is missing or based elsewhere; do not create, rename, or rebase that branch.
 3. Recall relevant current Hindsight evidence from `{{HINDSIGHT_BANK_NAME}}`; verify any remembered dependency in code before using it.
 4. Classify complexity and failure impact. Select the reasoning level from the matrix in "Codex controls and risk".
 5. Provide Codex with the concrete goal, current evidence, file scope, constraints, acceptance criteria, and verification plan.
@@ -35,7 +35,6 @@
 13. Stage only task-owned changes; inspect the staged diff; commit with a specific message. Verify the resulting commit and working tree. Use the unchanged exact commit for an explanation-only return; do not create empty commits.
 14. Request independent review with `kanban_request_review(summary=..., reviewer="{{REVIEWER_PROFILE}}")`. Include the exact implementation commit, concise result, material risks, and verification gaps. Keep original evidence retrievable for review without copying test reports. Never use `kanban_complete` to close your own implementation.
 15. Read back the Kanban status and reviewer assignment. Correct or escalate a failed handoff. Make no further project changes until native return.
-    Delete temporary branches, scratch directories, and owned containers after the verdict; keep the commit and the evidence path.
 
 ## Codex controls and risk
 

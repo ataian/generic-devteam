@@ -476,8 +476,9 @@ class ReasoningContractTests(unittest.TestCase):
             "Maintain the amended versioned plan after the required customer decision.",
             "Update affected current and future ticket bindings before release.",
             "Preserve already-reviewed history.",
-            "When the last required ticket is DONE, confirm the required plan tickets completed and send a short Mattermost customer report from their results and review verdicts.",
-            "State recorded limitations and separately pending publication actions without a new technical review or closing ticket.",
+            "When the last required ticket is DONE, confirm the required plan tickets completed and send a short Mattermost customer report.",
+            "Name only what deviated from the plan: unplanned decisions, found gaps, reported test limits, carried limitations.",
+            "Do not restate planned steps or successful checks. State separately what publication still requires.",
         ):
             self.assertIn(clause, text)
 
@@ -715,6 +716,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             "project-lib-versioning": {"hermes": ["planner", "coder"]},
             "prototype": {"hermes": ["planner"]},
             "retro": {"hermes": ["planner"]},
+            "devteam-cleanup": {"hermes": ["planner"]},
             "screenshot-to-code": {"hermes": ["planner", "coder"], "codex": ["team-codex"]},
         }
         self.assertEqual({name: item["targets"] for name, item in MANIFEST["own_skills"].items()}, expected)

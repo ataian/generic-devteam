@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.8.9",
+  "version": "2.8.10",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -23,6 +23,7 @@
     "references/test_diagnosing_bugs.py",
     "references/test_prototype.py",
     "references/test_render_reasoning.py",
+    "references/test_devteam_cleanup.py",
     "references/test_retro.py",
     "references/test_review_investigation.py",
     "references/test_triage_recovery.py",
@@ -41,6 +42,7 @@
     "skills/brownfield-feature-planning/references/replacement-imports.md",
     "skills/brownfield-feature-planning/scripts/recover-triage",
     "skills/brownfield-feature-planning/scripts/recover_triage.py",
+    "skills/devteam-cleanup/SKILL.md",
     "skills/diagnosing-bugs/LICENSE",
     "skills/diagnosing-bugs/NOTICE.md",
     "skills/diagnosing-bugs/README.md",
@@ -166,6 +168,23 @@
       "license_path": null,
       "notice_path": "NOTICE.md",
       "skill_path": "skills/brownfield-feature-planning/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
+    "devteam-cleanup": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "planner"
+        ]
+      },
+      "origin": "Owned cleanup procedure for a finished delivery. Separate from the delivery flow; customer-invoked only.",
+      "changes": "Copy the skill unchanged. The customer names the scope; the Planner removes only approved, reversible items and keeps branches, commits and evidence.",
+      "origin_ref": "references/upstream-sources.md#own-devteam-cleanup",
+      "license_path": null,
+      "notice_path": "NOTICE.md",
+      "skill_path": "skills/devteam-cleanup/SKILL.md",
       "transport": {
         "SKILL.md": "SKILL.md"
       }

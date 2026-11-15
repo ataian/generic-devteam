@@ -24,13 +24,9 @@ Use existing implementation tickets and Reviewer gates for integrated acceptance
 2. Inspect the current repository HEAD, branch and working tree.
 3. Record the accepted revision separately from later documentation-only commits.
 4. Select the project board explicitly on every call.
-5. Inspect current native schemas or CLI help for creation, title constraints, reads, subscriptions, links and release.
-6. Verify the running gateway's configuration context, dispatcher/review routing, assigned profiles and concurrency cap.
-7. Read only the required non-secret settings.
-8. Resolve the notification destination and authorized participant from project rules, session origin and current authorization settings.
-9. Do not infer the destination from an old subscription or the current desktop conversation.
-10. Verify the required skill and reference-file identities at each consuming runtime.
-11. Do not assume that one role's skill load transfers to another role or coding harness.
+5. Inspect native help only after a rejected call or a Hermes update; setup established the surface.
+6. Read the configured notification destination and participant from the project rules. Re-derive them only when the project binding changed.
+7. Do not infer the destination from an old subscription or the current desktop conversation. Gateway, dispatcher, adapter ownership, routing and file identity are setup facts; do not re-check them per release.
 
 ## 2. Create blocked cards and persist progress
 
@@ -57,8 +53,9 @@ Use existing implementation tickets and Reviewer gates for integrated acceptance
 9. Read each returned exact card before further writes.
 10. Verify its planned ticket and phase identity, title, approved references, body and native limits against the files at the approved revision.
 11. Use the persisted card as the creation checkpoint.
-12. Bind the verified notification destination.
-13. Read `notify-list --json` and compare platform, channel, chat type, participant, notifier profile and delivery mode literally.
+12. Create the branch from the confirmed start commit and record it on the card; read both back. A customer name overrides a convention.
+13. Bind the verified notification destination.
+14. Read `notify-list --json` and compare platform, channel, chat type, participant, notifier profile and delivery mode literally.
 
 Keep development decisions, consequential failures and remedies, blockers, concise outcomes, and review verdicts on the existing card.
 Attribute evidence to its executor and checked code state.
@@ -111,6 +108,9 @@ Keep product and test/start documentation in its owning repository.
 
 A release handoff proves neither completed implementation nor customer acceptance.
 It does not guarantee execution-service availability.
+
+Send handoff and closing report with `hermes send --to mattermost:<channel-id> --json`; read the returned message ID back.
+`--list mattermost` finds no channels without a channel directory: not a probe, no statement about the route. Take the channel ID from the project binding; report a send failure instead of building a transport.
 
 ## Narrow scope without stopping the accepted delivery
 
