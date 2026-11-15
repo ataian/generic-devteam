@@ -1,24 +1,24 @@
-# Optionaler Offlineexport
+# Optional offline export
 
-Nur bei ausdrücklichem Zusatzauftrag. Kein Standardlieferumfang und keine Umgehung der Projektregeln.
+Only on an explicit additional assignment. Not part of the standard delivery and no bypass of the project rules.
 
-## Eine Implementierung, zusätzliche Ausgabe
+## One implementation, additional output
 
-Aus denselben Komponenten, Daten und kompilierten Styles wie die reguläre Ansicht exportieren. Vorhandenen Build-/Renderweg wiederverwenden; keinen zweiten HTML-/Frameworkstack pflegen. Falls Interaktionen beauftragt sind, deren Offlinefähigkeit separat erhalten und prüfen; ein statischer Export darf sie nicht still verlieren.
+Export from the same components, data, and compiled styles as the regular view. Reuse the existing build/render path; do not maintain a second HTML/framework stack. If interactions are commissioned, preserve and check their offline capability separately; a static export must not silently lose them.
 
-Alle benötigten Styles, Bilder, Originalassets und Schriften einbetten. Keine CDN-Aufrufe, externen Imports, relativen Dateiabhängigkeiten, versteckten Fetches oder Abhängigkeit von Service-Worker-/Browsercache. Pfadprüfung und tatsächlicher Offlinebrowser ergänzen einander. Nicht nur sichtbare img-Quellen prüfen, sondern auch CSS-URLs, Fonts, Imports und Skripte.
+Embed all required styles, images, original assets, and fonts. No CDN calls, external imports, relative file dependencies, hidden fetches, or dependency on service-worker/browser cache. Path check and an actual offline browser complement each other. Check not only visible img sources, but also CSS URLs, fonts, imports, and scripts.
 
-## Wiederholbarer und fehlersicherer Lauf
+## Repeatable and failure-safe run
 
-1. Eingaben/Stand und erwartete Assets validieren; Ausgabe zunächst separat vorbereiten.
-2. Export mit eindeutigem Erfolgs-/Fehlerstatus erzeugen. Nur nach erfolgreicher Prüfung als aktuelles Ergebnis veröffentlichen. Fehlendes Originalasset ist ein Fehler, keine automatische Ersatzgrafik.
-3. Existiert ein alter Export, darf ein fehlgeschlagener Lauf ihn weder als neu ausgeben noch über einen veralteten Erfolgsmarker anbieten. Alten Stand kenntlich lassen; nötige Dateientfernung unterliegt den vorhandenen Rechten.
-4. Wiederholten Export desselben Stands prüfen. Falls Zeitstempel o. Ä. Unterschiede erzeugen, Ursache und reproduzierbare Vergleichsbasis dokumentieren, nicht ungeprüft Bytegleichheit behaupten.
+1. Validate inputs/state and expected assets; prepare the output separately first.
+2. Produce the export with an unambiguous success/error status. Publish it as the current result only after a successful check. A missing original asset is an error, not an automatic substitute graphic.
+3. If an old export exists, a failed run must neither present it as new nor offer it through a stale success marker. Leave the old state identifiable; required file removal is subject to the existing rights.
+4. Check a repeated export of the same state. If timestamps or similar produce differences, document the cause and a reproducible comparison basis, do not claim byte equality unchecked.
 
-## Tatsächliche Offlineabnahme
+## Actual offline acceptance
 
-Die fertige einzelne Datei isoliert ohne Nachbardateien und ohne nutzbare Netzverbindung über `file://` im Browser öffnen, ohne hilfreiche alte Caches. Nur ein Serveraufruf mit eingebetteten Styles reicht nicht.
+Open the finished single file in the browser via `file://` in isolation, without neighbouring files and without a usable network connection, and without helpful old caches. A server call with embedded styles alone is not enough.
 
-Beauftragte Viewports prüfen: Inhalte, Bilder/Originalassets, Schriften, lange Texte, Fehlwerte und beauftragte Interaktionen. Quelle, regulären Browserrender und Offlineansicht tatsächlich ansehen. Fehlassetprobe mit vorhandenem altem Export ausführen: Fehler muss sichtbar sein, alter Export darf kein aktueller Erfolg werden.
+Check the commissioned viewports: content, images/original assets, fonts, long texts, missing values, and commissioned interactions. Actually look at the source, the regular browser render, and the offline view. Run the missing-asset probe with an existing old export: the error must be visible, the old export must not become a current success.
 
-Handoff nennt Exportpfad/Stand, wiederholbaren Erzeugungsweg, echte positive und negative Ergebnisse, Offline-/Sichtnachweise und offene Grenzen. Ohne diese Prüfungen bleibt die Exportabnahme offen; Deployment entsteht daraus nicht automatisch.
+The handoff names the export path/state, the repeatable generation path, real positive and negative results, offline/visual evidence, and open limits. Without these checks, export acceptance stays open; deployment does not follow from it automatically.

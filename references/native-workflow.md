@@ -1,22 +1,22 @@
-# Rollenbindungen einrichten und prüfen
+# Set up and verify role bindings
 
-Diese Referenz ergänzt den [Setupablauf](setup.md): Sie ordnet bestätigte Werte
-ihren Zielen zu und beschreibt die Personalisierung der Rollen. Der laufende
-Arbeitsprozess und die Reasoning-Eskalation stehen in den Rollen-SOULs; fachliche
-Anleitungen bleiben in den jeweils installierten Skills.
+This reference complements the [setup flow](setup.md): it assigns confirmed values
+to their targets and describes the personalization of the roles. The running
+work process and the reasoning escalation stand in the role SOULs; domain
+instructions stay in the respectively installed skills.
 
 ## 1. Copy complete skills and bind the recovery launcher
 
-Die [Quellenübersicht](upstream-sources.md#mitgelieferte-bausteine) nennt die
-mitgelieferten Skillbäume und ihre Zielrollen. Je Ziel den vollständigen Baum aus
-`skills/` einschließlich Referenzen, Skripten und vorhandenen Lizenz-/Notice-Dateien
-kopieren. `SKILL.md` bleibt `SKILL.md`.
+The [source overview](upstream-sources.md#bundled-components) names the
+bundled skill trees and their target roles. For each target, copy the complete tree from
+`skills/` including references, scripts and existing license/notice files.
+`SKILL.md` stays `SKILL.md`.
 Bind only `brownfield-feature-planning/scripts/recover-triage` through the Maker's [recovery binding step](setup.md#bind-the-planner-recovery-invocation).
 Keep all other skill bytes unchanged.
 
-- Hermes: `<tatsächlich aufgelöster Rollenhome>/skills/<Skillname>/`.
-- Team-Codex: `<CODEX_PROCESS_HOME>/.agents/skills/<Skillname>/` gemäß Rollenmatrix.
-- Vorhandene Ziele auf Eigentum und Änderungen prüfen; bei Konflikten anhalten.
+- Hermes: `<actually resolved role home>/skills/<Skillname>/`.
+- Team-Codex: `<CODEX_PROCESS_HOME>/.agents/skills/<Skillname>/` per the role matrix.
+- Check existing targets for ownership and changes; stop on conflicts.
 - Compare the complete file set and bytes, using the bound Maker output for the recovery launcher.
 - Check discovery and loading in the target harness after the comparison.
 
@@ -26,42 +26,42 @@ Deliver `prototype` only to the Planner through [its owned-skill recipe](integra
 Deliver the bound callable launcher inside the existing planner skill tree.
 Do not add a separate runtime configuration file or workflow skill.
 
-## 2. Rollen-SOULs personalisieren
+## 2. Personalize role SOULs
 
-Die Vorlagen für [Planner](../templates/roles/planner.SOUL.md.template),
-[Coder](../templates/roles/coder.SOUL.md.template) und
-[Reviewer](../templates/roles/reviewer.SOUL.md.template) werden nur an den
-vorgesehenen Platzhaltern verändert. Das [Manifest](../manifest.json) beschreibt
-je Rolle die tatsächlich vorkommenden `render_fields`.
+The templates for [Planner](../templates/roles/planner.SOUL.md.template),
+[Coder](../templates/roles/coder.SOUL.md.template) and
+[Reviewer](../templates/roles/reviewer.SOUL.md.template) are changed only at the
+provided placeholders. The [manifest](../manifest.json) describes
+the `render_fields` actually occurring per role.
 
-| Feld | Bestätigter Wert |
+| Field | Confirmed value |
 |---|---|
-| `ROLE_NAME` | Eigener Anzeigename der jeweiligen Rolle |
-| `PLANER_NAME` | Planner-Anzeigename; Schreibweise mit einem N |
-| `CODER_NAME` | Coder-Anzeigename |
-| `REVIEWER_NAME` | Reviewer-Anzeigename |
-| `PROJECT_NAME` | Projektkennung als einzelnes Segment; bestimmt nicht den Workspace |
+| `ROLE_NAME` | Own display name of the respective role |
+| `PLANER_NAME` | Planner display name; spelling with one N |
+| `CODER_NAME` | Coder display name |
+| `REVIEWER_NAME` | Reviewer display name |
+| `PROJECT_NAME` | Project identifier as a single segment; does not determine the workspace |
 | `PROJECT_DIR` | Confirmed canonical absolute workspace; Planner only |
 | `REPOSITORY_ROOTS` | Confirmed repository boundaries as single-line text with separate planning and implementation assignments; Planner only |
 | `PLANNER_PROFILE` | Confirmed technical Planner profile ID; Coder only |
-| `HINDSIGHT_BANK_NAME` | Tatsächlich zugeordnete gemeinsame Projektbank |
-| `KANBAN_BOARD_NAME` | Native Boardkennung, nicht der Anzeigetitel |
-| `CODER_PROFILE` | Technische Coderprofilkennung, soweit in der Vorlage vorhanden |
-| `REVIEWER_PROFILE` | Technische Reviewerprofilkennung, soweit in der Vorlage vorhanden |
-| `CODEX_REASONING_DEFAULT` / `CODEX_REASONING_MAX` | Bestätigter Team-Codex-Standard und erlaubte Obergrenze; nur Coder-Vorlage |
-| `ROLE_REASONING_DEFAULT` / `ROLE_REASONING_HIGH` | Bestätigter Reviewer-Standard und höchste erlaubte Prüfstufe; nur Reviewer-Vorlage |
+| `HINDSIGHT_BANK_NAME` | Actually assigned shared project bank |
+| `KANBAN_BOARD_NAME` | Native board identifier, not the display title |
+| `CODER_PROFILE` | Technical Coder profile identifier, as far as present in the template |
+| `REVIEWER_PROFILE` | Technical Reviewer profile identifier, as far as present in the template |
+| `CODEX_REASONING_DEFAULT` / `CODEX_REASONING_MAX` | Confirmed Team-Codex default and permitted upper limit; Coder template only |
+| `ROLE_REASONING_DEFAULT` / `ROLE_REASONING_HIGH` | Confirmed Reviewer default and highest permitted review level; Reviewer template only |
 
-Anzeigenamen und technische Kennungen getrennt halten. Alle Mehrfachvorkommen
-aus demselben bestätigten Datensatz ersetzen. Der eigene Anzeigename liefert
-`ROLE_NAME`; weder zusätzliche Persona noch neue Rollenregeln anhängen.
+Keep display names and technical identifiers separate. Replace all multiple occurrences
+from the same confirmed record. The own display name supplies
+`ROLE_NAME`; append neither an additional persona nor new role rules.
 
-Der reine [Textrenderer](render_text.py) validiert die rollenbezogene Feldmenge
-und ersetzt in einem Durchlauf. Fehlende, zusätzliche oder beschädigte Felder
-sind Fehler. Werte bleiben unverändert: keine stille Kürzung oder Normalisierung.
-Namen sind nichtleerer einzeiliger Klartext; technische Kennungen und Projektname
-müssen außerdem die jeweiligen Syntax- und Pfadprüfungen bestehen. Markdown wird
-kontextgerecht maskiert; technische Werte in Codekontexten bleiben unverfälscht.
-Alle Nichtplatzhalterbytes der bestätigten Vorlage bleiben erhalten.
+The pure [text renderer](render_text.py) validates the role-related field set
+and replaces in one pass. Missing, additional or damaged fields
+are errors. Values stay unchanged: no silent truncation or normalization.
+Names are non-empty single-line plain text; technical identifiers and project name
+must additionally pass the respective syntax and path checks. Markdown is
+masked context-appropriately; technical values in code contexts stay unaltered.
+All non-placeholder bytes of the confirmed template are preserved.
 
 Use the role personalization accepted during preparation.
 Compare the rendered output with that scope before writing only `SOUL.md` in each confirmed role home.
@@ -111,9 +111,9 @@ For the six VoltAgent specialists, verify unchanged TOMLs and original model/rea
 Read back actual configuration and overrides; do not probe reasoning boundaries with model calls.
 A role maximum is a policy rule, not a technical execution barrier.
 
-Kommunikationszugänge und Kanalbindungen bleiben beim Planner. Geheimnisse gehören
-in geschützte native Zugangswege. Der private [Setuprecord](../templates/setup-record.md)
-dokumentiert Werte, Ziele und Nachweise; er ist keine zusätzliche Laufzeitkonfiguration.
+Communication accesses and channel bindings stay with the Planner. Secrets belong
+in protected native access paths. The private [setup record](../templates/setup-record.md)
+documents values, targets and evidence; it is not an additional runtime configuration.
 
 ## 4. Setup readbacks and resume
 
@@ -125,5 +125,5 @@ A concrete mismatch needs resolution before the affected write or activation.
 On resume, read the single setup JSON and actual targets; continue only the incomplete step.
 Correct stale descriptive prose without repeating confirmed decisions or creates.
 
-Diese Schritte gehören zum später ausdrücklich beauftragten Zielsetup. Beim
-Bearbeiten dieses Pakets werden keine Profile, Dienste oder Agenten aktiviert.
+These steps belong to the target setup explicitly commissioned later. Editing
+this package activates no profiles, services or agents.

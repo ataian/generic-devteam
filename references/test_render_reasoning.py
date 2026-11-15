@@ -507,12 +507,12 @@ class ReasoningContractTests(unittest.TestCase):
 
     def test_caveman_setup_checks_soul_bindings_only_after_writing(self):
         setup = (ROOT / "references/setup.md").read_text()
-        early = setup.split("2. Read back the native Hermes/Codex", 1)[1].split("3. Verwende", 1)[0]
+        early = setup.split("2. Read back the native Hermes/Codex", 1)[1].split("3. Use the pure text path", 1)[0]
         self.assertIn("Verify Caveman source, installed trees, autoload, and native skill discovery/loading", early)
         self.assertNotIn("Coder SOUL", early)
         self.assertNotIn("Verify Caveman delivery and activation", early)
         write = setup.index("then write `soul_text` only to the confirmed role home `SOUL.md`.")
-        readback = setup.index("6. Lies jedes Ziel zurück:", write)
+        readback = setup.index("6. Read back every target:", write)
         for clause in (
             "Read back the Coder SOUL's default/max values and process binding.",
             "Read back every role's Caveman load requirement and persisted-prose scope.",
@@ -814,7 +814,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
         self.assertNotIn("Jede Hermes-Rolle", analysis)
         sources = (ROOT / "references/upstream-sources.md").read_text()
         for name, targets in (
-            ("minimal-change-engineering", "Hermes-Planner"),
+            ("minimal-change-engineering", "Hermes Planner"),
             ("project-lib-versioning", "Planner and Coder"),
             ("screenshot-to-code", "Planner, Coder and Team-Codex"),
         ):
@@ -947,7 +947,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
         graphify, cbm = analysis.split('<a id="codebase-memory"></a>', 1)
         self.assertIn("Verify native discovery/loading of the original `graphify` skill in Planner, Coder, Reviewer and Team-Codex.", graphify)
         self.assertIn("Bind the confirmed output CWD, corpus and runtime interpreter", graphify)
-        self.assertIn("MCP-Eintrag in `config.yaml`, Shellhook `hooks.pre_llm_call`", cbm)
+        self.assertIn("MCP entry in `config.yaml`, shell hook `hooks.pre_llm_call`", cbm)
         self.assertIn("For each Hermes role, including Reviewer, read back its MCP command, environment/cache, repository CWD, original shellhook and native skill discovery/loading.", cbm)
         self.assertIn("Read back actual native connection/configuration status", cbm)
         self.assertIn("Missing required Reviewer assets, configuration or native discovery keep setup or an authorized team update incomplete.", analysis)

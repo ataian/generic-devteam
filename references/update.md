@@ -204,7 +204,7 @@ Ask the user to approve or defer the dependent file changes.
 Keep the whole team proposal withheld until that decision is recorded.
 Use `--dependency-decision` only to record that decision.
 It does not authorize runtime configuration or integration changes.
-For the Planner skill-maintenance policy, report the separate configuration step in [Setup](setup.md#3-frische-profile-bestätigte-modelle).
+For the Planner skill-maintenance policy, report the separate configuration step in [Setup](setup.md#3-fresh-profiles-confirmed-models).
 The file updater delivers the Planner template change but does not set `skills.creation_nudge_interval`.
 Obtain separate authorization to set and read back `skills.creation_nudge_interval=0` in the existing Planner profile.
 
@@ -420,7 +420,7 @@ The only removal targets are these exact Reviewer skill identities and their com
 | `project-lib-versioning` | `<reviewer home>/skills/project-lib-versioning/` |
 | `screenshot-to-code` | `<reviewer home>/skills/screenshot-to-code/` |
 
-Confirm identities and recipe paths against the [manifest](../manifest.json) and [own-skill recipe](setup.md#6-eigene-skills-rollen-und-textpersonalisierung).
+Confirm identities and recipe paths against the [manifest](../manifest.json) and [own-skill recipe](setup.md#6-own-skills-roles-and-text-personalization).
 This migration overrides local-adaptation preservation only for these three Reviewer skill trees.
 Preserve CBM/Graphify skills and bindings; restore the selected Reviewer integration through the approved upstream companion update.
 Include learned files, references, hidden files, and local additions.

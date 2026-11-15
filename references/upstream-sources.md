@@ -1,26 +1,26 @@
-# Bezugsquellen
+# Sources
 
-Diese Übersicht nennt Quellen, benötigten Umfang und Zielrollen. Die Einrichtung
-steht in [setup.md](setup.md) und [integrations.md](integrations.md).
-„Coder“ bezeichnet den Hermes-Coding-Orchestrator, „Team-Codex“ dessen getrennten
-Codex-Arbeitskontext; „alle Hermes-Rollen“ meint Planner, Coder und Reviewer.
+This overview names sources, required scope and target roles. The setup
+is in [setup.md](setup.md) and [integrations.md](integrations.md).
+„Coder“ denotes the Hermes coding orchestrator, „Team-Codex“ its separate
+Codex work context; „all Hermes roles“ means Planner, Coder and Reviewer.
 
-## Mitgelieferte Bausteine
+## Bundled components
 
 Copy each complete skill tree from `skills/`, including companion files.
 Keep all skill names and bytes unchanged except `brownfield-feature-planning/scripts/recover-triage`.
 Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the-planner-recovery-invocation).
 
-| Skill / lokale Quelle | Ziel |
+| Skill / local source | Target |
 |---|---|
-| <a id="own-planning"></a>[brownfield-feature-planning](../skills/brownfield-feature-planning/SKILL.md) | Hermes-Planner |
+| <a id="own-planning"></a>[brownfield-feature-planning](../skills/brownfield-feature-planning/SKILL.md) | Hermes Planner |
 | <a id="own-diagnosis"></a>[diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | Team-Codex |
-| <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes-Planner |
-| <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Hermes-Planner |
-| <a id="own-prototype"></a>[prototype](../skills/prototype/SKILL.md) | Hermes-Planner |
+| <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes Planner |
+| <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Hermes Planner |
+| <a id="own-prototype"></a>[prototype](../skills/prototype/SKILL.md) | Hermes Planner |
 | <a id="own-lib-versioning"></a>[project-lib-versioning](../skills/project-lib-versioning/SKILL.md) | Planner and Coder |
-| <a id="own-retro"></a>[retro](../skills/retro/SKILL.md) | Hermes-Planner |
-| <a id="own-devteam-cleanup"></a>[devteam-cleanup](../skills/devteam-cleanup/SKILL.md) | Hermes-Planner |
+| <a id="own-retro"></a>[retro](../skills/retro/SKILL.md) | Hermes Planner |
+| <a id="own-devteam-cleanup"></a>[devteam-cleanup](../skills/devteam-cleanup/SKILL.md) | Hermes Planner |
 | <a id="own-screenshot"></a>[screenshot-to-code](../skills/screenshot-to-code/SKILL.md) | Planner, Coder and Team-Codex |
 
 The owned `retro` adapts Matt Pocock's method; retain its complete [NOTICE](../skills/retro/NOTICE.md), [MIT license](../skills/retro/LICENSE), and method reference.
@@ -42,13 +42,13 @@ The owned `prototype` adapts Matt Pocock's logic/UI method for direct clarificat
 Deliver its complete tree and legal files only to the Planner through [the owned-skill recipe](integrations.md#prototype).
 
 <a id="own-roles"></a>
-Die SOUL-Vorlagen für [Planner](../templates/roles/planner.SOUL.md.template),
-[Coder](../templates/roles/coder.SOUL.md.template) und
-[Reviewer](../templates/roles/reviewer.SOUL.md.template) gehören jeweils zum
-entsprechenden Hermes-Profil. Nur die vorgesehenen Platzhalter durch bestätigte
-Werte ersetzen; den übrigen Inhalt erhalten.
+The SOUL templates for [Planner](../templates/roles/planner.SOUL.md.template),
+[Coder](../templates/roles/coder.SOUL.md.template) and
+[Reviewer](../templates/roles/reviewer.SOUL.md.template) each belong to the
+corresponding Hermes profile. Replace only the provided placeholders with confirmed
+values; preserve the remaining content.
 The Reviewer SOUL contains the proportional Spec/technical-quality investigation method; its [adaptation provenance](../NOTICE.md#bounded-review-adaptation-code-review) records the exact Matt source and differences.
-Render and deliver that SOUL through [Role bindings](native-workflow.md#2-rollen-souls-personalisieren), without a separate `code-review` skill or method file.
+Render and deliver that SOUL through [Role bindings](native-workflow.md#2-personalize-role-souls), without a separate `code-review` skill or method file.
 Native `sdlc-review` remains the original review lifecycle prerequisite.
 
 <a id="tas"></a>
@@ -69,7 +69,7 @@ Record local working-tree changes separately from that published identity.
 TAS has no team-role targets and is not installed into Planner, Coder, Reviewer, or Team-Codex by setup or team updates.
 Their existing SOUL and Caveman contracts remain unchanged; ordinary team setup does not load this authoring branch.
 
-## Fremdkomponenten
+## Third-party components
 
 Read `upstream_components` in the [manifest](../manifest.json) as the required source inventory.
 The TAS entry is an authoring dependency with empty `targets`; use its separate branch above, not the target-installation recipes.
@@ -110,23 +110,23 @@ Caveman's selected skill/legal bytes match the newer HEAD; retain the release co
 Graphify's bundle hashes now derive from the selected release, replacing the historical `86c57be8204673c2a1b9849a3292a7dd3ab373d8` evidence.
 CBM's existing static asset evidence derives from its selected `v0.12.1` source; it is not installer-output or live-runtime evidence.
 
-| Komponente | Originalquelle | Benötigter Umfang | Ziel |
+| Component | Original source | Required scope | Target |
 |---|---|---|---|
 | TAS | [ataian/tas](https://github.com/ataian/tas) | Complete standalone root skill tree, provenance and all `third_party/` legal files; see [authoring branch](#tas) | Maker authoring/review only; no team-role installation |
-| <a id="hermes-core"></a>Hermes-Basis | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [Dokumentation](https://hermes-agent.nousresearch.com/docs/) | Vorhandene funktionsfähige Hermes-Installation | Alle Hermes-Rollen |
-| <a id="hermes-codex"></a>Hermes-codex | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Vollständiges `skills/autonomous-ai-agents/codex` | Hermes-Coder |
-| <a id="hermes-review"></a>sdlc-review | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Vollständiges `skills/devops/sdlc-review` | Hermes-Reviewer |
-| <a id="codex-cli"></a>Codex CLI | [openai/codex](https://github.com/openai/codex) | Geeignete vorhandene Binary oder offizielles Release für das Zielsystem | Team-Codex |
-| <a id="superpowers"></a>Superpowers | [obra/superpowers](https://github.com/obra/superpowers) | Vollständiges Pluginrepository einschließlich `.hermes-plugin/plugin.yaml`, `__init__.py` und `skills/` | Hermes-Planner |
-| <a id="grill-me"></a>grill-me / grilling / domain-modeling / to-questionnaire | [mattpocock/skills](https://github.com/mattpocock/skills) | Complete `skills/productivity/grill-me`, `skills/productivity/grilling`, `skills/engineering/domain-modeling`, and `skills/productivity/to-questionnaire` trees, including `GLOSSARY-FORMAT.md`, `ADR-FORMAT.md`, `agents/openai.yaml`, and applicable legal files including root MIT `LICENSE`; same manifest revision | Hermes-Planner |
-| <a id="hindsight"></a>Hindsight-Integration | [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) | Vollständiges `hindsight-integrations/hermes`; vorhandenen Hindsight-Dienst anbinden | Alle Hermes-Rollen |
-| <a id="ponytail"></a>Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Vollständiges Repository mit Hermes-Plugin, `.codex-plugin/plugin.json`, Skills und Hooks | Hermes-Coder und Team-Codex |
+| <a id="hermes-core"></a>Hermes base | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [documentation](https://hermes-agent.nousresearch.com/docs/) | Existing functional Hermes installation | All Hermes roles |
+| <a id="hermes-codex"></a>Hermes-codex | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Complete `skills/autonomous-ai-agents/codex` | Hermes Coder |
+| <a id="hermes-review"></a>sdlc-review | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Complete `skills/devops/sdlc-review` | Hermes Reviewer |
+| <a id="codex-cli"></a>Codex CLI | [openai/codex](https://github.com/openai/codex) | Suitable existing binary or official release for the target system | Team-Codex |
+| <a id="superpowers"></a>Superpowers | [obra/superpowers](https://github.com/obra/superpowers) | Complete plugin repository including `.hermes-plugin/plugin.yaml`, `__init__.py` and `skills/` | Hermes Planner |
+| <a id="grill-me"></a>grill-me / grilling / domain-modeling / to-questionnaire | [mattpocock/skills](https://github.com/mattpocock/skills) | Complete `skills/productivity/grill-me`, `skills/productivity/grilling`, `skills/engineering/domain-modeling`, and `skills/productivity/to-questionnaire` trees, including `GLOSSARY-FORMAT.md`, `ADR-FORMAT.md`, `agents/openai.yaml`, and applicable legal files including root MIT `LICENSE`; same manifest revision | Hermes Planner |
+| <a id="hindsight"></a>Hindsight integration | [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) | Complete `hindsight-integrations/hermes`; connect the existing Hindsight service | All Hermes roles |
+| <a id="ponytail"></a>Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Complete repository with Hermes plugin, `.codex-plugin/plugin.json`, skills and hooks | Hermes Coder and Team-Codex |
 | <a id="caveman"></a>Caveman | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Complete `skills/caveman`, root `LICENSE`, `LICENSE-MIT`, `NOTICE`; writing only | All Hermes roles and Team-Codex |
-| <a id="caveman-review"></a>Caveman Review | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Complete `skills/caveman-review` and the same legal files and revision; finding format only | Hermes-Reviewer |
-| <a id="find-skills"></a>find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) | Vollständiges `skills/find-skills` | Team-Codex |
-| <a id="codex-agents"></a>Codex-Custom-Agents | [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents) | Die unten aufgeführten Originaldateien | Team-Codex |
+| <a id="caveman-review"></a>Caveman Review | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Complete `skills/caveman-review` and the same legal files and revision; finding format only | Hermes Reviewer |
+| <a id="find-skills"></a>find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) | Complete `skills/find-skills` | Team-Codex |
+| <a id="codex-agents"></a>Codex-Custom-Agents | [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents) | The original files listed below | Team-Codex |
 
-### Codex-Custom-Agents: Originaldateien
+### Codex custom agents: original files
 
 The [manifest](../manifest.json) is the version inventory for this component.
 Read `upstream_components.codex-custom-agents`: `original_repo`, `source_revision`, `subpaths`, and `legal_files`.
@@ -143,12 +143,12 @@ Keep all six TOMLs byte-identical to that revision through [the helper recipe](i
 Use their original model and reasoning settings, separately from the Team-Codex main-process policy.
 The Codex agent `reviewer` does not replace the independent Hermes Reviewer.
 
-## Codeanalyse: genau eine Alternative
+## Code analysis: exactly one alternative
 
-| Komponente | Originalquelle | Benötigter Umfang | Ziel |
+| Component | Original source | Required scope | Target |
 |---|---|---|---|
-| <a id="codebase-memory"></a>Codebase-memory | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | Passendes offizielles Release und vollständige native Hermes-/Codex-Integration: Originalskill, MCP, Hooks sowie die zu CBM gehörenden Codex-Unteragenten; `LICENSE` und Release-`THIRD_PARTY_NOTICES.md` erhalten. | Planner, Coder, Reviewer and Team-Codex |
-| <a id="graphify"></a>Graphify | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Runtime; für Hermes `graphify/skill-claw.md` und vollständiges `graphify/skills/claw/references/`, für Codex `graphify/skill-codex.md` und vollständiges `graphify/skills/codex/references/`; `LICENSE`, `LICENSE-MIT` und `NOTICE` erhalten. | Planner, Coder, Reviewer and Team-Codex |
+| <a id="codebase-memory"></a>Codebase-memory | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | Suitable official release and complete native Hermes/Codex integration: original skill, MCP, hooks and the Codex subagents belonging to CBM; preserve `LICENSE` and release `THIRD_PARTY_NOTICES.md`. | Planner, Coder, Reviewer and Team-Codex |
+| <a id="graphify"></a>Graphify | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Runtime; for Hermes `graphify/skill-claw.md` and complete `graphify/skills/claw/references/`, for Codex `graphify/skill-codex.md` and complete `graphify/skills/codex/references/`; preserve `LICENSE`, `LICENSE-MIT` and `NOTICE`. | Planner, Coder, Reviewer and Team-Codex |
 
 Use only the selected branch in [Code analysis](code-analysis.md).
 This source inventory does not replace its concrete setup recipe.

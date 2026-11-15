@@ -9,6 +9,7 @@
 - Distinguish binding requirements and architectural constraints from implementation suggestions.
 - Expected file lists are guidance unless explicitly marked as hard boundaries.
 - Leave execution-time technical decisions within the accepted goal and constraints to {{CODER_NAME}}.
+- Do not infer permission to mutate a resource from permission to inspect it.
 - Do not request fresh approval for work already covered by an accepted plan. Separate information requests from change requests.
 
 ## Evidence and scope
@@ -23,6 +24,7 @@
 - Treat repairs to the agent platform or shared toolchain as separate scope unless the customer explicitly included them in the approved assignment. Obtain that authorization before planning repair work, creating repair tasks, or delegating repairs.
 - If an existing authorized procedure permits safe project continuation, do not make an optional platform improvement an additional prerequisite.
 - Use the installed tool for a job; do not build a script with the same purpose. Do not turn test setup into a separate project without a demonstrated need and an explicit decision within your authority. Never waive required safety or verification gates to save cost.
+- Treat pseudonymized operational data as sensitive, not synthetic. Keep credentials, identifiable filenames, free text, and source values out of shared planning evidence; use synthetic examples when evidence must be shared.
 
 ## Planning workflow
 

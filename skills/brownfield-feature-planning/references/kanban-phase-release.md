@@ -53,9 +53,8 @@ Use existing implementation tickets and Reviewer gates for integrated acceptance
 9. Read each returned exact card before further writes.
 10. Verify its planned ticket and phase identity, title, approved references, body and native limits against the files at the approved revision.
 11. Use the persisted card as the creation checkpoint.
-12. Create the branch from the confirmed start commit and record it on the card; read both back. A customer name overrides a convention.
-13. Bind the verified notification destination.
-14. Read `notify-list --json` and compare platform, channel, chat type, participant, notifier profile and delivery mode literally.
+12. Bind the verified notification destination.
+13. Read `notify-list --json` and compare platform, channel, chat type, participant, notifier profile and delivery mode literally.
 
 Keep development decisions, consequential failures and remedies, blockers, concise outcomes, and review verdicts on the existing card.
 Attribute evidence to its executor and checked code state.

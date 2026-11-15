@@ -34,7 +34,6 @@ def core_contract(text):
         "Do not create implementation tickets before explicit plan acceptance.",
         "Keep independent review and required safety checks.",
         "Load a reference only when its trigger applies.",
-        "Do not infer permission to mutate a resource from permission to inspect it.",
     ):
         assert requirement in text, requirement
 
@@ -55,7 +54,6 @@ class BrownfieldPackageTests(unittest.TestCase):
         for line in (
             "Keep independent review and required safety checks.",
             "Do not create implementation tickets before explicit plan acceptance.",
-            "Do not infer permission to mutate a resource from permission to inspect it.",
         ):
             with self.subTest(rule=line), self.assertRaises(AssertionError):
                 core_contract(text.replace(line, ""))
@@ -142,15 +140,34 @@ class BrownfieldPackageTests(unittest.TestCase):
 
     def test_plan_separates_binding_scope_from_coder_discretion(self):
         text = (SKILL / "SKILL.md").read_text()
+        soul = (ROOT / "templates/roles/planner.SOUL.md.template").read_text()
         for clause in (
-            "Distinguish binding requirements and architectural constraints from implementation suggestions.",
-            "Expected file lists are guidance unless explicitly marked as hard boundaries.",
-            "Leave execution-time technical decisions within the accepted goal and constraints to the Coder.",
             "Record consequential in-scope decisions on the existing ticket.",
             "For an authorized binding amendment, update the versioned plan and affected current and future ticket bindings before release.",
             "Preserve already-reviewed history and verify the returning worker's applicable baseline.",
         ):
             self.assertIn(clause, text)
+        # Role boundaries and data rules live in the SOUL only; the skill must not restate them.
+        for single_source in (
+            "Distinguish binding requirements and architectural constraints from implementation suggestions.",
+            "Expected file lists are guidance unless explicitly marked as hard boundaries.",
+            "Leave execution-time technical decisions within the accepted goal and constraints to the Coder.",
+            "Do not infer permission to mutate a resource from permission to inspect it.",
+            "Treat pseudonymized operational data as sensitive, not synthetic.",
+            "Use synthetic examples when evidence must be shared.",
+        ):
+            with self.subTest(single_source=single_source):
+                self.assertNotIn(single_source, text)
+        for soul_clause in (
+            "Distinguish binding requirements and architectural constraints from implementation suggestions.",
+            "Expected file lists are guidance unless explicitly marked as hard boundaries.",
+            "Leave execution-time technical decisions within the accepted goal and constraints to {{CODER_NAME}}.",
+            "Do not infer permission to mutate a resource from permission to inspect it.",
+            "Treat pseudonymized operational data as sensitive, not synthetic.",
+            "use synthetic examples when evidence must be shared.",
+        ):
+            with self.subTest(soul_clause=soul_clause):
+                self.assertIn(soul_clause, soul)
 
     def test_story_decomposition_precedes_phase_and_ticket_mapping(self):
         text = (SKILL / "SKILL.md").read_text()
@@ -160,9 +177,14 @@ class BrownfieldPackageTests(unittest.TestCase):
             "Give each slice an observable, independently verifiable outcome across the relevant layers.",
             "Do not disguise database/API/UI layer tasks as stories by adding an actor prefix.",
             "Justify necessary foundations by the stories they enable and their verification gate.",
-            "Choose phase and ticket boundaries for reviewability and real dependencies, not a one-story/one-phase/one-ticket rule.",
         ):
             self.assertIn(clause, phases)
+        # Phase/ticket boundary rule is a SOUL rule; the skill must not restate it.
+        self.assertNotIn("Choose phase and ticket boundaries", phases)
+        self.assertIn(
+            "Map stories to phases and tickets by reviewable outcomes and real dependencies, not technical layers.",
+            (ROOT / "templates/roles/planner.SOUL.md.template").read_text(),
+        )
         self.assertLess(phases.index("Cut work by actor"), phases.index("Give each phase"))
         self.assertIn("apply the Planner's caller-contract and abstraction checks", text)
 
@@ -242,8 +264,12 @@ class BrownfieldPackageTests(unittest.TestCase):
 
     def test_integrated_acceptance_uses_existing_phase_and_reviewer(self):
         text = (SKILL / "SKILL.md").read_text()
-        self.assertIn("Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.", text)
-        self.assertIn("Place combined-behavior checks in the phase where integrated behavior becomes available.", text)
+        soul = (ROOT / "templates/roles/planner.SOUL.md.template").read_text()
+        # Phase and reviewer assignment are SOUL rules; the skill repeats neither.
+        self.assertIn("Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.", soul)
+        self.assertIn("Place combined-behavior checks where integrated behavior becomes available.", soul)
+        self.assertNotIn("Assign each acceptance criterion", text)
+        self.assertNotIn("Place combined-behavior checks", text)
         self.assertIn("Use existing results for the Planner's final customer report, not a new technical review or closing ticket.", text)
 
     def test_progress_policy_preserves_explicit_and_native_limits_only(self):

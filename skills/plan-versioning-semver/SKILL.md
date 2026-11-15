@@ -1,7 +1,7 @@
 ---
 name: plan-versioning-semver
-description: "Use when naming plan files: SemVer PLAN_<v>_<project>.md."
-version: 1.0.0
+description: "Use when naming plan files: Typ_Appversion_Name_vN.md."
+version: 1.1.0
 author: Mariko
 platforms: [linux]
 metadata:
@@ -10,104 +10,94 @@ metadata:
     category: devops
 ---
 
-# Plan-Dateien SemVer-versionieren
+# Versioning plan files
 
-Projekt-Pläne/Spezifikationen werden nach SemVer benannt, damit Features und
-Bugfixes an den Dateinamen ablesbar sind.
+Project plans and specifications carry their own version number in the filename, separate
+from the SemVer version of the project they apply to. Document type and revision are
+readable from the name without opening the file.
 
-## Namensschema
+## Naming scheme
 
 ```
-PLAN_<MAJOR>.<MINOR>.<PATCH>_<Name>.md
+<TYP>_<Appversion>_<Name>_v<Number>.md
 ```
 
-- **Erste Plan-Datei** (Basis): Projektname hinten dran, z. B.
-  `PLAN_1.0.0_Meetingprotokollmaker.md`.
-- **Jede weitere** (Feature): Kurzstring (1–2 Wörter) des Features statt
-  Projektname, z. B. `PLAN_1.1.0_Audio-Upload.md`, `PLAN_1.2.0_Nous-Portal.md`,
-  `PLAN_1.3.0_Auth.md`.
+- **Type prefix** first, in capitals: `PLAN_`, `REVIEW_`, `ADR_`, `HANDOFF_`, `SPEC_`. It
+  names the kind of document, not its version.
+- **Appversion** directly after the prefix: the SemVer version of the project from which
+  the change is planned.
+- **Name:** one or two words, readable, without version numbers. The project name appears
+  only on the first plan file; after that the name identifies the feature.
+- **Number** last, always with `v`: `v1` for the first revision, `v2` after the first
+  change. Plans, reviews and handoffs count whole numbers; SemVer applies to the project
+  itself.
+- Example: `PLAN_1.3.0_API-Returncode_v1.md`.
 
-Der Projektname erscheint NUR bei der ersten Datei — danach dient der Name als
-Feature-Namensgeber (kurz halten, 1–2 Wörter, damit der Dateiname nicht zu
-lang wird).
+## Rules
 
-## SemVer-Bedeutung auf Planspezifikationen
+1. Each new plan file starts at `v1`.
+2. Each change to an existing plan file increases its number by one (`v1` → `v2`). Rename
+   with `git mv` so the history stays intact.
+3. Plans with different name slugs count independently of each other.
+4. A new feature on an existing state gets its own plan file and starts at `v1`.
+5. Update internal references to the old name (AGENTS.md, README.md, the "Ergänzt …" lines
+   in feature plans).
+6. Bugfixes in **application code** do not change a plan number; the application version
+   follows SemVer.
 
-- **MAJOR** — inkompatible Änderung an der Spezifikation (Architektur/Pipeline
-  bricht ab, z. B. `video` → `input`-Namensumbenennung).
-- **MINOR** — neues, rückwärtskompatibles Feature (neue Plan-Datei pro Feature).
-- **PATCH** — rückwärtskompatibler Bugfix an einer bestehenden Spezifikation.
+## After creating the files
 
-## Regeln
+- Point AGENTS.md at the current plan name (binding specification).
+- Update the README.md structure block to the versioned files.
 
-1. Jedes neue Feature bekommt eine **eigene Plan-Datei** mit MINOR-Bump
-   (`1.0.0` → `1.1.0` → `1.2.0` …). Bestehende Pläne bleiben unverändert als
-   historische Spezifikation eingefroren (nicht umschreiben!).
-2. Rename per `git mv` (Historie bleibt erhalten), Commits erkennen die
-   Renames automatisch.
-3. Interne Verweise auf alte Plan-Namen aktualisieren (AGENTS.md, README.md,
-   "Ergänzt …"-Zeilen in den Feature-Plänen).
-4. Bugfixes am **App-Code** (z. B. Upload 303→201) ändern NICHT die Version
-   der historischen Plan-Dateien — die Pläne dokumentieren den damaligen
-   Stand. Die App-Codeversion (falls versioniert) folgt separatem Schema.
-5. Bei inkompatibler Spezifikationsänderung: MAJOR-Bump (z. B. `2.0.0`).
+## Standard: version API and CHANGELOG
 
-## Nach Dateien-Erstellung
+Base equipment for every project.
 
-- AGENTS.md auf den aktuellen Plan-Namen zeigen lassen (verbindliche
-  Spezifikation).
-- README.md Struktur-Block auf die versionierten Dateien aktualisieren.
+### 1) Version API
 
-## Standard: Version-API + CHANGELOG
-
-Grundausstattung bei jedem Projekts:
-
-### 1) Version-API
-
-Nur bei Projekten, die eine API anbieten!
-Ein öffentlicher Endpoint, der die App-Versionsnummer ausliefert — ohne Auth,
-weil die Version für Health-Check/Kompatibilität ohne Key abrufbar sein soll:
+Only for projects that provide an API.
+A public endpoint that serves the application version — without auth, because the version
+must be readable for health checks and compatibility without a key:
 
 ```http
 GET /api/version
-→ {"version": "2.0.0", "name": "<projektname>"}
+→ {"version": "2.0.0", "name": "<projectname>"}
 ```
 
-- Einheitliche Quelle für die Versionsnummer (nicht an mehreren
-  Orten pflegen).
-- Test: Endpoint ist auch mit aktiviertem Auth ohne Key erreichbar (200).
+- One source for the version number; do not maintain it in several places.
+- Test: the endpoint answers 200 without a key even when auth is enabled.
 
 ### 2) CHANGELOG.md
 
-Datei im Repo-Root, Keep-a-Changelog-Stil:
+File in the repository root, Keep-a-Changelog style:
 
 ```markdown
 # Changelog
 
-## [2.0.0] - JJJJ-MM-TT
+## [2.0.0] - YYYY-MM-DD
 ### Changed
 - …
 
-## [1.1.0] - JJJJ-MM-TT
+## [1.1.0] - YYYY-MM-DD
 ### Added
 - …
 ```
 
-- Pro Release-Version (X.Y.Z) ein Eintrag mit Datum.
-- Kategorien: `Added`, `Changed`, `Fixed`, `Removed`.
-- Bei jedem Release mitpflegen (Teil der Definition of Done).
+- One entry per release version (X.Y.Z) with its date.
+- Categories: `Added`, `Changed`, `Fixed`, `Removed`.
+- Maintain it with every release (part of the definition of done).
 
-### 3) App-Codeversion (SemVer) vs. Plan-Dateiversion
+### 3) Application version (SemVer) versus plan version
 
-Die App-Codeversion folgt eigenem SemVer-Schema, getrennt von den Plan-Dateien: 
-MAJOR bei inkompatibler API-Änderung, 
-MINOR bei neuem Feature,
-PATCH bei Bugfix. 
+The application version follows SemVer: MAJOR for an incompatible API change, MINOR for a
+new feature, PATCH for a bugfix.
 
-Die Plan-Dateien haben als Versionsnummer immer die aktuelle Version des Projekts 
-von dem ausgehend die Änderung geplant wird.
+A plan file carries two versions in its name: the appversion of the project state from
+which the change is planned, and, at the end, the running number of the document's own
+revisions. An application change does not rename the plan file.
 
-Beispiel: 
-Für eine App in Version 1.3.0 wird ein Wechsel des API returncodes 303→201 (inkompatibel = MAJOR Bump) geplant.
-Die Plan-Dateien erhalten 1.3.0 in ihren Versionsnummern.
-Für die App wird bei der Implementierung ein MAJOR-Bump auf 2.0.0 gemacht.
+Example: the application stands at 1.3.0. The plan covers the incompatible change of the
+API return code 303→201. The plan file is named `PLAN_1.3.0_API-Returncode_v1.md`; a
+revision of the same plan becomes `…_v2.md`. The application receives the MAJOR bump to
+2.0.0 during implementation; the filename stays.

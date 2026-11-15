@@ -2,7 +2,7 @@
 
 Execute these recipes only during an authorized setup or the approved [upstream companion update](update.md#required-upstream-companion-update).
 Consume the complete preparation dataset from [Setup](setup.md); do not reopen confirmed choices.
-Read the manifest's exact `source_revision` for each independent component under [Sources](upstream-sources.md#fremdkomponenten).
+Read the manifest's exact `source_revision` for each independent component under [Sources](upstream-sources.md#third-party-components).
 Use complete pinned source trees and compatible installed runtimes, without a newest-upstream search.
 Record source/revision, complete file inventory/hashes, licenses/notices, targets and exact readbacks.
 Historical research anchors are provenance, not installation pins or behavioral evidence.

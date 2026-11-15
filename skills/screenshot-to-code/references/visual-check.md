@@ -1,33 +1,33 @@
-# Visueller Abgleich
+# Visual comparison
 
-## Vergleichsbedingungen zuerst
+## Comparison conditions first
 
-Im vorhandenen Brief oder Prüfprotokoll festhalten:
+Record in the existing brief or check log:
 
-- beauftragter CSS-Viewport je Zielgröße, Browserzoom und Pixeldichte (DPR);
-- Quelle samt Seite/Ausschnitt, Skalierung und Crop; sichtbarer Viewport oder vollständige Seite;
-- Datenstand einschließlich Langtext-/Fehlwertfällen, Schriften und akzeptierte Ersatzschriften;
-- genehmigte Inhalts-/Farb-/Layoutabweichungen und vereinbarte Abnahmekriterien;
-- Arbeitsbudget und noch verfügbare Render-/Korrekturversuche.
+- commissioned CSS viewport per target size, browser zoom, and pixel density (DPR);
+- source including page/section, scaling, and crop; visible viewport or full page;
+- data state including long-text/missing-value cases, fonts, and accepted substitute fonts;
+- approved content/color/layout deviations and agreed acceptance criteria;
+- work budget and remaining render/correction attempts.
 
-Eine PDF-Seite hat keinen impliziten Browserviewport. Eine Bildbreite darf bei unbekannter Pixeldichte nicht pauschal halbiert werden. Relevante unbekannte Bedingungen klären, nicht passende Werte erfinden.
+A PDF page has no implicit browser viewport. With unknown pixel density, an image width must not be halved across the board. Clarify relevant unknown conditions, do not invent fitting values.
 
-## Echte Aufnahme und Prüfung
+## Real capture and check
 
-1. Mit zugelassenem Projektwerkzeug tatsächlich bauen/starten. Ladefehler, falsche Daten, Auth-/Mockmodus und Browserfehler sichtbar machen. Keine ungenehmigte Betriebsänderung zum Starten.
-2. Auf fertige Inhalte, Bilder und Schriften warten, nicht nur auf den ersten DOM-Aufbau oder eine beliebige Schlafzeit. Verfügbare Bereitschaftssignale wie abgeschlossene Datenabfragen, Bilddekodierung und Fontbereitschaft nutzen.
-3. Aufnahmen für den beauftragten Scope erstellen. Quelle **und tatsächlichen Render ansehen**. Ein gespeichertes Bild, DOM-Text oder ein Pixel-Diff allein ist kein vollständiger Sichtnachweis.
-4. In dieser Reihenfolge vergleichen: Inhalt/Vollständigkeit und Struktur; Raster/Ausrichtung; Abstände; Typografie/Umbrüche; Farben; Assets/Details. Genehmigte Unterschiede sind Teil des Solls.
-5. Lange Texte, variable Listen/Extras und vertraglich unterschiedliche null/fehlend/leer/0-Fälle überprüfen. Kein Weglassen als Layoutfix. Unbeabsichtigten Überlauf, Schnitt oder Überlagerungen nicht als Schriftfallback entschuldigen.
-6. Semantik, Alternativtexte, Labels und Kontrast prüfen; bei Interaktionen sichtbaren Fokus und Tastaturbedienung ausüben. Konkrete Konflikte mit Vorlagentreue klären. Keine uneingeschränkte Barrierefreiheitsbehauptung aus einer Sichtprobe.
-7. Abweichungen gezielt korrigieren und betroffene Bedingungen erneut prüfen. Vorgeschriebene Projektchecks zusätzlich ausführen; reine Renderfähigkeit ist keine Verhaltens-/Vertragsabnahme.
+1. Actually build/start with an approved project tool. Make load errors, wrong data, auth/mock mode, and browser errors visible. No unapproved operations change to start it.
+2. Wait for finished content, images, and fonts, not only for the first DOM build-up or an arbitrary sleep. Use available readiness signals such as completed data queries, image decoding, and font readiness.
+3. Create captures for the commissioned scope. **Look at the source and the actual render.** A saved image, DOM text, or a pixel diff alone is not complete visual evidence.
+4. Compare in this order: content/completeness and structure; grid/alignment; spacing; typography/line breaks; colors; assets/details. Approved differences are part of the target state.
+5. Check long texts, variable lists/extras, and contractually distinct null/missing/empty/0 cases. No omission as a layout fix. Do not excuse unintended overflow, clipping, or overlaps as a font fallback.
+6. Check semantics, alternative texts, labels, and contrast; for interactions, exercise visible focus and keyboard operation. Clarify concrete conflicts with template fidelity. No unrestricted accessibility claim from a visual check.
+7. Correct deviations in a targeted way and re-check the affected conditions. Run the prescribed project checks in addition; render capability alone is no behaviour/contract acceptance.
 
-## Ehrliche Stopplogik
+## Honest stop logic
 
-Keine universelle Zahl von Durchläufen und keinen pauschalen Pixel-Diff-Grenzwert vorgeben. Das vereinbarte Budget begrenzt Versuche, nicht die Abnahmequalität.
+Prescribe no universal number of passes and no blanket pixel-diff threshold. The agreed budget limits attempts, not the acceptance quality.
 
-- Browser/Build fehlt: Rendernachweis offen; andere unabhängige Prüfungen dürfen weiterlaufen.
-- Bildsicht fehlt: technische Aufnahme gegebenenfalls belegt, visuelle Übereinstimmung **nicht geprüft**.
-- Budget erschöpft: keine weitere automatische Runde; verbleibende Unterschiede, Auswirkungen und fehlende Nachweise übergeben. Nicht durch Formulierungen als bestanden darstellen.
+- Browser/build missing: render evidence open; other independent checks may continue.
+- Image view missing: technical capture possibly evidenced, visual match **not checked**.
+- Budget exhausted: no further automatic round; hand over remaining differences, impacts, and missing evidence. Do not present as passed through wording.
 
-Nachweis nennt Quelle, Code-/Buildstand, Daten und Vergleichsbedingungen, echte Aufnahmen/Testergebnisse, betrachtete Unterschiede, akzeptierte Abweichungen und offene Mängel. Fremdberichte als solche kennzeichnen, nicht als eigene Durchführung.
+The evidence names source, code/build state, data and comparison conditions, real captures/test results, differences considered, accepted deviations, and open defects. Mark external reports as such, not as your own execution.
