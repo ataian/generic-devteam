@@ -42,6 +42,8 @@ Preserve `PLANER_NAME`, `CODER_NAME`, `REVIEWER_NAME`, `PROJECT_NAME`, `HINDSIGH
 `ROLE_REASONING_DEFAULT`, and `ROLE_REASONING_HIGH` when confirmed.
 Keep fixed Planner/Hermes-Coder reasoning and the Codex model ID for native configuration only.
 Do not add role-render fields for these native settings.
+Store the verified absolute Codex entrypoint in `CODEX_BINARY` and the process/config homes in `CODEX_PROCESS_HOME` and `CODEX_HOME`.
+These Coder render fields contain raw paths, not shell-quoted strings; process HOME matches `confirmed_bindings.roles.team-codex.home`.
 
 Store resolved technical bindings in `confirmed_bindings`.
 Under `roles`, retain `planner`, `coder`, `reviewer`, and `team-codex`, each with `id` and canonical `home`.

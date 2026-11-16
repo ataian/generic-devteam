@@ -168,6 +168,7 @@ The file helper does not manage upstream Graphify/CBM integrations, MCP configur
 The helper accepts the reviewed pre-1.1.4 renderer by its exact source hash.
 That compatibility case adds role fields without changing substitution of old fields.
 The helper still verifies each old personalized baseline against the stored bytes.
+It also accepts the exact reviewed pre-2.9.0 renderer; shell quoting affects only the new Codex path fields.
 Other renderer changes remain withheld until transform compatibility is reviewed.
 
 For pre-1.1.4 teams, transfer the already confirmed workspace into `confirmed_values.PROJECT_DIR` in the existing setup JSON.
@@ -185,6 +186,11 @@ It preserves values already present in the installation record.
 It saves adopted values only after successful target verification.
 Later updates use those recorded values without reading `setup.md`.
 Do not assign this reconciliation to the Planner or Coder.
+
+For pre-2.9.0 teams, transfer the verified absolute Codex entrypoint and process/config homes into `CODEX_BINARY`, `CODEX_PROCESS_HOME`, and `CODEX_HOME` in `confirmed_values`.
+Reuse existing setup evidence and configuration readbacks; keep the stable entrypoint rather than its version-specific release target.
+Check process HOME against `confirmed_bindings.roles.team-codex.home`; resolve missing or conflicting paths before planning the file update.
+The same missing-value adoption preserves existing recorded values and writes them only after successful target verification.
 
 Read the proposal and the changed SOULs and skill files.
 Decode the proposal's `new_base` and `merged` fields as base64 if you inspect their bytes programmatically.

@@ -234,7 +234,8 @@ plan revision are bound anew for each task, not invented in setup.
 
 Bind `devteam/codex-home` and `devteam/user-home` inside the actual Coder home through [Team-Codex](integrations.md#team-codex).
 For CBM, bind the canonical account cache as a literal in the team MCP TOML `env` before hook approval under [Code analysis](code-analysis.md#codebase-memory).
-Record the actual Codex binary and both homes for configuration readback.
+Record the verified absolute Codex entrypoint as `CODEX_BINARY`, and both homes as `CODEX_PROCESS_HOME` and `CODEX_HOME` in `confirmed_values`.
+Keep the stable entrypoint rather than its version-specific release target; compare both homes with configuration readbacks.
 Deliver/configure the complete original components for the chosen analysis branch only.
 Read back analysis targets, assets, runtime binding and licenses for Planner, Coder, Reviewer and Team-Codex.
 For CBM include its complete native Codex subagents alongside the six VoltAgent helpers.
@@ -340,8 +341,10 @@ Use these fragments for the confirmed dataset; do not run synthetic development 
 
    Use the confirmed raw names, project, bank, board, profile IDs, and reasoning render values from `confirmed_values`.
    Include `PROJECT_DIR` and `REPOSITORY_ROOTS` for the Planner.
-   Include `PLANNER_PROFILE` for the Coder.
+   Include `PLANNER_PROFILE`, `CODEX_BINARY`, `CODEX_PROCESS_HOME`, and `CODEX_HOME` for the Coder.
    Check `PLANNER_PROFILE` against `confirmed_bindings.roles.planner.id` before rendering.
+   Check `CODEX_PROCESS_HOME` against `confirmed_bindings.roles.team-codex.home` before rendering.
+   Pass raw absolute paths; the renderer shell-quotes them in the invocation block.
    Do not pass fixed Planner/Hermes-Coder reasoning or the Codex model ID as role fields.
    `role_manifest` is the matching entry from `role_templates`. Missing values
    stop the output; no empty defaults and no invented new IDs.

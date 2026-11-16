@@ -2,8 +2,12 @@
 import json
 from pathlib import Path
 import re
+import shlex
 import shutil
+import subprocess
+import sys
 import tempfile
+import textwrap
 import unittest
 
 from render_text import render_role, role_fields
@@ -70,6 +74,8 @@ class ReasoningContractTests(unittest.TestCase):
                 values[key] = "example-role"
             elif key == "PROJECT_DIR":
                 values[key] = "/work/project"
+            elif key in {"CODEX_BINARY", "CODEX_PROCESS_HOME", "CODEX_HOME"}:
+                values[key] = "/work/" + key.lower()
             elif key == "REPOSITORY_ROOTS":
                 values[key] = "Planning: /work/plans; implementation: /work/project/code"
             elif key.endswith("_REASONING_DEFAULT"):
@@ -96,25 +102,77 @@ class ReasoningContractTests(unittest.TestCase):
     def test_codex_routing_and_cli_use_concrete_values(self):
         result = render_role(self.template("coder"), self.values("coder", "low", "high"), "coder")
         for text in [
-            "below HIGH, use `low`.",
-            "HIGH complexity with HIGH impact uses `high`.",
+            "Use `low` unless complexity or impact is HIGH.",
+            "If either is HIGH, you may raise reasoning up to `high`; if both are HIGH, use `high`.",
             "These limits also apply to retries, resumes, and other delegated helpers; the six VoltAgent specialists below use their original settings.",
-            "Supply the reasoning level selected for this task under the existing matrix",
-            "Default-level example with a quoted TOML string:",
-            "For a higher selected level, pass that selected value instead.",
-            'model_reasoning_effort=\'"low"\'',
+            'model_reasoning_effort=\'"REASONING"\'',
+            "Read `model` from `/work/codex_home/config.toml`.",
+            "Keep the configured model and provider.",
+            "`background=true`, `pty=true`",
+            "Observe the native process completion signal.",
         ]:
             self.assertTrue(text in result, text)
         self.assertNotIn("if the worker guard prohibits them", result)
         self.assertNotIn("{{", result)
 
+    def test_codex_path_fields_are_required_and_absolute(self):
+        fields = {"CODEX_BINARY", "CODEX_PROCESS_HOME", "CODEX_HOME"}
+        self.assertTrue(fields <= role_fields(self.template("coder"), "coder"))
+        for field in fields:
+            values = self.values("coder")
+            values.pop(field)
+            with self.subTest(missing=field), self.assertRaises(ValueError):
+                render_role(self.template("coder"), values, "coder")
+            for bad in ("codex", "~/codex", "/work/../codex", "/work//codex", "/work/codex/"):
+                with self.subTest(field=field, bad=bad), self.assertRaises(ValueError):
+                    render_role(self.template("coder"), dict(self.values("coder"), **{field: bad}), "coder")
+
+    def test_rendered_codex_command_preserves_paths_arguments_and_stdin(self):
+        """Execute the rendered shell recipe with a local argv recorder, not Codex."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binary = root / "codex with 'quote' $(false);&"
+            binary.write_text("#!" + sys.executable + "\nimport json, os, sys\n"
+                              "print(json.dumps({'argv': sys.argv[1:], 'stdin': sys.stdin.read(), "
+                              "'home': os.environ['HOME'], 'codex_home': os.environ['CODEX_HOME'], "
+                              "'ponytail': os.environ['PONYTAIL_DEFAULT_MODE'], 'cwd': os.getcwd()}))\n")
+            binary.chmod(0o700)
+            prompt = root / "prompt with 'quote'.txt"
+            prompt.write_text("Fixture prompt; literal $diagnosing-bugs\n")
+            values = self.values("coder")
+            values.update(CODEX_BINARY=str(binary), CODEX_PROCESS_HOME=str(root / "process '$(false)'"),
+                          CODEX_HOME=str(root / "config '$(false)'"))
+            rendered = render_role(self.template("coder"), values, "coder")
+            self.assertIn("`" + values["CODEX_HOME"] + "/config.toml`", rendered)
+            match = re.search(r"   ```sh\n(.*?)   ```", rendered, re.S)
+            self.assertIsNotNone(match)
+            assert match is not None
+            command = textwrap.dedent(match[1]).replace("MODEL_ID", "fixture-model").replace("REASONING", "high")
+            command = command.replace("PROMPT_FILE", shlex.quote(str(prompt)))
+            result = subprocess.run(["sh", "-c", command], cwd=root, text=True, capture_output=True, check=True)
+            data = json.loads(result.stdout)
+            self.assertEqual(data, {"argv": ["exec", "--model", "fixture-model", "--sandbox", "danger-full-access",
+                                            "-c", 'model_reasoning_effort="high"', "-"],
+                                    "stdin": prompt.read_text(), "home": values["CODEX_PROCESS_HOME"],
+                                    "codex_home": values["CODEX_HOME"], "ponytail": "full", "cwd": str(root)})
+
+    def test_coder_retains_worker_guard_and_removes_only_duplicate_model_sentence(self):
+        text = self.template("coder")
+        self.assertNotIn("Write the model ID as a literal argument.", text)
+        self.assertIn("Do not build any command with shell variables, an inline `-c`/`-e` interpreter, "
+                      "an `execute_code` block, command chains, or heredocs: the worker guard blocks them "
+                      "in unattended runs, where no approval is available. Write a script file and run it, "
+                      "or use the file tools.", text)
+        for obsolete in ("Take the binary, model ID, and provider from that configuration", "Reasoning matrix:"):
+            self.assertNotIn(obsolete, text)
+
     def test_voltagent_specialists_keep_original_settings_outside_parent_matrix(self):
         """Rendered instruction contract; no live Codex execution."""
         result = render_role(self.template("coder"), self.values("coder", "low", "medium"), "coder")
-        self.assertIn("For the main Codex process, use the model from the shared Team-Codex configuration.", result)
+        self.assertIn("Keep the configured model and provider.", result)
         self.assertIn("Use their installed original model and reasoning settings without prompt overrides.", result)
         self.assertIn("Pass this distinction to Codex in each task and resume.", result)
-        self.assertIn("HIGH complexity with HIGH impact uses `medium`.", result)
+        self.assertIn("if both are HIGH, use `medium`.", result)
         self.assertIn("Preserve explicit customer financial/resource caps", result)
         self.assertNotIn("Keep write scopes and model pins within policy.", result)
 
@@ -282,7 +340,9 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn("the exact implementation commit, concise result, material risks, and verification gaps", text)
         self.assertIn("Keep original evidence retrievable for review without copying test reports.", text)
         self.assertIn("Never use `kanban_complete` to close your own implementation.", text)
-        self.assertIn("Read back the Kanban status and reviewer assignment.", text)
+        self.assertIn('Check the `kanban_request_review` response for `ok: true` and `status: "review"`.', text)
+        self.assertIn("Correct or escalate a failed handoff. Make no further project changes until native return.", text)
+        self.assertNotIn("Read back the Kanban status and reviewer assignment.", text)
         self.assertNotIn("Nach jedem `kanban_request_review`", text)
 
     def test_coder_routes_decisions_outside_its_mandate_to_planner(self):
@@ -294,7 +354,7 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn("The existing subscription wakes `confirmed-planner`", text)
         self.assertNotIn("through native `kanban_request_review`", text)
         self.assertIn("Send one TIMER request to `confirmed-planner` through `kanban_create`.", text)
-        self.assertIn("Check `confirmed-planner` against the native profile registration before routing a task or TIMER request.", text)
+        self.assertNotIn("against the native profile registration", text)
         self.assertNotIn("setup record", text)
         self.assertIn("After native resumption, reread the decision and applicable plan baseline.", text)
         missing = dict(values)

@@ -47,6 +47,9 @@ class UpdaterTests(unittest.TestCase):
         values['REPOSITORY_ROOTS'] = "Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code"
         values['CODER_PROFILE'] = self.roles['coder']['id']
         values['REVIEWER_PROFILE'] = self.roles['reviewer']['id']
+        values['CODEX_BINARY'] = '/synthetic/bin/codex'
+        values['CODEX_PROCESS_HOME'] = self.roles['team-codex']['home']
+        values['CODEX_HOME'] = str(Path(self.roles['coder']['home']) / 'devteam/codex-home')
         self.bindings = {'board': 'sample', 'roles': self.roles, 'triage_recovery': {
             'python': '/synthetic/python',
             'script': str(self.home / 'skills/brownfield-feature-planning/scripts/recover_triage.py'),
@@ -229,7 +232,8 @@ class UpdaterTests(unittest.TestCase):
         setup_path = self.state / 'setup.md'
         setup = u.setup_data(self.state)
         old_values = {key: value for key, value in setup['confirmed_values'].items()
-                      if key not in ('PROJECT_DIR', 'REPOSITORY_ROOTS', 'PLANNER_PROFILE')}
+                      if key not in ('PROJECT_DIR', 'REPOSITORY_ROOTS', 'PLANNER_PROFILE',
+                                     'CODEX_BINARY', 'CODEX_PROCESS_HOME', 'CODEX_HOME')}
         setup_path.write_text('```json\n' + json.dumps(dict(setup, confirmed_values=old_values)) + '\n```\n')
         historical_renderer = {}
         exec(u.blob(self.repo, commit, 'references/render_text.py'), historical_renderer)
@@ -277,6 +281,53 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(record['confirmed_values']['PLANNER_PROFILE'], 'fixture-planner')
         (self.state / 'setup.md').rename(self.state / 'audit-only.md')
         self.assertFalse(json.loads(self.proposal().read_text())['conflicts'])
+
+    def test_pre290_installation_adopts_confirmed_codex_paths(self):
+        original = Path(__file__).resolve().parents[1]
+        commit = 'f0040ce5c748c4aa83d94c77c0be2af928a83a0a'
+        self.git('fetch', '-q', str(original), commit)
+        setup = u.setup_data(self.state)
+        paths = {key: setup['confirmed_values'][key]
+                 for key in ('CODEX_BINARY', 'CODEX_PROCESS_HOME', 'CODEX_HOME')}
+        old = dict(setup, confirmed_values={key: value for key, value in setup['confirmed_values'].items()
+                                          if key not in paths})
+        setup_path = self.state / 'setup.md'
+        setup_path.write_text('```json\n' + json.dumps(old) + '\n```\n')
+        for entry in u.desired(self.repo, commit, self.roles, old['confirmed_values'], bindings=self.bindings):
+            target = Path(entry['target'])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(entry['content'])
+        u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=commit,
+                     basis_evidence='Exact synthetic 2.8.18 installation')
+        before = (self.state / 'installation.json').read_bytes()
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        before_coder = coder.read_bytes()
+        with self.assertRaisesRegex(ValueError, 'Missing confirmed role bindings'):
+            self.proposal()
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+        self.assertEqual(coder.read_bytes(), before_coder)
+        setup_path.write_text('```json\n' + json.dumps(setup) + '\n```\n')
+        coder.write_text('Local retained rule.\n' + coder.read_text())
+        result = u.apply(self.home, self.proposal(), decision='proceed',
+                         review='Checked bound invocation and unchanged local rule',
+                         dependency_review='Confirmed Codex paths; file-only fixture update')
+        self.assertEqual(result['status'], 'applied')
+        self.assertTrue(coder.read_text().startswith('Local retained rule.\n'))
+        self.assertIn(paths['CODEX_HOME'] + '/config.toml', coder.read_text())
+        self.assertIn('Check the `kanban_request_review` response', coder.read_text())
+        record = u.load_record(self.home)[2]
+        for key, value in paths.items():
+            self.assertEqual(record['confirmed_values'][key], value)
+        setup_path.rename(self.state / 'audit-only.md')
+        proposal = json.loads(self.proposal().read_text())
+        self.assertFalse(proposal['conflicts'])
+        for entry in proposal['entries']:
+            self.assertEqual(u.digest(u.decoded(entry['merged'])), entry['before_hash'])
+
+    def test_codex_process_home_conflict_is_rejected(self):
+        values = dict(u.setup_data(self.state)['confirmed_values'], CODEX_PROCESS_HOME='/other/home')
+        with self.assertRaisesRegex(ValueError, 'Codex process HOME differs'):
+            u.desired(self.repo, self.base, self.roles, values, bindings=self.bindings)
 
     def pre200_installation(self):
         """Exact local source fixture, not an inferred package-version baseline."""

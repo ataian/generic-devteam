@@ -26,7 +26,10 @@ LEGACY_VERSION = '1.0.0'
 SCHEMA = 1
 # Reviewed pre-1.1.4 renderer: identical substitution/validation for old fields.
 ROLE_BINDING_PREDECESSOR = '051cf4e1e693534cd8ecd75f3fc55e8f8baf9c975f4bf7bd358acd19e6602117'
-ROLE_BINDING_FIELDS = {'PROJECT_DIR', 'REPOSITORY_ROOTS', 'PLANNER_PROFILE'}
+# Reviewed pre-2.9.0 renderer: new quoting applies only to new Codex path fields.
+CODEX_BINDING_PREDECESSOR = 'f0e6c906dcda4cb5e600345866589086c3e29363810b8b60bc44d1082613e190'
+ROLE_BINDING_FIELDS = {'PROJECT_DIR', 'REPOSITORY_ROOTS', 'PLANNER_PROFILE',
+                       'CODEX_BINARY', 'CODEX_PROCESS_HOME', 'CODEX_HOME'}
 OPERATIONAL = ('references/integrations.md', 'references/setup.md',
                'references/code-analysis.md', 'references/native-workflow.md',
                'references/kanban-block-triage-escalation.md', 'references/render_text.py')
@@ -247,6 +250,8 @@ def desired(repo, commit, roles, values, souls_only=False, bindings=None):
         if missing:
             raise ValueError('Missing confirmed role bindings: ' + ', '.join(sorted(missing)) +
                              '; operator must resolve existing setup evidence before rendering')
+        if 'CODEX_PROCESS_HOME' in fields and raw['CODEX_PROCESS_HOME'] != roles['team-codex']['home']:
+            raise ValueError('Codex process HOME differs from actual team-codex role binding')
         content = render_role(template, {key: raw[key] for key in fields}, role).encode()
         result.append({'role': role, 'source': source, 'target': str(Path(roles[role]['home']) / 'SOUL.md'),
                        'transform': 'render-role-v1', 'content': content, 'mode': 0o600})
@@ -593,7 +598,8 @@ def prepare(repo, home, ref='HEAD'):
     renderer = Path(__file__).with_name('render_text.py').read_bytes()
     old_renderer = blob(repo, old['maker_commit'], 'references/render_text.py')
     if (blob(repo, commit, 'references/render_text.py') != renderer or
-            (old_renderer != renderer and digest(old_renderer) != ROLE_BINDING_PREDECESSOR)):
+            (old_renderer != renderer and digest(old_renderer) not in
+             {ROLE_BINDING_PREDECESSOR, CODEX_BINDING_PREDECESSOR})):
         raise ValueError('Changed renderer: withhold rendered files and review transform compatibility before migration')
     old_entries = desired(repo, old['maker_commit'], old['roles'], old['confirmed_values'], old['legacy_skills_unknown'],
                           bindings=old['confirmed_bindings'])

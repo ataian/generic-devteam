@@ -48,6 +48,8 @@ the `render_fields` actually occurring per role.
 | `KANBAN_BOARD_NAME` | Native board identifier, not the display title |
 | `CODER_PROFILE` | Technical Coder profile identifier, as far as present in the template |
 | `REVIEWER_PROFILE` | Technical Reviewer profile identifier, as far as present in the template |
+| `CODEX_BINARY` | Verified absolute Codex entrypoint, not its version-specific release target; Coder only |
+| `CODEX_PROCESS_HOME` / `CODEX_HOME` | Verified absolute process/config homes; process HOME matches `confirmed_bindings.roles.team-codex.home`; Coder only |
 | `CODEX_REASONING_DEFAULT` / `CODEX_REASONING_MAX` | Confirmed Team-Codex default and permitted upper limit; Coder template only |
 | `ROLE_REASONING_DEFAULT` / `ROLE_REASONING_HIGH` | Confirmed Reviewer default and highest permitted review level; Reviewer template only |
 
@@ -60,7 +62,7 @@ and replaces in one pass. Missing, additional or damaged fields
 are errors. Values stay unchanged: no silent truncation or normalization.
 Names are non-empty single-line plain text; technical identifiers and project name
 must additionally pass the respective syntax and path checks. Markdown is
-masked context-appropriately; technical values in code contexts stay unaltered.
+masked context-appropriately; technical values in code contexts stay unaltered except Codex paths in shell fences, which receive shell quoting.
 All non-placeholder bytes of the confirmed template are preserved.
 
 Use the role personalization accepted during preparation.
