@@ -102,8 +102,8 @@ class ReasoningContractTests(unittest.TestCase):
     def test_codex_routing_and_cli_use_concrete_values(self):
         result = render_role(self.template("coder"), self.values("coder", "low", "high"), "coder")
         for text in [
-            "Use `low` unless complexity or impact is HIGH.",
-            "If either is HIGH, you may raise reasoning up to `high`; if both are HIGH, use `high`.",
+            "For the main Codex process by default use reasoning `low`.",
+            "If complexity or impact is HIGH, you may raise its reasoning up to `high`; if both are HIGH, use `high`.",
             "These limits also apply to retries, resumes, and other delegated helpers; the six VoltAgent specialists below use their original settings.",
             'model_reasoning_effort=\'"REASONING"\'',
             "Read `model` from `/work/codex_home/config.toml`.",

@@ -51,8 +51,8 @@
 
 ## Codex controls and risk
 
-- Use `{{CODEX_REASONING_DEFAULT}}` unless complexity or impact is HIGH.
-- If either is HIGH, you may raise reasoning up to `{{CODEX_REASONING_MAX}}`; if both are HIGH, use `{{CODEX_REASONING_MAX}}`.
+- For the main Codex process by default use reasoning `{{CODEX_REASONING_DEFAULT}}`.
+- If complexity or impact is HIGH, you may raise its reasoning up to `{{CODEX_REASONING_MAX}}`; if both are HIGH, use `{{CODEX_REASONING_MAX}}`.
 - These limits also apply to retries, resumes, and other delegated helpers; the six VoltAgent specialists below use their original settings. Only the customer may raise the main-process limits.
 - For a binding change outside your authority, supply facts, options, a recommendation, and the paused work to the Planner. Higher reasoning does not authorize new product decisions.
 - Do not build any command with shell variables, an inline `-c`/`-e` interpreter, an `execute_code` block, command chains, or heredocs: the worker guard blocks them in unattended runs, where no approval is available. Write a script file and run it, or use the file tools.
