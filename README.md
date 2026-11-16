@@ -111,7 +111,7 @@ The Planner checks actual blockers and coordinates sufficient customer answers i
 Technical interruptions preserve unfinished review; approval completes the exact reviewed commit directly to DONE.
 Work continues while a justified next approach remains, within explicit customer limits, provider quotas, operational permissions, and native safeguards.
 After the last required ticket reaches DONE, the Planner sends a short customer report from existing results and independent verdicts, without a closing ticket or another technical review.
-The file helper retains obsolete copies. Complete the [required version-gated Reviewer skill retirement](references/update.md#required-reviewer-skill-retirement-1122) after file application within the approved team update; preserve all assets outside its exact scope.
+The file helper classifies obsolete copies and deletes nothing. Complete the [required skill retirement](references/update.md#required-skill-retirement) after file application within the approved team update; preserve all assets outside its exact scope.
 The Planner receives Matt Pocock's original `grill-me`, `grilling`, `domain-modeling`, and `to-questionnaire` skills at the same pinned revision.
 Its SOUL requires `grilling` for requirements and conditionally loads domain modelling during that interview.
 Glossaries capture vocabulary; requirements and phase gates remain in the accepted plan. Unaccepted ADRs remain proposed.

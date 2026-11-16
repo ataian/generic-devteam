@@ -463,6 +463,127 @@ def activity(roles):
             'limit': 'No process match does not prove an idle team; dispatcher/session activity may be invisible.'}
 
 
+def skill_placement(entry, roles):
+    """Resolve the skill identity and root of one stored mapping. Never guesses."""
+    source = PurePosixPath(entry['source'])
+    parts = source.parts
+    if len(parts) < 3 or parts[0] != 'skills' or parts[1] in ('', '.', '..'):
+        raise ValueError('Managed source outside a skill tree: ' + entry['source'])
+    home = Path(roles[entry['role']]['home'])
+    for prefix in (Path('skills'), Path('.agents') / 'skills'):
+        root = home / prefix / parts[1]
+        if str(root / Path(*parts[2:])) == entry['target']:
+            return entry['role'], parts[1], root
+    raise ValueError('Managed target outside its recorded skill root: ' + entry['target'])
+
+
+def tree_entries(root):
+    """Yield (path, kind) below root without following links."""
+    stack = [Path(root)]
+    while stack:
+        with os.scandir(stack.pop()) as items:
+            for item in sorted(items, key=lambda entry: entry.name):
+                path = Path(item.path)
+                if item.is_symlink():
+                    yield path, 'symlink'
+                elif item.is_dir(follow_symlinks=False):
+                    yield path, 'dir'
+                    stack.append(path)
+                elif item.is_file(follow_symlinks=False):
+                    yield path, 'file'
+                else:
+                    yield path, 'other'
+
+
+def candidate_state(kind, root, hashes):
+    """Classify one candidate against its recorded installation hashes."""
+    findings, blocked = [], False
+    present = 0
+    try:
+        root = guarded(Path(root))
+    except (ValueError, OSError) as error:
+        return 'indeterminate', ['blocked: ' + str(error)]
+    if kind == 'tree' and root.exists():
+        try:
+            for path, entry_kind in tree_entries(root):
+                if entry_kind == 'file':
+                    if str(path) not in hashes:
+                        findings.append('extra: ' + str(path))
+                elif entry_kind in ('symlink', 'other'):
+                    findings.append('blocked: ' + str(path) + ' (' + entry_kind + ')')
+                    blocked = True
+        except OSError as error:
+            return 'indeterminate', ['blocked: ' + str(error)]
+    for target, installed in sorted(hashes.items()):
+        try:
+            data = read(Path(target))
+        except (ValueError, OSError) as error:
+            findings.append('blocked: ' + str(error))
+            blocked = True
+            continue
+        if data is None:
+            findings.append('missing: ' + target)
+        elif digest(data) != installed:
+            findings.append('modified: ' + target)
+        else:
+            present += 1
+    findings = sorted(set(findings))
+    if blocked:
+        return 'indeterminate', findings
+    changed = [item for item in findings if item.startswith(('modified:', 'missing:'))]
+    if any(item.startswith('modified:') for item in changed) or (changed and present):
+        return 'locally-modified', findings
+    if any(item.startswith('extra:') for item in findings):
+        return 'extra-files', findings
+    if changed:
+        return 'absent', findings
+    return 'pristine', findings
+
+
+def obsolete_candidates(stored, obsolete, roles):
+    """Describe every deassigned managed copy with identity, root, and local state."""
+    placed, unplaced = {}, []
+    obsolete = set(obsolete)
+    for target, entry in sorted(stored.items()):
+        try:
+            role, skill, root = skill_placement(entry, roles)
+        except (ValueError, OSError) as error:
+            if target in obsolete:
+                unplaced.append({'kind': 'file', 'role': entry['role'], 'skill': None, 'root': None,
+                                 'targets': [target], 'state': 'indeterminate',
+                                 'findings': ['blocked: ' + str(error)]})
+            continue
+        placed[target] = (role, skill, root)
+    managed = {}
+    for target, placement in placed.items():
+        managed.setdefault(placement, set()).add(target)
+    groups = {}
+    for target in obsolete:
+        placement = placed.get(target)
+        if placement is not None:
+            groups.setdefault(placement, set()).add(target)
+    candidates = list(unplaced)
+    for (role, skill, root), targets in sorted(groups.items()):
+        complete = managed[(role, skill, root)]
+        if targets == complete:
+            hashes = {target: stored[target]['installed_hash'] for target in sorted(targets)}
+            state, findings = candidate_state('tree', root, hashes)
+            candidates.append({'kind': 'tree', 'role': role, 'skill': skill, 'root': str(root),
+                               'targets': sorted(targets), 'state': state, 'findings': findings})
+        else:
+            for target in sorted(targets):
+                state, findings = candidate_state('file', root, {target: stored[target]['installed_hash']})
+                candidates.append({'kind': 'file', 'role': role, 'skill': skill, 'root': str(root),
+                                   'targets': [target], 'state': state, 'findings': findings})
+    return sorted(candidates, key=lambda item: (item['role'], item['skill'] or '', item['kind'],
+                                                item['root'] or '', item['targets']))
+
+
+def obsolete_targets(candidates):
+    """Flatten candidates back to the recorded list of retained target paths."""
+    return sorted(target for record in candidates for target in record['targets'])
+
+
 def prepare(repo, home, ref='HEAD'):
     state, raw, old = load_record(home)
     commit = revision(repo, ref)
@@ -543,7 +664,7 @@ def prepare(repo, home, ref='HEAD'):
             conflicts.append(target)
         entries.append(dict(entry, before_hash=digest(local) if local is not None else None, before_mode=before_mode,
                             baseline=digest(new), new_base=encoded(new), merged=encoded(merged or b''), conflict=conflict))
-    obsolete = sorted(set(stored) - new_targets)
+    obsolete = obsolete_candidates(stored, sorted(set(stored) - new_targets), old['roles'])
     proposal = {'schema': SCHEMA, 'team_id': old['team_id'], 'home': str(home), 'repo': str(Path(repo).resolve()),
                 'record_hash': digest(raw), 'maker_commit': commit, 'maker_version': version,
                 'confirmed_bindings': bindings, 'confirmed_values': values,
@@ -595,7 +716,7 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
     journal = {'schema': SCHEMA, 'status': 'prepared', 'team_id': old['team_id'], 'home': str(home),
                'record_before': encoded(raw), 'record_after': None, 'activity': observed,
                'decision': decision, 'semantic_review': review, 'dependency_review': dependency_review,
-               'proposal': str(path), 'files': [], 'retained_obsolete': proposal['obsolete']}
+               'proposal': str(path), 'files': [], 'retained_obsolete': obsolete_targets(proposal['obsolete'])}
     # Back up all targets before the first target write. Back up metadata too.
     atomic(run / 'installation.before.json', raw, None)
     for index, entry in enumerate(proposal['entries']):
@@ -632,7 +753,7 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
                 raise ValueError('Final target readback mismatch: ' + entry['target'])
         updated = dict(old, maker_commit=proposal['maker_commit'], maker_version=proposal['maker_version'],
                        confirmed_bindings=proposal['confirmed_bindings'], confirmed_values=proposal['confirmed_values'],
-                       managed=managed, last_run=str(run), retained_obsolete=proposal['obsolete'])
+                       managed=managed, last_run=str(run), retained_obsolete=obsolete_targets(proposal['obsolete']))
         updated_raw = json_bytes(updated)
         journal['record_after'] = encoded(updated_raw)
         # Persist recovery information before the metadata commit point.
@@ -655,7 +776,7 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
         error.args = (str(error) + '; recovery run: ' + str(run),)
         raise
     return {'status': 'applied', 'team_id': old['team_id'], 'run': str(run),
-            'retained_obsolete': proposal['obsolete'], 'notices': proposal['notices']}
+            'retained_obsolete': obsolete_targets(proposal['obsolete']), 'notices': proposal['notices']}
 
 
 def rollback(home, run, decision=None):

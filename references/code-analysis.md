@@ -2,7 +2,7 @@
 
 Configure the **Graphify or CBM** alternative confirmed in [Setup](setup.md) for Planner, Coder, Reviewer and Team-Codex.
 For existing teams, restore missing selected analysis assets and bindings through the approved [upstream companion update](update.md#required-upstream-companion-update).
-The [required Reviewer skill retirement](update.md#required-reviewer-skill-retirement-1122) covers only the three unrelated retired skills.
+The [required skill retirement](update.md#required-skill-retirement) covers the retired skill copies of all roles and changes no analysis asset.
 Sources and licenses are listed in [Sources](upstream-sources.md#code-analysis-exactly-one-alternative).
 Execute this recipe only during authorized target setup or the approved [upstream companion update](update.md#required-upstream-companion-update), not Maker authoring.
 

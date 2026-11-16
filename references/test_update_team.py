@@ -79,6 +79,29 @@ class UpdaterTests(unittest.TestCase):
     def proposal(self):
         return u.prepare(self.repo, self.home, 'HEAD')
 
+    def deassigned_reviewer_skill(self, name='screenshot-to-code'):
+        """Install one Maker skill into the Reviewer home, then deassign it."""
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        manifest['own_skills'][name]['targets']['hermes'].append('reviewer')
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture old reviewer equipment')
+        setup = u.setup_data(self.state)
+        installed = {}
+        for entry in u.desired(self.repo, 'HEAD', self.roles, setup['confirmed_values'], bindings=self.bindings):
+            if entry['role'] == 'reviewer' and entry['source'].startswith('skills/' + name + '/'):
+                target = Path(entry['target'])
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(entry['content'])
+                target.chmod(entry['mode'])
+                installed[str(target)] = target.read_bytes()
+        self.assertTrue(installed)
+        self.initialize()
+        manifest['own_skills'][name]['targets']['hermes'].remove('reviewer')
+        manifest_path.write_text(json.dumps(manifest))
+        self.commit('fixture deassign reviewer skill')
+        return installed
+
     def test_setup_scalars_survive_initialize_discovery_and_update(self):
         setup = u.setup_data(self.state)
         scalars = {'CREATE_BANK': True, 'CREATE_BOARD': False, 'WATCHER': True,
@@ -882,17 +905,106 @@ class UpdaterTests(unittest.TestCase):
                     self.assertNotIn(target, managed)
                     self.assertEqual(Path(target).read_bytes(), original)
 
-    def test_obsolete_file_is_retained_and_reported(self):
+    def test_obsolete_file_is_retained_and_classified(self):
         self.initialize()
         relative = 'skills/brownfield-feature-planning/references/project-retrospectives.md'
         (self.repo / relative).unlink()
         self.commit('remove source')
         plan = self.proposal()
         data = json.loads(plan.read_text())
-        self.assertTrue(data['obsolete'])
+        target = str(self.home / relative)
+        record = next(item for item in data['obsolete'] if target in item['targets'])
+        self.assertEqual(record['kind'], 'file')
+        self.assertEqual(record['role'], 'planner')
+        self.assertEqual(record['skill'], 'brownfield-feature-planning')
+        self.assertEqual(record['root'], str(self.home / 'skills/brownfield-feature-planning'))
+        self.assertEqual(record['state'], 'pristine')
+        self.assertEqual(record['findings'], [])
         result = u.apply(self.home, plan, decision='proceed', review='checked')
         self.assertEqual(result['status'], 'applied')
         self.assertTrue((self.home / relative).exists())
+        self.assertIn(target, result['retained_obsolete'])
+
+    def test_pristine_obsolete_tree_is_classified_without_deletion(self):
+        installed = self.deassigned_reviewer_skill()
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        trees = [item for item in proposal['obsolete'] if item['kind'] == 'tree']
+        self.assertEqual(len(trees), 1)
+        tree = trees[0]
+        self.assertEqual(tree['role'], 'reviewer')
+        self.assertEqual(tree['skill'], 'screenshot-to-code')
+        self.assertEqual(tree['root'], str(Path(self.roles['reviewer']['home']) / 'skills/screenshot-to-code'))
+        self.assertEqual(tree['targets'], sorted(installed))
+        self.assertEqual(tree['state'], 'pristine')
+        self.assertEqual(tree['findings'], [])
+        result = u.apply(self.home, plan, decision='proceed', review='checked pristine reviewer candidate')
+        self.assertEqual(result['status'], 'applied')
+        self.assertEqual(result['retained_obsolete'], sorted(installed))
+        _, _, record = u.load_record(self.home)
+        self.assertEqual(record['retained_obsolete'], sorted(installed))
+        for target, content in installed.items():
+            self.assertEqual(Path(target).read_bytes(), content)
+
+    def test_obsolete_classification_is_stable_across_preparations(self):
+        self.deassigned_reviewer_skill()
+        first = json.loads(self.proposal().read_text())['obsolete']
+        second = json.loads(self.proposal().read_text())['obsolete']
+        self.assertTrue(first)
+        self.assertEqual(first, second)
+
+    def test_local_edit_after_approval_invalidates_proposal(self):
+        installed = self.deassigned_reviewer_skill()
+        plan = self.proposal()
+        target = Path(sorted(installed)[0])
+        target.write_bytes(target.read_bytes() + b'\nLate local edit.\n')
+        with self.assertRaisesRegex(ValueError, 'drift'):
+            u.apply(self.home, plan, decision='proceed', review='checked')
+        self.assertEqual(Path(target).read_bytes(), installed[str(target)] + b'\nLate local edit.\n')
+
+    def test_symlink_in_obsolete_tree_is_indeterminate(self):
+        self.deassigned_reviewer_skill()
+        root = Path(self.roles['reviewer']['home']) / 'skills/screenshot-to-code'
+        (root / 'references/linked.md').symlink_to('/etc/hostname')
+        proposal = json.loads(self.proposal().read_text())
+        tree = next(item for item in proposal['obsolete'] if item['kind'] == 'tree')
+        self.assertEqual(tree['state'], 'indeterminate')
+        self.assertTrue(any('linked.md' in finding for finding in tree['findings']), tree['findings'])
+
+    def test_partially_missing_obsolete_tree_is_locally_modified(self):
+        installed = self.deassigned_reviewer_skill()
+        gone = sorted(installed)[0]
+        Path(gone).unlink()
+        proposal = json.loads(self.proposal().read_text())
+        tree = next(item for item in proposal['obsolete'] if item['kind'] == 'tree')
+        self.assertEqual(tree['state'], 'locally-modified')
+        self.assertIn('missing: ' + gone, tree['findings'])
+
+    def test_obsolete_mapping_outside_skill_roots_is_refused(self):
+        soul = {'role': 'reviewer', 'source': 'templates/roles/reviewer.SOUL.md.template',
+                'target': str(Path(self.roles['reviewer']['home']) / 'SOUL.md'), 'installed_hash': '0' * 64}
+        with self.assertRaisesRegex(ValueError, 'outside a skill tree'):
+            u.skill_placement(soul, self.roles)
+        stray = {'role': 'reviewer', 'source': 'skills/demo/SKILL.md',
+                 'target': '/synthetic/elsewhere/SKILL.md', 'installed_hash': '0' * 64}
+        with self.assertRaisesRegex(ValueError, 'outside its recorded skill root'):
+            u.skill_placement(stray, self.roles)
+        candidates = u.obsolete_candidates({soul['target']: soul, stray['target']: stray},
+                                           [soul['target'], stray['target']], self.roles)
+        self.assertEqual([item['state'] for item in candidates], ['indeterminate'] * 2)
+        self.assertEqual(u.obsolete_targets(candidates), sorted([soul['target'], stray['target']]))
+
+    def test_fully_removed_obsolete_tree_is_absent(self):
+        installed = self.deassigned_reviewer_skill()
+        root = Path(self.roles['reviewer']['home']) / 'skills/screenshot-to-code'
+        shutil.rmtree(root)
+        plan = self.proposal()
+        tree = next(item for item in json.loads(plan.read_text())['obsolete'] if item['kind'] == 'tree')
+        self.assertEqual(tree['state'], 'absent')
+        self.assertEqual(tree['targets'], sorted(installed))
+        result = u.apply(self.home, plan, decision='proceed', review='checked absent candidate')
+        self.assertEqual(result['status'], 'applied')
+        self.assertFalse(root.exists())
 
     def test_reviewer_deassignment_retains_installed_skills(self):
         """The file helper retains trees; the required prose poststep is separate."""
@@ -949,7 +1061,14 @@ class UpdaterTests(unittest.TestCase):
         self.commit('fixture deassign reviewer skills without deletion')
         plan = self.proposal()
         proposal = json.loads(plan.read_text())
-        self.assertEqual(set(proposal['obsolete']), managed_previous)
+        self.assertEqual(set(u.obsolete_targets(proposal['obsolete'])), managed_previous)
+        trees = {item['skill']: item for item in proposal['obsolete'] if item['kind'] == 'tree'}
+        self.assertEqual(set(trees), set(names))
+        for name, item in trees.items():
+            with self.subTest(name=name):
+                self.assertEqual(item['state'], 'locally-modified')
+                self.assertTrue(any(finding.startswith('modified:') for finding in item['findings']))
+                self.assertTrue(any(finding.startswith('extra:') for finding in item['findings']))
         self.assertFalse(proposal['conflicts'])
         result = u.apply(self.home, plan, decision='proceed', review='Checked retained reviewer equipment')
         self.assertEqual(result['status'], 'applied')

@@ -837,44 +837,47 @@ class ReviewerEquipmentTests(unittest.TestCase):
                                  "Preserve existing local Reviewer adaptations"):
                     self.assertNotIn(obsolete, text)
 
-    def test_retirement_has_exact_skill_scope_and_fixed_release_gate(self):
+    def test_retirement_scope_is_general_and_identity_resolved(self):
         """Prose contract only; this does not execute a target retirement."""
         update = (ROOT / "references/update.md").read_text()
-        self.assertIn("## Required Reviewer skill retirement (1.1.22)\n", update)
-        section = update.split("## Required Reviewer skill retirement (1.1.22)\n", 1)[1].split("\n## ", 1)[0]
-        rows = re.findall(r"^\| `([^`]+)` \| `([^`]+)` \|$", section, re.M)
+        self.assertIn("## Required skill retirement\n", update)
+        self.assertNotIn("## Required Reviewer skill retirement (1.1.22)", update)
+        section = update.split("## Required skill retirement\n", 1)[1].split("\n## ", 1)[0]
+        for state in ("pristine", "locally-modified", "extra-files", "indeterminate", "absent"):
+            with self.subTest(state=state):
+                self.assertIn(f"| `{state}` |", section)
         expected = ("minimal-change-engineering", "screenshot-to-code")
-        self.assertEqual(rows, [(name, f"<reviewer home>/skills/{name}/") for name in expected])
-        self.assertIn("pre-update version below `1.1.22` to a target version at or above `1.1.22`", section)
-        self.assertIn("This includes teams on `1.1.21`", section)
-        self.assertIn("Keep this introduction release fixed on later Maker releases.", section)
         for name in expected:
             item = MANIFEST["own_skills"].get(name) or MANIFEST["upstream_components"][name]
             self.assertNotIn("reviewer", item["targets"]["hermes"])
+            self.assertIn(f"`{name}`", section)
         self.assertNotIn("project-lib-versioning", MANIFEST["own_skills"])
         self.assertNotIn("project-lib-versioning", section)
         for clause in (
-            "This migration overrides local-adaptation preservation only for these two Reviewer skill trees.",
-            "Include learned files, references, hidden files, and local additions.",
+            "It reports every candidate in the reviewed proposal with its role, identity, resolved root, managed targets, and local state.",
+            "`update_team.py` deletes nothing.",
+            "A skill the team created itself is never a candidate, and neither is a file the Maker does not manage.",
+            "A candidate is one retired skill tree, or one retired file inside a tree that stays assigned.",
+            "is the first instance of this rule, not a separate mechanism; a pending one resumes as an ordinary candidate.",
+            "Resolve each identity against the [manifest](../manifest.json)",
+            "never remove it from a guess",
             "Keep the native `sdlc-review` skill and its automatic integration unchanged.",
-            "Preserve all other adaptations and all Planner, Coder and Team-Codex assets.",
-            "Preserve shared runtimes, caches, indices, MCP entries, hooks, and unrelated integrations.",
-            "Do not copy retired methods into SOUL or other skills.",
+            "Preserve CBM/Graphify skills and bindings; restore the selected Reviewer integration through the approved upstream companion update.",
+            "Preserve shared runtimes, caches, indices, MCP entries, hooks, and unrelated integrations; do not copy retired methods into SOUL or other skills.",
+            "Keep every other adaptation and every Planner, Coder and Team-Codex asset.",
+            "back up outside all native discovery roots, then remove",
+            "removal needs a separate decision for that exact candidate",
         ):
             self.assertIn(clause, section)
 
     def test_retirement_requires_preapply_pending_state_and_verified_resume(self):
         update = (ROOT / "references/update.md").read_text()
-        self.assertIn("## Required Reviewer skill retirement (1.1.22)\n", update)
-        section = update.split("## Required Reviewer skill retirement (1.1.22)\n", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("## Required skill retirement\n", update)
+        section = update.split("## Required skill retirement\n", 1)[1].split("\n## ", 1)[0]
         for clause in (
             "Before invoking `apply`, capture the installed package version and exact Maker commit",
             "Save the pre-update version, target release/commit, and retirement status `pending`",
             "Read back this private record before file application.",
-            "Resume a pending retirement on later updates even if `installation.json` already reports `1.1.22` or a later version.",
-            "Never infer migration completion from version alone.",
-            "For legacy or unknown versions, resolve the source evidence or explicitly reconcile these two identities within the approved scope.",
-            "Do not silently skip an unknown version.",
             "Run the pending retirement after successful file application and before reporting a complete team update.",
             "Treat already absent skills as successful no-ops after native readback.",
             "Keep failed or interrupted retirement `pending`, with the concrete blocker and next action.",
@@ -893,59 +896,53 @@ class ReviewerEquipmentTests(unittest.TestCase):
         self.assertIn("retirement status `pending`", steps[0][1])
         preflight = steps[1][1]
         for clause in (
+            "Read the proposal's obsolete entries and resolve each candidate's root, managed targets, state, and findings",
             "Keep this discovery strictly read-only.",
             "Do not remove trees or change exclusions or bindings during discovery.",
-            "Inspect native discovery roots and every resolved source path for the three exact skill identities.",
-            "Record source ownership, aliases, symlinks, and shared/external sources before selecting any removal path.",
-            "determine the supported Reviewer-specific exclusion or unbinding from the installed interface without applying it.",
-            "Record the concrete Reviewer-specific obsolete bindings for scope approval.",
+            "Record every unmanaged file in a candidate tree and every candidate the record does not manage.",
+            "determine the supported role-specific exclusion or unbinding from the installed interface without applying it.",
+            "Record the concrete role-specific obsolete bindings for scope approval.",
         ):
             self.assertIn(clause, preflight)
         self.assertNotRegex(preflight, r"(?im)^\s*(?:If [^\n]*, )?(?:use|apply|reconcile|remove|exclude|unbind)\b")
         approval = steps[2][1]
-        self.assertIn("the concrete paths and Reviewer-specific exclusions/unbindings found during read-only discovery", approval)
-        self.assertIn("Include the concrete Reviewer-specific obsolete bindings from that inventory.", approval)
+        self.assertIn("Include the exact `pristine` candidates, their resolved paths and backup destinations", approval)
+        self.assertIn("Include the complete-tree backups, native readbacks, and the concrete role-specific obsolete bindings from that inventory.", approval)
         self.assertIn("add the approved exact reconciliation scope to the existing private record before file application", approval)
         postapply = steps[3][1]
         ordered = (
             "Run the pending retirement after successful file application",
-            "Save the complete discovered local trees and affected Reviewer-specific bindings",
+            "Save every candidate's complete local tree and affected role-specific bindings",
             "Compare the complete backup inventory and file bytes/hashes with the source before removal.",
             "Save backup location, source inventory, verification, and unaffected-role inventories",
             "Continue only if file application, the complete backup, and backup comparison succeeded.",
             "Recheck the inspected source bytes and bindings immediately before any removal, exclusion, or binding change; stop on concurrent drift.",
-            "Remove only the verified Reviewer-local trees",
-            "Apply only the inspected, supported Reviewer-specific exclusions/unbindings",
-            "Reconcile only the inventoried Reviewer-specific obsolete bindings within the approved update scope.",
+            "Remove only the verified `pristine` candidates",
+            "Apply only the inspected, supported role-specific exclusions/unbindings",
+            "Reconcile only the inventoried role-specific obsolete bindings within the approved update scope.",
         )
         positions = [postapply.index(clause) for clause in ordered]
         self.assertEqual(positions, sorted(positions))
         between_drift_and_removal = postapply.split(ordered[5], 1)[1].split(ordered[6], 1)[0]
         self.assertFalse(between_drift_and_removal.strip(), "Drift check must immediately precede retirement writes")
         for clause in (
-            "Resolve the exact Reviewer home from confirmed bindings and native profile inventory.",
-            "Inspect native discovery roots and every resolved source path for the three exact skill identities.",
-            "Do not delete guessed paths or follow links into shared assets.",
-            "determine the supported Reviewer-specific exclusion or unbinding",
+            "Do not follow links into shared assets.",
             "If no supported isolation is available, stop this reconciliation with a concrete blocker.",
             "outside all native discovery roots",
-            "Compare the complete backup inventory and file bytes/hashes with the source before removal.",
             "Recheck the inspected source bytes and bindings immediately before any removal, exclusion, or binding change",
             "Report each concrete retained instruction or autoload reference that would recreate or require a retired skill.",
-            "Reconcile only the inventoried Reviewer-specific obsolete bindings within the approved update scope.",
-            "Verify absence of all three identities through native Reviewer discovery and source resolution.",
+            "Verify absence of every removed candidate through native discovery and source resolution.",
             "Verify preservation of unaffected roles and assets against the pre-removal inventory.",
             "Mark retirement `complete` only after these readbacks pass",
             "The file-updater rollback does not restore this prose poststep's removed trees or bindings.",
-            "Restore complete trees, modes, and Reviewer-specific bindings from the external backup",
+            "Restore complete trees, modes, and role-specific bindings from the external backup",
         ):
             self.assertIn(clause, section)
-        self.assertIn("Include these exact removals and the local-adaptation override once in the target update scope and approval.", section)
-        self.assertIn("Within that approved update, retirement is mandatory, not an optional second choice.", section)
-        self.assertIn("Outside this explicit retirement, retain generic obsolete files and local adaptations.", update)
+        self.assertIn("Within that approved update, retiring every `pristine` candidate is mandatory, not an optional second choice.", section)
+        self.assertIn("Retain obsolete files that are not managed skill copies, and retain local adaptations.", update)
         self.assertNotIn("Preserve existing installations unless a separate concrete reconciliation is authorized.", update)
         for relative in ("README.md", "references/code-analysis.md", "templates/setup-record.md"):
-            self.assertIn("#required-reviewer-skill-retirement-1122", (ROOT / relative).read_text())
+            self.assertIn("#required-skill-retirement", (ROOT / relative).read_text())
 
     def test_selected_reviewer_analysis_requires_native_readbacks_before_completion(self):
         analysis = (ROOT / "references/code-analysis.md").read_text()
@@ -968,7 +965,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             "Keep selected-analysis work pending until required Reviewer assets, configuration and native discovery readbacks pass.",
         ):
             self.assertIn(clause, section)
-        retirement = update.split("## Required Reviewer skill retirement (1.1.22)\n", 1)[1].split("\n## ", 1)[0]
+        retirement = update.split("## Required skill retirement\n", 1)[1].split("\n## ", 1)[0]
         self.assertNotRegex(retirement, r"\| `(?:graphify|codebase-memory)` \|")
         self.assertIn("Preserve CBM/Graphify skills and bindings; restore the selected Reviewer integration through the approved upstream companion update.", retirement)
         for relative in ("README.md", "templates/setup-record.md"):
