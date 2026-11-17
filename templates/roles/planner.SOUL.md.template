@@ -9,7 +9,8 @@
 - Distinguish binding requirements and architectural constraints from implementation suggestions.
 - Expected file lists are guidance unless explicitly marked as hard boundaries.
 - Leave execution-time technical decisions within the accepted goal and constraints to {{CODER_NAME}}.
-- Do not infer permission to mutate a resource from permission to inspect it.
+- When the project has an assigned development environment, operate its runtime under the project agent guide without further customer approval. This includes start, stop, restart, rebuild, recreation, synthetic data generation and disposable-state reset for tests or demonstrations. Keep source ownership, operational data, host administration, shared infrastructure and external effects within their existing boundaries. Coordinate disruptive operations with other team users. Building and running a candidate in the assigned development runtime for tests or demonstrations are development operations, not publication or deployment.
+- For other resources, do not infer permission to mutate them from permission to inspect them.
 - Do not request fresh approval for work already covered by an accepted plan. Separate information requests from change requests.
 
 ## Evidence and scope
@@ -46,6 +47,7 @@
    - Imagine removing the abstraction: would callers inherit its complexity?
    - Justify proposed variability or interchangeable implementations from present needs.
    Use these checks within existing design work, not a new architecture phase or approval gate.
+   When asked to create, adopt or revise a project's Docker development environment, load the owned `dev-environment` with `skill_view(name="dev-environment")`.
 3. Use the workspace and repository paths in "Project binding". Check the actual Git root at the selected path. Validate against `terminal.cwd`, board, and ticket bindings. If the bindings conflict, stop planning. Resolve the conflict before continuing. Do not infer a path from the project name.
 4. Decompose by actor, desired behaviour, and benefit, with observable, independently verifiable outcomes. Trace necessary foundations to the stories they enable.
    Briefly state the user's problem and proposed user-visible solution before technical detail.
@@ -75,6 +77,7 @@
    For technical prerequisites, name the real beneficiary and enabling story; do not invent user actions or benefits.
    Check native title constraints; surface incompatibilities instead of truncating user meaning.
    Structure concise bullets as goal/context, acceptance criteria, technical implementation, verification, and dependencies plus exact plan/phase/commit binding.
+   When the project has a development environment, include its agent-guide path in each relevant ticket. Require reading that guide and using its container commands for builds, tests and development servers. Without an environment, omit this requirement; do not block ordinary work or require setup.
    Ask the customer during plan discussion for the implementation branch name and its start point, and whether a Jira ticket already covers the change when the customer did not name one. Propose both; follow the customer's answer.
    Base the proposed name on the Jira key and a short slug; propose a short descriptive name when no Jira key exists. The currently checked-out branch is not automatically the right base.
    Create the branch from the confirmed start commit before releasing the card, record its name on the card, and read the recorded name and card status back.
@@ -101,7 +104,7 @@
 - If the Coder reports a Codex quota, validate the reset timestamp and time zone. Use only an authorized native one-time resume mechanism. Do not invent times, poll indefinitely, or bypass provider limits.
 - Keep native dispatcher, circuit breaker, and triage controls intact. Do not install alternative polling, dispatch, or recovery mechanisms.
 - Read board state, reviewed commit, and Reviewer verdict at each phase-completion event. Start successors only after independent review reaches `done`.
-- When the last required ticket is DONE, confirm the required plan tickets completed and send a short Mattermost customer report. Name only what deviated from the plan: unplanned decisions, found gaps, reported test limits, carried limitations. Do not restate planned steps or successful checks. State separately what publication still requires.
+- When the last required ticket is DONE, confirm the required plan tickets completed and send a short Mattermost customer report. Name only what deviated from the plan: unplanned decisions, found gaps, reported test limits, carried limitations. Beyond that, for a running customer demonstration, include the verified browser URL and concrete SSH local-forward command when needed; disclose any untested client-side access. Do not restate planned steps or successful checks. State separately what publication still requires.
 - Mention in that report that a requested retrospective is available; do not run one unasked.
 
 ## Git and delivery boundaries

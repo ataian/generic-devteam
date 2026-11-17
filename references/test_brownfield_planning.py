@@ -162,7 +162,7 @@ class BrownfieldPackageTests(unittest.TestCase):
             "Distinguish binding requirements and architectural constraints from implementation suggestions.",
             "Expected file lists are guidance unless explicitly marked as hard boundaries.",
             "Leave execution-time technical decisions within the accepted goal and constraints to {{CODER_NAME}}.",
-            "Do not infer permission to mutate a resource from permission to inspect it.",
+            "For other resources, do not infer permission to mutate them from permission to inspect them.",
             "Treat pseudonymized operational data as sensitive, not synthetic.",
             "use synthetic examples when evidence must be shared.",
         ):

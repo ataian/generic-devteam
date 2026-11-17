@@ -135,6 +135,14 @@ Concrete symptom/cause evidence and an exact reproducible check preserve the dir
 Unclear or competing causes, intermittent/state-dependent failures, performance isolation, or an unresolved/recurring apparent fix trigger the full method, including regressions emerging during ordinary implementation.
 Existing Planner routing, risk-sensitive verification, and independent review remain unchanged; complete-tree setup/update and native discovery checks do not prove live behavior.
 Relevant module/interface choices use caller-contract, complexity-encapsulation, abstraction-removal, and present-variability checks within existing design work.
+The Planner receives the owned [dev-environment skill](skills/dev-environment/SKILL.md) for requested Docker environment creation, adoption or revision.
+Project toolchains run in reusable containers; a required database belongs to the development Compose project. PostgreSQL adds template-derived branch databases with isolated state and reuse on return.
+Environment tasks produce `docker/dev/AGENTS.md` for agents and a standalone `docker/dev/HOWTO-human.md` for humans. Existing compatible layouts remain in place.
+The team operates its assigned development runtime autonomously for tests and demonstrations, including restart, rebuild, synthetic data and disposable-state reset.
+Source ownership, operational data, host/shared resources and external effects keep their existing boundaries. The Reviewer still cannot repair product code or deploy; local test/demo runs are development operations.
+Relevant tickets require the agent guide and its container commands when an environment exists; absence adds no setup blocker.
+Running demonstrations include verified access details and an SSH forwarding command when needed. Setup may offer this first task, but setup and updates do not execute it.
+These package contracts do not qualify Docker, PostgreSQL or live-agent behavior; environment acceptance uses real project checks.
 The Planner also receives the owned [retro skill](skills/retro/README.md), adapted from Matt Pocock with full-process token economy.
 Request it with `/retro`, “Machen wir eine Retro zum letzten Lauf”, or a named historical session, ticket, or project.
 It proposes source-backed process/environment improvements, not product acceptance; it changes nothing automatically and remains separate from `/refine`.

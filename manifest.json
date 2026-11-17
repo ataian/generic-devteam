@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.9.1",
+  "version": "2.10.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -20,10 +20,11 @@
     "references/setup.md",
     "references/test_bound_recovery.py",
     "references/test_brownfield_planning.py",
+    "references/test_dev_environment.py",
+    "references/test_devteam_cleanup.py",
     "references/test_diagnosing_bugs.py",
     "references/test_prototype.py",
     "references/test_render_reasoning.py",
-    "references/test_devteam_cleanup.py",
     "references/test_retro.py",
     "references/test_review_investigation.py",
     "references/test_triage_recovery.py",
@@ -42,6 +43,7 @@
     "skills/brownfield-feature-planning/references/replacement-imports.md",
     "skills/brownfield-feature-planning/scripts/recover-triage",
     "skills/brownfield-feature-planning/scripts/recover_triage.py",
+    "skills/dev-environment/SKILL.md",
     "skills/devteam-cleanup/SKILL.md",
     "skills/diagnosing-bugs/LICENSE",
     "skills/diagnosing-bugs/NOTICE.md",
@@ -170,6 +172,23 @@
       "license_path": null,
       "notice_path": "NOTICE.md",
       "skill_path": "skills/brownfield-feature-planning/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
+    "dev-environment": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "planner"
+        ]
+      },
+      "origin": "Owned Docker development-environment construction and adoption procedure, authored for this package.",
+      "changes": "Copy the complete skill tree unchanged. The Planner invokes it for requested environment work; setup and updates do not run it.",
+      "origin_ref": "references/upstream-sources.md#own-dev-environment",
+      "license_path": null,
+      "notice_path": "NOTICE.md",
+      "skill_path": "skills/dev-environment/SKILL.md",
       "transport": {
         "SKILL.md": "SKILL.md"
       }

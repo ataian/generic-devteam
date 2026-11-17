@@ -536,6 +536,63 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual((self.state / 'baselines' / entry['baseline']).read_bytes(), original)
         self.assertEqual(record['maker_commit'], self.git('rev-parse', 'HEAD').strip())
 
+    def test_dev_environment_complete_tree_delivery_and_local_update(self):
+        record = self.initialize()
+        entries = [e for e in record['managed'] if e['source'].startswith('skills/dev-environment/')]
+        self.assertEqual({e['source'] for e in entries}, {'skills/dev-environment/SKILL.md'})
+        self.assertEqual({e['role'] for e in entries}, {'planner'})
+        for entry in entries:
+            self.assertEqual(entry['target'], str(self.home / entry['source']))
+            self.assertEqual(entry['transform'], 'copy-v1')
+            self.assertEqual(Path(entry['target']).read_bytes(), (self.repo / entry['source']).read_bytes())
+        for role in ('coder', 'reviewer', 'team-codex'):
+            self.assertFalse((Path(self.roles[role]['home']) / 'skills/dev-environment').exists())
+        main = self.home / 'skills/dev-environment/SKILL.md'
+        main.write_bytes(b'Approved local environment note\n' + main.read_bytes())
+        self.change('skills/dev-environment/SKILL.md', '\nUpdated environment instruction.\n')
+        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture environment update reviewed')
+        self.assertTrue(main.read_bytes().startswith(b'Approved local environment note\n'))
+        self.assertTrue(main.read_bytes().endswith(b'Updated environment instruction.\n'))
+
+    def test_new_dev_environment_collision_addition_and_guarded_rollback(self):
+        path = self.repo / 'manifest.json'
+        manifest = json.loads(path.read_text())
+        self.assertIn('dev-environment', manifest['own_skills'])
+        entry = manifest['own_skills'].pop('dev-environment')
+        relative = 'skills/dev-environment/SKILL.md'
+        content = (self.repo / relative).read_bytes()
+        self.git('rm', '-r', 'skills/dev-environment')
+        path.write_text(json.dumps(manifest))
+        self.commit('fixture before environment assignment')
+        target = self.home / 'skills/dev-environment'
+        shutil.rmtree(target)
+        self.initialize()
+        before = (self.state / 'installation.json').read_bytes()
+        manifest['own_skills']['dev-environment'] = entry
+        path.write_text(json.dumps(manifest))
+        (self.repo / relative).parent.mkdir()
+        (self.repo / relative).write_bytes(content)
+        self.commit('fixture add Planner environment skill')
+        target.mkdir()
+        main = target / 'SKILL.md'
+        main.write_bytes(b'Unrelated local skill.\n')
+        plan = self.proposal()
+        self.assertIn(str(main), json.loads(plan.read_text())['conflicts'])
+        with self.assertRaisesRegex(ValueError, 'Text conflicts'):
+            u.apply(self.home, plan, decision='proceed', review='Fixture unresolved collision')
+        self.assertEqual(main.read_bytes(), b'Unrelated local skill.\n')
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+        main.unlink()  # Resolve only this disposable fixture collision.
+        plan = self.proposal()
+        entries = [e for e in json.loads(plan.read_text())['entries'] if e['source'] == relative]
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]['role'], 'planner')
+        result = u.apply(self.home, plan, decision='proceed', review='Fixture environment addition reviewed')
+        self.assertEqual(main.read_bytes(), content)
+        restored = u.rollback(self.home, Path(result['run']), decision='proceed')
+        self.assertEqual(set(restored['retained_additions']), {str(main)})
+        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+
     def test_prototype_complete_tree_maps_only_to_planner(self):
         record = self.initialize()
         entries = [e for e in record['managed'] if e['source'].startswith('skills/prototype/')]

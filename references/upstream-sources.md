@@ -14,6 +14,7 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | Skill / local source | Target |
 |---|---|
 | <a id="own-planning"></a>[brownfield-feature-planning](../skills/brownfield-feature-planning/SKILL.md) | Hermes Planner |
+| <a id="own-dev-environment"></a>[dev-environment](../skills/dev-environment/SKILL.md) | Hermes Planner |
 | <a id="own-diagnosis"></a>[diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | Team-Codex |
 | <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes Planner |
 | <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Planner and Coder |
@@ -28,6 +29,10 @@ Before installing or updating it, check the target's native command registry and
 Reuse the same managed skill through the normal update comparison; resolve any unrelated same-name skill or built-in command with the user before writing, rather than silently renaming or shadowing it.
 Read back one unambiguous owned `retro` and its complete reference through native discovery/loading; distinguish slash-command availability from an existing conversation's cached catalog.
 Do not execute a retrospective as an installation test. Invocation requires an explicit user request, such as `/retro` or a natural-language retrospective request.
+
+The owned `dev-environment` covers requested Docker development-environment creation, adoption and revision, including a project database when needed.
+Copy its complete tree through the existing own-skill setup/update path. Check target name collisions and native loading without running environment construction.
+Its generated repository agent guide supplies routine commands to all roles; the construction skill remains Planner-only.
 
 The owned `devteam-cleanup` has no upstream source, license or NOTICE of its own.
 It is a customer-invoked procedure outside the delivery flow: copy it through the same own-skill path and keep it free of automatic triggers.

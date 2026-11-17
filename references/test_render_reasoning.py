@@ -91,6 +91,57 @@ class ReasoningContractTests(unittest.TestCase):
                 self.assertEqual({f for f in fields if "REASONING" in f}, required)
                 self.assertEqual(fields, set(MANIFEST["role_templates"][role]["render_fields"]))
 
+    def test_rendered_development_authority_agrees_and_keeps_role_boundaries(self):
+        """Rendered instruction contract, not an agent/runtime behavior test."""
+        rendered = {role: render_role(self.template(role), self.values(role), role)
+                    for role in ("planner", "coder", "reviewer")}
+        paragraphs = []
+        for role, text in rendered.items():
+            with self.subTest(role=role):
+                matches = [line for line in text.splitlines()
+                           if line.startswith("- When the project has an assigned development environment,")]
+                self.assertEqual(len(matches), 1)
+                paragraphs.extend(matches)
+                for clause in ("under the project agent guide without further customer approval",
+                               "start, stop, restart, rebuild, recreation, synthetic data generation and disposable-state reset",
+                               "source ownership, operational data, host administration, shared infrastructure and external effects",
+                               "Coordinate disruptive operations with other team users.",
+                               "development operations, not publication or deployment."):
+                    self.assertIn(clause, matches[0])
+                self.assertNotIn("HOWTO-human.md", text)
+        self.assertEqual(len(set(paragraphs)), 1)
+        self.assertIn("You do not implement product code.", rendered["planner"])
+        self.assertIn("For other resources, do not infer permission to mutate them from permission to inspect them.", rendered["planner"])
+        self.assertIn("only Codex CLI writes productive project code", rendered["coder"])
+        self.assertIn("Outside that development scope, a coding ticket alone does not grant operational approval.", rendered["coder"])
+        self.assertIn("Tool and system prohibitions remain binding.", rendered["coder"])
+        self.assertIn("You must not change project code or repair findings yourself.", rendered["reviewer"])
+        self.assertIn("Do not push, deploy, operate unrelated services, or change host configuration from a review task.", rendered["reviewer"])
+
+    def test_rendered_environment_invocation_and_conditional_ticket_guide(self):
+        planner = render_role(self.template("planner"), self.values("planner"), "planner")
+        trigger = 'skill_view(name="dev-environment")'
+        self.assertIn(trigger, planner)
+        self.assertLess(planner.index("Use these checks within existing design work"), planner.index(trigger))
+        self.assertLess(planner.index(trigger), planner.index('3. Use the workspace'))
+        tickets = planner.split("7. Create small implementation tickets", 1)[1].split("8. Create dependent", 1)[0]
+        self.assertIn("When the project has a development environment, include its agent-guide path in each relevant ticket.", tickets)
+        self.assertIn("Require reading that guide and using its container commands for builds, tests and development servers.", tickets)
+        self.assertIn("Without an environment, omit this requirement; do not block ordinary work or require setup.", tickets)
+        self.assertIn("Beyond that, for a running customer demonstration, include the verified browser URL and concrete SSH local-forward command when needed; disclose any untested client-side access.", planner)
+        for role in ("coder", "reviewer"):
+            self.assertNotIn(trigger, self.template(role))
+
+    def test_rendered_runtime_authority_reaches_codex_and_review_helpers(self):
+        coder = render_role(self.template("coder"), self.values("coder"), "coder")
+        reviewer = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
+        handoff = coder.split("5. Provide Codex", 1)[1].split("6. Read", 1)[0]
+        self.assertIn("When an assigned development environment exists, include its agent-guide path and the development-runtime authority from Exception routing.", handoff)
+        helpers = reviewer.split("## Proportional investigation", 1)[1].split("## Independent review", 1)[0]
+        self.assertIn("Require read-only product-source investigation", helpers)
+        self.assertIn("Helpers may operate assigned test runtimes within your development authority; coordinate shared runtime changes through you.", helpers)
+        self.assertIn("Helpers must not implement, issue Kanban transitions, or enlarge scope or permissions.", helpers)
+
     def test_missing_reasoning_values_are_rejected(self):
         for role, required in REASONING_FIELDS.items():
             for field in required:
@@ -772,6 +823,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
     def test_default_equipment_retains_other_roles_and_sdlc(self):
         expected = {
             "brownfield-feature-planning": {"hermes": ["planner"]},
+            "dev-environment": {"hermes": ["planner"]},
             "diagnosing-bugs": {"codex": ["team-codex"]},
             "minimal-change-engineering": {"hermes": ["planner"]},
             "plan-versioning-semver": {"hermes": ["planner", "coder"]},
