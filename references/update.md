@@ -14,7 +14,7 @@ Resolve missing or contradictory bindings before writing that team's files.
 Do not create a cron job or watcher.
 Do not stop workers or restart sessions.
 Do not change models, plugins, integrations, configuration, or external services through the file helper.
-The required [Planner Kanban binding](#planner-kanban-tools), [upstream companion update](#required-upstream-companion-update), and [Reviewer skill retirement](#required-reviewer-skill-retirement-1122) use separate approved prose steps, not the file helper.
+The required [Planner Kanban binding](#planner-kanban-tools), [upstream companion update](#required-upstream-companion-update), and [skill retirement](#required-skill-retirement) use separate approved prose steps, not the file helper.
 Do not run a new setup or pipeline test card as part of a file update.
 
 Use Python 3.11 or later and local Git for this helper.
@@ -161,13 +161,14 @@ The updater adopts the missing recovery binding into its reviewed proposal and i
 If the marker already has the binding, the updater preserves it without reading `setup.md`.
 Do not assign that reconciliation to the planner.
 Do not replace unknown local launcher edits with a generic copy.
-The file helper lists removed source files and deassigned managed skill copies as `obsolete` and retains them on disk.
-Complete the [required Reviewer skill retirement](#required-reviewer-skill-retirement-1122) after file application for affected teams.
-Outside this explicit retirement, retain generic obsolete files and local adaptations.
+The file helper lists removed source files and deassigned managed skill copies as `obsolete` with role, identity, resolved root, and local state, and deletes nothing.
+Complete the [required skill retirement](#required-skill-retirement) after file application for affected teams.
+Retain obsolete files that are not managed skill copies, and retain local adaptations.
 The file helper does not manage upstream Graphify/CBM integrations, MCP configuration, hooks, or indices.
 The helper accepts the reviewed pre-1.1.4 renderer by its exact source hash.
 That compatibility case adds role fields without changing substitution of old fields.
 The helper still verifies each old personalized baseline against the stored bytes.
+It also accepts the exact reviewed pre-2.9.0 renderer; shell quoting affects only the new Codex path fields.
 Other renderer changes remain withheld until transform compatibility is reviewed.
 
 For pre-1.1.4 teams, transfer the already confirmed workspace into `confirmed_values.PROJECT_DIR` in the existing setup JSON.
@@ -185,6 +186,11 @@ It preserves values already present in the installation record.
 It saves adopted values only after successful target verification.
 Later updates use those recorded values without reading `setup.md`.
 Do not assign this reconciliation to the Planner or Coder.
+
+For pre-2.9.0 teams, transfer the verified absolute Codex entrypoint and process/config homes into `CODEX_BINARY`, `CODEX_PROCESS_HOME`, and `CODEX_HOME` in `confirmed_values`.
+Reuse existing setup evidence and configuration readbacks; keep the stable entrypoint rather than its version-specific release target.
+Check process HOME against `confirmed_bindings.roles.team-codex.home`; resolve missing or conflicting paths before planning the file update.
+The same missing-value adoption preserves existing recorded values and writes them only after successful target verification.
 
 Read the proposal and the changed SOULs and skill files.
 Decode the proposal's `new_base` and `merged` fields as base64 if you inspect their bytes programmatically.
@@ -204,7 +210,7 @@ Ask the user to approve or defer the dependent file changes.
 Keep the whole team proposal withheld until that decision is recorded.
 Use `--dependency-decision` only to record that decision.
 It does not authorize runtime configuration or integration changes.
-For the Planner skill-maintenance policy, report the separate configuration step in [Setup](setup.md#3-frische-profile-bestätigte-modelle).
+For the Planner skill-maintenance policy, report the separate configuration step in [Setup](setup.md#3-fresh-profiles-confirmed-models).
 The file updater delivers the Planner template change but does not set `skills.creation_nudge_interval`.
 Obtain separate authorization to set and read back `skills.creation_nudge_interval=0` in the existing Planner profile.
 
@@ -340,7 +346,7 @@ The file helper does not migrate cards or certify loaded instructions.
 5. **Review and apply files:** Prepare the normal three-way proposal and review changed instructions with neighboring local rules.
    Recheck current runs and claims immediately before application; defer if the settled state changed.
    Use the existing activity decision, semantic review, backups, and exact-target verification below.
-   Complete the fixed `1.1.22` retirement procedure when applicable; this workflow migration does not replace it.
+   Complete the [required skill retirement](#required-skill-retirement) for the affected team; this workflow migration does not replace it.
 6. **Read back the same cards:** Verify card identity, recorded decisions, implementation owner, review provenance, counters, parent gates, and actual phase.
    Keep the same card and its history.
    Update contradictory active instructions and affected baseline bindings through supported operations within the approved scope.
@@ -363,7 +369,7 @@ Warn the user if the team is active or activity remains unknown.
 Obtain an explicit proceed or skip decision for that team.
 The CLI conservatively requires this decision for every application and rollback.
 Do not fabricate an inactivity result to avoid the question.
-Before file application, complete the pre-apply record and approval steps in [required Reviewer skill retirement](#required-reviewer-skill-retirement-1122).
+Before file application, complete the pre-apply record and approval steps in [required skill retirement](#required-skill-retirement).
 Before applying workflow authority changes, complete steps 1–4 of [Workflow migration](#workflow-migration-200).
 Before dependent file application, complete the approved asset/loading requirements in [Required upstream companion update](#required-upstream-companion-update).
 
@@ -399,78 +405,85 @@ The whole update is not an atomic multi-file transaction or an external process 
 An active external writer can still race between checks and replacement.
 Private per-team state is trusted operator input, not a hostile same-UID security boundary.
 
-## Required Reviewer skill retirement (1.1.22)
+## Required skill retirement
 
-This is a mandatory Maker prose poststep, not automatic deletion by `update_team.py`.
-Apply it when an existing team crosses from a pre-update version below `1.1.22` to a target version at or above `1.1.22`.
-This includes teams on `1.1.21` whose earlier deassignment retained installed skills.
-Keep this introduction release fixed on later Maker releases.
-Resume a pending retirement on later updates even if `installation.json` already reports `1.1.22` or a later version.
-Never infer migration completion from version alone.
-For a team created at or above `1.1.22`, use original setup and discovery evidence to establish that this crossing migration is not applicable.
-For an older team already reporting a newer version without completion evidence, resolve its pre-update evidence or reconcile the exact scope below.
-For legacy or unknown versions, resolve the source evidence or explicitly reconcile these three identities within the approved scope.
-Do not silently skip an unknown version.
+A team update removes the managed skill copies the Maker no longer produces, so that an updated team holds the skill set a fresh team receives.
+Teams are updated, not recreated.
+Local work the team added is the only boundary: it is never overwritten or reset unasked.
 
-The only removal targets are these exact Reviewer skill identities and their complete local trees:
+`update_team.py` deletes nothing.
+It reports every candidate in the reviewed proposal with its role, identity, resolved root, managed targets, and local state.
+Complete the removal after file application inside the same approved scope.
+A `pristine` or `absent` candidate left in place keeps the team update incomplete.
 
-| Native skill identity | Recipe path to resolve, not a guessed deletion target |
-|---|---|
-| `minimal-change-engineering` | `<reviewer home>/skills/minimal-change-engineering/` |
-| `project-lib-versioning` | `<reviewer home>/skills/project-lib-versioning/` |
-| `screenshot-to-code` | `<reviewer home>/skills/screenshot-to-code/` |
+Candidates are the entries the proposal reports as `obsolete`: managed copies of an earlier Maker source that the target no longer produces.
+A skill the team created itself is never a candidate, and neither is a file the Maker does not manage.
+A candidate is one retired skill tree, or one retired file inside a tree that stays assigned.
 
-Confirm identities and recipe paths against the [manifest](../manifest.json) and [own-skill recipe](setup.md#6-eigene-skills-rollen-und-textpersonalisierung).
-This migration overrides local-adaptation preservation only for these three Reviewer skill trees.
-Preserve CBM/Graphify skills and bindings; restore the selected Reviewer integration through the approved upstream companion update.
-Include learned files, references, hidden files, and local additions.
-Do not copy retired methods into SOUL or other skills.
+| State | Meaning | Handling |
+|---|---|---|
+| `pristine` | every managed file matches its recorded installation hash; a tree holds no unmanaged file | back up outside all native discovery roots, then remove |
+| `locally-modified` | a managed file differs from its recorded hash, or part of the tree is already missing | retain and report the findings; removal needs a separate decision for that exact candidate |
+| `extra-files` | a tree holds a file the Maker does not manage | retain and report the findings; removal needs a separate decision for that exact tree |
+| `indeterminate` | a path cannot be resolved safely: symlink, hard link, shared source, unreadable path, or a mapping outside the recorded skill roots | retain and report the blocker |
+| `absent` | every managed file is already gone | treat as a successful no-op after native readback |
+
+A tree that carries a retired identity the installation record does not manage as a skill keeps its unknown baseline: retain it and report it, and never remove it from a guess.
+
+Resolve each identity against the [manifest](../manifest.json) and, where the manifest no longer carries it, from the recorded source mapping in the installation record.
+Inspect native discovery roots and every resolved source path for aliases, symlinks, and shared sources.
+Where a shared source serves another role, apply only a supported role-specific unbinding; stop with a concrete blocker when no isolation is available.
+Report each concrete retained instruction or autoload reference that would recreate or require a retired skill.
 Keep the native `sdlc-review` skill and its automatic integration unchanged.
-Preserve all other adaptations and all Planner, Coder and Team-Codex assets.
-Preserve shared runtimes, caches, indices, MCP entries, hooks, and unrelated integrations.
-Skill retirement does not authorize general integration or runtime cleanup.
+Preserve CBM/Graphify skills and bindings; restore the selected Reviewer integration through the approved upstream companion update.
+
+The retirement introduced in `1.1.22` for `minimal-change-engineering` and `screenshot-to-code` in Reviewer homes is the first instance of this rule, not a separate mechanism; a pending one resumes as an ordinary candidate.
+Keep every other adaptation and every Planner, Coder and Team-Codex asset.
+Preserve shared runtimes, caches, indices, MCP entries, hooks, and unrelated integrations; do not copy retired methods into SOUL or other skills.
+
+The steps below run once per team update, after the file-helper proposal exists.
 
 1. **Before file application:** Read the existing private setup/update record and any pending retirement evidence.
    Before invoking `apply`, capture the installed package version and exact Maker commit from the installation record and available setup evidence.
    Save the pre-update version, target release/commit, and retirement status `pending` in the existing private `devteam/setup.md` progress/update section.
    Keep the original pre-update evidence on resume; do not replace it with advanced installation metadata.
-   For missing provenance, record the unresolved evidence for the exact reconciliation scope below.
+   For missing provenance, record the unresolved evidence for the exact candidate scope below.
    Read back this private record before file application.
    Do not create a central registry or change the file-helper record schema.
-2. **Read-only discovery:** Resolve the exact Reviewer home from confirmed bindings and native profile inventory.
+2. **Read-only discovery:** Read the proposal's obsolete entries and resolve each candidate's root, managed targets, state, and findings against the confirmed role homes and native profile inventory.
    Keep this discovery strictly read-only.
    Do not remove trees or change exclusions or bindings during discovery.
-   Inspect native discovery roots and every resolved source path for the three exact skill identities.
-   Record source ownership, aliases, symlinks, and shared/external sources before selecting any removal path.
-   Do not delete guessed paths or follow links into shared assets.
-   If a shared or external source serves other roles, determine the supported Reviewer-specific exclusion or unbinding from the installed interface without applying it.
+   Inspect native discovery roots and every resolved source path for ownership, aliases, symlinks, and shared/external sources.
+   Record every unmanaged file in a candidate tree and every candidate the record does not manage.
+   Do not follow links into shared assets.
+   If a shared or external source serves other roles, determine the supported role-specific exclusion or unbinding from the installed interface without applying it.
    If no supported isolation is available, stop this reconciliation with a concrete blocker.
    Report each concrete retained instruction or autoload reference that would recreate or require a retired skill.
-   Record the concrete Reviewer-specific obsolete bindings for scope approval.
+   Record the concrete role-specific obsolete bindings for scope approval.
    Do not remove unrelated bindings or expand into general MCP/hook cleanup.
-3. **Approve the full update scope once:** Include these exact removals and the local-adaptation override once in the target update scope and approval.
-   Include complete-tree backups, native readbacks, and the concrete paths and Reviewer-specific exclusions/unbindings found during read-only discovery.
-   Include the concrete Reviewer-specific obsolete bindings from that inventory.
+3. **Approve the full update scope once:** Include the exact `pristine` candidates, their resolved paths and backup destinations, the retained candidates with their findings, and the concrete role-specific exclusions/unbindings found during read-only discovery in the target update scope and approval.
+   Include the complete-tree backups, native readbacks, and the concrete role-specific obsolete bindings from that inventory.
    For missing provenance, add the approved exact reconciliation scope to the existing private record before file application.
    This authoring procedure grants no live deletion permission.
-   Within that approved update, retirement is mandatory, not an optional second choice.
+   Within that approved update, retiring every `pristine` candidate is mandatory, not an optional second choice.
+   A retained `locally-modified`, `extra-files`, `indeterminate`, or unknown-baseline candidate is reported, not resolved inside the same scope.
    If the scope is withheld, record the incomplete step instead of claiming a complete team update.
 4. **After successful file application:** Run the pending retirement after successful file application and before reporting a complete team update.
-   Save the complete discovered local trees and affected Reviewer-specific bindings to a protected external backup outside all native discovery roots, including inherited and project roots.
+   Save every candidate's complete local tree and affected role-specific bindings to a protected external backup outside all native discovery roots, including inherited and project roots.
    Preserve modes, link metadata, and the full file inventory without dereferencing links into shared assets.
    Compare the complete backup inventory and file bytes/hashes with the source before removal.
    Save backup location, source inventory, verification, and unaffected-role inventories in the existing private record.
    Continue only if file application, the complete backup, and backup comparison succeeded.
    Recheck the inspected source bytes and bindings immediately before any removal, exclusion, or binding change; stop on concurrent drift.
-   Remove only the verified Reviewer-local trees from discovery, without following links or deleting shared sources.
-   Apply only the inspected, supported Reviewer-specific exclusions/unbindings for shared sources and obsolete references.
-   Reconcile only the inventoried Reviewer-specific obsolete bindings within the approved update scope.
+   Remove only the verified `pristine` candidates, without following links or deleting shared sources.
+   Apply only the inspected, supported role-specific exclusions/unbindings for shared sources and obsolete references.
+   Reconcile only the inventoried role-specific obsolete bindings within the approved update scope.
    Treat already absent skills as successful no-ops after native readback.
-5. **Verify and persist the result:** Verify absence of all three identities through native Reviewer discovery and source resolution.
+5. **Verify and persist the result:** Verify absence of every removed candidate through native discovery and source resolution.
    Use an established fresh discovery/readback interface; stale session catalogs and missing files alone do not establish absence.
    Verify preservation of unaffected roles and assets against the pre-removal inventory.
-   Read back affected Reviewer-specific bindings and the preserved native `sdlc-review` source/integration.
-   Mark retirement `complete` only after these readbacks pass, with exact paths, backup evidence, and file-update run/revision.
+   Read back affected role-specific bindings and the preserved native `sdlc-review` source/integration.
+   Mark retirement `complete` only after these readbacks pass, with exact paths, backup evidence, and the file-update run/revision.
    Read back the saved completion evidence.
    Keep failed or interrupted retirement `pending`, with the concrete blocker and next action.
    If retirement is withheld or fails, report `files updated; team update incomplete`.
@@ -478,7 +491,7 @@ Skill retirement does not authorize general integration or runtime cleanup.
 
 The file-updater rollback does not restore this prose poststep's removed trees or bindings.
 For an authorized restoration, first check current targets for later edits and review the saved backup and binding scope.
-Restore complete trees, modes, and Reviewer-specific bindings from the external backup without overwriting later work or shared assets.
+Restore complete trees, modes, and role-specific bindings from the external backup without overwriting later work or shared assets.
 Verify restored bytes and native discovery separately from the guarded file-helper rollback below.
 Record restoration and renewed `pending` status in the existing private record; do not retain a completion claim for restored skills.
 Do not restart workers or sessions, or claim that running contexts unloaded these skills.

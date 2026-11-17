@@ -1,7 +1,7 @@
 ---
 name: brownfield-feature-planning
 description: "Plan changes grounded in an existing application."
-version: 1.0.1
+version: 1.1.0
 author: Max, Mariko (Hermes Agent)
 license: MIT
 platforms: [linux]
@@ -29,17 +29,8 @@ Keep existing roles and execution policy.
 
 - Keep accepted product decisions binding when revising a plan.
 - Keep independent review and required safety checks.
-- Leave execution-time technical decisions within the accepted goal and constraints to the Coder.
-- Distinguish binding requirements and architectural constraints from implementation suggestions.
-- Expected file lists are guidance unless explicitly marked as hard boundaries.
-- Ask the customer about changed use cases, material trade-offs, or scope expansion.
 - Separate existing behavior, proposed behavior, and verified behavior.
-- Do not infer permission to mutate a resource from permission to inspect it.
-- Treat pseudonymized operational data as sensitive, not synthetic.
-- Keep credentials, identifiable filenames, free text, and source values out of shared planning evidence.
-- Use synthetic examples when evidence must be shared.
 - Apply specialist procedures only to requirements present in the accepted scope.
-- Leave implementation, independent review, and dispatcher execution with their assigned owners.
 
 ## Planning procedure
 
@@ -107,14 +98,11 @@ Cut work by actor, desired behaviour, and benefit before mapping stories to phas
 Give each slice an observable, independently verifiable outcome across the relevant layers.
 Do not disguise database/API/UI layer tasks as stories by adding an actor prefix.
 Justify necessary foundations by the stories they enable and their verification gate.
-Choose phase and ticket boundaries for reviewability and real dependencies, not a one-story/one-phase/one-ticket rule.
 Include preparation or refactoring only when justified by the goal.
 Context-window fit can inform sizing; preserve coherent, independently reviewable outcomes without a fixed size cap.
 For broad mechanical changes that cannot safely land as independent vertical slices, load only [Expand–Migrate–Contract](references/kanban-phase-release.md#expandmigratecontract) during planning, before plan acceptance.
 Give each phase an independently reviewable deliverable with requirements, files, interfaces, dependencies, tests, gate, and commit boundary.
 Map gates to enabling changes.
-Assign each acceptance criterion to an implementation ticket and its existing independent Reviewer.
-Place combined-behavior checks in the phase where integrated behavior becomes available.
 Use existing results for the Planner's final customer report, not a new technical review or closing ticket.
 Order producer artifacts before their consumers across separately versioned repositories.
 Name local build/installation prerequisites and applicable project/module rule paths in the plan.
@@ -172,8 +160,7 @@ A new commit alone does not invalidate every prior result.
 Require renewed checks for affected areas or insufficient evidence, while retaining independent review and explicit final-state acceptance tests.
 Keep original evidence; do not create a separate summary or evidence register.
 
-When handing the accepted plan to Kanban, load [Phase release](references/kanban-phase-release.md).
-Use that procedure for partial ticket-creation or release recovery too.
+When handing the accepted plan to Kanban, for partial ticket-creation, or for release recovery, load [Phase release](references/kanban-phase-release.md).
 Report the verified handoff state, not assumed worker execution or product completion.
 
 ## Revising an existing plan
@@ -204,7 +191,7 @@ Conditional references add no scope.
 |---|---|
 | External source, catalog, lookup, or optional data integration | [Data discovery](references/data-discovery.md) |
 | Import replacement, reset, identity remapping, or supplied operational test data | [Replacement imports](references/replacement-imports.md) |
-| Accepted plan enters Kanban, partial handoff, or approved scope/graph amendment | [Phase release](references/kanban-phase-release.md) |
+| Accepted plan enters Kanban, partial ticket-creation, release recovery, or approved scope/graph amendment | [Phase release](references/kanban-phase-release.md) |
 | Status, completion, review, or blocker notification | [Status inspection](references/kanban-status-inspection.md) |
 | Recovery from an interrupted run, resolved blocker, or automatic triage | [Recovery](references/kanban-triage-recovery.md) |
 | Operator tool or explicitly agreed operator-executed verification | [Operator acceptance](references/operator-script-acceptance.md) |

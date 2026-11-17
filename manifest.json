@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "2.8.12",
+  "version": "2.10.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "files": [
@@ -20,10 +20,11 @@
     "references/setup.md",
     "references/test_bound_recovery.py",
     "references/test_brownfield_planning.py",
+    "references/test_dev_environment.py",
+    "references/test_devteam_cleanup.py",
     "references/test_diagnosing_bugs.py",
     "references/test_prototype.py",
     "references/test_render_reasoning.py",
-    "references/test_devteam_cleanup.py",
     "references/test_retro.py",
     "references/test_review_investigation.py",
     "references/test_triage_recovery.py",
@@ -42,6 +43,7 @@
     "skills/brownfield-feature-planning/references/replacement-imports.md",
     "skills/brownfield-feature-planning/scripts/recover-triage",
     "skills/brownfield-feature-planning/scripts/recover_triage.py",
+    "skills/dev-environment/SKILL.md",
     "skills/devteam-cleanup/SKILL.md",
     "skills/diagnosing-bugs/LICENSE",
     "skills/diagnosing-bugs/NOTICE.md",
@@ -50,7 +52,6 @@
     "skills/diagnosing-bugs/references/method.md",
     "skills/minimal-change-engineering/SKILL.md",
     "skills/plan-versioning-semver/SKILL.md",
-    "skills/project-lib-versioning/SKILL.md",
     "skills/prototype/LICENSE",
     "skills/prototype/LOGIC.md",
     "skills/prototype/NOTICE.md",
@@ -113,6 +114,9 @@
         "coder.SOUL.md.template": "SOUL.md"
       },
       "render_fields": [
+        "CODEX_BINARY",
+        "CODEX_HOME",
+        "CODEX_PROCESS_HOME",
         "CODEX_REASONING_DEFAULT",
         "CODEX_REASONING_MAX",
         "HINDSIGHT_BANK_NAME",
@@ -172,6 +176,23 @@
         "SKILL.md": "SKILL.md"
       }
     },
+    "dev-environment": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "planner"
+        ]
+      },
+      "origin": "Owned Docker development-environment construction and adoption procedure, authored for this package.",
+      "changes": "Copy the complete skill tree unchanged. The Planner invokes it for requested environment work; setup and updates do not run it.",
+      "origin_ref": "references/upstream-sources.md#own-dev-environment",
+      "license_path": null,
+      "notice_path": "NOTICE.md",
+      "skill_path": "skills/dev-environment/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
     "devteam-cleanup": {
       "status": "included",
       "targets": {
@@ -227,7 +248,8 @@
       "status": "included",
       "targets": {
         "hermes": [
-          "planner"
+          "planner",
+          "coder"
         ]
       },
       "origin": "Übernommene, vom Nutzer bearbeitete Skillfassung; Autorenfeld Mariko, kein Lizenzfeld im Frontmatter.",
@@ -236,25 +258,6 @@
       "license_path": null,
       "notice_path": "NOTICE.md",
       "skill_path": "skills/plan-versioning-semver/SKILL.md",
-      "transport": {
-        "SKILL.md": "SKILL.md"
-      }
-    },
-    "project-lib-versioning": {
-      "status": "included",
-      "targets": {
-        "hermes": [
-          "planner",
-          "coder"
-        ]
-      },
-      "codex_instruction_only": true,
-      "origin": "Übernommene, vom Nutzer bearbeitete Skillfassung; MIT-Angabe im Frontmatter, historischer Autoren-/Auditverweis nicht zusätzlich belegt.",
-      "changes": "Aktuelle Nutzerfassung; beim Setup den vollständigen Skillbaum unverändert kopieren.",
-      "origin_ref": "references/upstream-sources.md#own-lib-versioning",
-      "license_path": null,
-      "notice_path": "NOTICE.md",
-      "skill_path": "skills/project-lib-versioning/SKILL.md",
       "transport": {
         "SKILL.md": "SKILL.md"
       }
@@ -305,7 +308,7 @@
         ]
       },
       "origin": "Kanonisches eigenständiges Paket screenshot-to-code 1.0.0; Max, Mariko (Hermes Agent); MIT mit vollständiger eigener LICENSE.",
-      "changes": "Alle sechs kanonischen Dateien bytegleich; vollständiger Skillbaum ohne Rendering oder Umbenennung.",
+      "changes": "Vollständiger Skillbaum ohne Rendering oder Umbenennung; Fassung 1.0.1 ist die englische Fassung nach TAS-Sprachvorgabe. `source_sha256` nennt die kanonischen Dateiidentitäten 1.0.0, nicht den ausgelieferten Stand.",
       "origin_ref": "references/upstream-sources.md#own-screenshot",
       "license_path": "skills/screenshot-to-code/LICENSE",
       "notice_path": "NOTICE.md",

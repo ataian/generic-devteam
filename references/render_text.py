@@ -6,6 +6,7 @@ Ziele. Dieses Modul entscheidet keine Persona-Befugnisse und verifiziert keine
 nativen IDs, Dateiexistenz oder Modellverfügbarkeit.
 """
 import re
+import shlex
 import unicodedata
 
 ROLE_FIELDS = {
@@ -14,11 +15,13 @@ ROLE_FIELDS = {
 }
 ROLE_TECHNICAL_FIELDS = {
     "planner": {"CODER_PROFILE", "REVIEWER_PROFILE", "PROJECT_DIR", "REPOSITORY_ROOTS"},
-    "coder": {"PLANNER_PROFILE", "REVIEWER_PROFILE", "CODEX_REASONING_DEFAULT", "CODEX_REASONING_MAX"},
+    "coder": {"PLANNER_PROFILE", "REVIEWER_PROFILE", "CODEX_REASONING_DEFAULT", "CODEX_REASONING_MAX",
+              "CODEX_BINARY", "CODEX_PROCESS_HOME", "CODEX_HOME"},
     "reviewer": {"ROLE_REASONING_DEFAULT", "ROLE_REASONING_HIGH"},
 }
 ROLE_NAMES = {"planner": "PLANER_NAME", "coder": "CODER_NAME", "reviewer": "REVIEWER_NAME"}
 FIELD = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
+CODEX_PATH_FIELDS = {"CODEX_BINARY", "CODEX_PROCESS_HOME", "CODEX_HOME"}
 
 
 def plain(value, *, empty=False, limit=None):
@@ -55,7 +58,7 @@ def role_fields(template, role):
 
 
 def render_role(template, values, role):
-    """Ein Durchlauf, nur Platzhalter ändern; Codekontexte erhalten rohe Werte."""
+    """Replace placeholders once; quote Codex paths only inside shell fences."""
     fields = role_fields(template, role)
     if not isinstance(values, dict) or set(values) != fields:
         raise ValueError("Exakt die vorkommenden Rollenfelder erforderlich")
@@ -70,6 +73,9 @@ def render_role(template, values, role):
         if key == "PROJECT_DIR" and (not value.startswith("/") or
                 (value != "/" and any(part in {"", ".", ".."} for part in value[1:].split("/")))):
             raise ValueError("Workspace must be an absolute canonical path")
+        if key in CODEX_PATH_FIELDS and (not value.startswith("/") or
+                any(part in {"", ".", ".."} for part in value[1:].split("/"))):
+            raise ValueError("Codex binding must be an absolute canonical path: " + key)
         if key.endswith("_PROFILE") and not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", value):
             raise ValueError("Ungültige technische Profilkennung")
         if "_REASONING_" in key and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", value):
@@ -83,20 +89,23 @@ def render_role(template, values, role):
     if own_name in values and values[own_name] != values["ROLE_NAME"]:
         raise ValueError("ROLE_NAME widerspricht dem eigenen Rollennamen")
 
-    def replace(text, raw=False):
-        return FIELD.sub(lambda match: values[match.group(1)] if raw else
+    def replace(text, raw=False, shell=False):
+        return FIELD.sub(lambda match: shlex.quote(values[match.group(1)])
+                         if shell and match.group(1) in CODEX_PATH_FIELDS else values[match.group(1)] if raw else
                          markdown(values[match.group(1)]).replace("=", r"\=").replace("~", r"\~"), text)
 
     result = []
     fence = None
+    shell = False
     for line in template.splitlines(keepends=True):
         marker = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line.rstrip("\r\n"))
         if fence:
-            result.append(replace(line, raw=True))
+            result.append(replace(line, raw=True, shell=shell))
             if marker and marker[1][0] == fence[0] and len(marker[1]) >= len(fence) and not marker[2].strip():
                 fence = None
         elif marker:
             fence = marker[1]
+            shell = marker[2].strip() in {"sh", "bash"}
             result.append(replace(line, raw=True))
         else:
             # Inlinecode nur auf der originalen Vorlage erkennen, nie auf Inputs.

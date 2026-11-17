@@ -178,6 +178,8 @@ class DiagnosisContracts(unittest.TestCase):
         template = (ROOT / "templates/roles/coder.SOUL.md.template").read_text()
         fields = role_fields(template, "coder")
         values = {key: "sample" for key in fields}
+        values.update(CODEX_BINARY="/fixture/bin/codex", CODEX_PROCESS_HOME="/fixture/process-home",
+                      CODEX_HOME="/fixture/codex-home")
         output = render_role(template, values, "coder")
         self.assertEqual(output, re.sub(r"\{\{([A-Z0-9_]+)\}\}", lambda m: values[m[1]], template))
         require(output, (

@@ -1,7 +1,7 @@
 ---
 name: minimal-change-engineering
 description: "Smallest correct change for code, scripts, cron, config."
-version: 1.0.0
+version: 1.0.1
 author: "Derived static template; original authorship recorded in preservation audit"
 license: MIT
 platforms: [linux, macos, windows]
@@ -67,8 +67,6 @@ outside that set turns out to be necessary, say so instead of silently expanding
 This is the cheapest way the user can catch scope drift early.
 
 ## Verification is never the thing you cut
-
-Per SOUL "No success without verification": the smallest change still needs evidence.
 
 - Non-trivial logic: leave one runnable check behind (assert-style self-check or a small
   test) — no framework, no fixtures. Trivial one-liners need none.

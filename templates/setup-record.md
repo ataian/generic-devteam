@@ -42,6 +42,8 @@ Preserve `PLANER_NAME`, `CODER_NAME`, `REVIEWER_NAME`, `PROJECT_NAME`, `HINDSIGH
 `ROLE_REASONING_DEFAULT`, and `ROLE_REASONING_HIGH` when confirmed.
 Keep fixed Planner/Hermes-Coder reasoning and the Codex model ID for native configuration only.
 Do not add role-render fields for these native settings.
+Store the verified absolute Codex entrypoint in `CODEX_BINARY` and the process/config homes in `CODEX_PROCESS_HOME` and `CODEX_HOME`.
+These Coder render fields contain raw paths, not shell-quoted strings; process HOME matches `confirmed_bindings.roles.team-codex.home`.
 
 Store resolved technical bindings in `confirmed_bindings`.
 Under `roles`, retain `planner`, `coder`, `reviewer`, and `team-codex`, each with `id` and canonical `home`.
@@ -108,7 +110,7 @@ Obtain separate authorization for data deletion.
 
 Initialize only after complete delivery, configuration/file readbacks, and recovery binding.
 Follow [Team updates](../references/update.md) for initialization, existing-team baselines, and authorized updates.
-For an existing-team update, record the pre-update version and pending status before file application under [required Reviewer skill retirement](../references/update.md#required-reviewer-skill-retirement-1122).
+For an existing-team update, record the pre-update version and pending status before file application under [required skill retirement](../references/update.md#required-skill-retirement).
 Keep its approval, external backup, native readbacks, and pending/completed poststep evidence in this record's progress and update sections.
 On every requested update, follow [Required upstream companion update](../references/update.md#required-upstream-companion-update), even when the Maker version is unchanged.
 Record missing selected Reviewer analysis assets and native bindings, including previously retired assets, and their approved restoration/readbacks.

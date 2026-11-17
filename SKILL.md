@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
-description: Richte ein natives Hermes-Projektteam unter Linux ein.
-version: 2.8.12
+description: Set up or update a native Hermes project team.
+version: 2.10.0
 author: Max
 license: MIT
 platforms: [linux]
@@ -73,4 +73,4 @@ Do not replace inspection with a log path or hide unresolved findings by truncat
 
 Setup readbacks establish configuration and delivery, not live agent behavior or project readiness.
 Excluded behavioral experiments are outside setup scope, not pending completion gates.
-Offer a first planning task to the Planner after handoff; do not start it automatically.
+Offer a first planning task to the Planner after handoff, such as creating or adopting the project's Docker development environment; do not start it automatically.

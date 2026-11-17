@@ -9,41 +9,39 @@ Do not run fan-out experiments, repair task graphs, reset counters, or patch the
 Copy and bind the complete existing Planner recovery skill through [Setup](setup.md#bind-the-planner-recovery-invocation).
 Later recovery uses that installed skill under its own approval and claim rules.
 
-## 5. Setzen: welche Homes, und der Rücklese-Nachweis, der wirklich zählt
+## Set the homes and the readback that counts
 
 Execute writes below only where effective `false` is missing and the change is authorized at a supported management layer.
 Use the selected actual dispatcher home or role profile; do not target unrelated profiles.
 
 ```sh
-hermes config set kanban.auto_decompose false              # Home, das dispatcht
-hermes -p <ROLLE> config set kanban.auto_decompose false    # jede Profilkopie
-hermes config get kanban.auto_decompose                     # beide Formen zurücklesen
+hermes config set kanban.auto_decompose false              # home that dispatches
+hermes -p <ROLE> config set kanban.auto_decompose false    # each profile copy
+hermes config get kanban.auto_decompose                     # read back both forms
 ```
 
-- `-p <profil>` ist der Profilselektor für Config-Befehle, auch wenn die
-  Top-Level-`--help` ihn nicht aufführt — daraus nicht ableiten, die Form sei nicht
-  unterstützt, und nicht von Hand YAML editieren.
+- `-p <profile>` is the profile selector for config commands even when the top-level
+  `--help` does not list it. Do not infer from that omission that the form is unsupported,
+  and do not edit YAML by hand.
 - Identify the actual dispatcher owner and selected team profiles. Read their effective values; do not inventory or modify unrelated profiles without a concrete authorized shared effect.
 - Accept an already effective `false` on a supported authorized management layer. Otherwise back up and change only the authorized setting; read back the exact delta. Do not override central restrictions.
-- **Kein Neustart.** `_resolve_auto_decompose_settings()`
-  (`gateway/kanban_watchers_common.py`) wird jeden Tick frisch gerufen; ein Neustart
-  ändert nichts. Bei unlesbarer Config liefert es `(False, 3)`, fällt also sicher
-  auf aus.
-- **Dort nachweisen, wo der Dispatcher liest, nicht dort, wo geschrieben wurde.**
-  Denselben Resolver mit dem Interpreter und Installationsverzeichnis des Gateways
-  aufrufen:
+- **No restart.** `_resolve_auto_decompose_settings()`
+  (`gateway/kanban_watchers_common.py`) is called fresh on every tick; a restart changes
+  nothing. With unreadable configuration it returns `(False, 3)`, so it falls back to off
+  safely.
+- **Prove it where the dispatcher reads, not where the write happened.**
+  Call the same resolver with the gateway's interpreter and installation directory:
 
   ```sh
   cd "$HERMES_HOME" && HERMES_HOME="$HERMES_HOME" <gateway-python> -c "
-  import sys; sys.path.insert(0, '<installationsverzeichnis>')
+  import sys; sys.path.insert(0, '<installation-directory>')
   from hermes_cli.config import load_config
   from gateway.kanban_watchers_common import _resolve_auto_decompose_settings
   print(_resolve_auto_decompose_settings(load_config))"
   ```
 
-  `(False, N)` ist das Gate, das der nächste Tick auswertet — das ist das
-  angekommene Schreiben. `(True, N)` heißt: der Dispatcher liest etwas anderes als
-  die Datei sagt.
+  `(False, N)` is the gate the next tick evaluates — that is the write that arrived.
+  `(True, N)` means: the dispatcher reads something other than what the file says.
 
 
 ## Interpreter and result

@@ -111,7 +111,7 @@ The Planner checks actual blockers and coordinates sufficient customer answers i
 Technical interruptions preserve unfinished review; approval completes the exact reviewed commit directly to DONE.
 Work continues while a justified next approach remains, within explicit customer limits, provider quotas, operational permissions, and native safeguards.
 After the last required ticket reaches DONE, the Planner sends a short customer report from existing results and independent verdicts, without a closing ticket or another technical review.
-The file helper retains obsolete copies. Complete the [required version-gated Reviewer skill retirement](references/update.md#required-reviewer-skill-retirement-1122) after file application within the approved team update; preserve all assets outside its exact scope.
+The file helper classifies obsolete copies and deletes nothing. Complete the [required skill retirement](references/update.md#required-skill-retirement) after file application within the approved team update; preserve all assets outside its exact scope.
 The Planner receives Matt Pocock's original `grill-me`, `grilling`, `domain-modeling`, and `to-questionnaire` skills at the same pinned revision.
 Its SOUL requires `grilling` for requirements and conditionally loads domain modelling during that interview.
 Glossaries capture vocabulary; requirements and phase gates remain in the accepted plan. Unaccepted ADRs remain proposed.
@@ -135,6 +135,14 @@ Concrete symptom/cause evidence and an exact reproducible check preserve the dir
 Unclear or competing causes, intermittent/state-dependent failures, performance isolation, or an unresolved/recurring apparent fix trigger the full method, including regressions emerging during ordinary implementation.
 Existing Planner routing, risk-sensitive verification, and independent review remain unchanged; complete-tree setup/update and native discovery checks do not prove live behavior.
 Relevant module/interface choices use caller-contract, complexity-encapsulation, abstraction-removal, and present-variability checks within existing design work.
+The Planner receives the owned [dev-environment skill](skills/dev-environment/SKILL.md) for requested Docker environment creation, adoption or revision.
+Project toolchains run in reusable containers; a required database belongs to the development Compose project. PostgreSQL adds template-derived branch databases with isolated state and reuse on return.
+Environment tasks produce `docker/dev/AGENTS.md` for agents and a standalone `docker/dev/HOWTO-human.md` for humans. Existing compatible layouts remain in place.
+The team operates its assigned development runtime autonomously for tests and demonstrations, including restart, rebuild, synthetic data and disposable-state reset.
+Source ownership, operational data, host/shared resources and external effects keep their existing boundaries. The Reviewer still cannot repair product code or deploy; local test/demo runs are development operations.
+Relevant tickets require the agent guide and its container commands when an environment exists; absence adds no setup blocker.
+Running demonstrations include verified access details and an SSH forwarding command when needed. Setup may offer this first task, but setup and updates do not execute it.
+These package contracts do not qualify Docker, PostgreSQL or live-agent behavior; environment acceptance uses real project checks.
 The Planner also receives the owned [retro skill](skills/retro/README.md), adapted from Matt Pocock with full-process token economy.
 Request it with `/retro`, “Machen wir eine Retro zum letzten Lauf”, or a named historical session, ticket, or project.
 It proposes source-backed process/environment improvements, not product acceptance; it changes nothing automatically and remains separate from `/refine`.

@@ -1,22 +1,22 @@
-# Verwendung in Hermes und Codex
+# Usage in Hermes and Codex
 
-Beide Runtimes verwenden dasselbe Paket. Projektregeln, Rollen und Berechtigungen stammen aus dem jeweiligen Einsatzkontext, nicht aus einer bestimmten Installation oder einem bestimmten Team.
+Both runtimes use the same package. Project rules, roles, and permissions come from the respective deployment context, not from a specific installation or a specific team.
 
-## Fähigkeiten statt eingebauter Infrastruktur
+## Capabilities instead of built-in infrastructure
 
-| Bedarf | Hermes | Codex |
+| Need | Hermes | Codex |
 | --- | --- | --- |
-| Skill und Referenzen | `skill_view` lädt den installierten Skill und relative Referenzen; alternativ Dateien lesen, ohne dies als Katalognachweis auszugeben. | Skill explizit mit `$screenshot-to-code` aufrufen oder anhand der Beschreibung auswählen lassen; referenzierte Dateien mit den tatsächlich vorhandenen Lesewerkzeugen öffnen. |
-| Regeln und Projektdateien | `read_file`, `search_files`; Änderungen nur mit vorhandenen Schreibrechten. | Verfügbare Datei-/Shellwerkzeuge; geltende Sandbox-/Freigaberegeln erhalten. |
-| Quelle/Render ansehen | Wenn angeboten `vision_analyze`; vorher tatsächliche Bildprüffähigkeit feststellen. | Verfügbare Bildsicht, beispielsweise angebotenes `view_image`; nicht allein wegen eines Dateipfads als vorhanden behandeln. |
-| Browser, Aufnahme, Offlineprobe | Vorhandenes Browserwerkzeug oder zugelassene Projekt-CLI. | Vorhandene Browseranbindung oder zugelassene Projekt-CLI. Keine Browserfähigkeit bloß aus dem Runtime-Namen ableiten. |
-| Checks/Build/Extraktion | `terminal` mit vorhandenen zugelassenen Projektwerkzeugen. | Vorhandenes Ausführungswerkzeug mit denselben Projektvorgaben. |
-| Offene Produktentscheidung | Vorhandener Gesprächs-/Rückfrageweg; falls verfügbar `clarify`. | Vorhandener Gesprächs-/Rückfrageweg. Keine Hermes-Werkzeuge voraussetzen. |
+| Skill and references | `skill_view` loads the installed skill and relative references; alternatively read files, without presenting this as catalogue evidence. | Invoke the skill explicitly with `$screenshot-to-code` or let it be selected by its description; open referenced files with the actually available read tools. |
+| Rules and project files | `read_file`, `search_files`; changes only with existing write rights. | Available file/shell tools; preserve applicable sandbox/approval rules. |
+| View source/render | `vision_analyze` when offered; establish actual image inspection capability first. | Available image view, for example an offered `view_image`; do not treat it as available merely because of a file path. |
+| Browser, capture, offline probe | Available browser tool or approved project CLI. | Available browser binding or approved project CLI. Do not infer browser capability from the runtime name alone. |
+| Checks/build/extraction | `terminal` with available approved project tools. | Available execution tool with the same project constraints. |
+| Open product decision | Available conversation/clarification path; `clarify` if available. | Available conversation/clarification path. Do not assume Hermes tools. |
 
-Toolnamen beschreiben verfügbare Möglichkeiten, keine Installationsanforderungen. Fehlendes Werkzeug konkret melden; keine erfundenen Tools, heimlichen Installationen oder neuen Dienste einführen. Ein Textleser ersetzt keine Bildsicht. Toolschemas der laufenden Sitzung haben Vorrang vor Beispielen.
+Tool names describe available options, not installation requirements. Report a missing tool concretely; introduce no invented tools, hidden installations, or new services. A text reader does not replace image view. Tool schemas of the running session take precedence over examples.
 
-## Laden und Rollen
+## Loading and roles
 
-Nur benötigte Referenzen laden: Quelle/Assets bei Extraktion oder Herkunftsfragen, visueller Abgleich beim Nachbau, Offlineexport ausschließlich beim Exportauftrag. Gleichnamige Skillkopien können unterschiedlich aufgelöst werden; bei Zweifeln tatsächlich geladenen Pfad und Inhalt prüfen. Eine alte Unterhaltung beweist nicht die aktuelle Paketidentität.
+Load only needed references: source/assets for extraction or provenance questions, visual comparison for a rebuild, offline export only on an export assignment. Skill copies of the same name can resolve differently; when in doubt, check the actually loaded path and content. An old conversation does not prove the current package identity.
 
-Planner klären offene Produktfragen und planen. Implementierer arbeiten in freigegebenen Phasen; Reviewer prüfen unabhängig. Eine akzeptierte Spezifikation wird nicht durch den Runtimewechsel erneut zur Diskussion gestellt. Neue wesentliche Lücken rollenrichtig melden und ausschließlich abhängige Arbeit anhalten. Weder Skillaufruf noch Toolverfügbarkeit erweitert Rechte oder beauftragt Commit, Veröffentlichung oder Betrieb.
+Planners clarify open product questions and plan. Implementers work in approved phases; reviewers check independently. An accepted specification is not reopened for discussion by the runtime change. Report new material gaps in the correct role and stop only dependent work. Neither skill invocation nor tool availability extends rights or commissions commit, publication, or operations.
