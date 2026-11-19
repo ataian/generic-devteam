@@ -32,7 +32,7 @@ Render synthetic role values through the existing renderer; compare nonplacehold
 Review changed instructions under [upstream TAS](upstream-sources.md#tas), including their conditions and required references.
 Use `test_diagnosing_bugs.py` for static proportional-path, method-pointer, delivery/legal, and explicit Coder-call contracts, not model-behavior claims.
 Use `test_prototype.py` for Planner-only clarification authority, branch/legal coverage, delivery, and updater regressions; these package checks add no tests or review gate to throwaway demos.
-Use `test_dev_environment.py` and rendered-role checks for create/adopt/incomplete paths, two-guide routing, PostgreSQL branch isolation, runtime authority and demo-access contracts.
+Use `test_dev_environment.py` and rendered-role checks for checkout-based tooling, guide scope, developer-workflow acceptance and deployment boundaries.
 The updater fixtures exercise Planner-only environment-skill delivery, local adaptations, new-skill collisions and rollback. These checks do not execute Docker, PostgreSQL or live agents.
 Use the existing updater fixtures for newly assigned Team-Codex diagnosis trees, collisions, dependency decisions, local edits, baselines, and retained rollback additions.
 Trace setup references semantically; a keyword scan alone does not establish scope.

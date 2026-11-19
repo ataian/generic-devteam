@@ -106,7 +106,7 @@ class ReasoningContractTests(unittest.TestCase):
                                "start, stop, restart, rebuild, recreation, synthetic data generation and disposable-state reset",
                                "source ownership, operational data, host administration, shared infrastructure and external effects",
                                "Coordinate disruptive operations with other team users.",
-                               "development operations, not publication or deployment."):
+                               "Running the app from source grants no deployment authority."):
                     self.assertIn(clause, matches[0])
                 self.assertNotIn("HOWTO-human.md", text)
         self.assertEqual(len(set(paragraphs)), 1)
@@ -136,7 +136,7 @@ class ReasoningContractTests(unittest.TestCase):
         coder = render_role(self.template("coder"), self.values("coder"), "coder")
         reviewer = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
         handoff = coder.split("5. Provide Codex", 1)[1].split("6. Read", 1)[0]
-        self.assertIn("When an assigned development environment exists, include its agent-guide path and the development-runtime authority from Exception routing.", handoff)
+        self.assertIn("When Codex needs the development environment, include its agent-guide path and the development-runtime authority from Exception routing.", handoff)
         helpers = reviewer.split("## Proportional investigation", 1)[1].split("## Independent review", 1)[0]
         self.assertIn("Require read-only product-source investigation", helpers)
         self.assertIn("Helpers may operate assigned test runtimes within your development authority; coordinate shared runtime changes through you.", helpers)
