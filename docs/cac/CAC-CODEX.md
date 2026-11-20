@@ -1,95 +1,133 @@
-# CAC-CODEX — Compact Artifact Contract
+# CAC-CODEX — Compact Technical Instruction & Handoff Notation
 
-Purpose: compact task intake and result handoff; **no reduction in implementation reasoning, verification, or code quality**.
+**Purpose:** A concise, declarative writing style for Codex-facing instructions, technical artifacts, task messages, findings, and replies.
 
-## 1. Authority and scope
+**Scope:** Representation **only**. CAC-CODEX is intended to replace Caveman/TAS *as a writing convention* in the Codex context. It does not define tasks, implementation methods, reasoning effort, tool usage, verification duties, approval rules, or workflows. Examples are **syntax illustrations, not mandated task or report contents**.
 
-- CAC controls agent-facing instructions, task prompts, progress/final responses, findings, and internal agent-authored implementation notes.
-- Preserve relevant instructions from owned `diagnosing-bugs` and other invoked skills; CAC never replaces the method or its acceptance gates.
-- Keep source code, identifiers, interfaces, tests, user-facing text, API docs, error diagnostics, and changelogs correct and maintainable. Compress **reports** rather than code readability or necessary domain explanation.
-- Do not change third-party skill text, Codex CLI, the six pinned specialist TOMLs, or Ponytail merely to implement a writing standard.
+## 1. Core style
 
-## 2. Input contract: Hermes Coder → Codex
+Prefer **structured facts and exact technical references** over narrative descriptions, without losing meaning.
 
-Send the minimum complete task context; retain exact approved binding and verification intent. Recommended task prompt:
+- Preserve all existing constraints, conditions, exceptions, negations, and obligation levels (`MUST` / `SHOULD` / `MAY`).
+- Preserve identifiers, names, code snippets, paths, commands, and literals exactly.
+- State observations as observations; distinguish them from assumptions and proposals.
+- Use conventional technical English with descriptive keys, not opaque abbreviations.
+- Remove redundant lead-ins, repetitive summaries, filler, and explanations that add no information.
+- Use concise prose where relations, rationale, or subtle behavior would otherwise become ambiguous.
+- Treat structure as a writing aid, **not** an exact input/output schema unless an existing interface already requires one.
 
-```text
-Task: <ticket ID + observable objective>
-Binding: <repo> | branch <name> | base <sha> | accepted plan <path>@<sha>
-Read: <relevant local instructions/paths and accepted glossary/ADR context>
-Scope: <affected behavior and material consumers; binding limits>
-AC:
-- <testable criterion>
-- <testable criterion>
-Verify: <existing harness, required RED evidence, integration/risk checks>
-Tools: <only needed skill cues, e.g. literal $diagnosing-bugs for bug work>
-Specialists: use only for concrete benefit; retain installed model/reasoning limits
-Report: CAC-CODEX result; missing checks and blockers explicit; no work diary
+## 2. Notation
+
+| Content | Compact representation |
+|---|---|
+| One instruction | Brief directive with original modality |
+| Related parameters | `key: value` mapping |
+| Several constraints | Short list |
+| Conditional behavior | `when` / `then` / `except` |
+| Code location | Existing `path:line`, symbol, or commit reference |
+| Technical difference | `observed` / `expected` / `difference` |
+| Simple state | One labeled line |
+| Hard-to-compress reasoning | Brief, explicit prose |
+
+Markdown + YAML-like mappings are the default *options*, not compulsory serialization. Avoid nesting that costs more tokens than an ordinary sentence; omit empty fields. Do not impose a glossary or a novel programming language on the reader.
+
+## 3. Instruction and skill wording: examples
+
+### Example A — compact task description
+
+**Verbose sample:**
+
+> In the illustrative parser, dates arrive as ISO strings. If a date has no timezone, the currently configured default timezone applies. The existing error mapping is unchanged.
+
+**CAC:**
+
+```yaml
+parser_input: ISO_date_string
+timezone:
+  when: missing
+  use: existing_configured_default
+error_mapping: unchanged
 ```
 
-- Read full relevant plan, code and instructions even when the prompt is short; the Coder must already bind the task to the exact accepted plan and branch.
-- Pass established terms and implementation-critical facts; do not paste all upstream SOULs, full plans, old reviews, or successful tool logs when directly retrievable and already mandated.
-- When a source is inaccessible to Codex, include its essential task-specific content; a path alone is insufficient.
-- On resume include current diff/state, exact remaining AC/findings, invalidated evidence, and required method cues; do not repeat already satisfied preparation.
-- Do not silently turn suggestions into constraints or expand scope because a possible improvement seems attractive.
+### Example B — precise exception
 
-## 3. Work contract
+**Verbose sample:**
 
-1. Inspect actual repo/branch, relevant code, accepted contract, callers/consumers, tests, and existing work before editing. Preserve unrelated changes.
-2. Resolve implementation decisions within delegated accepted scope; report unresolved authority, security, API, or requirement conflicts.
-3. Use appropriate tests and existing infrastructure. Preserve recorded RED-before-fix where required by the Hermes Coder policy; if no RED was observed, report that fact.
-4. Diagnose actual failures; require literal `$diagnosing-bugs` for bug tasks, resumes, and newly encountered unexplained regressions as directed by the Coder.
-5. Preserve completeness across changed value sets, persisted data, schema/enum consumers, exports, APIs, and risk invariants. Do not remove required coverage to save tokens.
-6. Use optional Codex specialists only for distinct demonstrated benefit. Keep their pinned settings, permissions, source boundaries, and native review independence.
-7. Do not invent recovery/dispatch loops, modify model/provider/reasoning settings outside policy, or install tooling without authorization.
-8. Continue to a verified result when feasible; fix recoverable tool failures. Escalate concrete blockers rather than retrying the same failed path indefinitely.
-9. Supply exact test failures/warnings; preserve original results retrievably. A brief success report is allowed only after inspection of actual results.
-10. Keep implementation changes legible and proportional. Do not abbreviate source code or discard important comments merely to reduce LLM tokens.
+> The value `null` is allowed for optional fields, but it is not allowed for the required field `id`.
 
-## 4. Output contract: Codex → Hermes Coder
+**CAC:**
 
-Default final response:
-
-```text
-result: DONE | BLOCKED | PARTIAL
-scope: <ticket ID + brief implemented effect>
-files: <paths only when needed for handoff>
-AC: <verified criterion IDs; identify unchecked ones>
-checks: Tests passed | <failed/skipped/unavailable check + impact>
-RED: <evidence ref> | not demonstrated
-risks: <material remaining risks/limits; omit if none>
-blocker: <specific action/permission needed; only if blocked>
-evidence: <retrievable source/result path when needed>
+```yaml
+null:
+  optional_fields: allowed
+  id: forbidden
 ```
 
-- `DONE` means Codex finished its delegated work, **not** that the ticket has passed independent review or that the code is published/deployed.
-- Do not assert a commit ID unless one actually exists and was checked. In the v4 flow the Hermes Coder owns committing and `kanban_request_review`.
-- Report output state accurately: implemented, checked, unverified, or blocked. Never transform an unsuccessful or unavailable check into `Tests passed`.
-- When a test fails, include exact failure identity, reproduction trigger, observed error, relevant file/location, and next corrective action. Use a path/reference for full logs when accessible.
-- A one-line output is enough if all required context is already available and no gaps exist. No fixed maximum applies to necessary findings.
-- Use compact Markdown or `key: value`; JSON/YAML only when an actual consumer parses it. These illustrative labels are not Codex API keys.
+### Example C — simple rule without extra structure
 
-## 5. Language / artifact policy
+```text
+MUST retain existing API field names.
+```
 
-- English, direct technical clauses. Keep conditions, negations, permissions, and evidence explicit.
-- Remove progress narration, self-congratulation, repeated ticket text, raw successful test listings, and speculative redesign essays.
-- Use stable names and clear references. Do not invent private abbreviations or symbolic codes that need explanation.
-- For documentation required by the product or other humans, follow project conventions and intended audience; CAC compactness is specific to agent-facing artifacts.
-- Human questions about missing permissions or product decisions must contain sufficient context/options; avoid mechanical shorthand.
+No behavior is introduced by these examples; they only demonstrate representation of hypothetical existing information.
 
-## 6. Integration constraints for `generic-devteam` v4
+## 4. Compact Codex-facing messages: suggestions
 
-- The Coder currently puts literal `$caveman` in every Codex task/resume. Replace that prompt style cue with the **shortest reliable CAC-CODEX instruction**, using an already supported loading path. Do not assume new skill metadata or a passive file link is loaded.
-- Do **not** remove or repurpose `PONYTAIL_DEFAULT_MODE=full`; Ponytail is a separate configured integration with native hooks. Preserve all approved process-local HOME/CODEX_HOME bindings.
-- Existing literal `$diagnosing-bugs` cues remain mandatory where currently specified.
-- Preserve installed Codex specialist TOMLs unchanged, `sdlc-review` independence, and exact model/reasoning boundaries.
-- Do not create or overwrite an `AGENTS.md` in the customer's product repository as a side effect of Maker setup. Any project-specific AGENTS.md change is a separately scoped product action.
-- Optimize recurring context: compare a brief inline CAC prompt clause with a verifiably loaded owned CAC skill before choosing. A longer mandatory skill may cost more than a concise stable prompt.
+These are **optional message shapes**. They do not prescribe what Codex must do or report. Select only fields that already belong to the exchange.
 
-## 7. Verification
+### Task context
 
-- Test representative feature, bug/RED, resumed task, rejected finding, high-risk invariant, unavailable dependency, and partial-check scenarios.
-- Measure prompt+loaded-skill+response tokens and full correction/retry cost; compare to v4 baseline.
-- Preserve task success, actual validation, handoff adequacy, independence, and existing guardrails. Restore information when compression increases uncertainty or correction loops.
+```yaml
+ref: T42
+target: <existing target>
+change: <requested delta>
+constraints: [<existing constraint>]
+context: <minimal necessary fact or resolvable reference>
+```
 
-**Core rule:** Codex performs the full engineering task, then returns the smallest accurate, actionable result to Hermes Coder.
+### Technical result / handoff
+
+```yaml
+ref: T42
+revision: <commit or artifact reference>
+changes: <concise factual summary>
+observed: <relevant observed outcome>
+open: <relevant unresolved detail, if any>
+```
+
+### Defect / review observation
+
+```yaml
+at: src/example/Parser.java:84
+observed: null_value_accepted
+expected: id_non_null
+impact: invalid_record_possible
+evidence: <actual evidence reference>
+```
+
+### Single-line message
+
+```text
+ref: T42 | rev: a1b2c3d | result: <short factual outcome>
+```
+
+### Conditional detail
+
+```yaml
+case:
+  when: <condition>
+  observed: <fact>
+  exception: <exception if relevant>
+```
+
+Field names and examples express a notation only; they do not add obligations, redefine existing fields, or establish status transitions.
+
+## 5. Code and document boundaries
+
+- **Codex-facing text:** use this compact notation when it improves clarity and token economy.
+- **Source code:** keep syntax and project coding conventions; CAC is not a code formatter.
+- **Code comments and human documentation:** prioritize the intended reader and necessary explanation.
+- **Human conversation:** use clear natural language rather than cryptic agent shorthand.
+- **Existing machine-readable formats:** keep their required syntax and semantics; CAC does not supersede JSON schemas, APIs, or other formal contracts.
+
+**Core test:** The compact version communicates the same information, with equally clear conditions and fewer unnecessary tokens. If a structure obscures meaning or increases length, use a short sentence instead.
