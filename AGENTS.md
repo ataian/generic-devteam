@@ -1,22 +1,17 @@
 # Maker package changes
 
-Use the existing package SemVer in `SKILL.md` and `manifest.json`.
-Update both version fields together for every delivered Maker package change.
-Use a MAJOR bump for an incompatible change.
-Use a MINOR bump for compatible functionality.
-Use a PATCH bump for a compatible fix, documentation change, recipe change, or script extraction.
-Apply one bump to a coherent changeset or release, not one bump per file or test correction.
-Keep historical commits and their version values unchanged.
-Record the package version and exact Maker commit separately in setup and update evidence.
+## Version and evidence
 
-Before editing agent-context Markdown, load the complete upstream TAS entrypoint and required references through [TAS authoring upstream](references/upstream-sources.md#tas).
-Apply TAS to every new or changed instruction in those files.
-Keep role-template changes and live-team rollout as separate authorizations.
-Run `python3 -B -m unittest discover -s references -p 'test_*.py'` before committing package changes.
+Apply one SemVer bump per delivered Maker changeset or release. Update `SKILL.md` and `manifest.json` together.
+Use MAJOR for incompatibility, MINOR for compatible functionality, and PATCH for compatible fixes, docs, recipes or script extraction.
+Preserve historical commits and versions. Record package version and exact Maker commit separately in setup and update evidence.
 
-Budget agent-context prose: `test_brownfield_planning` enforces a combined byte ceiling for `skills/brownfield-feature-planning/SKILL.md` plus each of its references. Measure that pair with `wc -c` before and after a prose edit, and run the test before committing. `kanban-phase-release.md` has almost no slack; prune or split there instead of raising a ceiling.
-Put durable role decision rules in the SOUL templates instead of growing the skill.
-Contract tests assert existing phrases word for word; re-run the suite after any deletion.
+## Instruction changes
 
-For explicit Maker development or review, use [Development verification](references/development-verification.md).
-Do not require those checks during ordinary team setup.
+Read and apply [CAC authoring](references/cac-authoring.md) before editing agent instructions.
+Keep durable role decisions in the SOUL templates. Role-template edits and live-team rollout require separate authorization.
+
+`test_brownfield_planning` caps the combined bytes of `skills/brownfield-feature-planning/SKILL.md` and each reference. Measure each affected pair with `wc -c` before and after prose edits. Prune or split `kanban-phase-release.md` to fit its near-full budget. Keep the ceiling.
+
+Use [Development verification](references/development-verification.md) for explicit Maker development or review only.
+Run `python3 -B -m unittest discover -s references -p 'test_*.py'` before committing package changes. Re-run after deletions because contract tests pin exact phrases.

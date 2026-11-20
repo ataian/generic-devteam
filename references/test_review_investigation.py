@@ -128,7 +128,7 @@ class ReviewInvestigationTests(unittest.TestCase):
                      r'"reviewed_commit":"<exact-commit>"',
                      r"kanban_request_changes", r'kanban_block\(kind="capability"',
                      r"already-consumed one-shot allowance does not renew",
-                     r"Use it to format findings, including its Auto-Clarity exceptions")
+                     r"Explain security findings with references, architectural disagreements with rationale, and onboarding findings with needed context")
 
     def test_removing_operative_bodies_fails_contracts_not_only_headings(self):
         text = self.rendered()

@@ -5,10 +5,9 @@ It proposes changes; it does not judge product acceptance or apply maintenance a
 
 ## Use without installation
 
-Read [SKILL.md](SKILL.md) and its required [method](references/method.md), then request a process retrospective.
-The complete package works from its own directory without the Maker or any upstream skill installation.
-Required capabilities: read files, search relevant history, and inspect available task/run records read-only.
-Missing history limits the result; it is not reconstructed.
+Read [SKILL.md](SKILL.md) and its required [method](references/method.md), then request a process retrospective. The complete package works from its own directory without Maker or an upstream skill installation.
+
+Required access is read-only: files, relevant history search and available task/run records. Missing history limits the result and is never reconstructed.
 
 Examples:
 
@@ -18,28 +17,20 @@ Examples:
 - `Run a process retrospective for session <session-id>.`
 - `Run a process retrospective for ticket <ticket-id>, phases <range>.`
 
-With no named target, the skill uses the current conversation.
-A historical target requires accessible original records, including relevant worker records when available.
+The default target is the current conversation. For a historical target, the skill needs accessible original records, including relevant worker records when available.
 
 ## Optional registration
 
-After explicit installation authorization, copy this complete directory to the intended runtime's skill location as `retro/`.
-Keep `SKILL.md`, `README.md`, `references/method.md`, `LICENSE`, and `NOTICE.md` together and unchanged.
-Before copying, inspect the target's active skill roots and built-in commands for a `retro` collision.
-Preserve existing packages; report a conflict instead of renaming or overwriting silently.
+1. Obtain explicit installation authorization. Before copying, inspect the target's active skill roots and built-in commands for a `retro` collision. Preserve existing packages and report conflicts. Do not rename or overwrite silently.
+2. Copy the complete directory as `retro/` into the intended runtime's skill location. Keep `SKILL.md`, `README.md`, `references/method.md`, `LICENSE` and `NOTICE.md` together and unchanged.
+3. In Hermes, verify one intended `retro` identity and complete loaded content with native catalog/main/reference readbacks. Verify that native discovery supplies `/retro` on the intended communication surface before claiming registration. The description also supports explicit natural-language requests. Do not rely on `disable-model-invocation` to enforce explicit-only use in Hermes.
 
-For Hermes, use native catalog/main/reference readbacks to verify one intended `retro` identity and the complete loaded content.
-Native skill discovery supplies `/retro`; verify availability on the intended communication surface before claiming registration.
-The description supports selection after an explicit natural-language request too.
-Do not rely on `disable-model-invocation` to enforce this policy in Hermes.
-No target installation or discovery is established by these package files.
+Package files alone establish neither target installation nor discovery.
 
 ## Output and authority
 
-Expect a short severity-ordered set of sourced process proposals, including causes, owners, benefits, and trade-offs.
-A smooth or poorly evidenced run may support no changes.
-User selection and an explicit implementation scope precede any change.
-Native `/refine` skill-and-memory maintenance remains a separate user action.
+Expect short, sourced process proposals in severity order, with causes, owners, benefits and trade-offs. A smooth or poorly evidenced run may support no changes.
+Any change requires user selection and explicit implementation scope. Native `/refine` skill-and-memory maintenance remains a separate user action.
 
 ## Verification and provenance
 

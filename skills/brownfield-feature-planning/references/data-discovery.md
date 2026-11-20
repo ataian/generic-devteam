@@ -1,142 +1,57 @@
 # External-data discovery
 
-Use when a feature depends on supplied files, reference catalogs, export mappings,
-or an optional datastore. Apply only the sections required by the accepted goal.
-Discovery does not authorize implementation, source copying, or target mutation.
+Trigger: supplied files, reference catalogs, export mappings, or an optional datastore. Use only sections required by the accepted goal. Discovery grants no implementation, source-copy, or target-mutation authority.
 
 ## Establish source identity and format
 
-1. Locate inputs through maintained import documentation and the supplied location.
-   Narrow an ambiguous location with a parent-directory inventory.
-   Do not search the whole home directory for a documented bulk input.
-2. Read each source with its schema or README before proposing import or lookup rules.
-   Confirm encoding separately for each file.
-   Verify delimiters, field meanings, multiplicity, format version, and null representation.
-   Compare actual shapes with current builders; historical files can use other names or cardinalities.
-3. Verify canonical source identity and hashes before relying on a sample.
-   Temporary mocks can have the same filename as an operational catalog.
-   Keep permitted provenance in the existing plan or task, not a new evidence document.
-4. Inspect sensitive content machine-side with narrowly scoped projections.
-   Return only required schema-known field names, types, and collection sizes.
-   Do not expose values, arbitrary dictionary keys, free text, or identifying filenames.
-   Treat pseudonymized material as sensitive rather than synthetic.
-5. Keep restricted source identities and case-to-filename mappings in authorized protected local storage.
-   Use neutral case aliases in plans, tickets, delegated prompts, and reports.
-   Use synthetic fixtures for shareable tests.
-   Source-read permission does not grant database writes, exports, or implementation release.
-
-For tests using operational files or a populated database, load
-[Authorized local source-data acceptance](replacement-imports.md#authorized-local-source-data-acceptance).
-A supplied directory or service address is not evidence of a matching record or successful prior job.
+1. Locate inputs through maintained import docs and the supplied location. Narrow ambiguity with a parent-directory inventory. Do not search the whole home for documented bulk input.
+2. Before proposing import or lookup rules, read each source with its schema/README. Check encoding per file, delimiters, field meanings, multiplicity, version, and null representation. Compare actual shapes with current builders. Historical names and cardinalities can differ.
+3. Before relying on a sample, verify canonical identity and hashes. A mock can share an operational filename. Keep permitted provenance in the existing plan or task.
+4. Inspect sensitive content machine-side with narrow projections. Return only required schema-known field names, types, and collection sizes. Exclude values, arbitrary dictionary keys, free text, and identifying filenames. Pseudonymized data remains sensitive.
+5. Store restricted source identity and case-to-filename mappings in authorized protected local storage. Use neutral aliases in plans, tickets, delegated prompts, and reports. Use synthetic shareable fixtures. Source-read access grants no database writes, exports, or implementation release.
+6. For operational-file or populated-database tests, load [Authorized local source-data acceptance](replacement-imports.md#authorized-local-source-data-acceptance). A supplied directory or service address proves neither a matching record nor a successful prior job.
 
 ## Resolve coverage and intended use
 
-Determine whether the dataset is a search aid or an authoritative validation source.
-Do not derive that decision from its shape or descriptive richness.
-A catalog of labels or synonyms can omit valid identifiers.
-Do not silently turn its search results into an allowlist.
-
-For time-dependent data, distinguish these coverage claims:
-
-- A current edition describes its published scope and period.
-- A historical union can retain identifiers no longer present in the current edition.
-- Coverage of identifiers in the user's records is not coverage of every identifier ever issued.
-
-Check whether retired identifiers must remain searchable.
-If historical labels are required, identify a source that actually contains them.
-Do not infer old meanings from current labels or promise historical completeness from the latest edition.
-Put unresolved source or coverage decisions in the plan as questions, not defaults.
-Ask one consequential domain question at a time.
-Reuse settled decisions instead of reopening them during each phase.
+- Decide explicitly whether the source aids search or governs validation. Shape and descriptive richness do not settle authority. Labels/synonyms can omit valid identifiers. Do not silently turn its search results into an allowlist.
+- Time coverage: a current edition covers its published scope and period. A historical union can retain retired identifiers. Coverage of user records does not establish coverage of every issued identifier.
+- Check whether retired identifiers must remain searchable. If historical labels are required, find a source containing them. Do not infer past meanings or historical completeness from the latest edition.
+- Record unresolved source/coverage choices as questions in the plan. Ask one consequential domain question at a time. Reuse settled decisions across phases.
 
 ## Trace transformation semantics
 
-1. Preserve the requested purpose.
-   An incomplete snapshot for viewing is not automatically a backup restore or an editable local record.
-   Do not add completeness rules, editing locks, or frontend work without an agreed need.
-2. Trace the active runtime exporter or builder from source storage to output paths.
-   Record consequential filters, identity substitutions, version mappings, and losses.
-   Keep a requested mapping explanation compact; mapping documentation is not another implementation phase.
-3. If the sender uses a clone's exporter, derive routine inverse mappings from that implementation.
-   Do not ask the user to reconstruct mappings already established in code.
-   Explain a many-to-one loss once and resolve only the consequential ambiguity.
-   Do not claim an exact inverse where the export discarded information.
-4. Inspect receiving storage, migrations, and read APIs separately from create/edit DTOs.
-   Authoring completeness can be stricter than the required snapshot read path.
-   Distinguish absent fields, supplied partial values, and inconsistent relationships.
-   Check nullability and supported precision before choosing defaults.
-5. Keep absent source facts absent unless the owner expressly authorizes normalization.
-   Separate generated technical identities from supplied facts.
-   Encode and test the exact approved normalization rule, including its limits.
-   Do not reject an approved representation or keep proposing an unapproved alternative.
-   A permitted partial-value default does not authorize filling a wholly absent value or other missing components.
-6. Reject or represent inconsistent input according to the agreed contract.
-   Do not silently drop supplied facts or report a partial import as complete.
-   Distinguish safe parsing, assignment, and persistence from product completeness validation.
+1. Preserve purpose. An incomplete viewing snapshot does not imply backup restoration or an editable record. Add completeness rules, editing locks, or frontend work only for an agreed need.
+2. Trace the active exporter/builder from source storage to output paths. Record consequential filters, identity substitutions, version mappings, and losses. Keep requested mapping explanations short. Mapping documentation needs no separate implementation phase.
+3. For a clone's exporter, derive routine inverse mappings from code. Ask only about consequential ambiguity. Explain any many-to-one loss once. Never claim an exact inverse after information loss.
+4. Inspect receiving storage, migrations, and read APIs separately from create/edit DTOs. Authoring may require more than the snapshot read path. Distinguish absence, partial values, and inconsistent relationships. Check nullability and supported precision before choosing defaults.
+5. Preserve absent facts unless the owner expressly permits normalization. Distinguish generated technical IDs from supplied facts. Encode and test the exact approved normalization rule, including its limits. Accept approved representations. Stop re-proposing unapproved alternatives. A partial-value default grants no authority to populate a wholly absent value or other missing components.
+6. Reject or represent inconsistent input per the agreed contract. Preserve supplied facts and report partial imports as partial. Check safe parsing, assignment, and persistence separately from product completeness.
 
-For protected ownership, document-local ID remapping, full snapshot replacement,
-and restoration of processed imports, load [Replacement-import planning](replacement-imports.md).
-Keep source-derived conclusions separate from execution-verified behavior.
+Load [Replacement-import planning](replacement-imports.md) for protected ownership, document-local ID remapping, full replacement, or restoration of processed imports. Keep source-derived findings distinct from execution-verified behavior.
 
 ## Match catalog behavior to the existing input
 
-Inspect the live call site, bound state, persistence/output path, API, and tests.
-Exclude commented or removed interfaces and superseded plans from the current-flow description.
-Trace input limits, truncation, normalization, and downstream match semantics.
-A displayed full identifier can become a prefix or another effective query value.
-
-If distinct selections collapse to the same effective input, make that consequence clear before submission.
-Do not promise independent exact queries for values that the current application merges.
-Resolve how multi-code results map to the existing input before choosing interaction details.
-Distinguish individually selectable values from individually submitted values.
-Prevent broad results or page-only actions from silently submitting unintended selections.
-Preserve selection semantics across filtering or pagination when that behavior is in scope.
-Choose controls and feedback from the agreed interaction contract; no fixed widget or counter layout is required.
-
-For bounded clients, define server-side result limits, request timing, response size, and failure behavior.
-Do not send the complete catalog to the browser merely because it fits on the server.
-Preserve the existing manual-input path when lookup is optional assistance.
-Bind acceptance to the actual submitted value and persisted result, not only the displayed label.
+1. Trace live call site, bound state, persistence/output, API, and tests. Exclude commented/removed interfaces and superseded plans. Follow limits, truncation, normalization, and downstream matches. A full display identifier can become a prefix or another effective query.
+2. Resolve multi-code results against the existing input before choosing controls. Distinguish individual selection from individual submission. Explain collapsed inputs before submission. Do not promise independent exact queries for merged values.
+3. Guard broad results and page-only actions against unintended submission. Preserve selection across filtering/pagination when in scope. Derive controls and feedback from the agreed interaction. No fixed widget or counter layout is required.
+4. For bounded clients, define server-side result limits, request timing, response size, and failure behavior. Server capacity alone does not justify sending a full catalog to the browser.
+5. Keep manual input when lookup is optional. Bind acceptance to the actual submitted value and persisted result. The displayed label alone is insufficient.
 
 ## Plan a reproducible load path
 
-If bulk data must remain outside Git, include an explicit repeatable, atomic importer in the feature scope.
-Version its schema and small synthetic tests.
-Provide short instructions with real import and verification commands.
-Keep a mostly static bulk load opt-in rather than part of ordinary application startup.
-A database-backed search is incomplete without a reproducible way to populate it.
-
-Reuse existing import logic and repository methods before proposing replacements.
-Name the producing repository and consuming runtime separately.
-Load [Operator script acceptance](operator-script-acceptance.md) when delivery includes an operator entrypoint.
-Keep its build, execution, and verification requirements within the accepted feature boundary.
+- Bulk data outside Git: include a repeatable atomic importer, versioned schema, small synthetic tests, and short instructions with real import and verification commands. Keep mostly static loads opt-in and outside routine startup. Database-backed search needs a reproducible population path.
+- Check existing import logic and repository methods before proposing a replacement. Name producer repository and consuming runtime separately.
+- Operator entrypoint: load [Operator script acceptance](operator-script-acceptance.md). Keep build, execution, and verification within accepted scope.
 
 ## Optional data features
 
-Define one authoritative enable flag and its default explicitly.
-Trace its configuration into each consuming process.
-Do not let an existing installation accidentally acquire a new datastore dependency.
-
-When disabled, require no optional datastore, connection attempt, migration, import, or dependent UI.
-Verify that the original workflow still works.
-Keep disablement separate from data deletion.
-
-When enabled but unavailable, preserve the core application if the feature is optional.
-Expose a lightweight unavailable state and log the cause for operators.
-Allow recovery without an application restart.
-Distinguish this temporary failure from intentional disablement.
-Choose its visual treatment from the accepted interaction requirements, not a prescribed tooltip or control.
-
-Check containment through actual application behavior rather than datastore packaging alone.
-Distinguish a per-database dump from a whole-cluster or volume backup.
-A separate datastore does not remove shared CPU, memory, storage, or backup costs.
+- Configuration: define one authoritative enable flag and its default. Trace the value into each consumer. Prevent accidental new datastore dependencies in existing installations.
+- When disabled, require no optional datastore, connection attempt, migration, import, or dependent UI. Verify the original workflow. Keep disablement separate from data deletion.
+- Enabled but unavailable: preserve the core application for optional features. Show a lightweight unavailable state, log the cause for operators, and allow recovery without restart. Distinguish temporary outage from intentional disablement. Choose presentation from accepted interaction requirements without prescribing a tooltip or control.
+- Verify failure containment through application behavior. Distinguish per-database dumps from cluster/volume backups. A separate datastore still shares CPU, memory, storage, and backup costs.
 
 ## Verification boundary
 
-Use synthetic cases to test relevant format variants, coverage limits, transformation losses,
-normalization exceptions, effective query values, and disabled/unavailable behavior.
-Map each check to an accepted requirement or a concrete changed-code risk.
-Retain independent review and all required real-operation gates.
-Label planned imports, source inspection, parser tests, and end-to-end runs separately.
-Store project-specific mappings and decisions in the existing approved plan or task.
-Do not add a separate discovery report or acceptance framework.
+- Use synthetic cases for relevant format variants, coverage limits, transformation losses, normalization exceptions, effective queries, and disabled/unavailable paths. Tie checks to accepted requirements or concrete changed-code risks.
+- Retain independent review and all required real-operation gates. Label planned imports, source inspection, parser tests, and end-to-end runs separately.
+- Keep project mappings and decisions in the existing approved plan or task. Do not add a discovery report or acceptance framework.

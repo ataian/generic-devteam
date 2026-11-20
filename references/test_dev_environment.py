@@ -47,11 +47,11 @@ class DevelopmentEnvironmentTests(unittest.TestCase):
     def test_absent_usable_and_incomplete_paths_preserve_scope(self):
         text = self.text()
         for clause in (
-            "Reuse a working toolchain and its entrypoint",
+            "Reuse a working toolchain and entrypoint",
             "If absent, plan the tools under `docker/dev/`",
-            "if incomplete, fix only the gap within the accepted scope",
-            "Preserve existing local inputs and data",
-            "Documentation-only adoption does not authorize rebuilding",
+            "If incomplete, fix only the gap within the accepted scope",
+            "Preserve local inputs and data",
+            "Documentation-only adoption authorizes no rebuild",
             "Resolve missing Docker access with the operator",
         ):
             with self.subTest(clause=clause):
@@ -59,31 +59,38 @@ class DevelopmentEnvironmentTests(unittest.TestCase):
 
     def test_only_guide_carries_environment_specific_operations(self):
         text = self.text()
-        for clause in ("one extremely short `docker/dev/AGENTS.md` in Caveman Full style",
-                       "what a coder needs to do differently", "one line per operation",
-                       "require the guide when a task uses the environment"):
+        for clause in (
+            "Guide: one short `docker/dev/AGENTS.md`, or the actual guide path in an adopted layout.",
+            "Content: only environment-specific changes to the coder's workflow.",
+            "Use one line per operation with a short label and exact invocation.",
+            "State non-obvious targets or destructive effects where relevant.",
+            "Loader: root `AGENTS.md` requires the guide by repository-relative path when a task uses the environment.",
+        ):
             self.assertIn(clause, text)
+        self.assertNotIn("Caveman", text)
         self.assertNotIn("HOWTO-human.md", text)
 
     def test_optional_database_targets_only_development_state(self):
         text = self.text()
-        for clause in ("only when the coding workflow needs one", "verify the dev target before writes",
+        for clause in ("add a project-compatible database to development Compose only if needed for coding",
+                       "verify the dev target before writes",
                        "If branch databases are agreed", "preserve its state on return",
                        "Reset only the selected disposable state"):
             self.assertIn(clause, text)
 
     def test_tools_see_working_tree_and_deployment_stays_separate(self):
         text = self.text()
-        for clause in ("must not be installed on the host", "not an agent sandbox",
+        for clause in ("Do not install these tools on the host", "not an agent sandbox",
                        "Bind-mount the current checkout directly", "without staging, copying or synchronizing",
-                       "may start the app from source", "deployment configuration under separate authorization"):
+                       "optionally start the app from source", "deployment configuration under separate authorization"):
             self.assertIn(clause, text)
 
     def test_acceptance_exercises_edit_and_new_test(self):
         acceptance = self.text().split("## Verify the developer workflow\n", 1)[1]
         for clause in ("Reviewer follows the guide", "runs a real project build",
                        "one reversible source change and a new, untracked targeted test",
-                       "rerun the selected test", "result reflects the change",
+                       "Rerun the selected test after the edit.",
+                       "Its result must reflect the change without staging files or rebuilding the tool image.",
                        "any unverified capability on the existing task"):
             self.assertIn(clause, acceptance)
         self.assertNotIn("demonstration", acceptance.lower())

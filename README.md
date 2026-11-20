@@ -36,10 +36,9 @@ Der [Bootstrap-Prompt](references/main-agent-wrapper.md) beschreibt diesen Einst
 
 Öffne den Checkout im vorhandenen Hermes und beauftrage:
 
-> Read repository-root `SKILL.md` and its required setup references. Configure my new team.
-> Group all foreseeable choices during preparation, show the complete parameters and concrete changes,
-> disclose later protected login/hook approval and `/sethome` actions, then obtain the start decision.
-> Do not begin product work.
+> Goal: configure my new team. Load repository-root `SKILL.md` and its required setup references.
+> Preparation: group foreseeable choices. Present all parameters and concrete changes. Disclose deferred protected login, hook approval and `/sethome` actions.
+> Gate: obtain the start decision before setup. Do not begin product work.
 
 Dieser dateibasierte Einstieg benötigt keine vorherige Registrierung des Makers
 im Skillkatalog. Für dauerhaftes Laden über den Skillnamen folgt die Installation.
@@ -59,19 +58,18 @@ oder Bauen des Pakets ein Setup auszuführen.
 3. Nach Freigabe kopiere diesen vollständigen Baum in dessen
    `skills/generic-devteam/`. Existiert das Ziel, vergleiche zuerst Herkunft und
    lokale Änderungen; niemals fremde Anpassungen überschreiben. Die vollständigen
-   eigenen Skillbäume behalten ihre `SKILL.md`.
-   Copy complete skill trees to their assigned targets.
-   Personalize role templates and bind only the recovery launcher through the Maker setup step.
-   Keep all other skill bytes unchanged.
+   eigenen Skillbäume behalten ihre `SKILL.md`. Der Maker liefert jeden Skillbaum
+   vollständig an die vorgesehenen Ziele, personalisiert die Rollenvorlagen und
+   bindet den Recovery-Launcher. Alle übrigen Skilldateien bleiben unverändert.
 4. Prüfe in diesem Profil native Discovery von `generic-devteam`, lade `SKILL.md`
    und `references/setup.md` ausdrücklich. Der bestehende Sitzungskatalog und ein
    neu aufgelöstes Skillpaket sind unterschiedliche Nachweise; keinen globalen
    Gatewayrestart allein zur Katalogaktualisierung auslösen.
 5. Beauftrage im Ziel-Hermes beispielsweise:
 
-   > Load generic-devteam. Complete grouped preparation for my new team before any setup writes.
-   > Present all parameters, changes and disclosed deferred interactions for the start decision.
-   > Configure and verify setup outputs; do not begin product work.
+   > Load generic-devteam. Goal: configure my new team and verify setup outputs.
+   > Before setup writes: complete grouped preparation. Present all parameters, changes and deferred interactions for the start decision.
+   > Do not begin product work.
 
 Complete independent questions together and dependent choices within preparation.
 Offer the Sol default set once: Planner fixed high; Hermes Coder fixed medium;
@@ -120,7 +118,7 @@ Interview, design, and explicit plan acceptance remain separate. Acquisition and
 Use `to-questionnaire` on request to draft a Markdown questionnaire for one external expert; creation does not authorize sending or accepting new scope.
 The Planner decomposes work by actor, behaviour, benefit, and independently verifiable outcomes, not technical layers.
 Necessary foundations trace to enabled stories; stories, phases, and tickets need not map one-to-one.
-Tickets use concise user-story titles and structured bullets: goal/context, acceptance criteria, technical implementation, verification, dependencies and exact plan/phase/commit binding.
+Put the user story in the title once. The body adds context, observable criteria, technical constraints, verification, dependencies and exact plan/phase/commit binding.
 Cards remain understandable alone, aligned with the authoritative accepted plan, and subject to Coder implementation discretion.
 Plans and ticket text use glossary vocabulary and relevant accepted ADRs, including without active domain modelling.
 Plan synthesis states the user's problem and user-visible solution, concrete test seams and analogous tests, meaningful scope boundaries, and decisions clarified by actual prototypes.
@@ -173,15 +171,16 @@ Report skipped and failed teams separately.
 ## Setup output verification
 
 Use [Verification](references/verification.md) for ordinary setup output readbacks and baseline completion.
+The Maker checks that the complete instructions load before deliberately activating the adapter,
+setting Home with `/sethome`, or starting task work. If the gateway already admitted the Planner
+when the profile was created, the Maker records that event and checks the current routing and context.
 Reuse evidence from each step; do not add synthetic memory, helper, communication, coding/review, or indexing trials.
 Report real incomplete bindings precisely. Excluded behavior tests are outside scope, not pending gates.
 The completion statement requires the private installation marker and pristine personalized baselines.
 
 ## Maker development and review
 
-For agent-instruction authoring/review, load the standalone [TAS upstream](references/upstream-sources.md#tas).
-This Maker contains no maintained TAS copy and installs no TAS into team roles.
-The manifest pin identifies published TAS `1.2.0`, including its writing-for-agents adaptation and addition-reconciliation rule; record any commissioned local changes separately.
+For instruction changes and reviews, use [CAC authoring](references/cac-authoring.md). The rendered role instructions and team-local Codex instructions carry the writing rules where each agent works.
 
 For explicitly requested authoring/review or separately commissioned behavioral qualification,
 use [Development verification](references/development-verification.md).

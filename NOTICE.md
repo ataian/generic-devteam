@@ -95,17 +95,14 @@ There is no automatic upstream synchronization or claim of measured review-quali
 
 ## Fremdkomponenten und technische Grenzen
 
-TAS is an external authoring dependency from [ataian/tas](https://github.com/ataian/tas), identified in the manifest and [source recipe](references/upstream-sources.md#tas).
-The Maker ships no normative TAS copy and assigns no TAS team-role installation; the complete upstream package retains its own MIT and third-party notices.
+Earlier Maker versions used [TAS](https://github.com/ataian/tas) for authoring. Its MIT and third-party notices remain with the upstream package.
 Matt Pocock's `to-questionnaire` is an unchanged Planner-only upstream asset in the existing pinned Matt component, not an owned adaptation or bundled Maker copy. Preserve its complete tree and the original root MIT license through the integration recipe.
 
 Fremdkomponenten sind Bezugsidentitäten mit dokumentierten Zielrezepten, keine
 mitexportierten Installationen. Ihre konkreten Bezugsstände behalten eigene
 Lizenzen/Notices; unsere MIT-Lizenz lizenziert sie nicht um. Rechercheidentitäten
 in nativen Rezepten sind keine Installationspins oder Runtimegarantien.
-For the two Caveman writing skills, `source_revision` pins the original release in the `caveman` component.
-`caveman-review.source_component` reuses that source identity.
-Their upstream texts remain unchanged; role SOULs extend their prose scope and preserve the review workflow.
+Earlier releases assigned the original [Caveman and Caveman Review](https://github.com/JuliusBrussee/caveman) skills. Their licenses and notices remain with those upstream assets.
 
 The manifest stage `setup-recipe` describes a recipe package, not qualified live-team behavior. General timeout/retry/rate-limit investigation and synthetic behavioral experiments are outside normal setup scope.
 

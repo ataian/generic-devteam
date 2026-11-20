@@ -1,10 +1,11 @@
-"""Isolated updater contracts. No live Hermes imports or profile writes."""
+"""Isolated updater contracts. No live Hermes calls or profile writes."""
 from typing import Any
 import json
 import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -272,7 +273,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertIn("`Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code`", target.read_text())
         coder = (Path(self.roles['coder']['home']) / 'SOUL.md').read_text()
         self.assertIn('kanban_block(kind="needs_input", reason=...)', coder)
-        self.assertIn('Keep the same card and Coder assignment.', coder)
+        self.assertIn('Keep card and Coder assignment.', coder)
         self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder)
         self.assertIn('Send one TIMER request to `fixture-planner`', coder)
         record = json.loads((self.state / 'installation.json').read_text())
@@ -986,8 +987,8 @@ class UpdaterTests(unittest.TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(b'Local upstream asset; preserve edits.\n')
             external[str(target)] = target.read_bytes()
-        names = ('tas', 'codex-cli', 'superpowers', 'grill-me', 'hindsight', 'ponytail',
-                 'caveman', 'find-skills', 'codex-custom-agents', 'codebase-memory', 'graphify')
+        names = ('codex-cli', 'superpowers', 'grill-me', 'hindsight', 'ponytail',
+                 'find-skills', 'codex-custom-agents', 'codebase-memory', 'graphify')
         for index, name in enumerate(names):
             with self.subTest(component=name):
                 item = manifest['upstream_components'][name]
@@ -1012,6 +1013,359 @@ class UpdaterTests(unittest.TestCase):
                 for target, original in external.items():
                     self.assertNotIn(target, managed)
                     self.assertEqual(Path(target).read_bytes(), original)
+
+    def test_cac_recipe_orders_staging_files_retirement_and_readbacks(self):
+        """Static checks of the required operator order, with no native execution."""
+        recipe = (self.repo / 'references/update.md').read_text()
+        heading = '## CAC migration\n'
+        self.assertIn(heading, recipe.splitlines(keepends=True))
+        section = recipe.split(heading, 1)[1].split('\n## ', 1)[0]
+        ordered = ('1. **Inspect**', '2. **Approve and back up**', '3. **Stage CAC**',
+                   '4. **Apply files, then retire legacy bindings**', '5. **Verify and resume**',
+                   '6. **Roll back**')
+        positions = [section.index(step) for step in ordered]
+        self.assertEqual(positions, sorted(positions))
+        for start, end, clauses in (
+            (0, 1, ('pre-update manifest', 'absence from the target manifest',
+                    'CODEX_PROCESS_HOME', 'CODEX_HOME', 'AGENTS.override.md', 'nested project', 'truncation')),
+            (1, 2, ('`pending`', 'outside all discovery roots', 'complete inventories, hashes, ownership, modes',
+                    'activity decision')),
+            (2, 3, ('`$CODEX_HOME/AGENTS.md`', 'preserve local text', 'withhold dependent file application')),
+            (3, 4, ('After successful file application', 'concurrent drift', '`skills.auto_load`',
+                    'only proven, pristine, authorized team-owned trees', 'foreign, shared, edited',
+                    'without deleting, masking, or overwriting')),
+            (4, 5, ('`complete` only', 'fresh native discovery', 'task and resume', 'both harnesses',
+                    'PONYTAIL_DEFAULT_MODE=full', 'even after installation metadata advances',
+                    'Repeat the file proposal and companion checks', 'files updated; team update incomplete')),
+        ):
+            for clause in clauses:
+                with self.subTest(step=ordered[start], clause=clause):
+                    self.assertIn(clause, section[positions[start]:positions[end]])
+        apply = section[positions[3]:positions[4]]
+        self.assertLess(apply.index('After successful file application'), apply.index('reconcile `skills.auto_load`'))
+        self.assertLess(apply.index('reconcile `skills.auto_load`'), apply.index('Retire only proven'))
+        rollback = section[positions[-1]:]
+        for clause in ('file-helper rollback', 'later edits', 'only recorded, authorized changes',
+                       'native readbacks', 'renewed `pending`'):
+            self.assertIn(clause, rollback)
+        self.assertLess(rollback.index('Restore required legacy trees'),
+                        rollback.index('Restore the prior Codex home instruction after reverting dependent SOULs'))
+        for heading in ('Prepare and review one team', 'Activity and application', 'Verify and hand off'):
+            body = recipe.split(f'## {heading}\n', 1)[1].split('\n## ', 1)[0]
+            self.assertIn('(#cac-migration)', body)
+        companion = recipe.split('## Required upstream companion update\n', 1)[1].split('\n## ', 1)[0]
+        self.assertNotIn('Caveman, caveman-review', companion)
+        self.assertNotIn('integrations.md#caveman', companion)
+
+    def test_cac_recipe_requires_fresh_native_checks_and_journaled_recovery(self):
+        recipe = (self.repo / 'references/update.md').read_text()
+        cac = recipe.split('## CAC migration\n', 1)[1].split('\n## ', 1)[0]
+        approval = cac.split('2. **Approve and back up**', 1)[1].split('3. **Stage CAC**', 1)[0]
+        self.assertIn('Generic upstream approval alone does not authorize CAC writes', approval)
+        companion = recipe.split('## Required upstream companion update\n', 1)[1].split('\n## ', 1)[0]
+        self.assertIn('Route existing-team Team-Codex instruction writes and legacy Caveman reconciliation '
+                      'through [CAC migration](#cac-migration)', companion)
+        for action in ('staging', 'dependent file application', 'each retirement mutation',
+                       'each rollback mutation'):
+            self.assertIn('immediately before ' + action, cac)
+        for evidence in ('`current_run_id`', '`claim_lock`', '`ended_at`', 'worker, dispatcher, and session',
+                         'defer affected writes', 'read-only'):
+            self.assertIn(evidence, cac)
+        retirement = cac.split('4. **Apply files, then retire legacy bindings**', 1)[1]
+        self.assertLess(retirement.index('Persist and read back the intent'), retirement.index('mv --no-copy'))
+        for recovery in ('original present and quarantine absent', 'original absent and quarantine present',
+                         'both paths present', 'both paths absent', 'no copy/delete fallback'):
+            self.assertIn(recovery, cac.lower())
+        rollback = cac.split('6. **Roll back**', 1)[1]
+        self.assertLess(rollback.index('before restoring either'), rollback.index('Restore required legacy trees'))
+        self.assertLess(rollback.index('Restore required legacy trees'), rollback.index('run the file-helper rollback'))
+        self.assertLess(rollback.index('run the file-helper rollback'),
+                        rollback.index('Restore the prior Codex home instruction'))
+
+    def cac_rename(self, source, destination):
+        """Run the documented stock command on disposable paths."""
+        recipe = (self.repo / 'references/update.md').read_text()
+        commands = [line.strip() for line in recipe.splitlines() if line.lstrip().startswith('mv --no-copy ')]
+        self.assertEqual(len(commands), 1, 'CAC recipe must provide a rename-only command')
+        help_text = subprocess.run(['mv', '--help'], capture_output=True, text=True, timeout=10).stdout
+        if '--no-copy' not in help_text:
+            self.skipTest('GNU mv with --no-copy is required for the documented rename command')
+        return subprocess.run(['sh', '-c', commands[0]], capture_output=True, text=True, timeout=10,
+                              env=dict(os.environ, SOURCE=str(source), DESTINATION=str(destination)))
+
+    def test_cac_quarantine_interruptions_and_coordinated_rollback(self):
+        before = self.cac_revisions()
+        coder = Path(self.roles['coder']['home'])
+        soul = coder / 'SOUL.md'
+        old_soul = soul.read_bytes()
+        instruction = Path(before['confirmed_values']['CODEX_HOME']) / 'AGENTS.md'
+        local = b'# Local instructions\n'
+        staged = local + b'# Fixture CAC instruction\n'
+        u.atomic(instruction, local, None)
+        u.atomic(instruction, staged, u.digest(local))
+
+        original = coder / 'skills/caveman'
+        legacy = {'SKILL.md': (b'# Legacy writing skill\n', 0o640),
+                  'legal/LICENSE': (b'License fixture\n', 0o600)}
+        original.mkdir(mode=0o750)
+        for name, (data, mode) in legacy.items():
+            u.atomic(original / name, data, None, mode)
+        inode = original.stat().st_ino
+        config = coder / 'config.yaml'
+        old_config = b'skills:\n  auto_load: [local-skill, caveman, ponytail]\n'
+        retired_config = b'skills:\n  auto_load: [local-skill, ponytail]\n'
+        u.atomic(config, old_config, None)
+        private = u.private_dir(self.state / 'cac-quarantine')
+        quarantine = private / 'coder caveman'
+        backup = private / 'verified backup'
+        shutil.copytree(original, backup)
+
+        result = u.apply(self.home, self.proposal(), decision='proceed', review='Fixture stage readback',
+                         dependency_review='Approved CAC fixture scope')
+        run = Path(result['run'])
+        new_soul = soul.read_bytes()
+        self.assertIn(b'Fixture legacy requirement: load caveman', old_soul)
+        self.assertNotIn(b'Fixture legacy requirement: load caveman', new_soul)
+        u.atomic(config, retired_config, u.digest(old_config))
+        setup = self.state / 'setup.md'
+        intent = (f'\nCAC pending: retire {original} into {quarantine}; '
+                  f'backup {backup}; dependent file run {run}; inode {inode}.\n').encode()
+        u.atomic(setup, setup.read_bytes() + intent, u.fingerprint(setup))
+
+        # Interruption after intent, before rename. The pending source still holds the whole tree.
+        self.assertIn(intent, setup.read_bytes())
+        self.assertEqual(original.stat().st_ino, inode)
+        self.assertFalse(os.path.lexists(quarantine))
+        moved = self.cac_rename(original, quarantine)
+        self.assertEqual(moved.returncode, 0, moved.stderr)
+        # Interruption after rename, before receipt. Reopen the same intent and read both paths.
+        self.assertIn(intent, setup.read_bytes())
+        self.assertFalse(os.path.lexists(original))
+        self.assertEqual(quarantine.stat().st_ino, inode)
+        self.assertEqual(quarantine.stat().st_mode & 0o777, 0o750)
+        for name, (data, mode) in legacy.items():
+            self.assertEqual((quarantine / name).read_bytes(), data)
+            self.assertEqual(u.file_mode(quarantine / name), mode)
+            self.assertEqual((backup / name).read_bytes(), data)
+
+        # Restore the tree and autoload before the actual file-helper rollback restores its consumers.
+        restoring = f'\nCAC pending: restore {quarantine} to {original}.\n'.encode()
+        u.atomic(setup, setup.read_bytes() + restoring, u.fingerprint(setup))
+        moved = self.cac_rename(quarantine, original)
+        self.assertEqual(moved.returncode, 0, moved.stderr)
+        self.assertIn(restoring, setup.read_bytes())
+        self.assertEqual(original.stat().st_ino, inode)
+        self.assertFalse(os.path.lexists(quarantine))
+        u.atomic(config, old_config, u.digest(retired_config))
+        self.assertEqual(soul.read_bytes(), new_soul)
+        self.assertEqual(instruction.read_bytes(), staged)
+        self.assertEqual(u.rollback(self.home, run, decision='proceed')['status'], 'rolled-back')
+        self.assertEqual(config.read_bytes(), old_config)
+        self.assertEqual(soul.read_bytes(), old_soul)
+        self.assertEqual(instruction.read_bytes(), staged)
+        u.atomic(instruction, local, u.digest(staged))
+        self.assertEqual(instruction.read_bytes(), local)
+        self.assertEqual(u.load_record(self.home)[2], before)
+
+    def test_cac_quarantine_exposes_drift_and_preserves_occupied_shared_targets(self):
+        original = self.home / 'skills/caveman'
+        original.mkdir()
+        skill = original / 'SKILL.md'
+        u.atomic(skill, b'pristine\n', None)
+        pristine = u.fingerprint(skill)
+        private = u.private_dir(self.state / 'cac-quarantine')
+        quarantine = private / 'planner caveman'
+
+        # A local edit and a second consumer's hard link invalidate pristine/exclusive ownership.
+        other = Path(self.roles['reviewer']['home']) / 'shared-skill.md'
+        os.link(skill, other)
+        with self.assertRaisesRegex(ValueError, 'regular file'):
+            u.fingerprint(skill)
+        skill.write_bytes(b'local edit\n')
+        self.assertNotEqual(u.digest(skill.read_bytes()), pristine)
+        self.assertEqual(skill.stat().st_nlink, 2)
+        self.assertEqual(other.read_bytes(), b'local edit\n')
+        self.assertFalse(os.path.lexists(quarantine))
+
+        # Use an independently pristine tree for retirement, then recreate the discovery path.
+        original = Path(self.roles['reviewer']['home']) / 'skills/caveman-review'
+        original.mkdir(parents=True)
+        u.atomic(original / 'SKILL.md', b'pristine\n', None)
+        moved = self.cac_rename(original, quarantine)
+        self.assertEqual(moved.returncode, 0, moved.stderr)
+        (quarantine / 'SKILL.md').write_bytes(b'later quarantine edit\n')
+        self.assertNotEqual(u.fingerprint(quarantine / 'SKILL.md'), pristine)
+        original.mkdir()
+        occupied = original.stat().st_ino
+        self.cac_rename(quarantine, original)
+        self.assertEqual(original.stat().st_ino, occupied)
+        self.assertEqual(list(original.iterdir()), [])
+        original.rmdir()
+        shared = self.home / 'skills'
+        original.symlink_to(shared, target_is_directory=True)
+        self.cac_rename(quarantine, original)
+        self.assertEqual(original.readlink(), shared)
+        self.assertEqual((quarantine / 'SKILL.md').read_bytes(), b'later quarantine edit\n')
+        self.assertEqual(other.read_bytes(), b'local edit\n')
+
+    def test_cac_native_recheck_detects_new_claim_without_file_drift(self):
+        import sqlite3
+        try:
+            from hermes_cli import kanban_db as native
+        except ImportError:
+            self.skipTest('Installed Hermes Python required for the native claim readback')
+
+        board = self.root / 'fixture-board.db'
+        coder = self.roles['coder']
+        soul = Path(coder['home']) / 'SOUL.md'
+        before = (u.fingerprint(soul), u.file_mode(soul))
+        writer = sqlite3.connect(board)
+        self.addCleanup(writer.close)
+        with writer:
+            writer.executescript(native.SCHEMA_SQL)
+            writer.execute("INSERT INTO tasks(id,title,assignee,status,created_at) VALUES "
+                           "('fixture-task','Fixture task',?,'ready',1)", (coder['id'],))
+        reader = sqlite3.connect(board.as_uri() + '?mode=ro', uri=True)
+        self.addCleanup(reader.close)
+        reader.row_factory = sqlite3.Row
+        with reader:
+            reader.execute('BEGIN')
+            self.assertIsNone(native.list_tasks(reader)[0].claim_lock)
+            self.assertEqual(native.list_runs(reader, 'fixture-task'), [])
+        with writer:
+            writer.execute("INSERT INTO task_runs(id,task_id,profile,status,claim_lock,started_at) "
+                           "VALUES (1,'fixture-task',?,'running','fixture-claim',2)", (coder['id'],))
+            writer.execute("UPDATE tasks SET status='running',claim_lock='fixture-claim',current_run_id=1")
+        worker = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(60)'],
+                                  env=dict(os.environ, HERMES_HOME=coder['home']))
+        try:
+            with reader:
+                reader.execute('BEGIN')
+                task, = native.list_tasks(reader)
+                run, = native.list_runs(reader, task.id)
+                self.assertEqual((task.current_run_id, task.claim_lock), (run.id, 'fixture-claim'))
+                self.assertEqual(run.profile, coder['id'])
+                self.assertIsNone(run.ended_at)
+            self.assertIn(worker.pid, u.activity(self.roles)['visible_pids'])
+            self.assertEqual((u.fingerprint(soul), u.file_mode(soul)), before)
+        finally:
+            worker.terminate()
+            worker.wait(timeout=5)
+
+    def cac_revisions(self):
+        """Build synthetic old/new Maker revisions without acquiring upstream trees."""
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        components = manifest['upstream_components']
+        components['caveman'] = {'source_revision': 'a' * 40, 'targets': {
+            'hermes': ['planner', 'coder', 'reviewer'], 'codex': ['team-codex']}}
+        components['caveman-review'] = {'source_component': 'caveman', 'targets': {'hermes': ['reviewer']}}
+        manifest_path.write_text(json.dumps(manifest))
+        coder = self.repo / 'templates/roles/coder.SOUL.md.template'
+        coder_template = coder.read_text()
+        legacy_clause = '\nFixture legacy requirement: load caveman.\n'
+        coder.write_text(coder_template + legacy_clause)
+        installed_coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        installed_coder.write_bytes(installed_coder.read_bytes() + legacy_clause.encode())
+        self.commit('fixture legacy upstream assignments')
+        before = self.initialize()
+
+        for name in ('caveman', 'caveman-review'):
+            del components[name]
+        source = 'templates/team-codex-AGENTS.md'
+        (self.repo / source).write_text('# Fixture CAC instruction\n')
+        manifest['files'] = sorted(set(manifest['files']) | {source})
+        major, minor, _ = map(int, before['maker_version'].split('.'))
+        manifest['version'] = f'{major}.{minor + 1}.0'
+        manifest_path.write_text(json.dumps(manifest))
+        skill = self.repo / 'SKILL.md'
+        skill.write_text(skill.read_text().replace(f"version: {before['maker_version']}\n",
+                                                  f"version: {manifest['version']}\n", 1))
+        coder.write_text(coder_template)
+        self.change('templates/roles/coder.SOUL.md.template', '\nUse the compact task and resume form.\n')
+        return before
+
+    def test_cac_file_only_update_leaves_legacy_companions_pending_on_repeat(self):
+        before = self.cac_revisions()
+        setup = self.state / 'setup.md'
+        setup.write_text(setup.read_text() + f"\nCAC migration: pending; exact base {before['maker_commit']}.\n"
+                         'Fixture interruption: staged CAC; retirement and effective loading unverified.\n')
+        values = u.setup_data(self.state)['confirmed_values']
+        code_home = Path(values['CODEX_HOME'])
+        process_home = Path(values['CODEX_PROCESS_HOME'])
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        coder.write_text('Local rule: keep the approved resource cap.\n\n' + coder.read_text())
+        plan = self.proposal()
+        external = {
+            code_home / 'AGENTS.md': b'# Local rules and staged CAC\nKeep the local review boundary.\n',
+            code_home / 'AGENTS.override.md': b'# Local override\nKeep the local escalation rule.\n',
+            code_home / 'config.toml': b'model = "fixture-model"\n[plugins."ponytail@team-ponytail"]\nenabled = true\n',
+            self.root / 'workspace/nested/AGENTS.md': b'# Project rules\nPreserve local scope.\n',
+            self.root / 'workspace/.agents/skills/caveman/SKILL.md': b'# Foreign project copy\n',
+            self.root / 'coder/plugins/ponytail/plugin.yaml': b'name: ponytail\n',
+            process_home / '.agents/skills/caveman/SKILL.md': b'# Legacy Codex copy\n',
+        }
+        for role in ('planner', 'coder', 'reviewer'):
+            home = Path(self.roles[role]['home'])
+            external[home / 'config.yaml'] = b'skills:\n  auto_load: [local-skill, caveman]\n'
+            external[home / 'skills/caveman/SKILL.md'] = b'# Legacy Hermes copy\n'
+        external[self.root / 'reviewer/skills/caveman-review/SKILL.md'] = b'# Locally edited review copy\n'
+        for path, contents in external.items():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(contents)
+            path.chmod(0o640)
+        saved_setup = setup.read_bytes()
+
+        proposal = json.loads(plan.read_text())
+        self.assertIn('manifest.json:upstream_components', proposal['dependencies'])
+        self.assertFalse(proposal['obsolete'])
+        with self.assertRaisesRegex(ValueError, 'Operational dependency changes'):
+            u.apply(self.home, plan, decision='proceed', review='Checked fixture scope')
+        result = u.apply(self.home, plan, decision='proceed', review='Checked local rule preservation',
+                         dependency_review='Fixture file-only decision; companion collision remains open')
+        self.assertEqual(result['status'], 'applied')
+        updated = u.load_record(self.home)[2]
+        self.assertNotEqual(updated['maker_version'], before['maker_version'])
+        self.assertEqual(updated['maker_commit'], proposal['maker_commit'])
+        self.assertTrue(coder.read_text().startswith('Local rule: keep the approved resource cap.\n'))
+        repeat = json.loads(self.proposal().read_text())
+        self.assertFalse(repeat['dependencies'] or repeat['conflicts'] or repeat['obsolete'])
+        self.assertTrue(all(u.digest(u.decoded(entry['merged'])) == entry['before_hash']
+                            for entry in repeat['entries']))
+        self.assertEqual(setup.read_bytes(), saved_setup)
+        self.assertIn('CAC migration: pending', setup.read_text())
+        for path, contents in external.items():
+            with self.subTest(path=path):
+                self.assertNotIn(str(path), {entry['target'] for entry in updated['managed']})
+                self.assertEqual(path.read_bytes(), contents)
+                self.assertEqual(path.stat().st_mode & 0o777, 0o640)
+
+    def test_cac_file_rollback_leaves_simulated_companion_changes_for_operator(self):
+        """A clean Codex home starts without AGENTS.md; only fixture writes stage it."""
+        before = self.cac_revisions()
+        plan = self.proposal()
+        code_home = Path(before['confirmed_values']['CODEX_HOME'])
+        instruction = code_home / 'AGENTS.md'
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        old_soul = coder.read_bytes()
+        self.assertFalse(instruction.exists())
+        self.assertEqual(u.apply(self.home, plan, decision='skip')['status'], 'skipped')
+        self.assertEqual(coder.read_bytes(), old_soul)
+        self.assertFalse(instruction.exists())
+        code_home.mkdir(parents=True)
+        instruction.write_bytes(b'# Staged CAC fixture\n')
+        result = u.apply(self.home, plan, decision='proceed', review='Checked fixture SOUL change',
+                         dependency_review='Approved fixture file-only scope')
+        run = Path(result['run'])
+        self.assertNotEqual(coder.read_bytes(), old_soul)
+        self.assertEqual(instruction.read_bytes(), b'# Staged CAC fixture\n')
+        instruction.write_bytes(b'# Later local work in team AGENTS.md\n')
+        rolled_back = u.rollback(self.home, run, decision='proceed')
+        self.assertEqual(rolled_back['status'], 'rolled-back')
+        self.assertEqual(coder.read_bytes(), old_soul)
+        self.assertEqual(u.load_record(self.home)[2], before)
+        self.assertEqual(instruction.read_bytes(), b'# Later local work in team AGENTS.md\n')
+        self.assertNotIn(str(instruction), rolled_back['retained_additions'])
 
     def test_obsolete_file_is_retained_and_classified(self):
         self.initialize()

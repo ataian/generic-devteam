@@ -21,38 +21,26 @@ REASONING_FIELDS = {
 }
 
 
-class TasPortabilityTests(unittest.TestCase):
-    """Authoring dependency contracts, not TAS model-behavior evidence."""
+class CacPortabilityTests(unittest.TestCase):
+    """The exported package owns both authoring and native Codex texts."""
 
     def check_source_contract(self, root):
         manifest = json.loads((root / "manifest.json").read_text())
-        self.assertFalse((root / "references/tas-authoring-standard.md").exists())
-        self.assertNotIn("references/tas-authoring-standard.md", manifest["files"])
-        component = manifest["upstream_components"].get("tas", {})
-        self.assertEqual(component.get("original_repo"), "https://github.com/ataian/tas")
-        self.assertRegex(component.get("source_revision", ""), r"^[0-9a-f]{40}$")
-        self.assertEqual(component.get("subpaths"), ["."])
-        self.assertEqual(component.get("targets"), {}, "Authoring dependency, not role equipment")
-        self.assertEqual(component.get("legal_files"), ["LICENSE", "NOTICE.md", "third_party"])
-        self.assertEqual(component.get("recipe_ref"), "references/upstream-sources.md#tas")
-        for relative in ("AGENTS.md", "HERMES.md", "references/development-verification.md"):
+        for legacy in ("tas", "caveman", "caveman-review"):
+            self.assertNotIn(legacy, manifest["upstream_components"])
+        for relative in ("references/cac-authoring.md", "templates/team-codex-AGENTS.md"):
+            self.assertIn(relative, manifest["files"])
+            self.assertTrue((root / relative).is_file())
+        for relative in ("AGENTS.md", "README.md", "references/development-verification.md", "HERMES.md"):
             path = root / relative
-            if path.exists():
-                text = path.read_text()
-                self.assertIn("upstream-sources.md#tas", text)
-                self.assertNotIn("tas-authoring-standard.md", text)
-        source = (root / "references/upstream-sources.md").read_text()
-        recipe = source.split("## TAS authoring upstream\n", 1)[1].split("\n## ", 1)[0]
-        for clause in ("../tas/SKILL.md", "working tree", "source_revision", "SKILL.md",
-                       "required references", "missing or unreadable", "published",
-                       "not installed into Planner, Coder, Reviewer, or Team-Codex"):
-            self.assertIn(clause, recipe)
+            if relative != "HERMES.md" or path.exists():  # repository-only Hermes entrypoint
+                self.assertIn("cac-authoring.md", path.read_text())
 
-    def test_required_standard_is_consumed_from_upstream(self):
+    def test_authoring_contract_is_project_owned(self):
         self.check_source_contract(ROOT)
 
-    def test_manifest_export_keeps_authoring_pointer_without_maintained_copy(self):
-        with tempfile.TemporaryDirectory(prefix="maker-tas-") as directory:
+    def test_manifest_export_contains_authoring_and_codex_texts(self):
+        with tempfile.TemporaryDirectory(prefix="maker-cac-") as directory:
             export = Path(directory)
             for relative in MANIFEST["files"] + ["manifest.json"]:
                 source = ROOT / relative
@@ -123,7 +111,7 @@ class ReasoningContractTests(unittest.TestCase):
         trigger = 'skill_view(name="dev-environment")'
         self.assertIn(trigger, planner)
         self.assertLess(planner.index("Use these checks within existing design work"), planner.index(trigger))
-        self.assertLess(planner.index(trigger), planner.index('3. Use the workspace'))
+        self.assertLess(planner.index(trigger), planner.index('3. Use "Project binding" paths.'))
         tickets = planner.split("7. Create small implementation tickets", 1)[1].split("8. Create dependent", 1)[0]
         self.assertIn("When the project has a development environment, include its agent-guide path in each relevant ticket.", tickets)
         self.assertIn("Require reading that guide and using its container commands for builds, tests and development servers.", tickets)
@@ -333,13 +321,13 @@ class ReasoningContractTests(unittest.TestCase):
         for role in ("planner", "coder", "reviewer"):
             text = render_role(self.template(role), self.values(role), role)
             with self.subTest(role=role):
-                self.assertIn('skill_view(name="caveman")', text)
-                self.assertIn("This overrides Caveman's persisted-content exception.", text)
+                self.assertNotIn("caveman", text.lower())
+                self.assertRegex(text.lower(), r"compact|labeled")
                 self.assertIn("Preserve requirements, conditions, open findings, and necessary evidence without a fixed character limit.", text)
                 self.assertIn("Reference an existing entry only if the recipient can retrieve it unambiguously.", text)
         coder = self.template("coder")
         self.assertNotIn("Persisted Kanban text uses short complete sentences, not chat fragments.", coder)
-        self.assertIn("$caveman", coder)
+        self.assertNotIn("$caveman", coder)
         self.assertIn("Never use `kanban_complete` to close your own implementation.", coder)
         self.assertIn("Record development decisions, accepted exceptions, consequential failures and remedies, blockers, outcomes, and review verdicts.", self.template("planner"))
         self.assertIn("Describe each finding fully once.", self.template("reviewer"))
@@ -456,11 +444,8 @@ class ReasoningContractTests(unittest.TestCase):
         text = render_role(self.template("planner"), self.values("planner"), "planner")
         scope = text.split("## Evidence and scope\n", 1)[1].split("\n## ", 1)[0]
         self.assertIn(
-            "Treat repairs to the agent platform or shared toolchain as separate scope "
-            "unless the customer explicitly included them in the approved assignment.", scope)
-        self.assertIn(
-            "Obtain that authorization before planning repair work, creating repair tasks, "
-            "or delegating repairs.", scope)
+            "Agent platform or shared toolchain repairs require explicit customer inclusion in the approved assignment "
+            "before planning, task creation or delegation.", scope)
         self.assertNotIn("You can resolve minor, locally correctable implementation details", text)
         self.assertIn(
             "Use only an authorized native one-time resume mechanism.", text)
@@ -470,8 +455,7 @@ class ReasoningContractTests(unittest.TestCase):
         text = render_role(self.template("planner"), self.values("planner"), "planner")
         scope = text.split("## Evidence and scope\n", 1)[1].split("\n## ", 1)[0]
         self.assertIn(
-            "If an existing authorized procedure permits safe project continuation, "
-            "do not make an optional platform improvement an additional prerequisite.", scope)
+            "If an existing authorized procedure allows safe continuation, do not make optional platform improvements prerequisites.", scope)
         self.assertIn("Never waive required safety or verification gates to save cost.", scope)
         self.assertIn("Start successors only after independent review reaches `done`.", text)
 
@@ -595,60 +579,58 @@ class ReasoningContractTests(unittest.TestCase):
         ):
             self.assertIn(clause, text)
 
-    def test_caveman_assignment_and_activation_reach_all_consumers(self):
-        upstream = MANIFEST["upstream_components"]
-        self.assertEqual(upstream["caveman"]["targets"], {
-            "hermes": ["planner", "coder", "reviewer"], "codex": ["team-codex"],
-        })
-        self.assertIn("caveman-review", upstream)
-        self.assertEqual(upstream["caveman-review"]["targets"], {"hermes": ["reviewer"]})
-        for name in ("caveman", "caveman-review"):
-            self.assertEqual(upstream[name]["subpaths"], [f"skills/{name}"])
-            self.assertEqual(upstream[name]["legal_files"], ["LICENSE", "LICENSE-MIT", "NOTICE"])
-        recipe = (ROOT / "references/integrations.md").read_text().split('<a id="caveman"></a>', 1)[1].split('<a id="find-skills"></a>', 1)[0]
-        for role in ("Planner", "Coder", "Reviewer", "Team-Codex"):
-            self.assertIn(role, recipe)
-        self.assertIn("skills.auto_load", recipe)
-        self.assertIn("caveman-review", recipe)
-        self.assertIn("Read less", recipe)
-        coder = self.template("coder")
-        self.assertIn("$caveman", coder)
-        self.assertIn("Pass the persisted-prose scope and clarity safeguards from this section in every Codex task and resume.", coder)
-        reviewer = self.template("reviewer")
-        self.assertIn('skill_view(name="caveman-review")', reviewer)
-        self.assertIn("Its formatting rules do not replace `sdlc-review`, required checks, verdicts, or native transitions.", reviewer)
+    def test_compression_preserves_authority_evidence_owner_and_exception(self):
+        cases = (
+            ("planner", "Ask the customer to confirm the implementation branch and start commit", "the customer"),
+            ("planner", "explicit customer authorization to the confirmed remote and branch", "to the confirmed remote and branch"),
+            ("coder", "Inspect the actual diff, task scope, original test/build/runtime results, and working tree after Codex completes", "original"),
+            ("coder", "Report tests that did not run or failed", "not"),
+            ("reviewer", "further aliases, routes, or encodings of an already-reported observation class", "already-reported"),
+        )
+        for role, clause, qualifier in cases:
+            with self.subTest(role=role, qualifier=qualifier):
+                rendered = render_role(self.template(role), self.values(role), role)
+                self.assertIn(clause, rendered)
+                mutated = rendered.replace(clause, clause.replace(qualifier, ""))
+                self.assertNotIn(clause, mutated)
 
-    def test_caveman_setup_checks_soul_bindings_only_after_writing(self):
+    def test_compact_contract_reaches_each_writer_without_external_style_load(self):
+        for role in MANIFEST["role_templates"]:
+            with self.subTest(role=role):
+                rendered = render_role(self.template(role), self.values(role), role)
+                self.assertNotIn("caveman", rendered.lower())
+                self.assertRegex(rendered.lower(), r"compact|labeled")
+        coder = self.template("coder")
+        for label in ("Goal:", "Scope:", "Constraints:", "Evidence:", "Acceptance:", "Verify:"):
+            self.assertIn(label, coder)
+        contract = (ROOT / "templates/team-codex-AGENTS.md").read_text()
+        for label in ("Change:", "Checked:", "Open:"):
+            self.assertIn(label, contract)
+        self.assertNotIn("caveman", contract.lower())
+        self.assertIn("sdlc-review", self.template("reviewer"))
+
+    def test_cac_delivery_precedes_personalization_and_role_readback_follows_write(self):
         setup = (ROOT / "references/setup.md").read_text()
-        early = setup.split("2. Read back the native Hermes/Codex", 1)[1].split("3. Use the pure text path", 1)[0]
-        self.assertIn("Verify Caveman source, installed trees, autoload, and native skill discovery/loading", early)
-        self.assertNotIn("Coder SOUL", early)
-        self.assertNotIn("Verify Caveman delivery and activation", early)
-        write = setup.index("then write `soul_text` only to the confirmed role home `SOUL.md`.")
-        readback = setup.index("6. Read back every target:", write)
-        for clause in (
-            "Read back the Coder SOUL's default/max values and process binding.",
-            "Read back every role's Caveman load requirement and persisted-prose scope.",
-            "Read back the Reviewer's `caveman-review` trigger and preserved review procedure.",
-        ):
-            self.assertGreater(setup.index(clause), readback)
-        recipe = (ROOT / "references/integrations.md").read_text().split('<a id="caveman"></a>', 1)[1].split('<a id="find-skills"></a>', 1)[0]
-        early_check = recipe.index("Before role personalization, verify complete source/target file sets and bytes")
-        late_check = recipe.index("After writing the personalized SOULs, perform the following readbacks in setup section 6, step 6.")
-        self.assertLess(early_check, late_check)
-        self.assertLess(late_check, recipe.index("Read back each personalized SOUL's Caveman use"))
+        delivery = setup.index("integrations.md#team-codex-instructions")
+        write = setup.index("write `soul_text` only to the confirmed role home's `SOUL.md`.")
+        readback = setup.index("6. **Read back every target.**", write)
+        self.assertLess(delivery, write)
+        for clause in ("default/max values and process binding", "compact exchanges", "task/resume", "effective sources"):
+            self.assertIn(clause, setup[readback:])
+        self.assertNotIn("caveman", setup.lower())
 
     def test_ticket_reporting_keeps_failures_without_success_catalogues(self):
         for role in ("coder", "reviewer"):
             text = self.template(role)
             with self.subTest(role=role):
-                self.assertIn("Report successful required checks as `Tests passed`.", text)
+                self.assertIn("Report successful required checks as `Tests passed`", text)
                 self.assertIn("Name failed, skipped, unavailable, or incomplete required checks and their consequence.", text)
                 self.assertNotIn("the risk class, and the reasoning level used", text)
                 self.assertNotIn("For high-risk verdicts report:", text)
         release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
-        self.assertIn("Keep criteria and implementation context concise; align excerpts with the authoritative accepted plan.", release)
-        self.assertIn("Keep task-specific accepted exceptions in the body.", release)
+        self.assertIn('Keep criteria and implementation context concise.', release)
+        self.assertIn('Use the authoritative accepted plan for excerpts.', release)
+        self.assertIn('binding constraints, and accepted task-specific exceptions.', release)
         self.assertNotIn("implementer-only harness instructions", release)
         self.assertNotIn("Record the verified graph checkpoint on the first phase card", release)
 
@@ -661,13 +643,13 @@ class ReasoningContractTests(unittest.TestCase):
             "Do not impose one story per phase or ticket.",
             "Use a concise actor-behaviour-benefit sentence as each title, not a technical task label.",
             "For technical prerequisites, name the real beneficiary and enabling story; do not invent user actions or benefits.",
-            "Structure concise bullets as goal/context, acceptance criteria, technical implementation, verification, and dependencies plus exact plan/phase/commit binding.",
+            "Outcome/context beyond the title, observable criteria, affected interfaces and binding limits, verification, dependencies and exact plan path/phase/repository roots/commit",
             "Make the card understandable without opening the full plan.",
             "Keep excerpts aligned with the authoritative accepted plan; do not repeat the whole plan.",
             "Distinguish binding requirements and architectural constraints from implementation suggestions.",
             "Leave execution-time technical decisions within the accepted goal and constraints to Example.",
             "Set assignee, reviewer, workspace, dependencies, and required runtime fields natively",
-            "This overrides Caveman's persisted-content exception.",
+            "actor-behaviour-benefit",
             "Clarity takes precedence over word or line limits.",
             "Do not create implementation tickets before acceptance.",
         ):
@@ -737,11 +719,11 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertNotIn('skill_view(name="codebase-design")', planner)
         self.assertNotIn("codebase-design", MANIFEST["upstream_components"])
 
-    def test_caveman_update_cannot_be_claimed_from_file_application(self):
-        text = (ROOT / "references/update.md").read_text()
-        self.assertIn("The file updater does not install Caveman skills or change `skills.auto_load`.", text)
-        self.assertIn("Defer the dependent SOUL changes until the required skills and loading bindings are verified.", text)
-        self.assertIn("Preserve local adaptations and historical tickets.", text)
+    def test_cac_migration_requires_companion_readback_not_only_file_application(self):
+        text = (ROOT / "references/update.md").read_text().split("## CAC migration", 1)[1].split("\n## ", 1)[0]
+        for clause in ("no-op file proposals", "preserve", "historical tickets", "pending", "skills.auto_load", "PONYTAIL_DEFAULT_MODE=full"):
+            self.assertIn(clause.lower(), text.lower())
+        self.assertLess(text.index("**Stage CAC**"), text.index("**Apply files"))
 
     def test_nonplaceholder_bytes_preserved(self):
         for role in MANIFEST["role_templates"]:
@@ -769,10 +751,10 @@ class PlannerKanbanToolsetTests(unittest.TestCase):
             "Kanban is default-off",
             "Desktop/TUI use `cli`",
             "OpenAI-compatible WebUI calls use `api_server`",
-            "Before enabling, capture each platform's native tool selection",
+            "Before enabling, capture native tool selections per platform",
             "Preserve unrelated enabled and disabled tools",
-            "compare the complete before/after selections",
-            "Do not replace `platform_toolsets` or root `toolsets` with a Kanban-only list",
+            "Compare complete before/after selections and suppression entries",
+            "Never replace `platform_toolsets` or root `toolsets` with a Kanban-only list",
             "such as clearing a `no_mcp` sentinel",
             "Keep native Kanban guards, the single active task, and the fixed independent Reviewer unchanged.",
         ):
@@ -809,7 +791,8 @@ class PlannerKanbanToolsetTests(unittest.TestCase):
         for clause in (
             "`cli`", "`mattermost`", "`api_server`", "tools list", "enabled",
             "agent.disabled_toolsets", "unrelated enabled/disabled selections",
-            "setup.md#planner-kanban-tools", "not prove", "running",
+            "setup.md#planner-kanban-tools", "This checks configuration only.",
+            "Do not create tasks or make model calls to test adoption by running conversations.",
         ):
             self.assertIn(clause, row)
 
@@ -842,7 +825,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
         self.assertEqual(upstream["sdlc-review"]["subpaths"], ["skills/devops/sdlc-review"])
         for name, item in MANIFEST["own_skills"].items():
             self.assertTrue((ROOT / item["skill_path"]).is_file(), name)
-        self.assertIn("Use the installed `sdlc-review` skill for the detailed review checklist.", self.template("reviewer"))
+        self.assertIn("Use the installed `sdlc-review` checklist.", self.template("reviewer"))
 
     def test_owned_retro_delivery_and_collision_contract(self):
         item = MANIFEST["own_skills"]["retro"]
@@ -868,10 +851,10 @@ class ReviewerEquipmentTests(unittest.TestCase):
             text = render_role(self.template(role), self.values(role), role)
             with self.subTest(role=role):
                 communication = text.split("## Communication\n", 1)[1].split("\n## ", 1)[0]
-                self.assertIn("Use the installed original `caveman` as the default writing style.", communication)
+                self.assertNotIn("caveman", communication.lower())
                 self.assertNotIn("TAS", text)
-                self.assertIn("Use English for role communication, tickets, handoffs, findings, technical project documentation, and agent instructions.", text)
-                self.assertIn("Preserve exact identifiers, quotations, error messages, and deliberately localized product text.", text)
+                self.assertIn("Write internal role communication, tickets, handoffs, findings, technical project docs and agent instructions in English.", text)
+                self.assertIn("Preserve exact identifiers, quotations, error messages and deliberately localized product text.", text)
                 self.assertNotIn("user's requested language", text)
         for relative in ("SKILL.md", "references/setup.md"):
             text = (ROOT / relative).read_text()
@@ -895,7 +878,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
         self.assertNotIn("minimal-change-engineering", text)
         self.assertNotIn("screenshot-to-code", text)
         self.assertNotIn("project-lib-versioning", text)
-        self.assertIn("Use the approved structural analysis integration and its original skill.", self.template("planner"))
+        self.assertIn("Use the approved structural analysis integration and original skill.", self.template("planner"))
         self.assertIn("Use the approved analysis integration and its original skill for structural analysis.", self.template("coder"))
 
     def test_scope_library_ui_and_finding_contracts_reach_reviewer(self):
@@ -903,16 +886,16 @@ class ReviewerEquipmentTests(unittest.TestCase):
         for clause in (
             "Flag unrelated scope or unnecessary complexity when it causes concrete risk or violates accepted requirements.",
             "Do not demand a smaller diff or alternative design solely by preference.",
-            "For changed project libraries, verify SemVer and the release policy against the accepted change set and baseline.",
-            "Verify affected consumer dependency chains, effective artifact resolution, and relevant builds/tests.",
-            "Do not require another bump if the intended version step is already fulfilled.",
+            "For changed project libraries, verify SemVer and release policy against accepted changes and baseline.",
+            "Check affected consumer dependency chains, effective artifact resolution and relevant builds/tests.",
+            "Require no further bump once the intended step is met.",
             "For visual acceptance, independently view the specified source and actual render at the reviewed state.",
-            "Compare relevant viewports, zoom/DPR, source page/crop, data, fonts, content, layout, typography, assets, and required interactions/accessibility under comparable conditions.",
+            "Compare relevant viewports, zoom/DPR, source page/crop, data, fonts, content, layout, typography, assets and required interactions/accessibility under comparable conditions.",
             "Respect accepted deviations and scope.",
-            "Record actual visual evidence and missing checks; build success, DOM text, or an image path alone does not prove visual acceptance.",
+            "Record visual evidence and gaps. Build success, DOM text or an image path alone cannot prove visual acceptance.",
             "Account for every prior open finding before approval.",
-            "Support every finding with a location, concrete failure condition, impact, and required correction.",
-            "Use it to format findings, including its Auto-Clarity exceptions.",
+            "Ground findings in `At:` location, `When / observed:` failure condition and observation, `Correct outcome:` required correction, `Impact:` and `Evidence:`.",
+            "Explain security findings with references, architectural disagreements with rationale, and onboarding findings with needed context.",
             "Clarity takes precedence over word or line limits.",
             "Distinguish observed defects, unverified risks, and optional improvements.",
         ):
@@ -1136,9 +1119,9 @@ class DomainModelingContractTests(unittest.TestCase):
         ):
             self.assertIn(clause, planner)
         setup = (ROOT / "references/setup.md").read_text()
-        role_write = setup.index('then write `soul_text` only to the confirmed role home `SOUL.md`.')
-        self.assertGreater(setup.index("Read back the Planner's conditional `domain-modeling` load"), role_write)
-        self.assertIn("If any required tree or companion is unavailable, withhold the dependent Planner output", setup)
+        role_write = setup.index("write `soul_text` only to the confirmed role home's `SOUL.md`.")
+        self.assertGreater(setup.index("Verify conditional `domain-modeling` load"), role_write)
+        self.assertIn("If a required tree or companion is unavailable, withhold dependent Planner output", setup)
 
     def test_consumers_read_accepted_definitions_without_mutating_domain_workflow(self):
         for role in ("coder", "reviewer"):
@@ -1184,10 +1167,10 @@ class QuestionnaireContractTests(unittest.TestCase):
             self.assertIn(clause, recipe)
         planning = (root / "skills/brownfield-feature-planning/SKILL.md").read_text()
         self.assertIn('On an explicit request for an expert questionnaire, load the original `to-questionnaire` with `skill_view(name="to-questionnaire")`.', planning)
-        self.assertIn("sending and plan acceptance retain their existing authorization gates", planning)
+        self.assertIn('Keep existing authorization gates for sending and plan acceptance.', planning)
         for relative in ("references/setup.md", "references/update.md", "references/verification.md"):
             self.assertIn("to-questionnaire", (root / relative).read_text())
-        self.assertIn("without generating or sending a questionnaire", (root / "references/verification.md").read_text())
+        self.assertIn("Do not generate or send a questionnaire.", (root / "references/verification.md").read_text())
 
     def test_original_questionnaire_is_planner_only_and_request_driven(self):
         self.check_questionnaire_contract(ROOT)
@@ -1282,54 +1265,54 @@ class TicketDocumentationTests(unittest.TestCase):
         self.assertIn("Keep the accepted plan and phase plan in the agreed versioned project location.", self.skill)
         self.assertIn("Record ticket documentation directly on the existing Kanban card.", self.skill)
         self.assertIn("Keep product documentation in its owning repository.", self.skill)
-        self.assertIn("Read the accepted specification and plan at their approved Git revisions.", self.release)
-        self.assertIn("Verify that every plan reference resolves to its approved revision.", self.release)
+        self.assertIn('Read specification and plan at approved Git revisions.', self.release)
+        self.assertIn('Resolve each plan reference to its approved revision.', self.release)
         self.assertIn("Verify every notification binding against the intended destination.", self.release)
         self.assertIn("Unblock descendants in reverse order and the first ticket last.", self.release)
 
     def test_partial_creation_resumes_from_persisted_cards(self):
         self.assertIn("approved plan path, plan commit and phase identifier", self.release)
         self.assertIn("including archived cards", self.release)
-        self.assertIn("Reuse exact matching cards and create only missing planned tickets.", self.release)
-        self.assertIn("Read each returned exact card before further writes.", self.release)
-        self.assertIn("Stop release on any unresolved mismatch", self.release)
+        self.assertIn('Reuse exact matches. Create only missing planned tickets.', self.release)
+        self.assertIn('Read back each returned exact card before further writes.', self.release)
+        self.assertIn('Stop release on unresolved mismatches.', self.release)
 
     def test_partial_release_preserves_completed_transitions(self):
-        self.assertIn("Before the first release, require every card to be blocked.", self.release)
-        self.assertIn("On partial release, verify current runs and dependency gates for already released cards.", self.release)
-        self.assertIn("Preserve completed release transitions.", self.release)
-        self.assertIn("On resume, apply this order only to pending initial releases.", self.release)
+        self.assertIn('Before first release, require every card blocked.', self.release)
+        self.assertIn('On partial release, preserve completed transitions and verify current runs and dependency gates on released cards.', self.release)
+        self.assertIn('On partial release, preserve completed transitions', self.release)
+        self.assertIn('On resume, apply the order only to pending initial releases.', self.release)
         self.assertNotIn("Every card is still blocked", self.release)
         self.assertNotIn("attachment verification", self.skill)
 
     def test_correction_updates_existing_assignment_and_plan_reference(self):
         self.assertIn("Update both bodies to reference the exact approved amended plan revision.", self.release)
-        self.assertIn("Replace contradictory active body instructions through the supported edit operation.", self.recovery)
-        self.assertIn("Preserve the existing card, authorized scope, history, valid dependencies, review provenance and counters.", self.recovery)
+        self.assertIn('Replace contradictory active body text through the supported edit.', self.recovery)
+        self.assertIn('Preserve card, authorized scope, history, valid dependencies, review provenance, counters, and native counter semantics, including legitimate transition resets.', self.recovery)
         self.assertIn("Keep independent review and required safety checks.", self.skill)
 
     def test_evidence_reuse_preserves_required_final_state_gates(self):
-        self.assertIn("Reuse evidence only while its checked inputs and relevant dependencies, configuration, and test conditions remain valid.", self.skill)
+        self.assertIn('Reuse evidence only while checked inputs and relevant dependencies, configuration, and test conditions remain valid.', self.skill)
         self.assertIn("A new commit alone does not invalidate every prior result.", self.skill)
-        self.assertIn("Keep original evidence; do not create a separate summary or evidence register.", self.skill)
-        self.assertIn("If acceptance explicitly requires an integrated run on the final state", self.status)
-        self.assertIn("Do not count targeted tests as that required full acceptance run.", self.status)
+        self.assertIn('Keep original evidence. Do not create a separate summary or evidence register.', self.skill)
+        self.assertIn('Explicit final-state integrated run: keep the gate open until the required run is evidenced and assessed by the reviewer.', self.status)
+        self.assertIn('Targeted tests cannot satisfy a required full run.', self.status)
         self.assertNotIn("If full acceptance ran on an earlier tree, retain the exact-final-commit gap", self.status)
 
     def test_operator_blocker_keeps_evidence_and_ownership_on_card(self):
-        self.assertIn("Route the handoff to the existing card's authorized owner.", self.status)
+        self.assertIn("For unresolved blockers, report actor, next safe action, observed evidence, impact, and resumption condition to the existing card's authorized owner.", self.status)
         self.assertIn("restart impact", self.status)
         self.assertIn("rollback", self.status)
-        self.assertIn("Append actual receipt and explicit assessment to the existing acknowledgment card.", self.operator)
-        self.assertIn("Record the repaired boundary, evidence, intended owner, remaining file/verification/commit/review work and unchanged exclusions on the existing card.", self.recovery)
-        self.assertIn("Read back the body and resumption comment before release.", self.recovery)
+        self.assertIn('Append receipt and explicit assessment to existing acknowledgment card:', self.operator)
+        self.assertIn('Record on the existing card: repaired boundary and evidence, intended owner, remaining file/verification/commit/review work, unchanged exclusions, and reusable completed prerequisites/final results.', self.recovery)
+        self.assertIn('Read back body and resumption comment before release.', self.recovery)
         self.assertIn("Do not complete, reclaim, redispatch, or overwrite it.", self.operator)
         self.assertIn("Verify process exit separately from `ended_at` or board `done`.", self.recovery)
-        self.assertIn("Keep orders, results, and assessments on existing Kanban cards", self.operator)
+        self.assertIn('Existing cards hold orders, results, and assessments.', self.operator)
 
     def test_removed_file_duties_do_not_survive_in_loaded_procedures(self):
         retrospective = (self.root / "references/project-retrospectives.md").read_text()
-        self.assertIn("Record a ticket retrospective on the existing card.", retrospective)
+        self.assertIn('If the user explicitly asks for ticket persistence, record the retrospective on the existing card.', retrospective)
         text = "\n".join((self.skill, self.release, self.status, self.recovery, self.operator, retrospective))
         for obsolete in (
             "durable manifest", "repository manifest commit", "existing manifest",

@@ -1,56 +1,29 @@
 # Private setup record
 
-Fill this template only for an authorized target setup.
-Store it at `<actual planner home>/devteam/setup.md`, outside the project, Git, and exports.
-Use mode 0700 for the owner directory and 0600 for this file.
-Store no tokens, passwords, authentication codes, or unredacted configuration dumps.
-Record only secret locations and access-check status.
-Native profiles, board, and service objects remain authoritative for current state.
-This record is evidence, not permission for rollout or operation.
+- Scope: authorized target setup only. Use `<actual planner home>/devteam/setup.md` outside project, Git and exports. Owner directory 0700, file 0600.
+- Secrets: record locations and access-check status only. Never store tokens, passwords, authentication codes or unredacted configuration dumps.
+- Authority: native profiles, board and service objects establish current state. This record grants no rollout or operation permission.
 
 ## Authorizations and readiness
 
-- Approved local installations, exact change scope, and bootstrap/PM/activation effects: pending.
-- Separate secret, shared-configuration, service, model, and external-identity authorizations: pending.
-- Preserved protection settings, ownership/collision checks, and shared objects affected: pending.
-- Complete upfront dataset readiness: pending.
+Before installation resolve all foreseeable choices: project/workspace, repositories, role names/IDs, models/providers/reasoning, Codex access/Git identity, bank/board, analysis, communication identities/targets/authorized users and change scope. Until Planner home exists, use the existing pre-profile dataset and handoff. Record raw values only in the JSON below. Here record readiness and evidence references.
 
-Before installation, resolve all foreseeable choices for project/workspace and repository boundaries,
-role names and IDs, models/providers and reasoning, Codex access and Git identity, bank/board,
-analysis choice, communication identity/targets/authorized users, and change scope.
-Use the existing pre-profile dataset and handoff until the Planner home exists.
-Keep raw confirmed values only in the JSON block below.
-Record readiness and evidence references here without repeating those values.
-Disclose any login, native approval, or `/sethome` action that technically requires a created target.
-Record its reason and execution point; do not treat other unresolved choices as deferred actions.
-
-- Disclosed technically deferred actions and completion evidence: pending.
+- Approved local installs, exact change scope, bootstrap/PM/activation effects: pending.
+- Separate secret, shared-configuration, service, model and external-identity approvals: pending.
+- Preserved protection settings, ownership/collision checks, affected shared objects: pending.
+- Upfront dataset complete: pending.
+- Technically deferred login, native approval or `/sethome` requiring a created target: pending. Record disclosed reason, execution point and completion evidence. Resolve other choices upfront.
 
 ## Confirmed data
 
-Write every nonsecret confirmed raw value in this single JSON block.
-Use `json.dumps` and the `json.loads` readback in [Setup](../references/setup.md).
-Preserve existing keys, types, and confirmed overrides on resume and update.
-Empty objects mean that values have not been recorded.
+Store all confirmed nonsecret raw data in the single JSON block. Use [Setup](../references/setup.md) for `json.dumps` and `json.loads` readback. Preserve existing keys, types and confirmed overrides on resume/update. Empty objects mean unrecorded values.
 
-Store names, project, bank, board, profile IDs, models, and reasoning in `confirmed_values`.
-Keep the canonical absolute workspace as `PROJECT_DIR`.
-Keep `REPOSITORY_ROOTS` as single-line repository text with separate planning and implementation assignments, or confirmed absence.
-Preserve `PLANER_NAME`, `CODER_NAME`, `REVIEWER_NAME`, `PROJECT_NAME`, `HINDSIGHT_BANK_NAME`,
-`KANBAN_BOARD_NAME`, `PLANNER_PROFILE`, `CODER_PROFILE`, `REVIEWER_PROFILE`, `CODEX_MODEL`,
-`PLANNER_REASONING`, `CODER_REASONING`, `CODEX_REASONING_DEFAULT`, `CODEX_REASONING_MAX`,
-`ROLE_REASONING_DEFAULT`, and `ROLE_REASONING_HIGH` when confirmed.
-Keep fixed Planner/Hermes-Coder reasoning and the Codex model ID for native configuration only.
-Do not add role-render fields for these native settings.
-Store the verified absolute Codex entrypoint in `CODEX_BINARY` and the process/config homes in `CODEX_PROCESS_HOME` and `CODEX_HOME`.
-These Coder render fields contain raw paths, not shell-quoted strings; process HOME matches `confirmed_bindings.roles.team-codex.home`.
-
-Store resolved technical bindings in `confirmed_bindings`.
-Under `roles`, retain `planner`, `coder`, `reviewer`, and `team-codex`, each with `id` and canonical `home`.
-Use the actual process HOME for `team-codex`, not `CODEX_HOME`.
-Under `triage_recovery`, retain `python`, `script`, `db`, and `planner_profile`.
-Use the verified dispatcher interpreter, installed planner script path, confirmed board DB resolved by the dispatcher,
-and confirmed technical Planner profile ID.
+- `confirmed_values`: names, project, bank, board, profile IDs, models and reasoning. Preserve confirmed `PLANER_NAME`, `CODER_NAME`, `REVIEWER_NAME`, `PROJECT_NAME`, `HINDSIGHT_BANK_NAME`, `KANBAN_BOARD_NAME`, `PLANNER_PROFILE`, `CODER_PROFILE`, `REVIEWER_PROFILE`, `CODEX_MODEL`, `PLANNER_REASONING`, `CODER_REASONING`, `CODEX_REASONING_DEFAULT`, `CODEX_REASONING_MAX`, `ROLE_REASONING_DEFAULT`, `ROLE_REASONING_HIGH`.
+- Workspace: `PROJECT_DIR` is canonical and absolute. `REPOSITORY_ROOTS` is one line with separate planning and implementation assignments or confirmed absence.
+- Native configuration only: fixed Planner/Hermes-Coder reasoning and Codex model ID. Add no role-render fields for them.
+- Coder render paths: verified absolute `CODEX_BINARY` entrypoint, process home `CODEX_PROCESS_HOME`, config home `CODEX_HOME`. Use raw paths without shell quoting. Match process HOME to `confirmed_bindings.roles.team-codex.home`.
+- `confirmed_bindings.roles`: `planner`, `coder`, `reviewer` and `team-codex`, each with actual `id` and canonical `home`. Use actual process HOME for `team-codex`.
+- `confirmed_bindings.triage_recovery`: `python` from verified dispatcher interpreter, `script` from installed Planner skill, `db` from dispatcher resolution of confirmed board DB, `planner_profile` from confirmed technical Planner ID.
 
 ```json
 {
@@ -61,35 +34,21 @@ and confirmed technical Planner profile ID.
 
 ## Setup targets and readbacks
 
-Record actual targets and evidence references without duplicating raw confirmed values.
-For each setup item, record its native identity or exact file path, configuration source,
-previous state/hash, delivered revision/hash, mode, and actual readback result.
-Report availability, configuration, file delivery, and unverified behavior separately.
-Do not infer live behavior from configuration or file checks.
+Per target, record actual native identity or exact path, configuration source, previous state/hash, delivered revision/hash, mode and readback. Reference JSON values without duplicating them. Separate availability, configuration, file delivery and unverified live behavior.
 
-- Native profiles, personalized SOUL targets and byte comparisons, complete assigned skills and discovery: pending.
+- Native profiles, three SOULs (bytes, effective loading, compact exchanges, Coder task/resume/delegation and Reviewer procedure), skill inventories and discovery: pending.
 - Required shared dependency availability and established interface readbacks: pending.
 - Per-role model/provider/reasoning settings, effective overrides, and native configuration readbacks: pending.
 - Team-Codex process HOME, separate CODEX_HOME, binary, protected access location/status, and Git identity configuration readbacks: pending.
+- Team-Codex instructions: source template path/hash and Maker SemVer/commit, confirmed homes/cwd, target path, previous and installed hashes/modes, backup location, effective instruction sources in order, override/limit and full-content results: pending.
 - Board/workspace, bank ownership and per-role memory bindings, selected analysis integration and target paths for Planner, Coder, Reviewer and Team-Codex: pending.
 - Planner communication identity, authorized users/channels, subscriptions, dispatcher/notifier ownership, and activation state: pending.
 - Component source repository/subpath, exact revision, license, complete file inventory/hashes, actual target, and discovery/configuration readbacks for each assigned component: pending.
 
-For each independent component, record the manifest's required `source_revision` or inherited `source_component` separately from observed installed provenance.
-Include complete plugin/skill trees, hidden files, companions, six VoltAgent TOMLs and legal files in the inventories.
-Record native registration and complete main/reference loading for every assigned consumer.
-Record missing historical provenance as unknown; do not label a local backup as a pristine upstream baseline.
-Record actual Codex/CBM/Graphify runtime paths, versions, shared consumers and compatibility/reuse decisions separately from asset pins.
-Include approved first installations in upfront setup scope; preserve existing/shared installations unless their concrete change is explicitly approved.
-For team updates, retain advance explicit approval of each concrete plugin/runtime/CLI change batch and its shared PM effects.
-Keep Hermes/distribution skills native-managed and the Hindsight service untouched.
-
-Generate the recovery launcher with `references/bind_recovery.py` after copying the complete skill tree.
-Keep its task ID as the only runtime argument.
-The installed launcher must not depend on this record at runtime.
-Binding evidence does not authorize operation or prove semantic API behavior.
-
-- Recovery board/dispatcher binding readback, script byte comparison, launcher hash and mode 0700, deterministic output comparison, and shell-quoted installed invocation path: pending.
+- Component pin evidence: per independent component, required manifest `source_revision` or inherited `source_component` and observed installed provenance. Compare full plugin/skill trees, hidden files, companions, six VoltAgent TOMLs and legal files. Record native registration and complete main/reference loading per assigned consumer. Unknown historical provenance stays unknown. A local backup cannot prove a pristine upstream baseline.
+- Runtime evidence: actual Codex/CBM/Graphify paths, versions, shared consumers and compatibility/reuse decisions, separate from asset pins. Approve first installs in upfront setup scope. Preserve existing/shared installations unless explicitly approved for concrete change. For updates, retain advance explicit approval of each concrete plugin/runtime/CLI change batch and shared PM effects. Keep Hermes/distribution skills native-managed and the Hindsight service untouched.
+- Recovery launcher: after copying the full skill tree, generate with `references/bind_recovery.py`. Task ID is the sole runtime argument. No runtime dependency on this record. Binding evidence proves neither operation authority nor semantic API behavior.
+- Recovery board/dispatcher readback, script bytes, launcher hash and mode 0700, deterministic output comparison and shell-quoted installed invocation path: pending.
 
 ## Progress and recovery
 
@@ -97,40 +56,20 @@ Binding evidence does not authorize operation or prove semantic API behavior.
 - Incomplete step, exact blocker or missing prerequisite, next action, required authorization, and success signal: pending.
 - Previous own file/configuration state and targeted recovery path: pending.
 
-On resume, read the JSON and relevant actual targets, then continue only the first incomplete setup step.
-Confirm missing input before using it.
-Resolve actual target drift before rendering or writing.
-Correct stale descriptive prose from readbacks without repeating confirmed choices or successful creates.
-Preserve local edits and unrelated profiles, skills, subscriptions, shared binaries/PM runtime,
-personal Codex assets, project files/AGENTS, service/bank/channel contents, and graph caches.
-Limit recovery to recorded own objects and entries.
-Obtain separate authorization for data deletion.
+1. On resume compare saved JSON with relevant actual targets. Confirm missing input and resolve target drift before render/write. Update stale prose from readbacks without repeating confirmed choices or successful creates. Resume the first incomplete step.
+2. Recover only recorded own objects/entries. Preserve local edits, unrelated profiles/skills/subscriptions, shared binaries/PM, personal Codex assets, project files/AGENTS, service/bank/channel contents and graph caches. Obtain separate data-deletion approval.
 
 ## Installation and update evidence
 
-Initialize only after complete delivery, configuration/file readbacks, and recovery binding.
-Follow [Team updates](../references/update.md) for initialization, existing-team baselines, and authorized updates.
-For an existing-team update, record the pre-update version and pending status before file application under [required skill retirement](../references/update.md#required-skill-retirement).
-Keep its approval, external backup, native readbacks, and pending/completed poststep evidence in this record's progress and update sections.
-On every requested update, follow [Required upstream companion update](../references/update.md#required-upstream-companion-update), even when the Maker version is unchanged.
-Record missing selected Reviewer analysis assets and native bindings, including previously retired assets, and their approved restoration/readbacks.
-Before file application, record pre-update Maker version/commit, required/observed asset sources, exact targets, differences, decisions and per-component `pending` status here.
-Keep complete backup inventories/bytes, modes, ownership, binding readbacks and guarded companion restoration evidence here.
-Mark a companion `complete` only after exact pinned bytes and required native readbacks pass; read back the saved evidence.
-Resume pending work even after installation metadata advances; helper rollback does not restore companion assets/bindings.
-Report `files updated; team update incomplete` while required companion work is pending or deferred.
-Keep `installation.json` and pristine personalized `baselines/<sha256>` under the Planner's private `devteam/` directory.
-Keep package SemVer and exact Maker commit distinct from the record schema.
-Preserve baseline provenance, role bindings, managed source/target mappings, transform identifiers, and hashes.
-Never use a locally edited target as a pristine Maker baseline.
-Keep private state directories at 0700 and files at 0600.
+- Baseline: initialize only after complete delivery, configuration/file readbacks and recovery binding. Follow [Team updates](../references/update.md) for initialization, existing-team baselines and authorized updates. Save `installation.json` and pristine personalized `baselines/<sha256>` under private Planner `devteam/` (directories 0700, files 0600). Record package SemVer and exact Maker commit separately from schema. Preserve provenance, role bindings, managed mappings, transforms and hashes. Exclude locally edited targets from pristine baselines.
+- Skill retirement: before file application, record pre-update version and `pending` under [required skill retirement](../references/update.md#required-skill-retirement). Keep approval, external backup, native readbacks and pending/completed poststep evidence in progress and update sections.
+- Companions: follow [required upstream update](../references/update.md#required-upstream-companion-update) on every requested update, even at the same Maker version. Before file application record pre-update Maker version/commit, required/observed asset sources, exact targets, differences, decisions and per-component `pending`. Include missing selected Reviewer analysis assets and native bindings, including previously retired assets, plus approved restoration/readbacks. Keep full backup inventories/bytes, modes, ownership, binding readbacks and guarded companion restoration evidence.
+- [CAC migration](../references/update.md#cac-migration): before the first companion write record base/target SemVer and commit, stage and `pending`. Keep exact [Team-Codex template](../references/integrations.md#team-codex-instructions) and approved merge evidence. Record effective loading, legacy reconciliation and `complete` separately from file application.
+- Companion completion: mark `complete` only after exact pinned asset byte comparisons and required native readbacks pass. Read back saved evidence. Resume pending work even if metadata advanced. Restore companion assets/bindings through guarded companion rollback. File-helper rollback alone leaves them in place. Report `files updated; team update incomplete` while required companion work is pending or deferred.
 
 - Package SemVer, exact Maker commit, installation marker, provenance, and baseline readbacks: pending.
 - Update proposal, activity finding and explicit proceed/skip decision, semantic review, and operational dependency decision: pending when an update is authorized.
 - Backup run, result journal, verified targets, per-team result, guarded rollback receipt, and retained additions/obsolete files: pending when an update is authorized.
 
-Advance installation metadata only after successful target verification.
-Preserve the three-way comparison, local-edit/conflict safeguards, conservative legacy handling, and guarded rollback.
-Report setup completion as **Team configured; setup outputs verified** only when required setup readbacks and the versioned installation baseline are complete.
-Report remaining setup blockers precisely.
-Do not leave excluded research or behavioral experiments as pending setup gates.
+- Advance metadata only after successful target verification. Preserve three-way comparison, local edits, conflict safeguards, conservative legacy handling and guarded rollback.
+- Use **Team configured; setup outputs verified** only after required outputs and versioned baseline pass. Report exact blockers. Research and behavioral experiments stay outside setup gates.
