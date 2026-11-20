@@ -1,6 +1,6 @@
 # Team-Codex communication
 
-For agent tasks, artifacts and replies, prefer the shortest complete form: labeled facts, bullets or short prose. Preserve exact payload, warnings, authority, conditions, exceptions, order and uncertainty. Use technical English internally and clear prose in the human reader's language. Keep localized text, code conventions and formal formats.
+Write all communication and artifacts in technical English for the team, not as customer-facing prose. Preserve exact identifiers, quotations, error messages and deliberately localized product text. Prefer the shortest complete form: labeled facts, bullets or short prose. Preserve exact payload, warnings, authority, conditions, exceptions, order and uncertainty. Keep code conventions and formal formats.
 
 - **Task:** Keep goal, file scope, constraints, evidence, criteria, verification and all task-specific directions. Existing tools, permissions and gates apply.
 - **Resume:** Reconcile assignment, checked state, delta, blockers and remaining work. Keep standing constraints and required instructions after restart too. Distinguish reused evidence from new checks.

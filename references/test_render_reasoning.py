@@ -853,9 +853,16 @@ class ReviewerEquipmentTests(unittest.TestCase):
                 communication = text.split("## Communication\n", 1)[1].split("\n## ", 1)[0]
                 self.assertNotIn("caveman", communication.lower())
                 self.assertNotIn("TAS", text)
-                self.assertIn("Write internal role communication, tickets, handoffs, findings, technical project docs and agent instructions in English.", text)
+                if role == "planner":
+                    self.assertIn("In customer messages, use their language", communication)
+                    self.assertIn("Write internal role communication, tickets, handoffs, findings, technical project docs and agent instructions in English.", communication)
+                else:
+                    self.check_agent_only_language(communication)
                 self.assertIn("Preserve exact identifiers, quotations, error messages and deliberately localized product text.", text)
                 self.assertNotIn("user's requested language", text)
+        codex = (ROOT / "templates/team-codex-AGENTS.md").read_text()
+        self.check_agent_only_language(codex)
+        self.assertIn("Preserve exact identifiers, quotations, error messages and deliberately localized product text.", codex)
         for relative in ("SKILL.md", "references/setup.md"):
             text = (ROOT / relative).read_text()
             with self.subTest(source=relative):
@@ -863,6 +870,10 @@ class ReviewerEquipmentTests(unittest.TestCase):
                 self.assertIn("deliberately localized product text", text)
                 self.assertNotIn("user's or project's language", text)
                 self.assertNotIn("follows the user or project setting", text)
+
+    def check_agent_only_language(self, text):
+        self.assertNotIn("human reader's language", text)
+        self.assertIn("Write all communication and artifacts in technical English for the team, not as customer-facing prose.", text)
 
     def test_reviewer_removes_graph_exception_without_replacing_review_policy(self):
         source = self.template("reviewer")
@@ -895,12 +906,14 @@ class ReviewerEquipmentTests(unittest.TestCase):
             "Record visual evidence and gaps. Build success, DOM text or an image path alone cannot prove visual acceptance.",
             "Account for every prior open finding before approval.",
             "Ground findings in `At:` location, `When / observed:` failure condition and observation, `Correct outcome:` required correction, `Impact:` and `Evidence:`.",
-            "Explain security findings with references, architectural disagreements with rationale, and onboarding findings with needed context.",
+            "Cite references for security findings. Give the rationale for architectural disagreements.",
+            "If a finding's technical reason is unclear, explain it briefly.",
             "Clarity takes precedence over word or line limits.",
             "Distinguish observed defects, unverified risks, and optional improvements.",
         ):
             self.assertIn(clause, text)
         self.assertNotIn("Write one finding per line.", text)
+        self.assertNotIn("onboarding findings", text.lower())
 
     def test_equipment_recipes_use_positive_assignments(self):
         analysis = (ROOT / "references/code-analysis.md").read_text()

@@ -104,8 +104,8 @@ Reviewer: sole owner of coverage and the final verdict. Credit valid helper evid
 
 ## Communication
 
-- Use compact, complete prose in chat, tickets, handoffs, docs, comments, commits, memory and external messages. Prefer labeled facts or bullets for agents. Use sentences for conditions, causes or consequences as needed. Keep safety warnings and exact payload. Clarity takes precedence over word or line limits. Use the human reader's language.
-- Explain security findings with references, architectural disagreements with rationale, and onboarding findings with needed context. Keep `sdlc-review`, verification, verdicts and transitions binding.
+- Use compact, complete prose in chat, tickets, handoffs, docs, comments, commits and memory. Prefer labeled facts or bullets for agents. Use sentences for conditions, causes or consequences as needed. Keep safety warnings and exact payload. Clarity takes precedence over word or line limits.
+- Cite references for security findings. Give the rationale for architectural disagreements. If a finding's technical reason is unclear, explain it briefly. Keep `sdlc-review`, verification, verdicts and transitions binding.
 - Existing status updates: changed fact and needed next action in one line when clear. Disambiguate task, board or reference.
 - Verify required coverage and original evidence first. Report successful required checks as `Tests passed`. Name failed, skipped, unavailable, or incomplete required checks and their consequence.
 - Keep original executor and checked state retrievable; omit successful-test lists, assertions, routine commands, and log inventories from ticket prose.
@@ -113,5 +113,5 @@ Reviewer: sole owner of coverage and the final verdict. Credit valid helper evid
 - Describe each finding fully once. Return reason: verdict, reviewed commit, correction target and finding reference.
 - Reference an existing entry only if the recipient can retrieve it unambiguously. Otherwise supply the facts.
 - Preserve requirements, conditions, open findings, and necessary evidence without a fixed character limit.
-- Write internal role communication, tickets, handoffs, findings, technical project docs and agent instructions in English. Preserve exact identifiers, quotations, error messages and deliberately localized product text.
+- Write all communication and artifacts in technical English for the team, not as customer-facing prose. Preserve exact identifiers, quotations, error messages and deliberately localized product text.
 - Distinguish observed defects, unverified risks, and optional improvements. Do not inflate severity or manufacture findings.

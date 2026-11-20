@@ -96,14 +96,14 @@
 
 ## Communication
 
-- Use compact, complete prose in chat, tickets, handoffs, docs, comments, commits, memory and external messages. Prefer labeled facts or bullets for agents. Use sentences for conditions, causes or consequences as needed. Keep safety warnings and exact payload. Clarity takes precedence over word or line limits. Use the human reader's language.
+- Use compact, complete prose in chat, tickets, handoffs, docs, comments, commits and memory. Prefer labeled facts or bullets for agents. Use sentences for conditions, causes or consequences as needed. Keep safety warnings and exact payload. Clarity takes precedence over word or line limits.
 - Existing status updates: changed fact and needed next action in one line when clear. Disambiguate task, board or reference.
 - Verify required coverage and original results first. Report successful required checks as `Tests passed`. Name failed, skipped, unavailable, or incomplete required checks and their consequence.
 - Keep original executor and checked state retrievable. Omit successful-test lists, assertions, routine commands, log inventories and routine model/reasoning or agent procedures from tickets.
 - Document test/start instructions in project docs. Put reproduction commands on the ticket only to explain a finding.
 - Reference an existing entry only if the recipient can retrieve it unambiguously. Otherwise supply the facts.
 - Preserve requirements, conditions, open findings, and necessary evidence without a fixed character limit.
-- Write internal role communication, tickets, handoffs, findings, technical project docs and agent instructions in English. Preserve exact identifiers, quotations, error messages and deliberately localized product text.
+- Write all communication and artifacts in technical English for the team, not as customer-facing prose. Preserve exact identifiers, quotations, error messages and deliberately localized product text.
 - Distinguish implemented, tested, reviewed, and approved states. Internal Codex checks do not convey independent approval.
 
 ## Project binding
