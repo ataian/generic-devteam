@@ -1,206 +1,89 @@
 # Replacement-import planning
 
-Use when external records create local aggregates that later imports replace completely.
-Also use the restoration section when processing of an accepted import must be undone.
-These are planning and acceptance rules, not evidence that an importer or reset has run.
+Trigger: external records create local aggregates that later imports replace completely. For undoing processing of an accepted import, use the restoration section. These rules govern planning and acceptance. Importer/reset execution requires separate evidence.
 
 ## Submission, identity, and protected ownership
 
-1. Trace document origin, actual submitting actor, endpoint, and stored aggregate.
-   External file origin does not imply machine-to-machine submission.
-   Reuse existing session and role checks for an internal upload unless another access model is requested.
-   Verify backend authority separately from the user-facing role name.
-2. Distinguish the source key, local aggregate ID, stable visible identity, and nested object IDs.
-   Establish whether source keys are global or source-scoped from the sender contract.
-   Do not infer uniqueness from UUID-like syntax.
-   Agree which identities survive reimport before selecting deletion behavior.
-3. Resolve replacement targets only through the importer-owned mapping.
-   Check that protected provenance agrees with the expected local identity or namespace.
-   Abort without mutation on disagreement.
-   Never select a deletion target from supplied IDs, names, business identifiers, or a matching prefix alone.
-4. Keep the stable mapping and visible identity outside the replaceable payload.
-   Protect uniqueness and concurrent access.
-   Prove that a forged payload cannot nominate an internally created record.
-   Do not silently repair inconsistent ownership during import.
+1. Trace document origin, actual submitter, endpoint, and stored aggregate. External origin does not establish machine-to-machine submission. For internal uploads, reuse existing session/role checks unless another model was requested. Verify backend authority independently of role display names.
+2. Identify source key, local aggregate ID, stable visible identity, and nested object IDs separately. Determine global or source-scoped keys from the sender contract. UUID-like syntax proves no uniqueness. Agree which identities survive reimport before selecting deletion behavior.
+3. Resolve replacement targets only through the importer-owned mapping. Compare protected provenance with expected local identity/namespace. On mismatch, abort without mutation or silent ownership repair. Never select a deletion target from supplied IDs, names, business identifiers, or a matching prefix alone.
+4. Keep stable mapping and visible identity outside replaceable payload. Protect uniqueness and concurrent access. Prove forged input cannot nominate an internally created record.
 
-For source formats, export losses, receiving read contracts, and normalization decisions,
-load [External-data discovery](data-discovery.md#trace-transformation-semantics).
-Keep absent facts empty unless the owner expressly permits normalization.
-Encode the exact permitted exception without inventing unrelated values or precision.
-Do not infer authorization decisions or completed workflow states to satisfy authoring DTOs.
-Optional absent groups are not inconsistent relationships.
+Load [External-data discovery](data-discovery.md#trace-transformation-semantics) for formats, export losses, receiving read contracts, and normalization. Leave absent facts empty unless expressly authorized. Encode only the permitted exception, without unrelated values or precision. Do not infer authorization or completed workflow states to satisfy authoring DTOs. Distinguish optional absent groups from inconsistent relationships.
 
 ## Document-local identity graph
 
-When external IDs need not be retained, allocate local IDs through a schema-aware map
-keyed by object kind and source ID.
-Inventory foreign keys, join tables, parent/history links, and nested JSON references.
-Preserve domain codes and external terminology identifiers.
-Do not rewrite every UUID-looking string or perform global string replacement.
-
-For ORM-generated IDs, distinguish entity identity from nested JSON-object identity.
-Obtain actual managed entity IDs through the supported persistence path before finalizing references.
-Test save/merge behavior rather than assuming manually assigned generated IDs are accepted.
-Never resolve an unknown imported reference by searching existing application records.
-Specify the response to duplicate, ambiguous, or unresolved references before mutation.
-Under agreed strict rejection, fail the whole import and preserve the prior snapshot.
+1. If external IDs need not survive, allocate local IDs with a schema-aware map keyed by object kind and source ID. Inventory foreign keys, join tables, parent/history links, and nested JSON references. Preserve domain codes and external terminology IDs. Avoid blanket UUID rewriting and global string substitution.
+2. With ORM-generated IDs, distinguish managed entity IDs from nested JSON-object IDs. Obtain actual managed IDs via supported persistence before finalizing references. Test save/merge. Manually assigned generated IDs may fail.
+3. Before mutation, specify handling for duplicate, ambiguous, or unresolved references. Never resolve an unknown import reference against existing application records. Under agreed strict rejection, fail the whole import and preserve the prior snapshot.
 
 ## Replacement and atomicity
 
-Choose deletion from the required active-state outcome.
-A complete snapshot replaces the old content; it does not require every possible section.
-An omitted section or scalar must disappear from active reads rather than retain its old value.
+Choose deletion by the required active state. A complete snapshot need not supply every section. Remove omitted sections/scalars from active reads.
 
-1. Prefer existing soft-delete behavior if it satisfies the contract and physical erasure is not required.
-   Do not build annotation bypasses or purge infrastructure to preserve an obsolete proposal.
-   Inspect deletion filters, global business-key uniqueness, incoming references, cycles, and unenforced links.
-2. If deletion leaves a unique key occupied, consider preserving the stable identity row.
-   Replace its entire mutable payload and active child snapshot.
-   Do not use null-ignoring patch mapping for full replacement.
-3. Load the complete old active child inventory before deactivating parents whose filters hide those children.
-   Deactivate children themselves if removing only their parent leaves them readable.
-   Replace parent-scoped records as well as direct fields.
-   Use ordinary repository deletion for owned records without soft-delete where appropriate.
-4. Preserve shared dictionaries and unrelated records.
-   If physical erasure is required, include historical soft-deleted owned rows.
-   Verify physical removal independently of filtered application reads.
-   Do not add retention or history-browsing features merely because archived rows remain.
-5. Honor the agreed controller/service/repository and persistence boundaries.
-   An existing native-query helper does not authorize bypassing a repository-only contract.
-6. Keep ownership recheck, old-state deactivation, payload clearing, new snapshot creation,
-   and mapping update in one transaction on the actual target datasource.
-   Identify filesystem and external effects separately; database rollback does not undo them.
-   Avoid unrelated authoring notifications, schedulers, and outbound transfers.
+1. Prefer existing soft deletion when it meets the contract and physical erasure is unnecessary. Avoid annotation bypasses or purges for obsolete proposals. Inspect deletion filters, global business-key uniqueness, incoming references, cycles, and unenforced links.
+2. If deletion leaves a unique key occupied, consider retaining the stable identity row. Replace its full mutable payload and active children. Full replacement cannot use null-ignoring patch mapping.
+3. Inventory all old active children before deactivating parents whose filters hide them. Deactivate children still readable after parent removal. Replace parent-scoped records and direct fields. Use ordinary repository deletion for owned records without soft-delete where appropriate.
+4. Preserve shared dictionaries and unrelated records. If physical erasure is required, include historical soft-deleted owned rows and verify removal independently of filtered reads. Archived rows alone do not justify retention or history-browsing features.
+5. Honor controller/service/repository and persistence boundaries. A native-query helper does not override a repository-only contract.
+6. In one transaction on the actual target datasource, recheck ownership, deactivate old state, clear payload, create new snapshot, and update mapping. Identify filesystem and external effects separately. Database rollback cannot undo them. Avoid unrelated authoring notifications, schedulers, and outbound transfers.
 
 ## Minimum acceptance matrix
 
-Use synthetic data and an isolated mutation target.
-Verify that the existing harness supplies required migrations, views, foreign keys, and sequences.
-Copied tables alone do not prove a view-backed read path.
-Use the smallest faithful setup instead of redesigning the shared framework.
-Keep setup marked planned until executed.
+Use synthetic data and an isolated mutation target. Verify that the existing harness supplies required migrations, views, foreign keys, and sequences. Copied tables alone cannot establish a view-backed read path. Use the smallest faithful setup without redesigning the shared framework. Leave setup planned until executed.
 
 | Scenario | Required observable result |
 | --- | --- |
-| First import | One mapping and one visible aggregate; supported supplied data are readable. |
-| Same source key again | Agreed identity survives; only the new snapshot is active. |
+| First import | One mapping and one visible aggregate. Supported supplied data are readable. |
+| Same source key again | Agreed identity survives. Only the new snapshot is active. |
 | Omitted former group, scalar, or parent-scoped record | No stale current content through any relevant active read. |
-| Same nested IDs in different source records | Independent local identities; no cross-record attachment or overwrite. |
+| Same nested IDs in different source records | Independent local identities with no cross-record attachment or overwrite. |
 | Payload supplies an internal ID | No replacement of or attachment to an internally created record through that ID. |
 | Mapping disagrees with expected identity | Atomic rejection without deletion, reassignment, or silent repair. |
 | Failure after deactivation or clearing | Prior committed fields, children, parent-scoped records, and mapping survive rollback. |
 | Concurrent first imports or reimports | No duplicate mapping, unstable visible identity, partial aggregate, or unsafe interleaving. |
-| Optional groups absent or values partially supplied | Apply the agreed representation policy; no fabricated completeness. |
-| Duplicate IDs or unresolved relationships | Apply the agreed rejection policy atomically; no silent skip or existing-record fallback. |
+| Optional groups absent or values partially supplied | Apply the agreed representation policy without fabricating completeness. |
+| Duplicate IDs or unresolved relationships | Apply the agreed rejection policy atomically. Reject silent skips and existing-record fallbacks. |
 
-Distinguish allowed archived rows from forbidden active leftovers.
-Assert physical removal only when the contract requires it.
-Test the agreed viewing path rather than adding a new UI or lifecycle platform.
-Keep migrations, implementation commits, and independent review in their actual repository boundaries.
+Distinguish allowed archives from forbidden active leftovers. Assert physical removal only if required. Test the agreed viewing path without adding UI or a lifecycle platform. Keep migrations, implementation commits, and independent review within their actual repository boundaries.
 
 ## Restoring previously accepted imports
 
-Use when reset or reassignment must undo processing, not accept a new snapshot.
+Trigger: reset or reassignment undoes processing without accepting a new snapshot.
 
-1. Trace parsing, mapping, processing, persistence, and downstream export.
-   Identify each mutated field path, its save point, and an available original source.
-   Inspect nested setters and ORM dirty checking as well as top-level assignments.
-   Distinguish detached export copies from managed import records.
-2. Separate association removal, reversal of overrides, and recovery of original source values.
-   A later processing pass that might overwrite current values is not full restoration.
-   Matching setters support a reuse hypothesis, not proof of recovery or future compatibility.
-3. Classify field ownership before choosing reconstruction.
-   An overwritten field cannot reveal its original value or original absence without retained history.
-   Use an original file or immutable snapshot when original facts must be recovered.
-   A new snapshot column cannot restore already-lost legacy values.
-4. If the owner identifies processing-owned system fields and accepts discarding their legacy values,
-   reset only the explicit leaf-field allowlist.
-   Do not require source reconstruction or speculative age/version gates for that policy.
-   Distinguish null from importer defaults such as false or an empty string.
-   Preserve measurements, sibling values, list order, and entries outside owned positions.
-   Check the allowlist against actual processing setters, excluding container-creation setters.
-   Fresh nested IDs alone do not require rereading a source file.
-5. Separate reconstruction from new-upload admission.
-   A previously accepted file can fail today's mandatory-field or supported-version rules.
-   Define a bounded compatibility policy that retains structural readability, safe interpretation,
-   relationship consistency, and atomic failure.
-   Do not blindly call current upload validation or disable all validation.
-   Keep new-upload rules unchanged unless separately authorized.
-   Report an uninterpretable original format as an unresolved recovery boundary.
-6. Protect historical objects before clearing associations or renewing identities.
-   Deep-copy shared mutable data where needed.
-   Capture old result IDs before renewal so reprocessing cannot restore removed links.
-   Do not mutate archived results through shared nested objects.
+1. Trace parsing, mapping, processing, persistence, and export. For each mutated field, identify path, save point, and available original source. Inspect nested setters and ORM dirty checking. Distinguish detached export copies from managed import records.
+2. Separate association removal, override reversal, and original-value recovery. A later processing pass that may overwrite values cannot prove restoration. Matching setters indicate possible reuse. Prove recovery and compatibility separately.
+3. Classify field ownership before reconstruction. Overwritten values/absence require retained history. Use original file or immutable snapshot when original facts are required. A new snapshot column cannot recover lost legacy facts.
+4. If the owner identifies processing-owned system fields and accepts loss of legacy values, reset only the explicit leaf allowlist. Require neither source reconstruction nor speculative age/version gates. Distinguish null from defaults like false or an empty string. Preserve measurements, siblings, list order, and entries outside owned positions. Check actual processing setters, excluding container-creation setters. Fresh nested IDs alone do not require rereading source.
+5. Separate reconstruction from upload admission. A previously accepted file may fail current mandatory-field/version rules. Define bounded compatibility for structural readability, safe interpretation, consistent relationships, and atomic failure. Do not blindly apply current admission or disable all validation. Keep new-upload rules unless separately authorized. Report uninterpretable originals as unresolved recovery boundaries.
+6. Protect historical objects before clearing associations or renewing identities. Deep-copy shared mutable data as needed. Capture old result IDs before renewal so reprocessing cannot restore removed links. Do not mutate archived results through shared nested objects.
 
-Test the selected policy rather than a superseded one:
+Test the selected policy:
 
-- For reconstruction, cover overwritten source values, processing-created nested objects,
-  and a previously accepted fixture rejected by current upload admission.
-- For an approved system-field reset, assert the exact allowlist and preserved sibling sentinels.
-  Prove reset without source-file access.
-  Remove superseded parser work and file/admission error responses from the plan and tests.
-- For either path, cover changed processing configuration/type, null or empty nested data,
-  protected history, and rollback after failure.
+- Reconstruction: overwritten source values, processing-created nested objects, and a previously accepted fixture current admission rejects.
+- Approved system-field reset: exact allowlist, preserved sibling sentinels, and reset without source-file access. Remove superseded parser work and file/admission error responses from plan and tests.
+- Both: changed processing configuration/type, null or empty nested data, protected history, and rollback after failure.
 
-Keep routine regressions synthetic.
-Any real-source acceptance requires the authorization below.
-A design clarification does not itself approve execution.
+Keep routine regressions synthetic. Real-source acceptance requires authorization below. Design clarification grants no execution authority.
 
 ## Authorized local source-data acceptance
 
-Use when the owner supplies operational files or a populated local test database.
-Source permission is separate from plan approval, implementation dispatch, and mutation permission.
+Trigger: owner supplies operational files or a populated local test database. Separate source permission from plan approval, implementation dispatch, and mutation permission.
 
-1. Record the permitted source, purpose, local service, and credential location without secret values.
-   Inspect metadata first and count allowed file types without exposing identifying filenames.
-   Label facts as owner-provided, metadata-verified, database-verified, or execution-verified.
-   File presence does not prove a matching import or completed historical job.
-2. Bind the scenario to actor, entrypoint, and persisted state.
-   Resolve an ordinary restriction separately from a privileged exception.
-   Verify each with the correct role and existing separation-of-duty rules.
-   A disabled control alone is not server-side enforcement or authority for new UI work.
-3. Inspect only necessary source fields and narrow database projections under the granted permission.
-   Keep real identifier/filename mappings in protected local storage.
-   Use neutral case aliases in shared artifacts.
-   Verify required associations and historical states instead of assuming them.
-   Label synthetic prerequisite setup as synthetic rather than an exercised operational case.
-4. Preserve supplied originals and use a separately scoped local test target.
-   Mutate the populated source database only when expressly authorized.
-   Copy only the minimum authorized related data; a sample-file grant is not a whole-database export grant.
-   Clarify unbounded data needs before copying.
-   Do not run automatic migrations, cleanup, volume deletion, or schedulers against the source.
-5. Define the finite workflow, postconditions, and stop boundary before execution.
-   Compare prior/current active records, preserved source values, regenerated processing fields,
-   protected history, and actual workflow state.
-   Success of the last processing step does not prove earlier gates.
-   If external submission is excluded, disable outbound clients and jobs.
-   Verify no new submission jobs or external calls with before/after inventory and mock-call assertions.
-   Do not transmit test data to prove readiness.
-6. Read credentials locally only when needed for the next authorized operation.
-   Keep source content and credentials out of Git, chat, delegates, task attachments, memory, and reusable fixtures.
-   Protect necessary local copies and clean only owned test resources.
-   Report the exact commit, neutral alias, source/target mode, result, and verification gaps on the existing task.
-   Directory inventory or connectivity is not end-to-end acceptance.
-   Retain independent review and separate execution/publication gates.
+1. Record permitted source, purpose, local service, and credential location without secret values. Inspect metadata first. Count allowed file types without revealing identifying filenames. Label facts owner-provided, metadata-verified, database-verified, or execution-verified. File presence proves neither matching import nor completed historical job.
+2. Bind scenario to actor, entrypoint, and persisted state. Verify ordinary restrictions and privileged exceptions separately with correct roles and separation-of-duty rules. Disabled UI proves neither server enforcement nor authority for new UI work.
+3. Inspect only necessary fields and narrow database projections under the grant. Keep real identifier/filename mappings in protected local storage. Use neutral aliases in shared artifacts. Verify required associations and historical states. Label synthetic prerequisite setup as synthetic.
+4. Preserve originals and use a separately scoped local test target. Mutate a populated source database only with express authorization. Copy minimum authorized related data. A sample-file grant permits no whole-DB export. Clarify unbounded data needs before copying. No automatic migrations, cleanup, volume deletion, or schedulers against source.
+5. Before execution, define finite workflow, postconditions, and stop boundary. Compare prior/current active records, preserved source values, regenerated processing fields, protected history, and actual workflow state. Verify earlier gates independently of the last processing step. If external submission is excluded, disable outbound clients/jobs and verify no new submission jobs or external calls via before/after inventories and mock-call assertions. Never transmit test data to prove readiness.
+6. Read credentials locally only for the next authorized operation. Keep source content and credentials out of Git, chat, delegates, task attachments, memory, and reusable fixtures. Protect needed local copies and clean only owned test resources.
+7. Existing task evidence: exact commit, neutral alias, source/target mode, result, and verification gaps. Directory inventory and connectivity cannot prove end-to-end acceptance. Retain independent review and separate execution/publication gates.
 
 ## Schema-only confirmation on an authorized local database
 
-Use only when catalog evidence can settle a storage question left open by source inspection.
-Read no application records and run no import or migration during planning.
+Use only if catalog evidence can settle a storage question left open by source inspection. Read no application records or run imports/migrations during planning.
 
-1. Resolve the exact local database service and target from authorized configuration.
-   Parse resolved Compose configuration locally; emit only an explicit metadata allowlist.
-   Verify the Docker endpoint before querying.
-2. Use the existing database client rather than installing host dependencies for a catalog read.
-   Supply credentials through the authorized mechanism without printing them.
-   For PostgreSQL, enforce read-only operation and stop on SQL errors.
-3. Use a read-only transaction with a bounded statement timeout.
-   Query only required catalog definitions for nullability, types, and incoming foreign keys.
-   For PostgreSQL, use filtered `information_schema.columns` and `pg_constraint` queries
-   with `pg_get_constraintdef(oid)`, then `ROLLBACK`.
-   Do not treat catalog evidence as importer execution, rollback testing, or application-read verification.
+1. Resolve exact local service and target from authorized configuration. Parse resolved Compose configuration locally and emit only allowlisted metadata. Verify Docker endpoint before querying.
+2. Use the existing database client. Do not install host dependencies for a catalog read. Supply credentials through the authorized path without printing them. On PostgreSQL, enforce read-only mode and stop on SQL errors.
+3. Use a read-only transaction and bounded statement timeout. Query only needed catalog definitions for nullability, types, and incoming foreign keys. For PostgreSQL, filter `information_schema.columns` and `pg_constraint`, use `pg_get_constraintdef(oid)`, then `ROLLBACK`. Catalog evidence cannot establish importer execution, tested rollback, or application reads.
 
-Keep concrete entity maps, table lists, protected source locations, and approved defaults
-in the project's existing authorized records, not this reusable reference.
-Keep technical recommendations proposed until their design gate is satisfied.
-Selecting authentication does not authorize credential provisioning or deployment.
+Store concrete entity maps, table lists, protected locations, and approved defaults in existing authorized project records. Technical recommendations remain proposed until their design gate. Selecting authentication grants no credential provisioning or deployment authority.

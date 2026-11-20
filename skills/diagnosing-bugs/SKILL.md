@@ -13,53 +13,37 @@ metadata:
 
 # Diagnosing bugs
 
-Team-Codex owns diagnosis and implementation within the accepted task.
-Use evidence to choose a direct fix or the full diagnosis method.
+Owner: Team-Codex diagnoses and implements within the accepted task. Evidence selects direct fix or full diagnosis.
 
 ## When to use
 
-Use for bug/diagnosis tasks and unexplained test failures or regressions found during ordinary implementation.
-Use the accepted goal, context, exact symptom, expected behavior, and verification criteria.
-If required behavior is unclear, resolve it through existing task routing.
+- Trigger: bug or diagnosis task, or an unexplained test failure or regression during ordinary implementation.
+- Inputs: accepted goal and context, exact symptom, expected behavior and verification criteria. Resolve unclear required behavior through existing task routing.
 
 ## Boundaries
 
-Keep all probes within existing scope, resource limits, operational permissions, and native safeguards.
-Redact credentials and PII before returning outputs or captured artifacts.
-Use protected input/data paths; do not expand secret environment values into commands or logs.
-Preserve required security, data-integrity, acceptance, and independent-review checks on both paths.
-Risk alone does not require prolonged cause exploration; ticket or diff size does not select the path.
+- Probes: stay within scope, resource limits, operational permissions and native safeguards.
+- Data: use protected input/data paths. Never expand secret environment values into commands or logs. Redact credentials and PII before returning output or captured artifacts.
+- Both paths retain required security, data-integrity, acceptance and independent-review checks. Risk alone does not require extended cause exploration. Ticket and diff size do not select the path.
 
 ## Classify from evidence
 
-Start with a short targeted investigation using available code, repros, and original results.
-Check full-diagnosis triggers before selecting the direct-fix path.
-Use the direct-fix path only when all three conditions hold:
+1. Investigate briefly using available code, repros and original results.
+2. Check full-diagnosis triggers first. Switch before attempting guessed fixes, as soon as uncertainty is evident or any trigger applies:
+   - Cause still unclear after the initial investigation, or plausible causes need distinguishing.
+   - Intermittent failure or dependence on state, timing or environment.
+   - Performance regression requiring measurement and isolation.
+   - Original symptom survives an apparent fix or recurs.
 
-- Concrete evidence supports both the symptom and its cause.
-- The affected flow and required correction are clear.
-- A focused test or reproducible check can demonstrate the exact bug and its correction.
-
-Demonstrate the error, correct its cause, and run relevant verification.
-Do not generate alternatives, build a separate harness, or further minimize an already simple case to satisfy a checklist.
-
-Use full diagnosis when any condition applies:
-
-- The cause remains unclear after the first targeted investigation.
-- Multiple plausible causes need distinguishing.
-- The failure is intermittent or depends on state, timing, or environment.
-- A performance regression needs measurement and isolation.
-- An apparent fix leaves the original symptom unresolved, or the failure recurs.
-
-Switch as soon as uncertainty is evident, before guessed fix attempts.
-Reuse completed investigation, repros, and checks instead of restarting.
-Technical deepening within accepted scope needs no new Planner or customer approval.
-Read [the full method](references/method.md) completely when any full-diagnosis trigger applies.
-If the required reference is missing or unreadable, report its path and stop the affected diagnosis.
+   Read [the full method](references/method.md) completely. If missing or unreadable, report its path and stop the affected diagnosis. Reuse completed investigation, repros and checks. Deepening within accepted scope requires no new Planner or customer approval.
+3. Use direct fix only if concrete evidence supports both symptom and cause, the affected flow and required correction are clear, and a focused test or reproducible check can demonstrate the exact bug and its correction. Demonstrate the error, fix the cause, then verify. Do not generate alternatives, build a separate harness, or further minimize an already simple case to satisfy a checklist.
 
 ## Verification and handoff
 
-Verify the original symptom is resolved and required regression, acceptance, and risk checks pass.
-Report unavailable or incomplete required checks and their consequence through existing task conventions.
-State confirmed cause and meaningful verification with original evidence retrievable; label remaining uncertainty.
-Keep independent review and the existing handoff unchanged; no separate diagnosis dossier is required.
+Verify resolution of the original symptom and passing required regression, acceptance and risk checks. Keep the existing handoff and independent review. Use compact bullets within task conventions.
+
+- Cause: confirmed cause, if established.
+- Checked: meaningful verification and retrievable original evidence.
+- Open: remaining uncertainty and any failed, unavailable, or incomplete required checks with their consequences.
+
+No separate diagnosis dossier is required.

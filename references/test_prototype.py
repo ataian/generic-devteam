@@ -17,14 +17,16 @@ ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "skills/prototype"
 FILES = {"SKILL.md", "LOGIC.md", "UI.md", "NOTICE.md", "LICENSE"}
 CONTRACT = (
-    "The Planner writes and adjusts these aids directly during grilling, before final plan acceptance when useful.",
-    "This narrow clarification workflow replaces product-implementation gates for these aids only.",
-    "No Coder, Team-Codex, delegation, Kanban ticket, test suite, independent review, or additional approval round is required or used.",
-    "Write no automated tests for the demo.",
-    "Store every prototype file in the Planner's existing planning `docs/` directory alongside the plan, including when planning and product repositories differ.",
-    "Keep prototypes out of the product directory, application routes, build configuration, and production assets.",
-    "No commit, throwaway branch, publication, separate report, or cleanup ritual is required.",
-    "Only the clarified decision enters the product plan; the demo proves neither production correctness nor approval of new scope.",
+    "Owner: the Planner writes and adjusts the demo directly during grilling, before final plan acceptance when "
+    "useful.",
+    "Demo only: no Coder, Team-Codex, delegation, Kanban ticket, automated tests, test suite, independent review "
+    "or extra approval round.",
+    "Product work retains accepted-plan, Codex, testing and independent-review requirements.",
+    "Files: the Planner's existing planning `docs/` beside the plan, even across repositories.",
+    "Exclude the product directory, application routes, build configuration and production assets.",
+    "No required commit, throwaway branch, publication, separate report or cleanup ritual.",
+    "Carry only the clarified decision into the product plan. The demo provides no evidence of production correctness "
+    "or approval of new scope.",
 )
 
 
@@ -63,9 +65,11 @@ class PrototypeTests(unittest.TestCase):
         self.assertNotIn("disable-model-invocation", meta)
         for clause in ("read its branch before building", "[LOGIC.md](LOGIC.md)", "[UI.md](UI.md)",
                        "continue verbal clarification", "synthetic data, in-memory state",
-                       "or install dependencies for the demo", "Try the relevant controls",
-                       "without building preview infrastructure", "Simplify when construction",
-                       "Resume grilling from that answer"):
+                       "No real mutations, sensitive data, live services or dependency installations.",
+                       "Open it with available local preview or browser tools and try the relevant controls",
+                       "without building preview infrastructure",
+                       "Simplify if construction grows into a development project",
+                       "Resume grilling from that result without separate prototype acceptance"):
             self.assertIn(clause, body)
 
     def test_direct_clarification_scenarios_and_missing_clause_mutations(self):
@@ -80,11 +84,13 @@ class PrototypeTests(unittest.TestCase):
         ui = self.text("UI.md")
         for clause in ("single self-contained HTML", "domain language", "free-play buttons",
                        "guided scenarios", "Each step performs the actual demo action",
-                       "in-memory examples", "no logic is automatically lifted into product code"):
+                       "in-memory examples", "Do not lift demo logic into product code automatically."):
             self.assertIn(clause, logic)
-        for clause in ("structurally different variants", "not a quota", "?variant=",
-                       "focused text inputs", "local stubs", "instead of modifying the real application",
-                       "No application route", "stay in planning `docs/`"):
+        for clause in ("For competing layouts, vary information hierarchy, layout and primary actions.",
+                       "Colour alone is insufficient.", "not a quota", "?variant=",
+                       "focused text inputs", "local stubs",
+                       "Represent that context in the demo and keep the real application untouched",
+                       "No application route", "Keep variants and switcher in planning `docs/`"):
             self.assertIn(clause, ui)
 
     def test_rendered_planner_trigger_keeps_product_gates(self):
@@ -96,7 +102,7 @@ class PrototypeTests(unittest.TestCase):
         rendered = render_role(text, values, "planner")
         for clause in ('skill_view(name="prototype")', "During grilling", "write isolated throwaway",
                        "without Coder, Codex, tickets, automated tests, independent review, or extra approval rounds",
-                       "product implementation retains the normal workflow and gates",
+                       "Product implementation retains the normal workflow and gates",
                        "Do not create implementation tickets before acceptance.",
                        "Assign implementation to", "If a prototype clarified a decision"):
             self.assertIn(clause, rendered)

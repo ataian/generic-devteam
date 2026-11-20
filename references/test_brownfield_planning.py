@@ -98,18 +98,19 @@ class BrownfieldPackageTests(unittest.TestCase):
             "replacement-imports.md": (
                 "Resolve replacement targets only through the importer-owned mapping.",
                 "Under agreed strict rejection, fail the whole import and preserve the prior snapshot.",
-                "Mutate the populated source database only when expressly authorized.",
-                "Do not blindly call current upload validation or disable all validation.",
+                "Mutate a populated source database only with express authorization.",
+                "Do not blindly apply current admission or disable all validation.",
             ),
             "operator-script-acceptance.md": (
-                "The independent reviewer chooses/assesses separate rechecks and owns the verdict.",
-                "Freeze the tested tree during each operator run and refresh resource inventory before mutation.",
+                "Independent reviewer: choose and assess separate rechecks, own verdict.",
+                "Freeze the tested tree during each operator run. Refresh resource inventory before mutation.",
 
             ),
             "kanban-triage-recovery.md": (
-                "Require an ended previous writer and no parallel repository writer before continuation.",
+                "Require an ended previous writer and no parallel repository writer before continuing.",
                 "The script rejects signature drift but does not prove semantic equivalence.",
-                "Do not hardcode a coder or bypass an unresolved `CHANGES_REQUESTED` verdict.",
+                "Do not hardcode a coder.",
+                "Never reopen pending review to execute code or bypass unresolved `CHANGES_REQUESTED`.",
             ),
         }
 
@@ -120,7 +121,11 @@ class BrownfieldPackageTests(unittest.TestCase):
                     self.assertIn(requirement, text)
 
         status = (SKILL / "references/kanban-status-inspection.md").read_text()
-        self.assertIn("Do not substitute operator completion for later coding/product review.", status)
+        self.assertIn("Coding/product: require completed independent-reviewer run, verdict, reviewed commit, "
+                      "and test evidence.", status)
+        self.assertIn("Explicitly authorized bounded operator work: require the operator's own completed run, "
+                      "original ownership, and fulfilled result contract. Later coding/product review still applies.",
+                      status)
 
     def test_proposal_chain_budgets(self):
         core = (SKILL / "SKILL.md").stat().st_size
@@ -144,7 +149,8 @@ class BrownfieldPackageTests(unittest.TestCase):
         for clause in (
             "Record consequential in-scope decisions on the existing ticket.",
             "For an authorized binding amendment, update the versioned plan and affected current and future ticket bindings before release.",
-            "Preserve already-reviewed history and verify the returning worker's applicable baseline.",
+            "Preserve valid safety gates, review boundaries, budget decisions, and already-reviewed history.",
+            "Verify the returning worker's applicable baseline.",
         ):
             self.assertIn(clause, text)
         # Role boundaries and data rules live in the SOUL only; the skill must not restate them.
@@ -174,9 +180,9 @@ class BrownfieldPackageTests(unittest.TestCase):
         phases = text.split("### 4. Build reviewable phases\n", 1)[1].split("\n### 5.", 1)[0]
         for clause in (
             "Cut work by actor, desired behaviour, and benefit before mapping stories to phases and tickets.",
-            "Give each slice an observable, independently verifiable outcome across the relevant layers.",
-            "Do not disguise database/API/UI layer tasks as stories by adding an actor prefix.",
-            "Justify necessary foundations by the stories they enable and their verification gate.",
+            "Each slice needs an observable, independently verifiable outcome across relevant layers.",
+            "Adding an actor prefix to database/API/UI layer work does not make it a story.",
+            "Justify foundations by the stories they enable and their verification gate.",
         ):
             self.assertIn(clause, phases)
         # Phase/ticket boundary rule is a SOUL rule; the skill must not restate it.
@@ -191,24 +197,33 @@ class BrownfieldPackageTests(unittest.TestCase):
     def test_phase_release_keeps_story_content_exact_bindings_and_recovery(self):
         release = (SKILL / "references/kanban-phase-release.md").read_text()
         for clause in (
-            "Write a concise actor-behaviour-benefit title, not a technical task label.",
-            "Surface incompatible native title constraints instead of truncating user meaning.",
-            "Goal/context: state the outcome and necessary context.",
-            "Acceptance criteria: list concrete observable success conditions.",
-            "Technical implementation: include necessary interfaces, affected areas, and constraints; label suggestions separately.",
+            "Write one concise actor-behaviour-benefit story in the title.",
+            "For a technical prerequisite, use the real beneficiary and enabling story.",
+            "Do not invent user actions or benefits or use a technical task label.",
+            "Surface incompatible native title limits without truncating user meaning.",
+            "Goal/context: outcome and necessary context beyond the title.",
+            "Acceptance criteria: observable success conditions.",
+            "Technical implementation: necessary interfaces, affected areas, binding constraints, and accepted task-specific "
+            "exceptions. Label suggestions separately.",
             "Verification: state the checks needed to establish these criteria, including relevant failure cases.",
-            "Dependencies and binding: name blockers, absolute accepted plan/phase paths, exact Git commits, phase identifier, and planning repository root.",
-            "Keep criteria and implementation context concise; align excerpts with the authoritative accepted plan.",
-            "Make the card understandable without opening the full plan; leave implementation discretion with the Coder.",
-            "Do not repeat the whole plan, routine team procedures, or successful-test catalogues.",
-            "Match persisted cards to the planned ticket identity, approved plan path, plan commit and phase identifier.",
-            "Reuse exact matching cards and create only missing planned tickets.",
-            "Check each story, criterion, technical constraint and exception against its phase scope, gate, commit boundary and reviewer binding.",
+            "Dependencies and binding: planned story/prerequisite identity, blockers, absolute accepted plan/phase paths, "
+            "exact Git commits, phase identifier, and planning repository root.",
+            "Bind separate phase plans or specifications by absolute path and exact Git commit.",
+            "Keep criteria and implementation context concise.",
+            "Use the authoritative accepted plan for excerpts.",
+            "Write a self-contained body with short bullets.",
+            "Leave implementation discretion with the Coder.",
+            "Leave standard procedures in role rules and omit whole-plan copies and successful-test catalogues.",
+            "Match persisted cards by planned ticket identity, approved plan path, plan commit and phase identifier.",
+            "Reuse exact matches. Create only missing planned tickets.",
+            "Check each story, criterion, technical constraint, and exception against phase scope, gate, commit boundary, "
+            "and reviewer binding.",
             "--initial-status blocked", "idempotency key", "explicit completion contract",
-            "Read each returned exact card before further writes.",
+            "Read back each returned exact card before further writes.",
             "Leave later advancement to the dispatcher and independent review gates.",
         ):
-            self.assertIn(clause, release)
+            with self.subTest(clause=clause):
+                self.assertIn(clause, release)
         for obsolete in ("create only missing phases", "complete accepted phase list", "Write a short goal"):
             self.assertNotIn(obsolete, release)
 
@@ -221,7 +236,8 @@ class BrownfieldPackageTests(unittest.TestCase):
         ):
             with self.subTest(clause=clause):
                 self.assertIn(clause, text)
-        self.assertIn("Apply the Planner's vocabulary and accepted-ADR rules to ticket titles and descriptions at the accepted baseline.", release)
+        self.assertIn("Apply the Planner's vocabulary and accepted-ADR rules to title and body at the accepted baseline.",
+                      release)
 
     def test_wide_mechanical_changes_load_conditional_method_before_acceptance(self):
         text = (SKILL / "SKILL.md").read_text()
@@ -230,7 +246,8 @@ class BrownfieldPackageTests(unittest.TestCase):
             "For broad mechanical changes that cannot safely land as independent vertical slices, load only "
             "[Expand–Migrate–Contract](references/kanban-phase-release.md#expandmigratecontract) during planning, before plan acceptance.", phases)
         self.assertIn("Include preparation or refactoring only when justified by the goal.", phases)
-        self.assertIn("Context-window fit can inform sizing; preserve coherent, independently reviewable outcomes without a fixed size cap.", phases)
+        self.assertIn("Context-window fit may inform sizing. Keep coherent, independently reviewable outcomes "
+                      "without a fixed size cap.", phases)
         self.assertIn("Do not create implementation tickets before explicit plan acceptance.", text)
 
     def test_expand_migrate_contract_preserves_green_states_and_native_gates(self):
@@ -239,15 +256,17 @@ class BrownfieldPackageTests(unittest.TestCase):
         self.assertIn(heading, release)
         section = release.split(heading, 1)[1].split("\n## ", 1)[0]
         for clause in (
-            "Use during planning only for broad mechanical changes that cannot safely land as ordinary independent vertical slices.",
-            "Expand: add the new form alongside the old; verify coexistence and compatibility.",
-            "Migrate: move callers in reviewable bounded batches; make each batch depend on expansion.",
+            "During planning only, use for broad mechanical changes that cannot safely land as ordinary independent "
+            "vertical slices.",
+            "Expand: add the new form alongside the old. Verify coexistence and compatibility.",
+            "Migrate: move callers in bounded, reviewable batches, each dependent on expansion.",
             "Keep every intermediate state working and verified, with required checks green.",
-            "Contract: retire the old form only after every migration batch and confirmed absence of remaining callers.",
-            "Make contraction depend on every migration batch.",
-            "Bind these outcomes, dependencies, and verification to the accepted plan, phases, and native tickets through the release procedure below.",
-            "Advance only after each prerequisite's existing independent review gate reaches DONE.",
-            "Use existing implementation tickets and Reviewer gates for integrated acceptance; keep the Planner's final report separate.",
+            "Contract: depend on every migration batch. Confirm no callers remain before retiring the old form.",
+            "Carry outcomes, dependencies, and verification into the accepted plan, phases, and native tickets "
+            "through the release procedure below.",
+            "Advance only when each prerequisite's existing independent review gate reaches DONE.",
+            "Use existing implementation tickets and Reviewer gates for integrated acceptance.",
+            "Keep the Planner's final report separate.",
         ):
             with self.subTest(clause=clause):
                 self.assertIn(clause, section)
@@ -255,7 +274,7 @@ class BrownfieldPackageTests(unittest.TestCase):
         self.assertLess(section.index("Migrate:"), section.index("Contract:"))
         for excluded in ("integration branch", "ungreen", "integrate-and-verify", "ready-for-agent"):
             self.assertNotIn(excluded, section)
-        self.assertIn("Use this procedure after explicit acceptance", release)
+        self.assertIn("Prerequisite: explicit acceptance of a dependency-ordered implementation plan.", release)
         self.assertIn("Leave later advancement to the dispatcher and independent review gates.", release)
 
     def test_domain_clarification_uses_planner_workflow(self):
@@ -276,15 +295,18 @@ class BrownfieldPackageTests(unittest.TestCase):
         text = (SKILL / "SKILL.md").read_text()
         release = (SKILL / "references/kanban-phase-release.md").read_text()
         for clause in (
-            "Work until the acceptance criteria are met.",
+            "Progress: work until acceptance criteria and required checks are complete, then stop.",
             "Correct recoverable failures independently.",
             "Escalate the concrete obstacle when no justified next approach remains.",
-            "Preserve explicit customer financial/resource caps, configured limits, provider quotas, operational permissions, and native failure-loop guards.",
+            "Limits: preserve explicit customer financial/resource caps, configured limits, provider quotas, "
+            "operational permissions, and native failure-loop guards.",
         ):
             self.assertIn(clause, text)
         self.assertNotIn("who may authorize an extension", text)
         self.assertNotIn("retry allowances", text)
-        self.assertIn("Set explicit customer limits and required native runtime/retry fields without inventing discretionary attempt budgets.", release)
+        self.assertIn("Set native assignee and workspace, `--initial-status blocked`, idempotency key, required skill, "
+                      "explicit completion contract, explicit customer limits, and required runtime/retry fields. "
+                      "Do not invent discretionary attempt budgets.", release)
         for source in (text, release):
             self.assertNotIn("Use native run logs for detailed execution output.", source)
             self.assertIn("Native run outputs remain available evidence, not an authored run-log duty.", source)
@@ -292,15 +314,17 @@ class BrownfieldPackageTests(unittest.TestCase):
     def test_recovery_screens_current_blocker_and_keeps_customer_return_in_execution(self):
         text = (SKILL / "references/kanban-triage-recovery.md").read_text()
         for clause in (
-            "Triage means blocked work in this team; never deliberately send work there.",
-            "Check an actual Coder escalation for an overlooked in-scope solution before involving the customer.",
-            "Record the correction and resume the Coder without a customer round.",
+            "Triage means blocked work in this team. Never deliberately send work there.",
+            "Screen a real Coder escalation for an overlooked in-scope solution before involving the customer.",
+            "If found, record the correction and resume the Coder without a customer round.",
             "Record a sufficient customer answer and its scope on the existing ticket.",
-            "Use `kanban_comment(task_id=..., body=...)` and read back the posted decision before resumption.",
+            "Post with `kanban_comment(task_id=..., body=...)` and read back the decision before resuming.",
             "An old answer must not clear a newer blocker.",
-            "Leave an already-active or completed task unchanged.",
-            "A Mattermost wake is not an active Reviewer run; use ordinary unblock or guarded triage recovery instead of request-changes.",
-            "Preserve native counter semantics, including resets performed by legitimate native transitions.",
+            "Leave active/completed tasks unchanged.",
+            "A Mattermost wake carries no active Reviewer authority. Use ordinary unblock or guarded triage recovery. "
+            "Reserve request-changes for active review.",
+            "Preserve card, authorized scope, history, valid dependencies, review provenance, counters, and native "
+            "counter semantics, including legitimate transition resets.",
         ):
             self.assertIn(clause, text)
         self.assertNotIn("Resolve routine technical decisions within the planner's existing mandate", text)
@@ -357,7 +381,7 @@ class BrownfieldPackageTests(unittest.TestCase):
     def test_technical_review_interruption_does_not_require_coder_rework(self):
         text = (SKILL / "references/kanban-triage-recovery.md").read_text()
         for clause in (
-            "For a technical interruption during review, restore unfinished review with its existing provenance.",
+            "Technical interruption during review: restore unfinished review with existing provenance.",
             "Use a Coder return only for substantive findings, questions, or required implementation continuation.",
             "Keep capability failures and verified quota pauses blocked until their actual cause is resolved.",
         ):

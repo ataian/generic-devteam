@@ -1,0 +1,22 @@
+# Sechs SG1-Zusätze — Bewertung für den Maker
+
+Grundlage: `HANDOFF_2.11.1_SG1-Zusaetze_v1.md` und Maker `2.11.1` (`b589e4a`). Diskussionsstand: alle sechs Entscheidungen offen. Keine Paketänderung, kein Team-Update. Maßstab: Welche konkrete Entscheidung trifft ein frisch erzeugtes Team mit der Ergänzung richtiger? Bestehende Pflichten bleiben beim bisherigen Eigentümer; Sonderfälle lösen keine Routineprüfung aus.
+
+| Nr. | Empfehlung | Warum / Platz im bestehenden Ablauf |
+|---|---|---|
+| 1 | Nur den Ausnahmefall aufnehmen | `skills/brownfield-feature-planning/SKILL.md:79` verlangt gezieltes Staging und Prüfung des Commits. Unklar bleibt der zulässige Weg, wenn Git die neue Plandatei ignoriert. Kein Ignore-Audit vor jedem Commit, kein pauschales Force-Add. |
+| 2 | Nur den Vorrang der eingefrorenen Basis und des Nachtrags ergänzen | `SKILL.md:78,88–90` im Brownfield-Skill bindet an genaue Commits und verlangt aktualisierte Ticketbindungen. `kanban-phase-release.md:73` und `kanban-triage-recovery.md:20` ersetzen widersprüchlichen aktiven Text. Bei bewusst eingefrorener Basis fehlen die beiden getrennten Revisionsbezüge und die Angabe, *welche* Klauseln der genehmigte Nachtrag ersetzt. Beides in der bestehenden Amendment-Regel verankern; keine zweite Ticketpflegeprozedur. |
+| 3 | Bestehende ID-Regel präzisieren | `kanban-status-inspection.md:53,102` verlangt bereits native Run-ID zur Auswahl und tatsächliche Run-Identität beim Melden. Die vorhandene Regel auf Auswahl **und** Bericht beziehen: JSON-Feld `id`, nicht die laufende Nummer der Tabellenanzeige. Kein zusätzlicher Aufruf, keine neue Berichtsspalte. |
+| 4 | Bedingt aufnehmen | `kanban-status-inspection.md:69–72` trennt Implementierungsübergabe und Reviewer-Lauf, sagt aber nicht ausdrücklich, was gilt, wenn die Übergabe Belege oder Grenzen in Run-Metadaten verortet. Dann die bezeichneten Felder lesen, nicht den letzten Kommentar für das gesamte Ergebnis halten. Keine pauschale Anweisung, komplette Metadaten zu laden. |
+| 5 | Keine fünfstufige Parallelprozedur; die Entscheidung des Planners ergänzen | `templates/roles/reviewer.SOUL.md.template:78` regelt die native Rückgabe an den Coder; `kanban-status-inspection.md:68–75,102` regelt Phasenbeleg, Nachfolger und Unterschied zwischen bereit und gestartet. In der Phasenbestimmung fehlt die Abzweigung: Bei einem negativen Urteil nicht aus `BLOCK` auf den Boardstatus `blocked` schließen. Urteil und natives `changes_requested`-Ereignis dem abgelehnten Commit und den offenen Befunden zuordnen. Ist die Korrektur auf derselben Karte schon bereit oder läuft sie, den Dispatcher und Coder arbeiten lassen; keine Entblockung, Ersatzkarte oder zweite Zuweisung. Die Anzahl der Runden allein ist keine Scopeänderung. |
+| 6 | Die Auswahl der Transition schärfen, nicht sieben Zeilen kopieren | `kanban-triage-recovery.md:21–22,76–78` deckt erfüllte Eltern, Rücklesen, Reviewer-Zuständigkeit, lokale Semantik und das Ziel `ready`/`todo` bereits ab. Für einen echten Block aus dem Review: `source_status` und ursprüngliche Implementierer-Übergabe heranziehen. Nur wenn die installierte Transition die Reviewphase wiederherstellt, den behobenen Block auf diesem Weg lösen. Danach `review` oder tatsächlichen Reviewer-Claim, unveränderte Zuordnung und dieselbe Übergabe belegen. Eine Rückgabe an den Implementierer ist keine Wiederaufnahme des unterbrochenen Reviews. Bei Ablehnung Zustand und Semantik neu prüfen, nicht erzwingen; der bereits begrenzte Triage-Fallback bleibt bestehen. |
+
+Referenznamen ohne Paketpfad in der Tabelle stehen unter `skills/brownfield-feature-planning/references/`; die kurzen `SKILL.md`-Verweise in Zeile 2 bezeichnen den Skill-Einstieg. Übernahme der *Bedeutung* garantiert keine konfliktfreie Textzusammenführung beim SG1-Update: Der Helfer verwendet `git merge-file`. Konfliktfreiheit wäre am tatsächlichen Ziel separat nachzuweisen, kein Auswahlkriterium für Maker-Inhalte.
+
+## 1 — Satzvorschlag am bestehenden Staging-Schritt
+
+> If Git ignores the intended plan file, check the matching rule. If authorized, allowlist only that path; otherwise report the exclusion. Preserve all other exclusions.
+
+Der genehmigte Plan-Commit ist keine pauschale Erlaubnis, die Ignore-Policy des Projekts zu ändern. Für ein normal sichtbares Dokument entsteht kein neuer Prüfschritt.
+
+Testbasis: statischer Vergleich des Handoffs mit dem ausgelieferten Makertext. Keine Tests und keine nativen Board-Transitionen ausgeführt; die Empfehlungen behaupten keine über alle Hermes-Versionen identische Laufzeitsemantik.

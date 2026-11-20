@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Set up or update a native Hermes project team.
-version: 2.10.0
+version: 2.11.2
 author: Max
 license: MIT
 platforms: [linux]
@@ -13,64 +13,39 @@ metadata:
 
 # Generic Devteam
 
-Configure a Planner, Coder/Team-Codex, and independent Reviewer in an existing Linux Hermes installation.
-This Maker is a prose setup recipe, not an installer framework or a second dispatcher.
+Setup recipe for an existing Linux Hermes installation: Planner, Coder/Team-Codex, independent Reviewer. No installer framework or second dispatcher.
 Use English for development communication and artifacts. Preserve exact identifiers, quotations, errors, and deliberately localized product text.
 
 ## Triggers and boundaries
 
-Use this entry for an explicitly requested new team or interrupted setup.
-For requested existing-team file updates, read [Team updates](references/update.md); reuse confirmed values without a new interview.
-Before either operation, check your own wrapper or a local adaptation under [Maker wrapper](references/main-agent-wrapper.md).
-Package authoring or review authorizes file work only, not installation or activation.
-Keep product planning and project onboarding as later explicit tasks.
+- New or interrupted setup: require an explicit request. Follow the sequence below.
+- Requested existing-team file update: read [Team updates](references/update.md). Reuse confirmed values without a new interview.
+- Before setup or update: check your own wrapper or local adaptation under [Maker wrapper](references/main-agent-wrapper.md).
+- Package authoring/review: file work only. Installation, activation, product planning and project onboarding need their own requests.
 
-Require available Hermes, Mattermost, Hindsight, a working Codex shell sandbox, and suitable model access.
-Use established supported interfaces and available component sources.
-Use the manifest's exact upstream asset commits without a fresh latest-version search.
-Keep Hermes core and its distribution skills native-managed; Maker does not pin, install, upgrade, or repair Hermes.
-Inspect and preserve existing Codex and selected analysis runtimes before setup.
-Disclose any first installation in the complete upfront setup scope; obtain approval before changing existing/shared runtimes.
-For team updates, obtain advance explicit approval for every plugin update and any CBM/Graphify runtime or Team-Codex CLI change.
-Report concrete incompatibilities and defer dependent outputs until the required decision and capability are resolved.
-Preserve ownership, local edits, native protection, and independent review boundaries.
-Keep secrets in protected native input/storage paths, outside chat, arguments, records, and Git.
+- Prerequisites: Hermes, Mattermost, Hindsight, working Codex shell sandbox, suitable model access.
+- Sources: established supported interfaces, available components and exact manifest asset commits. Skip latest-version searches. Hermes and distribution skills stay native-managed. No Hermes pin, installation, upgrade or repair.
+- Setup scope: inspect and preserve existing Codex and selected analysis runtimes. Disclose first installations upfront with the full setup scope. Obtain approval before changing existing/shared runtimes.
+- Update scope: obtain advance explicit approval for every plugin update and any CBM/Graphify runtime or Team-Codex CLI change.
+- Incompatibility: report the concrete conflict. Defer dependent outputs until the decision and capability are resolved.
+- Safeguards: preserve ownership, local edits, native protection and independent review. Keep secrets in protected native input/storage, outside chat, arguments, records and Git.
 
 ## Tool output
 
-Keep required instructions in context; reduce evidence output, not verification scope.
-Read complete required instructions and only the selected integration branch.
-Reuse unchanged instructions already available in the current context after a user pause.
-If context is missing or the source changed, reload the affected instructions.
-On resume, reconcile saved setup data with relevant native state, then continue the first incomplete step.
-
-Load and validate the complete setup JSON locally; let scripts consume its values directly.
-Return only the setup values, configuration fields, inventory entries, or API results needed for the current decision.
-For complete file and native-loading checks, compare the full results programmatically.
-Return the checked scope, actual source/target bindings, result, and concrete differences.
-Keep complete nonsecret evidence in the existing private setup area and return its path.
-For verbose installations, use the protected logging procedure in [Integrations](references/integrations.md#installation-output).
-If a check fails or a decision needs more detail, inspect the relevant evidence and return the necessary details, errors, and warnings.
-Do not replace inspection with a log path or hide unresolved findings by truncating output.
+- Context: load all required instructions in full and only the selected integration branch. After a pause, reuse unchanged instructions in context. Reload affected instructions if missing or changed.
+- Resume: reconcile saved setup data with relevant native state. Continue the first incomplete step.
+- Local checks: validate the entire setup JSON and pass values directly to scripts. Compare full file and native-loading results programmatically.
+- Return: include only setup values, configuration fields, inventory entries or API results needed for the decision. For full comparisons, give checked scope, actual source/target bindings, result and concrete differences. Return the path to complete nonsecret evidence in the existing private setup area.
+- Verbose installs: use [protected logging](references/integrations.md#installation-output).
+- Failure or detail needed: inspect the evidence and return relevant details, errors and warnings. Keep full verification scope. A log path cannot replace inspection. Never truncate away unresolved findings.
 
 ## Setup sequence
 
-1. Read [Setup](references/setup.md) and [Role bindings](references/native-workflow.md) completely.
-   Complete the grouped preparation interview and required availability/collision checks before any profile, file, bank, board, or activation write.
-   Reuse confirmed facts and choices; derive new profile IDs under the exact setup rule.
-2. Present all confirmed parameters, targets, installations, shared PM effects, activation scope, and disclosed target-dependent login, hook approval, and `/sethome` actions.
-   Obtain the start decision only after all foreseeable choices are resolved.
-3. Execute the authorized concrete recipes from [Integrations](references/integrations.md), [Sources](references/upstream-sources.md), [Manifest](manifest.json), and [Board configuration](references/kanban-block-triage-escalation.md).
-   Read only the chosen branch of [Code analysis](references/code-analysis.md) as work instructions.
-   Copy complete assigned skills, personalize roles, and bind recovery through the existing helpers.
-   Accept an already correct effective central protection setting without a duplicate override.
-4. Read back actual objects, effective configuration, files, modes, discovery, and generated bindings under [Setup-output verification](references/verification.md).
-   Reuse each step's evidence. Perform the genuine Planner `/sethome` action at its disclosed technical point.
-   Do not run synthetic memory, helper, communication, coding/review, or indexing experiments.
-5. Save the private [setup record](templates/setup-record.md) and versioned installation baseline through the existing updater initialization path.
-   Report **Team configured; setup outputs verified** only after required outputs and baseline are complete.
-   Otherwise report the exact incomplete binding and next action.
+1. Load [Setup](references/setup.md) and [Role bindings](references/native-workflow.md) in full. Reuse confirmed facts and choices. Derive new profile IDs by the setup rule. Finish grouped preparation and availability/collision checks before profile, file, bank, board or activation writes.
+2. Present confirmed parameters, targets, installations, shared PM effects and activation scope. Disclose target-dependent login, hook approval and `/sethome` actions. Obtain the start decision after resolving every foreseeable choice.
+3. Apply authorized [Integrations](references/integrations.md), [Sources](references/upstream-sources.md), [Manifest](manifest.json) and [Board configuration](references/kanban-block-triage-escalation.md) recipes. Use only the selected [Code analysis](references/code-analysis.md) branch as instructions. Copy complete assigned skills, personalize roles and bind recovery with the existing helpers. Reuse a correct effective central protection setting without adding an override.
+4. Follow [Setup-output verification](references/verification.md): reuse step evidence for actual objects, effective configuration, files, modes, discovery and generated bindings. Verify complete effective loading before intentional adapter activation, `/sethome` or task work. If the Planner was already hot-admitted, record the early effect and check routing/context. Perform the genuine Planner `/sethome` at the disclosed point. Skip synthetic memory, helper, communication, coding/review and indexing experiments.
+5. Save the private [setup record](templates/setup-record.md) and versioned baseline through updater initialization. Report **Team configured; setup outputs verified** only when required outputs and baseline are complete. For incomplete setup, give the exact missing binding and next action.
 
-Setup readbacks establish configuration and delivery, not live agent behavior or project readiness.
-Excluded behavioral experiments are outside setup scope, not pending completion gates.
-Offer a first planning task to the Planner after handoff, such as creating or adopting the project's Docker development environment; do not start it automatically.
+Readbacks establish configuration and delivery. Live behavior, project readiness and excluded experiments are outside setup completion scope.
+After handoff, offer a first Planner task, such as creating or adopting the project's Docker development environment. Do not start it automatically.
