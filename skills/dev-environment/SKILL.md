@@ -16,7 +16,7 @@ metadata:
 - Trigger: the customer asks the Planner to create, adopt or revise a coding environment.
 - Purpose: containerized build and test tools for the working checkout. Do not install these tools on the host. The container is not an agent sandbox.
 - Developer workflow: edit the checkout, run targeted tests and optionally start the app from source for local feedback.
-- Built-image demos and end-to-end tests use the project's deployment configuration; the demo handover card is that authorization.
+- Built-image demos and end-to-end tests use the project's deployment configuration under separate authorization; the demo handover card is that authorization.
 
 ## Plan from the developer's task
 
