@@ -87,14 +87,13 @@ class ReasoningContractTests(unittest.TestCase):
         for role, text in rendered.items():
             with self.subTest(role=role):
                 matches = [line for line in text.splitlines()
-                           if line.startswith("- When the project has an assigned development environment,")]
+                           if line.startswith("- When the project has an assigned development environment or a demonstration runtime,")]
                 self.assertEqual(len(matches), 1)
                 paragraphs.extend(matches)
-                for clause in ("under the project agent guide without further customer approval",
-                               "start, stop, restart, rebuild, recreation, synthetic data generation and disposable-state reset",
+                for clause in ("this team owns both runtimes",
+                               "read the project agent guide and use its commands",
+                               "Start, stop, restart, rebuild, recreation, synthetic data generation and reset of disposable state",
                                "source ownership, operational data, host administration, shared infrastructure and external effects",
-                               "The development and demonstration runtime belongs to this team;",
-                               "a denial is a blocker to report, not a customer question.",
                                "Running the app from source grants no deployment authority."):
                     self.assertIn(clause, matches[0])
                 self.assertNotIn("HOWTO-human.md", text)
@@ -114,10 +113,9 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertLess(planner.index("Use these checks within existing design work"), planner.index(trigger))
         self.assertLess(planner.index(trigger), planner.index('3. Use "Project binding" paths.'))
         tickets = planner.split("7. Create small implementation tickets", 1)[1].split("8. Create dependent", 1)[0]
-        self.assertIn("When the project has a development environment, include its agent-guide path in each relevant ticket.", tickets)
-        self.assertIn("Require reading that guide and using its container commands for builds, tests and development servers.", tickets)
-        self.assertIn("Without an environment, omit this requirement; do not block ordinary work or require setup.", tickets)
-        self.assertIn("Beyond that, for a running customer demonstration, include the verified browser URL and concrete SSH local-forward command when needed; disclose any untested client-side access.", planner)
+        self.assertNotIn("agent-guide path in each relevant ticket", tickets)
+        self.assertIn("When the project has a demonstration runtime, add a final `Demo handover` card", tickets)
+        self.assertIn("For a completed demo handover, state the reviewed commit, the verified browser URL", planner)
         for role in ("coder", "reviewer"):
             self.assertNotIn(trigger, self.template(role))
 
@@ -200,7 +198,8 @@ class ReasoningContractTests(unittest.TestCase):
         text = self.template("coder")
         self.assertNotIn("Write the model ID as a literal argument.", text)
         self.assertIn("Never pass code through an inline `-c`/`-e` interpreter or a heredoc: the worker guard "
-                      "blocks both in unattended runs. Put multi-step work in a script file and run it.", text)
+                      "blocks both in unattended runs, where no approval is available. Write the code to a script file "
+                      "and run it, or use the file tools.", text)
         for obsolete in ("Take the binary, model ID, and provider from that configuration", "Reasoning matrix:"):
             self.assertNotIn(obsolete, text)
 
