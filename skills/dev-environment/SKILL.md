@@ -1,7 +1,7 @@
 ---
 name: dev-environment
 description: Create, adopt or revise a containerized coding environment.
-version: 0.3.0
+version: 0.3.1
 author: Max, Mariko (Hermes Agent)
 license: MIT
 platforms: [linux]
@@ -16,7 +16,7 @@ metadata:
 - Trigger: the customer asks the Planner to create, adopt or revise a coding environment.
 - Purpose: containerized build and test tools for the working checkout. Do not install these tools on the host. The container is not an agent sandbox.
 - Developer workflow: edit the checkout, run targeted tests and optionally start the app from source for local feedback.
-- Built-image demos and end-to-end tests use the project's deployment configuration under separate authorization; the demo handover card is that authorization.
+- Built-image demos and end-to-end tests use the project's deployment configuration; starting and stopping them is part of your development and demonstration authority. Publishing to a production target is not.
 
 ## Plan from the developer's task
 

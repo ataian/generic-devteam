@@ -90,7 +90,7 @@ class ReasoningContractTests(unittest.TestCase):
                            if line.startswith("- When the project has an assigned development environment or a demonstration runtime,")]
                 self.assertEqual(len(matches), 1)
                 paragraphs.extend(matches)
-                for clause in ("this team owns both runtimes",
+                for clause in ("it is yours to operate",
                                "read the project agent guide and use its commands",
                                "Start, stop, restart, rebuild, recreation, synthetic data generation and reset of disposable state",
                                "source ownership, operational data, host administration, shared infrastructure and external effects",
@@ -126,7 +126,7 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn("When Codex needs the development environment, include its agent-guide path and the development-runtime authority from Exception routing.", handoff)
         helpers = reviewer.split("## Proportional investigation", 1)[1].split("## Independent review", 1)[0]
         self.assertIn("Require read-only product-source investigation", helpers)
-        self.assertIn("Helpers may operate assigned test runtimes within your development authority; coordinate shared runtime changes through you.", helpers)
+        self.assertIn("Helpers may operate assigned test runtimes within your development authority; coordinate their runtime changes.", helpers)
         self.assertIn("Helpers must not implement, issue Kanban transitions, or enlarge scope or permissions.", helpers)
 
     def test_missing_reasoning_values_are_rejected(self):

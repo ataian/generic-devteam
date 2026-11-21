@@ -82,7 +82,7 @@ class DevelopmentEnvironmentTests(unittest.TestCase):
         text = self.text()
         for clause in ("Do not install these tools on the host", "not an agent sandbox",
                        "Bind-mount the current checkout directly", "without staging, copying or synchronizing",
-                       "optionally start the app from source", "deployment configuration under separate authorization"):
+                       "optionally start the app from source", "starting and stopping them is part of your development and demonstration authority"):
             self.assertIn(clause, text)
 
     def test_acceptance_exercises_edit_and_new_test(self):
