@@ -1,7 +1,7 @@
 ---
 name: dev-environment
 description: Create, adopt or revise a containerized coding environment.
-version: 0.2.0
+version: 0.3.0
 author: Max, Mariko (Hermes Agent)
 license: MIT
 platforms: [linux]
@@ -31,11 +31,12 @@ metadata:
 - Toolchain: use native build and test commands, required versions and the project's usual selector for new tests. Reuse tools and dependency caches. Rebuild the tool image only when its inputs change.
 - Inputs: keep machine-specific values local and ignored. Track portable, secret-free defaults. Name missing required inputs without printing values. Exclude secrets from image builds and served artifacts. Bind local listeners to loopback by default.
 - Database: add a project-compatible database to development Compose only if needed for coding. Use synthetic data and verify the dev target before writes. If branch databases are agreed, select the matching database and preserve its state on return. Reset only the selected disposable state.
-- Permissions: reuse project services and helpers within existing permissions. Additional services, host administration and Docker socket access require their own agreed scope.
+- Permissions: container lifecycle verbs are regular development operations. The team grants them per profile at setup, never per run. Reuse project services and helpers within existing permissions. Additional services, host administration and Docker socket access require their own agreed scope.
 
 ## Hand over one operating guide
 
 - Guide: one short `docker/dev/AGENTS.md`, or the actual guide path in an adopted layout.
+- Entrypoint: give the guide one script with verbs (`docker/dev/dev.sh up|stop|test|reset …`) and let every operation be that single simple command line. A compound command line or `$` expansion inside double quotes never matches an agent grant, so a verb per line keeps both the guide and the runtime allowlist small.
 - Content: only environment-specific changes to the coder's workflow. Use one line per operation with a short label and exact invocation. State non-obvious targets or destructive effects where relevant.
 - Occasional operations: point to existing helper commands or their help. Keep implementation detail and acceptance evidence out of recurring context.
 - Loader: root `AGENTS.md` requires the guide by repository-relative path when a task uses the environment.

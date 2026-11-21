@@ -93,7 +93,8 @@ class ReasoningContractTests(unittest.TestCase):
                 for clause in ("under the project agent guide without further customer approval",
                                "start, stop, restart, rebuild, recreation, synthetic data generation and disposable-state reset",
                                "source ownership, operational data, host administration, shared infrastructure and external effects",
-                               "Coordinate disruptive operations with other team users.",
+                               "The development and demonstration runtime belongs to this team;",
+                               "a denial is a blocker to report, not a customer question.",
                                "Running the app from source grants no deployment authority."):
                     self.assertIn(clause, matches[0])
                 self.assertNotIn("HOWTO-human.md", text)
@@ -198,10 +199,8 @@ class ReasoningContractTests(unittest.TestCase):
     def test_coder_retains_worker_guard_and_removes_only_duplicate_model_sentence(self):
         text = self.template("coder")
         self.assertNotIn("Write the model ID as a literal argument.", text)
-        self.assertIn("Do not build any command with shell variables, an inline `-c`/`-e` interpreter, "
-                      "an `execute_code` block, command chains, or heredocs: the worker guard blocks them "
-                      "in unattended runs, where no approval is available. Write a script file and run it, "
-                      "or use the file tools.", text)
+        self.assertIn("Never pass code through an inline `-c`/`-e` interpreter or a heredoc: the worker guard "
+                      "blocks both in unattended runs. Put multi-step work in a script file and run it.", text)
         for obsolete in ("Take the binary, model ID, and provider from that configuration", "Reasoning matrix:"):
             self.assertNotIn(obsolete, text)
 

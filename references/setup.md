@@ -114,6 +114,15 @@ hermes -p "$PROFILE" config get security.protected_instruction_files
 
 Record effective protection and its management source. Report genuine conflicts. Never alter central policy or bypass administrative restrictions.
 
+Grant the team's regular container commands in all three profiles, so a standard development operation does not become an approval question. The runtime matches a grant only against a simple command line: a compound line (`;`, `&&`, `|`, a heredoc) or `$` expansion inside double quotes never matches. The project guide therefore needs one script entrypoint, and these entries cover the direct commands around it.
+
+```sh
+hermes -p "$PROFILE" config set command_allowlist '["docker *","docker-compose *","env * docker *","env * docker-compose *"]'
+hermes -p "$PROFILE" config get command_allowlist
+```
+
+Record the effective list, the reason for each entry, and that `approvals.single_query_mode`, `unattended_mode` and `cron_mode` stay `deny`. Add no entry outside the development environment. Reconcile the same list on update; a team updated from an older Maker otherwise keeps the old empty list.
+
 In the correct native profile, use protected login and read back model configuration. Check environment/YAML, session/per-model/CLI overrides, fallbacks and required helper routes through established interfaces. Return relevant nonsecret fields and effective override sources only. A stored key or warning alone cannot prove an effective value.
 
 ### Planner Kanban tools

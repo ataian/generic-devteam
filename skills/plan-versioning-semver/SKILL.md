@@ -1,7 +1,7 @@
 ---
 name: plan-versioning-semver
 description: "Use when naming plans or app/library SemVer, changelog, API."
-version: 1.3.0
+version: 1.3.1
 author: Mariko
 platforms: [linux]
 metadata:
@@ -82,3 +82,5 @@ File in the repository root, Keep-a-Changelog style:
 - **PATCH** for a backward-compatible fix.
 
 Classify each application and self-owned library version change by these three cases. Bump a changed library independently. Bump each consuming library that needs a version change after its dependency changes, and follow the same rule through its consumers.
+
+Every change on its own branch increments the application version once, from the version checked out at the start branch, in the same commit as the change. A `-SNAPSHOT` suffix is a version like any other; treating the work as a pre-release addition is not an exemption. Name the class (`MAJOR`/`MINOR`/`PATCH`) when proposing the branch, and name the version fields the project actually carries.
