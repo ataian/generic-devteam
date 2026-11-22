@@ -25,6 +25,7 @@ Render the [Planner](../templates/roles/planner.SOUL.md.template), [Coder](../te
 | `PLANNER_PROFILE` | Confirmed technical Planner profile ID; Coder only |
 | `HINDSIGHT_BANK_NAME` | Actually assigned shared project bank |
 | `KANBAN_BOARD_NAME` | Native board identifier, not the display title |
+| `DEMO_PASSWORD` | Shared demonstration password as one literal line; all three roles; kept only in private team state |
 | `CODER_PROFILE` | Technical Coder profile identifier, as far as present in the template |
 | `REVIEWER_PROFILE` | Technical Reviewer profile identifier, as far as present in the template |
 | `CODEX_BINARY` | Verified absolute Codex entrypoint, not its version-specific release target; Coder only |
@@ -33,7 +34,7 @@ Render the [Planner](../templates/roles/planner.SOUL.md.template), [Coder](../te
 | `ROLE_REASONING_DEFAULT` / `ROLE_REASONING_HIGH` | Confirmed Reviewer default and highest permitted review level; Reviewer template only |
 
 - **Bind.** Use the same confirmed record for every occurrence. Keep display names separate from technical IDs. Use the role's own display name for `ROLE_NAME`.
-- **Render.** The pure [text renderer](render_text.py) validates the field set and substitutes once. Reject missing, extra or damaged fields. Require nonempty single-line names and valid technical IDs and project name under their syntax and path rules. Preserve values and every non-placeholder byte without truncation or normalization. Apply context-specific Markdown escaping and shell-quote Codex paths in shell fences. Keep other code values raw. Append no persona or rules.
+- **Render.** The pure [text renderer](render_text.py) validates the field set and substitutes once. Reject missing, extra or damaged fields. Require nonempty single-line names and valid technical IDs and project name under their syntax and path rules. Preserve values and every non-placeholder byte without truncation or normalization. Apply context-specific Markdown escaping and shell-quote Codex paths in shell fences. Keep code values and `DEMO_PASSWORD` raw. Append no persona or rules.
 - **Deliver.** Compare rendered output against the personalization accepted in preparation. Write only `SOUL.md` in each confirmed role home. Preserve foreign or concurrently changed files. Ask again only for a newly observed conflict or scope change.
 - **Read back.** Compare complete saved bytes with generated output and use the native interface to verify full loading. The Reviewer SOUL owns proportional investigation and conditional critical-invariant helper credit. Keep native `sdlc-review` preloaded. Deliver no separate method reference or helper profile.
 - **Check call policy.** After SOUL delivery, verify the Coder's explicit diagnosis call and the Planner's direct clarification exception.

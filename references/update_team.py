@@ -28,8 +28,17 @@ SCHEMA = 1
 ROLE_BINDING_PREDECESSOR = '051cf4e1e693534cd8ecd75f3fc55e8f8baf9c975f4bf7bd358acd19e6602117'
 # Reviewed pre-2.9.0 renderer: new quoting applies only to new Codex path fields.
 CODEX_BINDING_PREDECESSOR = 'f0e6c906dcda4cb5e600345866589086c3e29363810b8b60bc44d1082613e190'
+# Reviewed pre-2.14.0 renderer: DEMO_PASSWORD is a new literal field; all older
+# substitutions are byte-identical, so an older team's baseline still verifies.
+DEMO_PASSWORD_PREDECESSOR = '8d4eaefbb34a3f04ab23ad2ed8e013296e17bcf2cd2350c3cf8792fb712594b6'
+REVIEWED_RENDERERS = {ROLE_BINDING_PREDECESSOR, CODEX_BINDING_PREDECESSOR, DEMO_PASSWORD_PREDECESSOR}
 ROLE_BINDING_FIELDS = {'PROJECT_DIR', 'REPOSITORY_ROOTS', 'PLANNER_PROFILE',
-                       'CODEX_BINARY', 'CODEX_PROCESS_HOME', 'CODEX_HOME'}
+                       'CODEX_BINARY', 'CODEX_PROCESS_HOME', 'CODEX_HOME', 'DEMO_PASSWORD'}
+# Stored once in the private setup JSON and installation record; never printed.
+SECRET_FIELDS = {'DEMO_PASSWORD'}
+SECRET_PLACEHOLDER = '{{DEMO_PASSWORD}}'
+PAYLOAD_FIELDS = {'new_base', 'merged'}
+WITHHELD = '<redacted: DEMO_PASSWORD appears outside the rendered literal>'
 OPERATIONAL = ('references/integrations.md', 'references/setup.md',
                'references/code-analysis.md', 'references/native-workflow.md',
                'references/kanban-block-triage-escalation.md', 'references/render_text.py')
@@ -45,6 +54,51 @@ def encoded(data):
 
 def decoded(data):
     return base64.b64decode(data, validate=True)
+
+
+def redacted(value, secret):
+    """Printable copy: mask the secret and the payloads that carry it.
+
+    Applies to CLI output only. The private proposal and installation record
+    keep the exact bytes the helper applies and verifies.
+    """
+    if not isinstance(secret, str) or not secret:
+        return value
+    if isinstance(value, dict):
+        result = {}
+        for key, item in value.items():
+            if key in SECRET_FIELDS:
+                result[key] = SECRET_PLACEHOLDER
+            elif key in PAYLOAD_FIELDS and isinstance(item, str):
+                try:
+                    content = base64.b64decode(item, validate=True)
+                except ValueError:
+                    result[key] = item
+                else:
+                    result[key] = _masked_payload(content, secret, item)
+            else:
+                result[key] = redacted(item, secret)
+        return result
+    if isinstance(value, list):
+        return [redacted(item, secret) for item in value]
+    return value
+
+
+def _masked_payload(content, secret, original):
+    """Swap only the rendered `` `secret` `` literal; withhold ambiguous payloads."""
+    token = secret.encode()
+    if token not in content:
+        return original
+    masked = content.replace(b'`' + token + b'`', b'`' + SECRET_PLACEHOLDER.encode() + b'`')
+    if token in masked:
+        return WITHHELD
+    return base64.b64encode(masked).decode('ascii')
+
+
+def _printable(output):
+    """CLI view of a record or proposal: mask the stored demonstration password."""
+    values = output.get('confirmed_values') if isinstance(output, dict) else None
+    return redacted(output, values.get('DEMO_PASSWORD') if isinstance(values, dict) else None)
 
 
 def json_bytes(data):
@@ -598,8 +652,7 @@ def prepare(repo, home, ref='HEAD'):
     renderer = Path(__file__).with_name('render_text.py').read_bytes()
     old_renderer = blob(repo, old['maker_commit'], 'references/render_text.py')
     if (blob(repo, commit, 'references/render_text.py') != renderer or
-            (old_renderer != renderer and digest(old_renderer) not in
-             {ROLE_BINDING_PREDECESSOR, CODEX_BINDING_PREDECESSOR})):
+            (old_renderer != renderer and digest(old_renderer) not in REVIEWED_RENDERERS)):
         raise ValueError('Changed renderer: withhold rendered files and review transform compatibility before migration')
     old_entries = desired(repo, old['maker_commit'], old['roles'], old['confirmed_values'], old['legacy_skills_unknown'],
                           bindings=old['confirmed_bindings'])
@@ -889,7 +942,7 @@ def main():
             output = apply(args.home, args.proposal, args.activity_decision, args.semantic_review, args.dependency_decision)
         else:
             output = rollback(args.home, args.run, args.activity_decision)
-        print(json.dumps(output, ensure_ascii=True, indent=2))
+        print(json.dumps(_printable(output), ensure_ascii=True, indent=2))
     except (ValueError, KeyError, OSError, subprocess.CalledProcessError) as error:
         parser.exit(1, 'Updater stopped: ' + str(error) + '\n')
 

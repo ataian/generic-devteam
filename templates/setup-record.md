@@ -1,7 +1,7 @@
 # Private setup record
 
 - Scope: authorized target setup only. Use `<actual planner home>/devteam/setup.md` outside project, Git and exports. Owner directory 0700, file 0600.
-- Secrets: record locations and access-check status only. Never store tokens, passwords, authentication codes or unredacted configuration dumps.
+- Secrets: record credential locations and access-check status only. `DEMO_PASSWORD` is the single exception and lives only in the JSON block below.
 - Authority: native profiles, board and service objects establish current state. This record grants no rollout or operation permission.
 
 ## Authorizations and readiness
@@ -16,9 +16,9 @@ Before installation resolve all foreseeable choices: project/workspace, reposito
 
 ## Confirmed data
 
-Store all confirmed nonsecret raw data in the single JSON block. Use [Setup](../references/setup.md) for `json.dumps` and `json.loads` readback. Preserve existing keys, types and confirmed overrides on resume/update. Empty objects mean unrecorded values.
+Store all confirmed raw data in the single JSON block. Use [Setup](../references/setup.md) for `json.dumps` and `json.loads` readback. Preserve existing keys, types and confirmed overrides on resume/update. Empty objects mean unrecorded values. `DEMO_PASSWORD` is the only secret here; keep it in private team state. Outside that state it exists only as the rendered SOUL literal.
 
-- `confirmed_values`: names, project, bank, board, profile IDs, models and reasoning. Preserve confirmed `PLANER_NAME`, `CODER_NAME`, `REVIEWER_NAME`, `PROJECT_NAME`, `HINDSIGHT_BANK_NAME`, `KANBAN_BOARD_NAME`, `PLANNER_PROFILE`, `CODER_PROFILE`, `REVIEWER_PROFILE`, `CODEX_MODEL`, `PLANNER_REASONING`, `CODER_REASONING`, `CODEX_REASONING_DEFAULT`, `CODEX_REASONING_MAX`, `ROLE_REASONING_DEFAULT`, `ROLE_REASONING_HIGH`.
+- `confirmed_values`: names, project, bank, board, profile IDs, models, reasoning and the demonstration password. Preserve confirmed `PLANER_NAME`, `CODER_NAME`, `REVIEWER_NAME`, `PROJECT_NAME`, `HINDSIGHT_BANK_NAME`, `KANBAN_BOARD_NAME`, `PLANNER_PROFILE`, `CODER_PROFILE`, `REVIEWER_PROFILE`, `DEMO_PASSWORD`, `CODEX_MODEL`, `PLANNER_REASONING`, `CODER_REASONING`, `CODEX_REASONING_DEFAULT`, `CODEX_REASONING_MAX`, `ROLE_REASONING_DEFAULT`, `ROLE_REASONING_HIGH`.
 - Workspace: `PROJECT_DIR` is canonical and absolute. `REPOSITORY_ROOTS` is one line with separate planning and implementation assignments or confirmed absence.
 - Native configuration only: fixed Planner/Hermes-Coder reasoning and Codex model ID. Add no role-render fields for them.
 - Coder render paths: verified absolute `CODEX_BINARY` entrypoint, process home `CODEX_PROCESS_HOME`, config home `CODEX_HOME`. Use raw paths without shell quoting. Match process HOME to `confirmed_bindings.roles.team-codex.home`.

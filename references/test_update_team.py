@@ -51,6 +51,8 @@ class UpdaterTests(unittest.TestCase):
         values['CODEX_BINARY'] = '/synthetic/bin/codex'
         values['CODEX_PROCESS_HOME'] = self.roles['team-codex']['home']
         values['CODEX_HOME'] = str(Path(self.roles['coder']['home']) / 'devteam/codex-home')
+        # Synthetic demonstration password; never a real credential.
+        values['DEMO_PASSWORD'] = 'Synthetic-Demo-Passphrase-9'
         self.bindings = {'board': 'sample', 'roles': self.roles, 'triage_recovery': {
             'python': '/synthetic/python',
             'script': str(self.home / 'skills/brownfield-feature-planning/scripts/recover_triage.py'),
@@ -329,6 +331,148 @@ class UpdaterTests(unittest.TestCase):
         values = dict(u.setup_data(self.state)['confirmed_values'], CODEX_PROCESS_HOME='/other/home')
         with self.assertRaisesRegex(ValueError, 'Codex process HOME differs'):
             u.desired(self.repo, self.base, self.roles, values, bindings=self.bindings)
+
+    def test_fresh_team_renders_demonstration_password_only_into_the_three_souls(self):
+        record = self.initialize()
+        self.assertEqual(record['confirmed_values']['DEMO_PASSWORD'], 'Synthetic-Demo-Passphrase-9')
+        for role in ('planner', 'coder', 'reviewer'):
+            with self.subTest(role=role):
+                text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
+                self.assertEqual(text.count('`Synthetic-Demo-Passphrase-9`'), 1)
+                self.assertNotIn('{{DEMO_PASSWORD}}', text)
+        for entry in record['managed']:
+            if entry['source'].startswith('skills/'):
+                with self.subTest(source=entry['source'], role=entry['role']):
+                    self.assertNotIn(b'Synthetic-Demo-Passphrase-9', Path(entry['target']).read_bytes())
+
+    def test_missing_or_unsafe_demonstration_password_blocks_fresh_role_output(self):
+        setup = u.setup_data(self.state)
+        path = self.state / 'setup.md'
+        absent = dict(setup['confirmed_values'])
+        absent.pop('DEMO_PASSWORD')
+        path.write_text('```json\n' + json.dumps(dict(setup, confirmed_values=absent)) + '\n```\n')
+        with self.assertRaisesRegex(ValueError, 'DEMO_PASSWORD'):
+            u.initialize(self.repo, self.home, 'fresh-team', self.roles)
+        for value in ('', '   ', 'two\nlines', 'tick`value', 'back\\slash', 'tilde~value', '{{DEMO_PASSWORD}}'):
+            values = dict(setup['confirmed_values'], DEMO_PASSWORD=value)
+            path.write_text('```json\n' + json.dumps(dict(setup, confirmed_values=values)) + '\n```\n')
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                u.initialize(self.repo, self.home, 'fresh-team', self.roles)
+            self.assertFalse((self.state / 'installation.json').exists())
+
+    def pre2140_installation(self):
+        """Exact 2.13.1 source fixture: the last Maker without DEMO_PASSWORD."""
+        original = Path(__file__).resolve().parents[1]
+        commit = '675e05180b4277d78206d63beb2ff71cee2f4f73'
+        self.git('fetch', '-q', str(original), commit)
+        self.assertEqual(u.package_version(self.repo, commit), '2.13.1')
+        setup = u.setup_data(self.state)
+        old = dict(setup, confirmed_values={key: value for key, value in setup['confirmed_values'].items()
+                                            if key != 'DEMO_PASSWORD'})
+        (self.state / 'setup.md').write_text('```json\n' + json.dumps(old) + '\n```\n')
+        for entry in u.desired(self.repo, commit, self.roles, old['confirmed_values'], bindings=self.bindings):
+            target = Path(entry['target'])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(entry['content'])
+            target.chmod(entry['mode'])
+        return u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=commit,
+                            basis_evidence='Synthetic exact 2.13.1 installation without DEMO_PASSWORD')
+
+    def test_pre2140_team_adopts_demonstration_password_only_after_verified_apply(self):
+        self.pre2140_installation()
+        marker = self.state / 'installation.json'
+        before_marker = marker.read_bytes()
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        before_coder = coder.read_bytes()
+        with self.assertRaisesRegex(ValueError, 'DEMO_PASSWORD'):
+            self.proposal()
+        self.assertEqual(marker.read_bytes(), before_marker)
+        self.assertEqual(coder.read_bytes(), before_coder)
+
+        setup = u.setup_data(self.state)
+        setup['confirmed_values']['DEMO_PASSWORD'] = 'Synthetic-Pre214-Pass-1'
+        (self.state / 'setup.md').write_text('```json\n' + json.dumps(setup) + '\n```\n')
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertFalse(proposal['conflicts'])
+        # Adoption is not persisted before the verified target write.
+        self.assertNotIn('DEMO_PASSWORD', json.loads(marker.read_text())['confirmed_values'])
+        self.assertNotIn(b'Synthetic-Pre214-Pass-1', coder.read_bytes())
+
+        result = u.apply(self.home, plan, decision='proceed',
+                         review='Checked demo lifecycle, teardown verb and literal password in all three SOULs',
+                         dependency_review='Reviewed operational recipe change; file-only fixture update')
+        self.assertEqual(result['status'], 'applied')
+        record = u.load_record(self.home)[2]
+        self.assertEqual(record['confirmed_values']['DEMO_PASSWORD'], 'Synthetic-Pre214-Pass-1')
+        for role in ('planner', 'coder', 'reviewer'):
+            with self.subTest(role=role):
+                text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
+                self.assertEqual(text.count('`Synthetic-Pre214-Pass-1`'), 1)
+        for role in ('coder', 'reviewer'):
+            with self.subTest(lifecycle=role):
+                self.assertIn('a demonstration runtime is not permanent',
+                              (Path(self.roles[role]['home']) / 'SOUL.md').read_text())
+        self.assertIn('`demo.sh retire`', coder.read_text())
+        self.assertIn('`demo.sh user`', coder.read_text())
+        self.assertIn('recorded login works on the running system',
+                      (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text())
+
+        # A later update reuses the recorded value without reading setup.md again.
+        (self.state / 'setup.md').rename(self.state / 'audit-only.md')
+        later = json.loads(self.proposal().read_text())
+        self.assertFalse(later['conflicts'])
+        self.assertEqual(later['confirmed_values']['DEMO_PASSWORD'], 'Synthetic-Pre214-Pass-1')
+        for entry in later['entries']:
+            self.assertEqual(u.digest(u.decoded(entry['merged'])), entry['before_hash'])
+
+    def test_cli_output_redacts_the_demonstration_password(self):
+        script = Path(__file__).with_name('update_team.py')
+        roles = self.root / 'native-roles.json'
+        roles.write_text(json.dumps(self.roles))
+
+        def cli(*arguments):
+            result = subprocess.run([sys.executable, '-B', str(script), '--repo', str(self.repo), *arguments],
+                                    text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            return result.stdout
+
+        printed = cli('init', '--home', str(self.home), '--team-id', 'cli-demo', '--roles', str(roles))
+        self.assertNotIn('Synthetic-Demo-Passphrase-9', printed)
+        self.assertEqual(json.loads(printed)['confirmed_values']['DEMO_PASSWORD'], '{{DEMO_PASSWORD}}')
+        self.change()
+        printed = cli('plan', '--home', str(self.home))
+        self.assertNotIn('Synthetic-Demo-Passphrase-9', printed)
+        proposal = json.loads(printed)
+        self.assertEqual(proposal['confirmed_values']['DEMO_PASSWORD'], '{{DEMO_PASSWORD}}')
+        for entry in proposal['entries']:
+            payload = u.decoded(entry['new_base'])
+            self.assertNotIn(b'Synthetic-Demo-Passphrase-9', payload)
+            if entry['target'].endswith('/SOUL.md'):
+                self.assertIn(b'`{{DEMO_PASSWORD}}`', payload)
+        # The private proposal keeps the exact bytes the helper applies.
+        stored = json.loads(Path(proposal['proposal']).read_text())
+        souls = [entry for entry in stored['entries'] if entry['target'].endswith('/SOUL.md')]
+        self.assertTrue(souls)
+        for entry in souls:
+            self.assertIn(b'Synthetic-Demo-Passphrase-9', u.decoded(entry['new_base']))
+
+    def test_cli_redaction_swaps_only_the_rendered_literal(self):
+        secret = 'Synthetic-Demo-Passphrase-9'
+        masked = u.redacted({'merged': u.encoded(b'password `' + secret.encode() + b'` in demonstration text\n'),
+                             'new_base': u.encoded(b'no secret here\n'),
+                             'confirmed_values': {'DEMO_PASSWORD': secret, 'PROJECT_NAME': 'keep'}}, secret)
+        self.assertIsInstance(masked, dict)
+        assert isinstance(masked, dict)
+        self.assertEqual(u.decoded(masked['merged']), b'password `{{DEMO_PASSWORD}}` in demonstration text\n')
+        self.assertEqual(u.decoded(masked['new_base']), b'no secret here\n')
+        self.assertEqual(masked['confirmed_values'], {'DEMO_PASSWORD': '{{DEMO_PASSWORD}}', 'PROJECT_NAME': 'keep'})
+        stray = u.redacted({'merged': u.encoded(secret.encode() + b' outside code\n')}, secret)
+        self.assertIsInstance(stray, dict)
+        assert isinstance(stray, dict)
+        self.assertEqual(stray['merged'], u.WITHHELD)
+        self.assertEqual(u.redacted({'a': ['b', {'DEMO_PASSWORD': secret}]}, secret),
+                         {'a': ['b', {'DEMO_PASSWORD': '{{DEMO_PASSWORD}}'}]})
 
     def pre200_installation(self):
         """Exact local source fixture, not an inferred package-version baseline."""

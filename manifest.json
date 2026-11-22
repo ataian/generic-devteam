@@ -90,6 +90,7 @@
       "render_fields": [
         "CODER_NAME",
         "CODER_PROFILE",
+        "DEMO_PASSWORD",
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
@@ -121,6 +122,7 @@
         "CODEX_PROCESS_HOME",
         "CODEX_REASONING_DEFAULT",
         "CODEX_REASONING_MAX",
+        "DEMO_PASSWORD",
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
@@ -147,6 +149,7 @@
       },
       "render_fields": [
         "CODER_NAME",
+        "DEMO_PASSWORD",
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",

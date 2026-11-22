@@ -137,6 +137,44 @@ class ReasoningContractTests(unittest.TestCase):
                 with self.subTest(role=role, field=field), self.assertRaises(ValueError):
                     render_role(self.template(role), values, role)
 
+    def test_demonstration_lifecycle_and_usage_verbs_reach_each_role(self):
+        """Static rendered instruction contract; no runtime or demo is exercised."""
+        rendered = {role: render_role(self.template(role), self.values(role), role)
+                    for role in ("planner", "coder", "reviewer")}
+        lifecycle = ("a demonstration runtime is not permanent; at most one exists and shows the last independently "
+                     "reviewed commit. Replacing it includes retiring the previous one after verifying exclusive "
+                     "ownership of its containers, volumes and private runtime directory; preserve review evidence "
+                     "and unrelated resources.")
+        self.assertIn(lifecycle, rendered["coder"])
+        self.assertIn(lifecycle, rendered["reviewer"])
+        self.assertIn("Use the project's documented teardown verb (`demo.sh retire` or equivalent); never compose "
+                      "container, volume, network or directory removal yourself", rendered["coder"])
+        self.assertIn("create the demonstration user with the password `Example` via `demo.sh user`", rendered["coder"])
+        self.assertIn("recorded login works on the running system with the password `Example`", rendered["reviewer"])
+        self.assertIn("the demonstration user with the password `Example`", rendered["planner"])
+        for role, text in rendered.items():
+            with self.subTest(role=role):
+                self.assertNotIn("{{", text)
+
+    def test_demonstration_password_stays_one_literal_string(self):
+        password = "Demo*Pass_w0rd#1!"
+        for role in ("planner", "coder", "reviewer"):
+            with self.subTest(role=role):
+                values = dict(self.values(role), DEMO_PASSWORD=password)
+                text = render_role(self.template(role), values, role)
+                self.assertIn("`" + password + "`", text)
+                self.assertNotIn("{{DEMO_PASSWORD}}", text)
+
+    def test_demonstration_password_rejects_instruction_and_fence_breakouts(self):
+        for bad in ("", " ", " leading", "trailing ", "line\nbreak", "tick`break", "back\\slash",
+                    "tilde~value", "{{DEMO_PASSWORD}}", "\u2028separator"):
+            with self.subTest(value=bad), self.assertRaises(ValueError):
+                render_role(self.template("coder"), dict(self.values("coder"), DEMO_PASSWORD=bad), "coder")
+        values = self.values("coder")
+        values.pop("DEMO_PASSWORD")
+        with self.assertRaises(ValueError):
+            render_role(self.template("coder"), values, "coder")
+
     def test_codex_routing_and_cli_use_concrete_values(self):
         result = render_role(self.template("coder"), self.values("coder", "low", "high"), "coder")
         for text in [

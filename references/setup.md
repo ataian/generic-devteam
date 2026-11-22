@@ -1,7 +1,7 @@
 # Guided native target setup
 
 - Scope: authorized target setup only. Use established supported interfaces and recipes. Skip recurring parser, source, loader and SDK investigations.
-- Inputs: confirmed nonsecret data only. Never interpolate raw user text as shell code.
+- Inputs: confirmed nonsecret data only, except the single demonstration password in section 2. Never interpolate raw user text as shell code.
 
 Use English for development communication and artifacts. Preserve exact identifiers, quotations, errors, and deliberately localized product text.
 
@@ -40,6 +40,7 @@ Use English for development communication and artifacts. Preserve exact identifi
 - `PROJECT_NAME`: one segment without slash, backslash or traversal.
 - Workspace: confirm its canonical absolute path independently of the name. Use it for `PROJECT_DIR`, `terminal.cwd` and board default workspace. Never derive the path from the name.
 - `REPOSITORY_ROOTS`: one line with separate planning and implementation roots. Preserve nested checkouts and multiple roots. No repository moves, Git initialization or project tool installs.
+- `DEMO_PASSWORD`: ask once for the team's shared demonstration password and require an answer before creation. No default; without a value no role file is rendered. It is the only secret the Maker stores: private team state only (setup JSON, installation record, proposals, run journals), never chat output, tickets, memory, Hindsight or profile configuration. The three SOULs carry it as a literal.
 - Before creation: check existing project instructions and native profile/board bindings for contradictions.
 - Planner write authority includes the project's `HERMES.md`. It describes only the local installation; the Planner reconciles its board and workspace entries with the card binding and records the correction.
 
@@ -70,7 +71,7 @@ Use English for development communication and artifacts. Preserve exact identifi
 
 1. Keep confirmed nonsecret values once in the existing dataset. On interruption use the existing pre-profile handoff until the Planner home exists. Transfer values unchanged to the private record after creation.
 2. Present all parameters, derived IDs, target homes, create/reuse choices, models/limits, Git identity, analysis, communication permissions, concrete writes, shared effects and activation scope. Include template-based role personalization in acceptance.
-3. Disclose each deferred action, reason and execution point: protected login requiring a new home, native `/hooks` approval after configuration, genuine Planner DM `/sethome` after role delivery and adapter activation. Prepare protected credentials earlier where supported. Never collect secrets in chat or JSON.
+3. Disclose each deferred action, reason and execution point: protected login requiring a new home, native `/hooks` approval after configuration, genuine Planner DM `/sethome` after role delivery and adapter activation. Prepare protected credentials earlier where supported. Never collect secrets in chat or JSON; `DEMO_PASSWORD` is the qualified exception, written only to the private setup JSON.
 4. Obtain the start decision after resolving every foreseeable choice. Use the dataset in later steps. Substitute generated native IDs from readbacks. Read resolved homes from native outputs. Do not ask the user to invent or repeat either or reopen agreed role rules. Ask later only for a new conflict/failure, newly knowable decision, user scope change or disclosed deferred interaction.
 
 ## 3. Fresh profiles, confirmed models
@@ -190,7 +191,7 @@ hermes kanban boards list --json
 - Continue the private [setup record](../templates/setup-record.md) at `<actual planner home>/devteam/setup.md` outside project, Git and Maker tree (directory 0700, file 0600). Reconcile confirmed data and actual targets before overwriting. Record authorization, upfront readiness and disclosed deferred actions.
 - Completed step evidence: native identity or exact own path, previous state/hash, verified readback and next prerequisite. Use the existing target-readback, progress, blocker and installation/update sections.
 - Asset evidence: compare complete assigned inventories and legal files against manifest `source_revision`. Record required and observed sources/revisions and licenses. Keep compatible runtime reuse separate from pinned delivery. Unknown provenance cannot prove a pristine baseline.
-- Raw data: lossless single `json` block. Use `confirmed_values` for setup inputs and `confirmed_bindings` for resolved technical bindings. Preserve all existing keys/types, including native-only models/reasoning and role/recovery bindings. Never reconstruct raw values from prose/tables, invent missing values or store secrets.
+- Raw data: lossless single `json` block. Use `confirmed_values` for setup inputs and `confirmed_bindings` for resolved technical bindings. Preserve all existing keys/types, including native-only models/reasoning, `DEMO_PASSWORD` and role/recovery bindings. Never reconstruct raw values from prose/tables, invent missing values or store other secrets.
 
 Generate from `record_template_text` with this pure fragment. On resume use the existing record:
 
@@ -220,7 +221,7 @@ Compare parsed values with the confirmed dataset and, on resume, relevant native
    - Planner: deliver `prototype` by [its recipe](integrations.md#prototype) before personalizing dependent SOUL clauses.
 2. **Verify configuration.** Compare actual Hermes/Codex native settings, limits and helper routes with preparation data. Compare all six VoltAgent TOMLs byte-for-byte with the manifest revision, including original model/reasoning. Save sources, authorization and readbacks privately. Keep the native Codex model ID out of render fields. For every assigned consumer, read back the selected [analysis bindings](code-analysis.md) from section 4. Record roots and the installed operational update reference.
 3. **Render.** In approved target setup, load [references/render_text.py](render_text.py) by reviewed package absolute path, e.g. `importlib.util.spec_from_file_location`. Never import a same-named foreign module from the search path. The renderer takes strings and has no file I/O, runtime load or CLI. Read templates in UTF-8 with the file tool.
-   - `role`: `planner`, `coder` or `reviewer`. `role_manifest`: matching `role_templates` entry. Use existing SOUL templates and confirmed raw names, project, bank, board, IDs and reasoning render values from `confirmed_values`. `ROLE_NAME` is the role's display name. Missing values block output. No empty defaults or invented IDs.
+   - `role`: `planner`, `coder` or `reviewer`. `role_manifest`: matching `role_templates` entry. Use existing SOUL templates and confirmed raw names, project, bank, board, IDs, reasoning and `DEMO_PASSWORD` render values from `confirmed_values`. `ROLE_NAME` is the role's display name. Missing values block output. No empty defaults or invented IDs.
    - Planner fields: `PROJECT_DIR`, `REPOSITORY_ROOTS`. Coder fields: `PLANNER_PROFILE`, `CODEX_BINARY`, `CODEX_PROCESS_HOME`, `CODEX_HOME`. Before rendering, match `PLANNER_PROFILE` to `confirmed_bindings.roles.planner.id` and `CODEX_PROCESS_HOME` to `confirmed_bindings.roles.team-codex.home`. The record holds actual resolved bindings. Pass raw absolute paths for shell quoting in the invocation block.
    - Exclude fixed Planner/Hermes-Coder reasoning and Codex model ID from render fields. Keep communication values with Planner. Use original technical data for shell values. Generate no separate runtime configuration. Bind recovery via the Maker step below.
 
@@ -237,7 +238,7 @@ Compare parsed values with the confirmed dataset and, on resume, relevant native
    soul_text = render_role(role_template_text, role_values, role)
    ```
 
-4. **Validate renderer contract.** Check [role fields](native-workflow.md#2-personalize-role-souls): nonempty, raw and single-line. Names at most 120 characters. No control/format characters, template braces, indentation, backticks, backslashes or fence breakouts. Unknown, missing, additional or damaged fields fail. Replace all matching occurrences exactly in one nonrecursive pass. Escape normal Markdown. Inline code and fenced process/examples get raw validated values. No Markdown backslashes in native IDs, bank or path. Preserve every non-placeholder byte. Append no persona or process rewrite.
+4. **Validate renderer contract.** Check [role fields](native-workflow.md#2-personalize-role-souls): nonempty, raw and single-line. Names at most 120 characters. No control/format characters, template braces, indentation, backticks, backslashes or fence breakouts. Unknown, missing, additional or damaged fields fail. Replace all matching occurrences exactly in one nonrecursive pass. Escape normal Markdown. Inline code and fenced process/examples get raw validated values. `DEMO_PASSWORD` is always a literal: one line, exact bytes, never instruction text. No Markdown backslashes in native IDs, bank, password or path. Preserve every non-placeholder byte. Append no persona or process rewrite.
 5. **Write.** Compare exact `soul_text` with approved personalization. Ask again only for a newly observed conflict or scope change. Recheck ownership immediately before writing. Use file tools to write `soul_text` only to the confirmed role home's `SOUL.md`. Replace only the compared neutral SOUL created for this setup. Stop for foreign or concurrently changed content. No shell interpolation or recursive global replacement.
 6. **Read back every target.** Record installed paths and exact readbacks. Verify configured modes without synthetic worker experiments.
    - Roles: exact mapping, byte-identical complete `soul_text`, unchanged non-placeholder bytes, no leftover fields or Coder/Reviewer communication values. Compare role/project/bank/board values and technical IDs with the record. Check effective native configuration and logged restrictions.
