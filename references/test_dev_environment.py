@@ -82,7 +82,8 @@ class DevelopmentEnvironmentTests(unittest.TestCase):
         text = self.text()
         for clause in ("Do not install these tools on the host", "not an agent sandbox",
                        "Bind-mount the current checkout directly", "without staging, copying or synchronizing",
-                       "optionally start the app from source", "starting and stopping them is part of your development and demonstration authority"):
+                       "optionally start the app from source", "starting and stopping them is part of your development and demonstration authority",
+                       "Keep deployment files out of the development checkout; when the customer keeps them together, the disposable worktree is the documented standard path."):
             self.assertIn(clause, text)
 
     def test_acceptance_exercises_edit_and_new_test(self):

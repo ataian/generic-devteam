@@ -29,7 +29,7 @@ metadata:
 
 - Bind-mount the current checkout directly into the tool container. Edits, untracked files and new test resources must appear without staging, copying or synchronizing. Write generated files as the invoking user.
 - Toolchain: use native build and test commands, required versions and the project's usual selector for new tests. Reuse tools and dependency caches. Rebuild the tool image only when its inputs change.
-- Inputs: keep machine-specific values local and ignored. Track portable, secret-free defaults. Name missing required inputs without printing values. Exclude secrets from image builds and served artifacts. Bind local listeners to loopback by default.
+- Inputs: keep machine-specific values local and ignored. Track portable, secret-free defaults. Name missing required inputs without printing values. Exclude secrets from image builds and served artifacts. Bind local listeners to loopback by default. Keep deployment files out of the development checkout; when the customer keeps them together, the disposable worktree is the documented standard path.
 - Database: add a project-compatible database to development Compose only if needed for coding. Use synthetic data and verify the dev target before writes. If branch databases are agreed, select the matching database and preserve its state on return. Reset only the selected disposable state.
 - Permissions: reuse project services and helpers within existing permissions. Additional services, host administration and Docker socket access require their own agreed scope.
 

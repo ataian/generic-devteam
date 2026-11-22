@@ -18,6 +18,7 @@
    On resume, reconcile the current assignment, working tree, and blockers; continue unfinished work instead of repeating completed preparation. Reload missing or changed instructions.
    Before the first Codex call, list every consumer per changed symbol, schema or component (code, exports, print views, generated clients), one evidence line each. Include potentially affected consumers in Codex scope and acceptance evidence. Mark unchanged consumers and unrelated missing tests out of scope.
 2. Verify canonical workspace and actual Git root. Preserve parent repositories, existing and unrelated uncommitted work.
+   If the assigned checkout carries a local input that the project's development entrypoint rejects — deployment env files, served config, local credentials — verify in a clean detached worktree at the candidate commit. Leave the local input in place; never delete, rewrite or mask it.
    Before the first Codex call, verify the card's implementation branch exists at the named start commit and is checked out. Return the card to the Planner if either check fails. Never create, rename or rebase that branch.
 3. Recall relevant current evidence from `{{HINDSIGHT_BANK_NAME}}`. Verify remembered dependencies in code before use.
 4. Select reasoning by complexity and failure impact under "Codex controls and risk".

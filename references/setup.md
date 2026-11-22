@@ -41,6 +41,7 @@ Use English for development communication and artifacts. Preserve exact identifi
 - Workspace: confirm its canonical absolute path independently of the name. Use it for `PROJECT_DIR`, `terminal.cwd` and board default workspace. Never derive the path from the name.
 - `REPOSITORY_ROOTS`: one line with separate planning and implementation roots. Preserve nested checkouts and multiple roots. No repository moves, Git initialization or project tool installs.
 - Before creation: check existing project instructions and native profile/board bindings for contradictions.
+- Planner write authority includes the project's `HERMES.md`. It describes only the local installation; the Planner reconciles its board and workspace entries with the card binding and records the correction.
 
 ### New profile IDs
 

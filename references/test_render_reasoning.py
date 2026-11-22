@@ -609,6 +609,22 @@ class ReasoningContractTests(unittest.TestCase):
         planner = render_role(self.template("planner"), self.values("planner"), "planner")
         self.assertIn("Name the final candidate commit as the verification target, not an interim state.", planner)
 
+    def test_project_binding_owns_hermes_md_and_isolates_local_inputs(self):
+        planner = render_role(self.template("planner"), self.values("planner"), "planner")
+        for clause in (
+            "The project's `HERMES.md` describes only the local installation.",
+            "It is yours: compare its board and workspace entries with the card binding, rewrite it whenever they differ, and record the correction on the card.",
+            "Do not ask the customer about this file and do not plan against a stale binding.",
+        ):
+            self.assertIn(clause, planner)
+        coder = render_role(self.template("coder"), self.values("coder"), "coder")
+        for clause in (
+            "If the assigned checkout carries a local input that the project's development entrypoint rejects — deployment env files, served config, local credentials — verify in a clean detached worktree at the candidate commit.",
+            "Leave the local input in place; never delete, rewrite or mask it.",
+        ):
+            self.assertIn(clause, coder)
+        self.assertIn("Planner write authority includes the project's `HERMES.md`.", (ROOT / "references/setup.md").read_text())
+
     def test_reviewer_returns_questions_to_coder_without_inventing_defects(self):
         text = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
         for clause in (
