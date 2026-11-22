@@ -602,6 +602,13 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn("Give every Coder card `--max-runtime 8h`.", planner)
         self.assertIn("This caps a runaway worker run for dispatcher recovery; it is not a work budget.", planner)
 
+    def test_full_suite_runs_once_on_the_final_candidate(self):
+        coder = render_role(self.template("coder"), self.values("coder"), "coder")
+        self.assertIn("Interim candidates get `check` and the selected test only.", coder)
+        self.assertIn("Run the full suite once, on the final candidate; rerun it only after a change that touches a boundary it already verified.", coder)
+        planner = render_role(self.template("planner"), self.values("planner"), "planner")
+        self.assertIn("Name the final candidate commit as the verification target, not an interim state.", planner)
+
     def test_reviewer_returns_questions_to_coder_without_inventing_defects(self):
         text = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
         for clause in (

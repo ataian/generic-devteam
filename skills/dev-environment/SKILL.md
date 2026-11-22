@@ -36,7 +36,7 @@ metadata:
 ## Hand over one operating guide
 
 - Guide: one short `docker/dev/AGENTS.md`, or the actual guide path in an adopted layout.
-- Entrypoint: give the guide one script with one verb per operation (`docker/dev/dev.sh up`, `stop`, `test`, `reset`). A compound command line, or `$` expansion inside double quotes, never matches an agent grant.
+- Entrypoint: give the guide one script with one verb per operation (`docker/dev/dev.sh up`, `check`, `stop`, `test`, `reset`). `check` runs the selected component's static checks without the test suites. A compound command line, or `$` expansion inside double quotes, never matches an agent grant.
 - Content: only environment-specific changes to the coder's workflow. Use one line per operation with a short label and exact invocation. State non-obvious targets or destructive effects where relevant.
 - Occasional operations: point to existing helper commands or their help. Keep implementation detail and acceptance evidence out of recurring context.
 - Loader: root `AGENTS.md` requires the guide by repository-relative path when a task uses the environment.
