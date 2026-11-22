@@ -149,9 +149,10 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn(lifecycle, rendered["reviewer"])
         self.assertIn("Use the project's documented teardown verb (`demo.sh retire` or equivalent); never compose "
                       "container, volume, network or directory removal yourself", rendered["coder"])
-        self.assertIn("create the demonstration user with the password `Example` via `demo.sh user`", rendered["coder"])
+        self.assertIn("create the demonstration user via `demo.sh user` with the password `Example` supplied only from private team state through the environment variable the script documents, never as an argument", rendered["coder"])
         self.assertIn("recorded login works on the running system with the password `Example`", rendered["reviewer"])
-        self.assertIn("the demonstration user with the password `Example`", rendered["planner"])
+        self.assertIn("the demonstration user and its login name", rendered["planner"])
+        self.assertIn("The password is `Example`; never write it on a card.", rendered["planner"])
         for role, text in rendered.items():
             with self.subTest(role=role):
                 self.assertNotIn("{{", text)
@@ -186,9 +187,9 @@ class ReasoningContractTests(unittest.TestCase):
             "Keep the configured model and provider.",
             "`background=true`, `pty=true`",
             "Read the first stdout line `{\"type\":\"thread.started\",\"thread_id\":\"<uuid>\"}`; record `thread_id` on the card.",
-            "Wait for the process with the profile's 14400-second terminal cap and let the exit signal end the wait.",
-            "The cap bounds the wait; it is not the worker-run limit.",
-            "When a wait returns without new output, do not wait again: record the last output and block the card as a capability finding.",
+            "Call the native wait with `timeout=14400`; the dispatcher raises the worker's terminal cap to the card runtime, so an omitted timeout would wait up to eight hours.",
+            "The process exit ends the wait; the cap is not the worker-run limit.",
+            "When a wait returns without new output, do not wait again: record the last output and block the card with `kind=\"capability\"`.",
         ]:
             self.assertTrue(text in result, text)
         self.assertNotIn("if the worker guard prohibits them", result)
@@ -608,12 +609,10 @@ class ReasoningContractTests(unittest.TestCase):
         coder = render_role(self.template("coder"), self.values("coder"), "coder")
         for clause in (
             "A failing harness, fixture or test environment is a defect of the verification setup, not of the product.",
-            "If a second round still produces only harness findings, stop: record the defect, evidence, affected command and smallest next step on the card, then park it through Exception routing instead of continuing in the same context.",
-            "When the test is the deliverable, the executor that writes it runs it against the running page; you keep the test scope and acceptance, and reserve the runtime only for a contended or shared resource.",
+            "If a second round still produces only harness findings, stop: record the defect, evidence, affected command and smallest next step on the card, then park it with `kanban_block(kind=\"capability\", reason=...)` instead of continuing in the same context.",
+            "When the test is the deliverable, the executor that writes it runs it against the running page and commits it only after that execution; you keep the test scope and acceptance and reserve the runtime only for a contended or shared resource.",
             "A prompt that forbids the test run produces blind test code.",
-            "Derive selectors from rendered DOM or the component source, never from framework convention.",
-            "Commit test code only after its author executed it against the running page.",
-            "Before changing fixture counts or data volume, read the isolation or disposable-state checker that guards the suite; its limits are part of the acceptance.",
+            "the reference owns selector derivation and the isolation-checker limit",
             "Point to the exact plan revision; never paste plan text into the prompt. Keep the brief under 4 KB.",
             "continue a selector, fixture, seed or parameter in the running Codex session",
             "use a Hermes subagent only when the work needs Hermes tools such as the board, skills or process management, never for code alone",
@@ -637,8 +636,8 @@ class ReasoningContractTests(unittest.TestCase):
         release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
         self.assertIn("Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget.", release)
         planner = render_role(self.template("planner"), self.values("planner"), "planner")
-        self.assertIn("Give every Coder card `--max-runtime 8h`.", planner)
-        self.assertIn("This caps a runaway worker run for dispatcher recovery; it is not a work budget.", planner)
+        self.assertIn("Create and release the cards through Brownfield's phase release procedure; it owns the worker-run hang cap and the native runtime fields.", planner)
+        self.assertNotIn("Give every Coder card `--max-runtime 8h`", planner)
 
     def test_full_suite_runs_once_on_the_final_candidate(self):
         coder = render_role(self.template("coder"), self.values("coder"), "coder")
@@ -1192,7 +1191,8 @@ class ReviewerEquipmentTests(unittest.TestCase):
         ):
             self.assertIn(clause, section)
         self.assertIn("Within that approved update, retiring every `pristine` candidate is mandatory, not an optional second choice.", section)
-        self.assertIn("Retain obsolete files that are not managed skill copies, and retain local adaptations.", update)
+        self.assertIn("Retain obsolete files that are not managed skill copies and preserve locally edited obsolete trees", update)
+        self.assertIn("A current managed target is not obsolete: its local edit is an adaptation that the approved scope replaces after backup.", update)
         self.assertNotIn("Preserve existing installations unless a separate concrete reconciliation is authorized.", update)
         for relative in ("README.md", "references/code-analysis.md", "templates/setup-record.md"):
             self.assertIn("#required-skill-retirement", (ROOT / relative).read_text())

@@ -91,7 +91,13 @@ class BuildEvidenceTests(unittest.TestCase):
         ):
             with self.subTest(clause=clause):
                 self.assertIn(clause, setup)
-        self.assertIn("setup-time entrypoint list", update)
+        record = (ROOT / "templates/setup-record.md").read_text()
+        for text in (setup, record, update):
+            self.assertIn("confirmed_bindings.command_allowlists", text)
+        legacy = next(row for row in update.splitlines() if row.startswith("   | Pre-`2.14.0` command grants"))
+        self.assertIn("[setup grant recipe](setup.md#project-command-grants)", legacy)
+        self.assertIn("`docker compose *`", legacy)
+        self.assertIn("### Project command grants", setup)
         self.assertIn("Reconcile `terminal.timeout` to `14400` on the Coder and Reviewer profiles and read it back", update)
         for text in (setup, update):
             self.assertIn("A role does not extend its own list", text)
