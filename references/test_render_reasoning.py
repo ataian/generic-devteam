@@ -517,6 +517,30 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertNotIn("State the same limit to Codex", text)
         self.assertNotIn("1800", text)
 
+    def test_coder_harness_brake_keeps_scoped_test_execution_with_its_author(self):
+        """Static contract: harness defects stop in a bounded stage, not a product rewrite."""
+        coder = render_role(self.template("coder"), self.values("coder"), "coder")
+        for clause in (
+            "A failing harness, fixture or test environment is a defect of the verification setup, not of the product.",
+            "If a second round still produces only harness findings, stop: record the defect, evidence, affected command and smallest next step on the card, then park it through Exception routing instead of continuing in the same context.",
+            "When the test is the deliverable, the executor that writes it runs it against the running page; you keep the test scope and acceptance, and reserve the runtime only for a contended or shared resource.",
+            "A prompt that forbids the test run produces blind test code.",
+            "Derive selectors from rendered DOM or the component source, never from framework convention.",
+            "Commit test code only after its author executed it against the running page.",
+            "Before changing fixture counts or data volume, read the isolation or disposable-state checker that guards the suite; its limits are part of the acceptance.",
+            "Point to the exact plan revision; never paste plan text into the prompt. Keep the brief under 4 KB.",
+            "continue a selector, fixture, seed or parameter in the running Codex session",
+            "use a Hermes subagent only when the work needs Hermes tools such as the board, skills or process management, never for code alone",
+            "Such a subagent may write test paths only; keep the product tree read-only.",
+            "you create no card of your own",
+        ):
+            with self.subTest(clause=clause):
+                self.assertIn(clause, coder)
+        self.assertIn("When harness work occurred, add `Harness:` with the finding, cause and change.", coder)
+        self.assertIn("only Codex CLI writes productive project code", coder)
+        planner = render_role(self.template("planner"), self.values("planner"), "planner")
+        self.assertIn("When a ticket's environment is itself under construction, cut a separate card for it; a product card never carries an open environment defect.", planner)
+
     def test_reviewer_returns_questions_to_coder_without_inventing_defects(self):
         text = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
         for clause in (
