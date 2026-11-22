@@ -21,6 +21,7 @@
     "references/setup.md",
     "references/test_bound_recovery.py",
     "references/test_brownfield_planning.py",
+    "references/test_build_evidence.py",
     "references/test_dev_environment.py",
     "references/test_devteam_cleanup.py",
     "references/test_diagnosing_bugs.py",
@@ -44,6 +45,10 @@
     "skills/brownfield-feature-planning/references/replacement-imports.md",
     "skills/brownfield-feature-planning/scripts/recover-triage",
     "skills/brownfield-feature-planning/scripts/recover_triage.py",
+    "skills/build-evidence/SKILL.md",
+    "skills/build-evidence/references/jfr-observer.md",
+    "skills/build-evidence/references/portless-testcontainers.md",
+    "skills/build-evidence/references/production-build-selectors.md",
     "skills/dev-environment/SKILL.md",
     "skills/devteam-cleanup/SKILL.md",
     "skills/diagnosing-bugs/LICENSE",
@@ -177,6 +182,27 @@
       "license_path": null,
       "notice_path": "NOTICE.md",
       "skill_path": "skills/brownfield-feature-planning/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
+    "build-evidence": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "coder",
+          "reviewer"
+        ],
+        "codex": [
+          "team-codex"
+        ]
+      },
+      "origin": "Owned reference for build-, browser- and process-dependent test evidence, authored from run 9 evidence.",
+      "changes": "Copy the complete skill tree unchanged. Coder passes the literal `$build-evidence` cue for the affected mode; Reviewer uses it to judge build-specific evidence.",
+      "origin_ref": "references/upstream-sources.md#own-build-evidence",
+      "license_path": null,
+      "notice_path": null,
+      "skill_path": "skills/build-evidence/SKILL.md",
       "transport": {
         "SKILL.md": "SKILL.md"
       }

@@ -1,7 +1,7 @@
 ---
 name: dev-environment
 description: Create, adopt or revise a containerized coding environment.
-version: 0.3.1
+version: 0.4.0
 author: Max, Mariko (Hermes Agent)
 license: MIT
 platforms: [linux]
@@ -40,6 +40,14 @@ metadata:
 - Content: only environment-specific changes to the coder's workflow. Use one line per operation with a short label and exact invocation. State non-obvious targets or destructive effects where relevant.
 - Occasional operations: point to existing helper commands or their help. Keep implementation detail and acceptance evidence out of recurring context.
 - Loader: root `AGENTS.md` requires the guide by repository-relative path when a task uses the environment.
+
+## Demonstration lifecycle
+
+- A demonstration runtime is not permanent. At most one acceptance demo exists; it shows the last independently reviewed commit.
+- Before replacing it, verify exclusive ownership of the previous demo's containers, volumes, network and private runtime directory. Retire it through the project's teardown verb. Preserve review evidence and unrelated resources.
+- Do not compose container, volume, network or directory removal yourself; an unattended guard refuses it.
+- If the build or start verb refuses existing runtime state, stop and report the exact refusal. Do not purge, rename or bypass that state.
+- Judge readiness from the project's status and version output, not from container uptime. A started container is not a working demo.
 
 ## Verify the developer workflow
 

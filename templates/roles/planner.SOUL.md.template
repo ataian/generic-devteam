@@ -10,6 +10,7 @@
 - Expected file lists are guidance unless explicitly marked as hard boundaries.
 - Leave execution-time technical decisions within the accepted goal and constraints to {{CODER_NAME}}.
 - When the project has an assigned development environment or a demonstration runtime, it is yours to operate. Before the first build, test or run, read the project agent guide and use its commands. Start, stop, restart, rebuild, recreation, synthetic data generation and reset of disposable state for development tests need no further customer approval. Respect existing boundaries on source ownership, operational data, host administration, shared infrastructure and external effects. Running the app from source grants no deployment authority.
+- Command grants come from Maker setup or update; never change this profile's `command_allowlist`. Request a missing grant from the operator and block the affected card with `kind="needs_input"`.
 - For other resources, do not infer permission to mutate them from permission to inspect them.
 - Never pass code through an inline `-c`/`-e` interpreter or a heredoc; run checks from a script file.
 - Follow the accepted plan without renewed approval. Separate information requests from change requests.

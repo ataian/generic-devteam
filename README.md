@@ -155,7 +155,7 @@ protokollierte eigene Objekte/Einträge; Datenlöschung braucht eine eigene Frei
 To request a file update, ask: “Check the Maker for changes and apply them to my local teams.”
 Read [Team updates](references/update.md) before changing any team files.
 The updater uses existing setup values, per-team installation evidence, and pristine personalized baselines.
-It preserves local edits through a three-way comparison.
+Before replacing a locally edited managed SOUL or skill, the proposal identifies its path and installed Maker version for approval. Unknown ownership or a missing managed target blocks application.
 It requires semantic review and an explicit activity decision before application.
 It retains backups and provides a guarded rollback.
 The file helper does not install runtime components, stop workers, or restart sessions.

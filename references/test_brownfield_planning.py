@@ -367,7 +367,7 @@ class BrownfieldPackageTests(unittest.TestCase):
             self.assertIn(clause, steps[2][1])
         for clause in (
             "Reconcile old Planner-review clarification routes and fixed discretionary retry approvals within the approved update mandate.",
-            "Preserve explicit customer financial/resource caps, operational permissions, native guards, and unrelated local adaptations.",
+            "Preserve explicit customer financial/resource caps held outside managed files, operational permissions, native guards, and unrelated unmanaged files.",
             "Obtain a customer decision only for genuinely conflicting explicit mandates.",
         ):
             self.assertIn(clause, steps[3][1])

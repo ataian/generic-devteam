@@ -950,6 +950,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
     def test_default_equipment_retains_other_roles_and_sdlc(self):
         expected = {
             "brownfield-feature-planning": {"hermes": ["planner"]},
+            "build-evidence": {"hermes": ["coder", "reviewer"], "codex": ["team-codex"]},
             "dev-environment": {"hermes": ["planner"]},
             "diagnosing-bugs": {"codex": ["team-codex"]},
             "minimal-change-engineering": {"hermes": ["planner"]},

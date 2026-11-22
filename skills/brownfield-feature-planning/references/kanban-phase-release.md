@@ -32,6 +32,7 @@ Carry outcomes, dependencies, and verification into the accepted plan, phases, a
 3. Set native assignee and workspace, `--initial-status blocked`, idempotency key, required skill, explicit completion contract, explicit customer limits, and required runtime/retry fields. Do not invent discretionary attempt budgets. Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget. Check `--max-retries` semantics before setting a consecutive-failure limit. The breaker threshold counts failures, not extra attempts.
 4. Read back each returned exact card before further writes. Compare ticket/phase identity, title, approved references, body, and native limits against approved-revision files. Use the persisted card as the creation checkpoint.
 5. Bind the verified notification destination. Read `notify-list --json`. Compare platform, channel, chat type, participant, notifier profile, and delivery mode literally.
+   Subscribe on the project board: `hermes -p <planner-profile> kanban --board <board> notify-subscribe <task> ...`, then read the same board and task back. A subscription created without the board binds to the wrong installation.
 
 Existing card: development decisions, consequential failures and remedies, blockers, concise outcomes, and review verdicts. Attribute evidence to its executor and checked code state. Native run outputs remain available evidence, not an authored run-log duty. Keep product and test/start documentation in its owning repository.
 
@@ -46,6 +47,7 @@ Existing card: development decisions, consequential failures and remedies, block
 1. Wait until all cards exist before linking missing approved dependencies. Read each exact card. Use [bounded extraction](kanban-status-inspection.md#read-and-reduce-before-output-truncation) only when native reads lack required evidence.
 2. Before first release, require every card blocked. On partial release, preserve completed transitions and verify current runs and dependency gates on released cards.
 3. Check assignee, workspace, skill, runtime/retry fields, and completion contract. Check each story, criterion, technical constraint, and exception against phase scope, gate, commit boundary, and reviewer binding.
+   Set the independent Reviewer profile explicitly on every implementation card and read it back. A card bound to the Planner or the Coder is not independently reviewed.
 4. Resolve each plan reference to its approved revision. Verify every notification binding against the intended destination. Verify the first ticket has no parent and the final ticket has no child in the approved chain. Preserve valid links to follow-up tickets outside the chain. Verify each intermediate ticket's intended predecessor and successor.
 5. If parsing fails after a successful write, re-read the recorded exact ID. Do not repeat the write. Stop release on unresolved mismatches. Preserve partial progress.
 

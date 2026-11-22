@@ -23,6 +23,7 @@ Store all confirmed raw data in the single JSON block. Use [Setup](../references
 - Native configuration only: fixed Planner/Hermes-Coder reasoning and Codex model ID. Add no role-render fields for them.
 - Coder render paths: verified absolute `CODEX_BINARY` entrypoint, process home `CODEX_PROCESS_HOME`, config home `CODEX_HOME`. Use raw paths without shell quoting. Match process HOME to `confirmed_bindings.roles.team-codex.home`.
 - `confirmed_bindings.roles`: `planner`, `coder`, `reviewer` and `team-codex`, each with actual `id` and canonical `home`. Use actual process HOME for `team-codex`.
+- `confirmed_bindings.command_allowlists`: map `planner`, `coder` and `reviewer` to their verified native arrays of command strings. A missing role key is unknown; `[]` is a verified empty list.
 - `confirmed_bindings.triage_recovery`: `python` from verified dispatcher interpreter, `script` from installed Planner skill, `db` from dispatcher resolution of confirmed board DB, `planner_profile` from confirmed technical Planner ID.
 
 ```json
@@ -71,5 +72,5 @@ Per target, record actual native identity or exact path, configuration source, p
 - Update proposal, activity finding and explicit proceed/skip decision, semantic review, and operational dependency decision: pending when an update is authorized.
 - Backup run, result journal, verified targets, per-team result, guarded rollback receipt, and retained additions/obsolete files: pending when an update is authorized.
 
-- Advance metadata only after successful target verification. Preserve three-way comparison, local edits, conflict safeguards, conservative legacy handling and guarded rollback.
+- Advance metadata only after successful target verification. Apply the managed-file, conflict and rollback rules in [Team updates](../references/update.md).
 - Use **Team configured; setup outputs verified** only after required outputs and versioned baseline pass. Report exact blockers. Research and behavioral experiments stay outside setup gates.

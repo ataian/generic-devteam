@@ -123,14 +123,20 @@ hermes -p "$PROFILE" config get security.protected_instruction_files
 
 Record effective protection and its management source. Report genuine conflicts. Never alter central policy or bypass administrative restrictions.
 
-Grant the team's regular container commands in all three profiles, so a standard development operation does not become an approval question. The runtime matches a grant only against a simple command line: a compound line (`;`, `&&`, `|`, a heredoc) or `$` expansion inside double quotes never matches. The project guide therefore needs one script entrypoint, and these entries cover the direct commands around it.
+### Project command grants
+
+Grant the project's development and demonstration entrypoints in all three profiles, so a standard operation does not become an approval question. Take the exact absolute script paths and one verb per entry from the project agent guide; grant each reviewed command as written, with a `*` only for a script-validated argument such as a commit SHA or test selector. The runtime matches a grant only against a simple command line: a compound line (`;`, `&&`, `|`, a heredoc) or `$` expansion inside double quotes never matches, and a leading variable assignment changes the command text away from the bare entry. Never grant `docker compose *`, `docker *`, `docker-compose *` or an `env *` wrapper: the entrypoints own container, volume and network lifecycle, and a broad Docker pattern also grants removal outside the accepted scope. Keep read-only `docker ps`, `docker ps -a`, `docker logs *` and `docker inspect *` for diagnosis.
 
 ```sh
-hermes -p "$PROFILE" config set command_allowlist '["docker *","docker-compose *","env * docker *","env * docker-compose *"]'
+DEV_ENTRYPOINT='<absolute development entrypoint from the project guide>'
+DEMO_ENTRYPOINT='<absolute demonstration entrypoint from the project guide>'
+hermes -p "$PROFILE" config set command_allowlist "[\"$DEV_ENTRYPOINT check\",\"$DEV_ENTRYPOINT test\",\"$DEV_ENTRYPOINT test-selected *\",\"$DEV_ENTRYPOINT test-all\",\"$DEMO_ENTRYPOINT build *\",\"$DEMO_ENTRYPOINT start *\",\"$DEMO_ENTRYPOINT status\",\"$DEMO_ENTRYPOINT stop\",\"$DEMO_ENTRYPOINT retire\",\"$DEMO_ENTRYPOINT retire *\",\"$DEMO_ENTRYPOINT user\",\"docker ps\",\"docker ps -a\",\"docker logs *\",\"docker inspect *\"]"
 hermes -p "$PROFILE" config get command_allowlist
 ```
 
-Record the effective list, the reason for each entry, and that `approvals.single_query_mode`, `unattended_mode` and `cron_mode` stay `deny`. Add no entry outside the development environment. Reconcile the same list on update; a team updated from an older Maker otherwise keeps the old empty list.
+Omit entries whose entrypoint or verb the project does not have. When the Planner must construct the environment before its guide exists, add only the exact `docker compose -f <absolute dev compose path> build`, `up -d`, `down`, `ps` and `logs` entries; never `-v` and never a wildcard. The `demo.sh user` entry stays the bare script invocation: supply the password only through the environment variable the project documents, never as an argument and never in a grant.
+
+After each role's native readback matches the approved list, save that list under the role key in `confirmed_bindings.command_allowlists` in the private setup JSON. Record the reason for each entry and verify `approvals.single_query_mode`, `unattended_mode` and `cron_mode` remain `deny`. A role does not extend its own list; a missing grant blocks the affected work.
 
 In the correct native profile, use protected login and read back model configuration. Check environment/YAML, session/per-model/CLI overrides, fallbacks and required helper routes through established interfaces. Return relevant nonsecret fields and effective override sources only. A stored key or warning alone cannot prove an effective value.
 
@@ -217,7 +223,7 @@ confirmed_bindings = record_data["confirmed_bindings"]
 Compare parsed values with the confirmed dataset and, on resume, relevant native objects. Stop the affected step for incomplete/invalid JSON, missing required confirmed input or target drift. Resolve missing input/drift before rendering or writing. Correct stale prose from readbacks without repeating choices or creates. Use these fragments for the confirmed dataset. No synthetic development regressions, behavior or research gates in setup.
 
 1. **Copy skills.** Use the [source and role matrix](upstream-sources.md#bundled-components). Copy complete own trees from `skills/` to `<role home>/skills/<name>/`, including licenses, notices and references. Keep names and bytes unchanged except the recovery launcher. Bind it through the Maker step below after copying. No source-profile discovery.
-   - Team-Codex: `screenshot-to-code` and `diagnosing-bugs` under `.agents/skills/` in process HOME. Before personalization follow the [diagnosis recipe](integrations.md#diagnosing-bugs) for collisions, full bytes and native discovery.
+   - Team-Codex: every `own_skills` entry whose `targets.codex` names `team-codex` — currently `screenshot-to-code`, `diagnosing-bugs` and `build-evidence` — under `.agents/skills/` in process HOME. Before personalization follow the [diagnosis recipe](integrations.md#diagnosing-bugs) for collisions, full bytes and native discovery.
    - Planner: deliver `prototype` by [its recipe](integrations.md#prototype) before personalizing dependent SOUL clauses.
 2. **Verify configuration.** Compare actual Hermes/Codex native settings, limits and helper routes with preparation data. Compare all six VoltAgent TOMLs byte-for-byte with the manifest revision, including original model/reasoning. Save sources, authorization and readbacks privately. Keep the native Codex model ID out of render fields. For every assigned consumer, read back the selected [analysis bindings](code-analysis.md) from section 4. Record roots and the installed operational update reference.
 3. **Render.** In approved target setup, load [references/render_text.py](render_text.py) by reviewed package absolute path, e.g. `importlib.util.spec_from_file_location`. Never import a same-named foreign module from the search path. The renderer takes strings and has no file I/O, runtime load or CLI. Read templates in UTF-8 with the file tool.

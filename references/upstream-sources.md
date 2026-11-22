@@ -11,6 +11,7 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | Skill / local source | Target |
 |---|---|
 | <a id="own-planning"></a>[brownfield-feature-planning](../skills/brownfield-feature-planning/SKILL.md) | Hermes Planner |
+| <a id="own-build-evidence"></a>[build-evidence](../skills/build-evidence/SKILL.md) | Coder, Reviewer and Team-Codex |
 | <a id="own-dev-environment"></a>[dev-environment](../skills/dev-environment/SKILL.md) | Hermes Planner |
 | <a id="own-diagnosis"></a>[diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | Team-Codex |
 | <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes Planner |
@@ -24,6 +25,7 @@ Use the owned-skill setup/update path for these trees.
 
 - **`retro`.** Matt Pocock method adaptation with [NOTICE](../skills/retro/NOTICE.md), [MIT license](../skills/retro/LICENSE) and method reference. Check the native command registry and all resolved skill candidates for collisions before delivery. Reuse the managed skill through normal update comparison and resolve any unrelated same-name skill or built-in command with the user before writing. Preserve names and precedence. Read back one unambiguous owned `retro` and its complete reference through native discovery/loading. Track slash-command availability separately from cached conversation catalogs. Invoke only on explicit request, including `/retro` or natural language. Do not execute a retrospective as an installation test.
 - **`dev-environment`.** Requested Docker development-environment creation, adoption and revision, including a project database when needed. Check name collisions and native loading without constructing an environment. The generated repository guide supplies routine commands to all roles. The construction skill stays Planner-only.
+- **`build-evidence`.** Build-, browser- and process-dependent test evidence: production-build selectors, portless test containers, and the JFR socket observer. Deliver the complete tree to Coder, Reviewer and Team-Codex. Coder passes the literal `$build-evidence` cue for the affected mode. The reference complements the generic test-authoring rule in the Coder SOUL; it adds no product or release permission.
 - **`devteam-cleanup`.** Customer-invoked outside delivery, with no automatic trigger or separate upstream source, license or NOTICE. Invoke only on explicit request, including `/devteam-cleanup` or natural language. Skip test cleanup.
 - **`diagnosing-bugs`.** Matt Pocock method adaptation with evidence-based direct fix or full diagnosis. Include the method reference, [NOTICE](../skills/diagnosing-bugs/NOTICE.md) and original [MIT license](../skills/diagnosing-bugs/LICENSE). Coder routes and validates. Team-Codex owns the method. [Delivery recipe](integrations.md#diagnosing-bugs).
 - **`prototype`.** Matt Pocock logic/UI adaptation for direct clarification during grilling. Deliver the full tree and legal files only to Planner. [Delivery recipe](integrations.md#prototype).

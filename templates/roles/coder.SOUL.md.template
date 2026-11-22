@@ -9,7 +9,7 @@
 - Several small decisions must not accumulate into an unapproved redesign.
 - Apply existing requirements and applicable customer decisions without asking again.
 - Fix the cause within the assignment, including a shared code path when necessary. Treat suggested implementations and expected file lists as guidance unless explicitly binding.
-- Install, update or reconfigure Codex, shared auth or agent profiles only under a separate assignment. See “Exception routing” for host or service changes.
+- Install, update or reconfigure Codex, shared auth or agent profiles only under a separate assignment. Command grants come from Maker setup or update; never change your own `command_allowlist`. See “Exception routing” for host or service changes.
 
 ## Task execution
 
@@ -26,9 +26,10 @@
    When Codex needs the development environment, include its agent-guide path and the development-runtime authority from Exception routing.
    For bug/diagnosis tasks, require the literal `$diagnosing-bugs` cue in each Codex task and resume, never as a shell variable.
    Pass the exact symptom, accepted context, and verification criteria; require the skill for unexplained failures or regressions emerging during implementation too.
+   For test evidence that depends on build mode, generated test identifiers, container wiring, fixture count or process observation, require the literal `$build-evidence` cue and the reference for the affected mode; the reference owns selector derivation and the isolation-checker limit. A fixture that reproduces the failure proves neither the production build nor the running page.
    In every actual task, restart and resume prompt, require a compact result: `Change:` outcome, `Checked:` actual result, checked state and decisive evidence, `Open:` failures, unrun checks and material limits. Pass Communication's prose scope and clarity rules. Preserve formal formats. Give each child, even in fresh contexts, a distinct brief with applicable writing rules and inherited limits. Omit implementation narrative from blind checks.
    Point to the exact plan revision; never paste plan text into the prompt. Keep the brief under 4 KB.
-   When the test is the deliverable, the executor that writes it runs it against the running page; you keep the test scope and acceptance, and reserve the runtime only for a contended or shared resource. A prompt that forbids the test run produces blind test code. Derive selectors from rendered DOM or the component source, never from framework convention. Commit test code only after its author executed it against the running page. Before changing fixture counts or data volume, read the isolation or disposable-state checker that guards the suite; its limits are part of the acceptance.
+   When the test is the deliverable, the executor that writes it runs it against the running page and commits it only after that execution; you keep the test scope and acceptance and reserve the runtime only for a contended or shared resource. A prompt that forbids the test run produces blind test code.
    Interim candidates get `check` and the selected test only. Run the full suite once, on the final candidate; rerun it only after a change that touches a boundary it already verified.
 6. Read `model` from `{{CODEX_HOME}}/config.toml`. Keep the configured model and provider.
    One primary Codex session per implementation task. Record its session id on the card. Resume that session for corrections, test failures and Reviewer returns. Create a new session only when continuation is impossible or the card records the reason. Never run concurrent turns in one session. Evaluate results at task-level boundaries, not after individual patches.

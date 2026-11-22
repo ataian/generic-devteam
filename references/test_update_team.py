@@ -194,6 +194,7 @@ class UpdaterTests(unittest.TestCase):
         plan = self.proposal()
         proposal = json.loads(plan.read_text())
         self.assertFalse(proposal['conflicts'])
+        self.assertIn(str(target), {item['path'] for item in proposal['adaptations']})
         self.assertEqual(marker.read_bytes(), before_metadata)
         result = u.apply(self.home, plan, decision='proceed', review='Checked template record round trip',
                          dependency_review='Reviewed operational changes; no runtime migration authorized')
@@ -217,7 +218,10 @@ class UpdaterTests(unittest.TestCase):
             self.assertEqual(managed['installed_hash'], u.digest(Path(entry['target']).read_bytes()))
             self.assertEqual(managed['baseline'], u.digest(entry['content']))
             self.assertEqual((self.state / 'baselines' / managed['baseline']).read_bytes(), entry['content'])
-        self.assertEqual(target.read_bytes(), before_targets[str(target)][0] + b'\nNew upstream instruction.\n')
+        new_file = next(entry for entry in new_expected
+                        if entry['source'] == 'skills/brownfield-feature-planning/SKILL.md')
+        self.assertEqual(target.read_bytes(), new_file['content'])
+        self.assertFalse(target.read_text().startswith('Local heading'))
         self.assertEqual(json.loads((Path(result['run']) / 'result.json').read_text())['status'], 'applied')
         self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
         self.assertEqual(marker.read_bytes(), before_metadata)
@@ -270,7 +274,8 @@ class UpdaterTests(unittest.TestCase):
         result = u.apply(self.home, plan, decision='proceed', review='Checked bindings and local note',
                          dependency_review='Approved file-only migration')
         self.assertEqual(result['status'], 'applied')
-        self.assertTrue(target.read_text().startswith('Local team note\n'))
+        self.assertFalse(target.read_text().startswith('Local team note\n'))
+        self.assertIn(str(target), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         self.assertIn("`/synthetic/client's workspace`", target.read_text())
         self.assertIn("`Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code`", target.read_text())
         coder = (Path(self.roles['coder']['home']) / 'SOUL.md').read_text()
@@ -311,11 +316,13 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(coder.read_bytes(), before_coder)
         setup_path.write_text('```json\n' + json.dumps(setup) + '\n```\n')
         coder.write_text('Local retained rule.\n' + coder.read_text())
-        result = u.apply(self.home, self.proposal(), decision='proceed',
-                         review='Checked bound invocation and unchanged local rule',
+        plan = self.proposal()
+        result = u.apply(self.home, plan, decision='proceed',
+                         review='Checked bound invocation and replaced local rule',
                          dependency_review='Confirmed Codex paths; file-only fixture update')
         self.assertEqual(result['status'], 'applied')
-        self.assertTrue(coder.read_text().startswith('Local retained rule.\n'))
+        self.assertFalse(coder.read_text().startswith('Local retained rule.\n'))
+        self.assertIn(str(coder), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         self.assertIn(paths['CODEX_HOME'] + '/config.toml', coder.read_text())
         self.assertIn('Check the `kanban_request_review` response', coder.read_text())
         record = u.load_record(self.home)[2]
@@ -489,7 +496,7 @@ class UpdaterTests(unittest.TestCase):
         return u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=commit,
                             basis_evidence='Synthetic exact 1.1.22 source and complete managed-tree installation')
 
-    def test_pre200_update_preserves_local_caps_and_pending_migration_record(self):
+    def test_pre200_update_reports_and_replaces_local_text(self):
         target_version = json.loads((self.repo / 'manifest.json').read_text())['version']
         record = self.pre200_installation()
         self.assertEqual(record['maker_version'], '1.1.22')
@@ -511,27 +518,29 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(updated['maker_version'], target_version)
         self.assertEqual(updated['roles'], self.roles)
         self.assertEqual(updated['confirmed_bindings'], self.bindings)
-        self.assertTrue(coder.read_text().startswith(local))
+        self.assertFalse(coder.read_text().startswith(local))
+        self.assertIn(str(coder), {item['path'] for item in proposal['adaptations']})
         self.assertIn('kanban_block(kind="needs_input", reason=...)', coder.read_text())
         self.assertNotIn('through native `kanban_request_review`', coder.read_text())
         reviewer = (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text()
         self.assertIn('only the Coder escalates it through the Planner.', reviewer)
         self.assertEqual(setup.read_bytes(), before_setup)
 
-    def test_pre200_conflicting_local_planner_route_withholds_file_application(self):
+    def test_pre200_local_planner_route_is_reported_and_replaced(self):
         self.pre200_installation()
         coder = Path(self.roles['coder']['home']) / 'SOUL.md'
         old = 'Route the same task to `fixture-planner` through native `kanban_request_review`.'
         self.assertIn(old, coder.read_text())
         coder.write_text(coder.read_text().replace(old, 'Local binding mandate: route all decisions to Planner review.'))
-        before = coder.read_bytes()
-        metadata = (self.state / 'installation.json').read_bytes()
         plan = self.proposal()
-        self.assertIn(str(coder), json.loads(plan.read_text())['conflicts'])
-        with self.assertRaises(ValueError):
-            u.apply(self.home, plan, decision='proceed', review='Unresolved explicit local route conflict')
-        self.assertEqual(coder.read_bytes(), before)
-        self.assertEqual((self.state / 'installation.json').read_bytes(), metadata)
+        proposal = json.loads(plan.read_text())
+        self.assertFalse(proposal['conflicts'])
+        self.assertIn(str(coder), {item['path'] for item in proposal['adaptations']})
+        u.apply(self.home, plan, decision='proceed',
+                review='Reported local route deviation; Maker text authoritative',
+                dependency_review='Fixture file-only migration; runtime unchanged')
+        self.assertNotIn('Local binding mandate', coder.read_text())
+        self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder.read_text())
 
     def test_113_installation_adopts_confirmed_role_bindings(self):
         self.check_historical_binding_upgrade('da11a12710aace9a0522c88fd8fb3ef378711d0c')
@@ -695,8 +704,10 @@ class UpdaterTests(unittest.TestCase):
         main = self.home / 'skills/dev-environment/SKILL.md'
         main.write_bytes(b'Approved local environment note\n' + main.read_bytes())
         self.change('skills/dev-environment/SKILL.md', '\nUpdated environment instruction.\n')
-        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture environment update reviewed')
-        self.assertTrue(main.read_bytes().startswith(b'Approved local environment note\n'))
+        plan = self.proposal()
+        self.assertIn(str(main), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
+        u.apply(self.home, plan, decision='proceed', review='Fixture environment update reviewed')
+        self.assertFalse(main.read_bytes().startswith(b'Approved local environment note\n'))
         self.assertTrue(main.read_bytes().endswith(b'Updated environment instruction.\n'))
 
     def test_new_dev_environment_collision_addition_and_guarded_rollback(self):
@@ -752,8 +763,10 @@ class UpdaterTests(unittest.TestCase):
         main = self.home / 'skills/prototype/SKILL.md'
         main.write_bytes(b'Approved local planning note\n' + main.read_bytes())
         self.change('skills/prototype/SKILL.md', '\nUpdated prototype clarification instruction.\n')
-        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture prototype update reviewed')
-        self.assertTrue(main.read_bytes().startswith(b'Approved local planning note\n'))
+        plan = self.proposal()
+        self.assertIn(str(main), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
+        u.apply(self.home, plan, decision='proceed', review='Fixture prototype update reviewed')
+        self.assertFalse(main.read_bytes().startswith(b'Approved local planning note\n'))
         self.assertTrue(main.read_bytes().endswith(b'Updated prototype clarification instruction.\n'))
 
     def test_new_prototype_tree_collision_and_guarded_rollback(self):
@@ -875,8 +888,10 @@ class UpdaterTests(unittest.TestCase):
         main.write_bytes(b'Local approved note\n' + main.read_bytes())
         main.chmod(0o640)
         self.change('skills/diagnosing-bugs/SKILL.md', '\nNew diagnosis instruction.\n')
-        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture local adaptation checked')
-        self.assertTrue(main.read_bytes().startswith(b'Local approved note\n'))
+        plan = self.proposal()
+        self.assertIn(str(main), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
+        u.apply(self.home, plan, decision='proceed', review='Fixture local adaptation reported and replaced')
+        self.assertFalse(main.read_bytes().startswith(b'Local approved note\n'))
         self.assertTrue(main.read_bytes().endswith(b'New diagnosis instruction.\n'))
         self.assertEqual(u.file_mode(main), 0o640)
 
@@ -897,11 +912,12 @@ class UpdaterTests(unittest.TestCase):
         result = u.apply(self.home, plan, decision='proceed', review='Agent reviewed local drift',
                          dependency_review='User approved file-only migration; no runtime change')
         self.assertEqual(result['status'], 'applied')
-        self.assertTrue(target.read_text().startswith('Local team note'))
+        self.assertFalse(target.read_text().startswith('Local team note'))
+        self.assertIn(str(target), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         skill = self.home / 'skills/brownfield-feature-planning/SKILL.md'
         self.assertNotIn('New upstream instruction.', skill.read_text())
 
-    def test_reviewer_investigation_reaches_existing_soul_and_preserves_local_policy(self):
+    def test_reviewer_investigation_reaches_existing_soul_and_replaces_local_policy(self):
         """Actual old/new SOUL delivery; no runtime activation or model call."""
         source = self.repo / 'templates/roles/reviewer.SOUL.md.template'
         candidate = source.read_text()
@@ -925,16 +941,17 @@ class UpdaterTests(unittest.TestCase):
         source.write_text(candidate)
         self.commit('deliver candidate investigation through existing SOUL mapping')
         proposal = self.proposal()
-        result = u.apply(self.home, proposal, decision='proceed', review='Static candidate and local-cap compatibility')
+        self.assertIn(str(target), {item['path'] for item in json.loads(proposal.read_text())['adaptations']})
+        result = u.apply(self.home, proposal, decision='proceed', review='Static candidate and local-cap replacement')
         self.assertEqual(result['status'], 'applied')
         self.assertIn(heading, target.read_text())
         self.assertIn('Spec / requirement fidelity', target.read_text())
         self.assertIn('Technical quality / standards', target.read_text())
-        self.assertTrue(target.read_text().endswith(local))
+        self.assertFalse(target.read_text().endswith(local))
         _, _, record = u.load_record(self.home)
         managed = next(e for e in record['managed'] if e['target'] == str(target))
         baseline = (self.state / 'baselines' / managed['baseline']).read_bytes()
-        self.assertEqual(target.read_bytes(), baseline + local.encode())
+        self.assertEqual(target.read_bytes(), baseline)
         self.assertEqual(managed['transform'], 'render-role-v1')
         self.assertEqual(managed['installed_hash'], u.digest(target.read_bytes()))
         for role, before in neighbors.items():
@@ -942,7 +959,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
         self.assertEqual(target.read_bytes(), old['content'] + local.encode())
 
-    def test_reviewer_investigation_local_rule_collision_withholds_all_writes(self):
+    def test_reviewer_investigation_local_text_is_reported_and_replaced(self):
         self.initialize()
         source = self.repo / 'templates/roles/reviewer.SOUL.md.template'
         target = Path(self.roles['reviewer']['home']) / 'SOUL.md'
@@ -950,27 +967,25 @@ class UpdaterTests(unittest.TestCase):
         self.assertIn(clause, source.read_text())
         target.write_text(target.read_text().replace(clause, 'Locally amended small-correction policy'))
         source.write_text(source.read_text().replace(clause, 'Revised upstream small-correction policy'))
-        self.commit('synthetic conflicting reviewer policy')
-        before = {e['target']: Path(e['target']).read_bytes()
-                  for e in json.loads((self.state / 'installation.json').read_text())['managed']}
-        marker = (self.state / 'installation.json').read_bytes()
+        self.commit('synthetic reviewer policy revision')
         proposal = self.proposal()
-        self.assertTrue(json.loads(proposal.read_text())['conflicts'])
-        with self.assertRaises(ValueError):
-            u.apply(self.home, proposal, decision='proceed', review='Unresolved local policy collision')
-        self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
-        for path, content in before.items():
-            self.assertEqual(Path(path).read_bytes(), content)
+        data = json.loads(proposal.read_text())
+        self.assertFalse(data['conflicts'])
+        self.assertIn(str(target), {item['path'] for item in data['adaptations']})
+        u.apply(self.home, proposal, decision='proceed', review='Reported local policy replacement')
+        self.assertIn('Revised upstream small-correction policy', target.read_text())
+        self.assertNotIn('Locally amended small-correction policy', target.read_text())
 
-    def test_three_way_keeps_local_edits_and_pristine_new_baseline(self):
+    def test_local_edit_is_replaced_and_new_baseline_is_pristine(self):
         self.initialize()
         target = self.home / 'skills/brownfield-feature-planning/SKILL.md'
         target.write_text('Local heading\n' + target.read_text())
         self.change()
         plan = self.proposal()
+        self.assertIn(str(target), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         result = u.apply(self.home, plan, decision='proceed', review='Agent checked all changed context files')
         self.assertEqual(result['status'], 'applied')
-        self.assertTrue(target.read_text().startswith('Local heading\n'))
+        self.assertFalse(target.read_text().startswith('Local heading\n'))
         self.assertTrue(target.read_text().endswith('New upstream instruction.\n'))
         record = json.loads((self.state / 'installation.json').read_text())
         entry = next(x for x in record['managed'] if x['target'] == str(target))
@@ -981,19 +996,47 @@ class UpdaterTests(unittest.TestCase):
         self.assertNotIn('New upstream instruction.', target.read_text())
         self.assertEqual(json.loads((self.state / 'installation.json').read_text())['maker_commit'], self.base)
 
-    def test_conflict_stops_without_target_writes(self):
+    def test_build_evidence_and_grant_rules_reach_fresh_and_existing_teams(self):
+        record = self.initialize()
+        sources = {entry['source'] for entry in record['managed']}
+        self.assertIn('skills/build-evidence/SKILL.md', sources)
+        self.assertIn('skills/build-evidence/references/production-build-selectors.md', sources)
+        for role, subpath in (('coder', 'skills'), ('reviewer', 'skills'),
+                              ('team-codex', '.agents/skills')):
+            target = Path(self.roles[role]['home']) / subpath / 'build-evidence/SKILL.md'
+            self.assertTrue(target.is_file(), (role, target))
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        reviewer = Path(self.roles['reviewer']['home']) / 'SOUL.md'
+        self.assertIn('$build-evidence', coder.read_text())
+        self.assertIn('never change your own `command_allowlist`', coder.read_text())
+        self.assertIn('never change this profile\'s `command_allowlist`', reviewer.read_text())
+
+        target = Path(self.roles['coder']['home']) / 'skills/build-evidence/references/jfr-observer.md'
+        local = b'\nLocal build note.\n'
+        target.write_bytes(target.read_bytes() + local)
+        self.change('skills/build-evidence/SKILL.md', '\nNew build evidence rule.\n')
+        plan = self.proposal()
+        adaptations = {item['path']: item for item in json.loads(plan.read_text())['adaptations']}
+        self.assertEqual(adaptations[str(target)]['version'], record['maker_version'])
+        result = u.apply(self.home, plan, decision='proceed', review='Reported and replaced local build note')
+        self.assertFalse(target.read_bytes().endswith(local))
+        self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
+        self.assertTrue(target.read_bytes().endswith(local))
+
+    def test_local_managed_text_replacement_precedes_both_sides(self):
         self.initialize()
         target = self.home / 'skills/brownfield-feature-planning/SKILL.md'
         target.write_text(target.read_text().replace('name:', 'local-name:', 1))
         source = self.repo / 'skills/brownfield-feature-planning/SKILL.md'
         source.write_text(source.read_text().replace('name:', 'upstream-name:', 1))
-        self.commit('conflict')
-        before = target.read_bytes()
+        self.commit('local and upstream text change')
         plan = self.proposal()
-        self.assertTrue(json.loads(plan.read_text())['conflicts'])
-        with self.assertRaises(ValueError):
-            u.apply(self.home, plan, decision='proceed', review='checked')
-        self.assertEqual(target.read_bytes(), before)
+        data = json.loads(plan.read_text())
+        self.assertFalse(data['conflicts'])
+        self.assertIn(str(target), {item['path'] for item in data['adaptations']})
+        u.apply(self.home, plan, decision='proceed', review='Reported local text replacement')
+        self.assertIn('upstream-name:', target.read_text())
+        self.assertNotIn('local-name:', target.read_text())
 
     def test_activity_and_semantic_review_gates_and_skip(self):
         self.initialize()
@@ -1471,7 +1514,8 @@ class UpdaterTests(unittest.TestCase):
         updated = u.load_record(self.home)[2]
         self.assertNotEqual(updated['maker_version'], before['maker_version'])
         self.assertEqual(updated['maker_commit'], proposal['maker_commit'])
-        self.assertTrue(coder.read_text().startswith('Local rule: keep the approved resource cap.\n'))
+        self.assertFalse(coder.read_text().startswith('Local rule: keep the approved resource cap.\n'))
+        self.assertIn(str(coder), {item['path'] for item in proposal['adaptations']})
         repeat = json.loads(self.proposal().read_text())
         self.assertFalse(repeat['dependencies'] or repeat['conflicts'] or repeat['obsolete'])
         self.assertTrue(all(u.digest(u.decoded(entry['merged'])) == entry['before_hash']
@@ -1651,7 +1695,7 @@ class UpdaterTests(unittest.TestCase):
             previous[str(main)] = main.read_bytes()
         managed_previous = {
             item['target'] for item in u.load_record(self.home)[2]['managed']
-            if item['role'] == 'reviewer' and item['source'].startswith('skills/')}
+            if item['role'] == 'reviewer' and any(item['source'].startswith(f'skills/{name}/') for name in names)}
         unaffected = {
             str(path): path.read_bytes()
             for role in ('planner', 'coder', 'team-codex')
@@ -1680,7 +1724,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(result['status'], 'applied')
         _, _, record = u.load_record(self.home)
         self.assertEqual(set(record['retained_obsolete']), managed_previous)
-        self.assertFalse(set(previous) & {item['target'] for item in record['managed']})
+        self.assertFalse(managed_previous & {item['target'] for item in record['managed']})
         for target, content in previous.items():
             self.assertEqual(Path(target).read_bytes(), content)
         for target, content in unaffected.items():
@@ -1931,14 +1975,19 @@ class UpdaterTests(unittest.TestCase):
                 self.assertEqual((self.state / 'installation.json').read_bytes(), before)
                 target.write_bytes(saved)
 
-    def test_present_empty_file_is_not_a_missing_file(self):
+    def test_present_empty_file_is_replaced_as_a_local_deviation(self):
         self.initialize()
         target = self.home / 'SOUL.md'
+        before = target.read_bytes()
         target.write_bytes(b'')
         self.change()
         plan = self.proposal()
-        self.assertNotIn(str(target), json.loads(plan.read_text())['conflicts'])
-        u.apply(self.home, plan, decision='proceed', review='checked deliberate empty local file')
+        data = json.loads(plan.read_text())
+        self.assertNotIn(str(target), data['conflicts'])
+        self.assertIn(str(target), {item['path'] for item in data['adaptations']})
+        result = u.apply(self.home, plan, decision='proceed', review='checked deliberate empty local file')
+        self.assertEqual(target.read_bytes(), before)
+        self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
         self.assertEqual(target.read_bytes(), b'')
 
     def test_updates_preserve_local_modes_and_private_state(self):
