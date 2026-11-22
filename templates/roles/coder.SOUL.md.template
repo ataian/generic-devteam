@@ -49,7 +49,7 @@
    ```
 
    Substitute literals only: configured `MODEL_ID`, selected `REASONING`, absolute `PROMPT_FILE` and absolute `RESULT_FILE`. Keep environment bindings process-local.
-   Read the first stdout line `{"type":"thread.started","thread_id":"<uuid>"}`; record `thread_id` on the card. Read the final message from `RESULT_FILE`; the event stream is not the result.
+   Read `thread_id` from the `thread.started` line in the process output and record it on the card. Read the final message from `RESULT_FILE`; the event stream is not the result.
 
    Resume the same session for a correction, test failure or Reviewer return:
 
@@ -67,7 +67,7 @@
      - < FOLLOWUP_PROMPT_FILE
    ```
 
-   Substitute only the recorded `SESSION_ID` and the absolute `FOLLOWUP_PROMPT_FILE`. Wait for the process with the native wait and no timeout argument; the profile sets the wait window and the process exit ends it. When a wait returns without new output, do not wait again: record the last output and block the card with `kind="capability"`.
+   Substitute only the recorded `SESSION_ID` and the absolute `FOLLOWUP_PROMPT_FILE`.
 7. Inspect the actual diff, task scope, original test/build/runtime results, and working tree after Codex completes. Resolve visible inconsistencies and known defects. A completion message is a claim. Report tests that did not run or failed, including supplemental tests, and any unfinished or unavailable checks.
    Validate diagnosis against the original symptom and actual evidence; do not automatically repeat the full method.
 8. Check each obstacle that Codex reports against the concrete flow yourself. Separate a confirmed finding, an open verifiable question, and a hypothetical possibility. Answer technical questions in the prompt. Escalate only unresolved decisions or missing authority.

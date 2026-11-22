@@ -100,7 +100,7 @@ hermes -p "$PROFILE" config get kanban.auto_subscribe_on_create
 hermes -p "$PROFILE" config get security.protected_instruction_files
 ```
 
-For the Coder and Reviewer profiles only, set the wait window and the tool-call deadline as configuration; role prose does not configure either. Unset, `timeouts.tools` falls back to 420 s and ends a wait before the wait returns its own result. `terminal.timeout` bounds one wait, `timeouts.tools.sequential_call` one tool call and `timeouts.tools.concurrent_batch` one parallel batch; the tool deadline MUST exceed the wait window. Neither value caps the worker run; the card's `--max-runtime` does.
+For the Coder and Reviewer profiles only, set the wait window and the tool-call deadline as configuration; role prose does not configure either. Unset, `timeouts.tools` falls back to 420 s and ends a wait before the wait returns its own result. `terminal.timeout` bounds one wait, `timeouts.tools.sequential_call` one tool call and `timeouts.tools.concurrent_batch` one parallel batch; the tool deadline MUST exceed the wait window. The window stays below the card runtime on purpose: when it elapses the role reads the run's state and lets it continue, and the card's `--max-runtime` remains the hard end.
 
 ```sh
 hermes -p "$PROFILE" config set terminal.timeout 14400

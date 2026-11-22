@@ -149,9 +149,12 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn(lifecycle, rendered["coder"])
         self.assertIn(lifecycle, rendered["reviewer"])
         self.assertIn("a stopped runtime is not a retired one", rendered["planner"])
-        self.assertIn("retire a running demonstration runtime through the project's teardown verb", rendered["planner"])
-        self.assertIn("Use the project's documented teardown verb (`demo.sh retire` or equivalent); never compose "
-                      "container, volume, network or directory removal yourself", rendered["coder"])
+        self.assertIn("retire a running demonstration runtime.", rendered["planner"])
+        for role in ("planner", "coder"):
+            with self.subTest(role=role):
+                self.assertIn("Use the project's documented teardown verb (`demo.sh retire` or equivalent); never compose "
+                              "container, volume, network or directory removal yourself — an unattended guard refuses it.",
+                              rendered[role])
         self.assertIn("create the demonstration user via `demo.sh user` with the password `Example` supplied only from private team state through the environment variable the script documents, never as an argument", rendered["coder"])
         self.assertIn("recorded login works on the running system with the password `Example`", rendered["reviewer"])
         self.assertIn("the demonstration user and its login name", rendered["planner"])
@@ -189,12 +192,12 @@ class ReasoningContractTests(unittest.TestCase):
             "Read `model` from `/work/codex_home/config.toml`.",
             "Keep the configured model and provider.",
             "`background=true`, `pty=true`",
-            "Read the first stdout line `{\"type\":\"thread.started\",\"thread_id\":\"<uuid>\"}`; record `thread_id` on the card.",
-            "Wait for the process with the native wait and no timeout argument; the profile sets the wait window and the process exit ends it.",
-            "When a wait returns without new output, do not wait again: record the last output and block the card with `kind=\"capability\"`.",
+            "Read `thread_id` from the `thread.started` line in the process output and record it on the card.",
         ]:
             self.assertTrue(text in result, text)
-        self.assertNotIn("timeout=14400", result)
+        self.assertNotIn("14400", result)
+        self.assertNotIn("28800", result)
+        self.assertNotIn("do not wait again", result)
         self.assertNotIn("if the worker guard prohibits them", result)
         self.assertNotIn("{{", result)
 
@@ -639,7 +642,7 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn('hermes -p "$PROFILE" config get timeouts.tools.sequential_call', setup)
         self.assertIn('hermes -p "$PROFILE" config get timeouts.tools.concurrent_batch', setup)
         self.assertIn("the tool deadline MUST exceed the wait window", setup)
-        self.assertNotIn("14400", render_role(self.template("coder"), self.values("coder"), "coder"))
+        self.assertNotIn("15000", render_role(self.template("coder"), self.values("coder"), "coder"))
         update = (ROOT / "references/update.md").read_text()
         self.assertIn("Reconcile `terminal.timeout` to `14400` and `timeouts.tools.sequential_call`/`concurrent_batch` to `15000` on the Coder and Reviewer profiles and read all three back", update)
         release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
