@@ -98,7 +98,7 @@ class BuildEvidenceTests(unittest.TestCase):
         self.assertIn("[setup grant recipe](setup.md#project-command-grants)", legacy)
         self.assertIn("`docker compose *`", legacy)
         self.assertIn("### Project command grants", setup)
-        self.assertIn("Reconcile `terminal.timeout` to `14400` on the Coder and Reviewer profiles and read it back", update)
+        self.assertIn("Reconcile `terminal.timeout` to `14400` and `timeouts.tools.sequential_call`/`concurrent_batch` to `15000` on the Coder and Reviewer profiles and read all three back", update)
         for text in (setup, update):
             self.assertIn("A role does not extend its own list", text)
             self.assertNotIn('"docker *"', text)
@@ -134,13 +134,21 @@ class BuildEvidenceTests(unittest.TestCase):
         dev = (ROOT / "skills/dev-environment/SKILL.md").read_text()
         for clause in (
             "A demonstration runtime is not permanent. At most one acceptance demo exists",
-            "Retire it through the project's teardown verb.",
+            "Retire it through the project's teardown verb and verify they are gone; a stopped runtime is not a retired one.",
             "Do not compose container, volume, network or directory removal yourself",
             "If the build or start verb refuses existing runtime state, stop and report the exact refusal.",
             "Judge readiness from the project's status and version output, not from container uptime.",
         ):
             with self.subTest(clause=clause):
                 self.assertIn(clause, dev)
+
+    def test_demo_retirement_is_verifiable_with_read_only_listings(self):
+        setup = (ROOT / "references/setup.md").read_text()
+        grant = next(line for line in setup.splitlines() if "config set command_allowlist" in line)
+        tail = grant.split("docker inspect *", 1)[1]
+        for entry in ("docker volume ls", "docker network ls"):
+            with self.subTest(entry=entry):
+                self.assertIn(entry, tail)
 
 
 if __name__ == "__main__":

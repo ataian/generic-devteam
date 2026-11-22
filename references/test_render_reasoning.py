@@ -143,10 +143,13 @@ class ReasoningContractTests(unittest.TestCase):
                     for role in ("planner", "coder", "reviewer")}
         lifecycle = ("a demonstration runtime is not permanent; at most one exists and shows the last independently "
                      "reviewed commit. Replacing it includes retiring the previous one after verifying exclusive "
-                     "ownership of its containers, volumes and private runtime directory; preserve review evidence "
+                     "ownership of its containers, volumes, network and private runtime directory, and verifying "
+                     "they are gone; a stopped runtime is not a retired one. Preserve review evidence "
                      "and unrelated resources.")
         self.assertIn(lifecycle, rendered["coder"])
         self.assertIn(lifecycle, rendered["reviewer"])
+        self.assertIn("a stopped runtime is not a retired one", rendered["planner"])
+        self.assertIn("retire a running demonstration runtime through the project's teardown verb", rendered["planner"])
         self.assertIn("Use the project's documented teardown verb (`demo.sh retire` or equivalent); never compose "
                       "container, volume, network or directory removal yourself", rendered["coder"])
         self.assertIn("create the demonstration user via `demo.sh user` with the password `Example` supplied only from private team state through the environment variable the script documents, never as an argument", rendered["coder"])
@@ -187,11 +190,11 @@ class ReasoningContractTests(unittest.TestCase):
             "Keep the configured model and provider.",
             "`background=true`, `pty=true`",
             "Read the first stdout line `{\"type\":\"thread.started\",\"thread_id\":\"<uuid>\"}`; record `thread_id` on the card.",
-            "Call the native wait with `timeout=14400`; the dispatcher raises the worker's terminal cap to the card runtime, so an omitted timeout would wait up to eight hours.",
-            "The process exit ends the wait; the cap is not the worker-run limit.",
+            "Wait for the process with the native wait and no timeout argument; the profile sets the wait window and the process exit ends it.",
             "When a wait returns without new output, do not wait again: record the last output and block the card with `kind=\"capability\"`.",
         ]:
             self.assertTrue(text in result, text)
+        self.assertNotIn("timeout=14400", result)
         self.assertNotIn("if the worker guard prohibits them", result)
         self.assertNotIn("{{", result)
 
@@ -628,11 +631,17 @@ class ReasoningContractTests(unittest.TestCase):
 
     def test_worker_wait_cap_and_card_hang_cap_are_recipe_level(self):
         setup = (ROOT / "references/setup.md").read_text()
-        self.assertIn("For the Coder and Reviewer profiles only, set the per-wait cap.", setup)
+        self.assertIn("For the Coder and Reviewer profiles only, set the wait window and the tool-call deadline as configuration", setup)
         self.assertIn('hermes -p "$PROFILE" config set terminal.timeout 14400', setup)
+        self.assertIn('hermes -p "$PROFILE" config set timeouts.tools.sequential_call 15000', setup)
+        self.assertIn('hermes -p "$PROFILE" config set timeouts.tools.concurrent_batch 15000', setup)
         self.assertIn('hermes -p "$PROFILE" config get terminal.timeout', setup)
+        self.assertIn('hermes -p "$PROFILE" config get timeouts.tools.sequential_call', setup)
+        self.assertIn('hermes -p "$PROFILE" config get timeouts.tools.concurrent_batch', setup)
+        self.assertIn("the tool deadline MUST exceed the wait window", setup)
+        self.assertNotIn("14400", render_role(self.template("coder"), self.values("coder"), "coder"))
         update = (ROOT / "references/update.md").read_text()
-        self.assertIn("Reconcile `terminal.timeout` to `14400` on the Coder and Reviewer profiles and read it back", update)
+        self.assertIn("Reconcile `terminal.timeout` to `14400` and `timeouts.tools.sequential_call`/`concurrent_batch` to `15000` on the Coder and Reviewer profiles and read all three back", update)
         release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
         self.assertIn("Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget.", release)
         planner = render_role(self.template("planner"), self.values("planner"), "planner")

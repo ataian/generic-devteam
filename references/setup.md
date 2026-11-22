@@ -100,11 +100,15 @@ hermes -p "$PROFILE" config get kanban.auto_subscribe_on_create
 hermes -p "$PROFILE" config get security.protected_instruction_files
 ```
 
-For the Coder and Reviewer profiles only, set the per-wait cap. A wait call may occupy that cap and ends with the process; it does not extend the worker-run limit. A worker may raise this cap to the card runtime, so the Coder passes `timeout=14400` explicitly to each wait.
+For the Coder and Reviewer profiles only, set the wait window and the tool-call deadline as configuration; role prose does not configure either. Unset, `timeouts.tools` falls back to 420 s and ends a wait before the wait returns its own result. `terminal.timeout` bounds one wait, `timeouts.tools.sequential_call` one tool call and `timeouts.tools.concurrent_batch` one parallel batch; the tool deadline MUST exceed the wait window. Neither value caps the worker run; the card's `--max-runtime` does.
 
 ```sh
 hermes -p "$PROFILE" config set terminal.timeout 14400
+hermes -p "$PROFILE" config set timeouts.tools.sequential_call 15000
+hermes -p "$PROFILE" config set timeouts.tools.concurrent_batch 15000
 hermes -p "$PROFILE" config get terminal.timeout
+hermes -p "$PROFILE" config get timeouts.tools.sequential_call
+hermes -p "$PROFILE" config get timeouts.tools.concurrent_batch
 ```
 
 Disable the automatic skill-review trigger only in the Planner profile:
@@ -125,12 +129,12 @@ Record effective protection and its management source. Report genuine conflicts.
 
 ### Project command grants
 
-Grant the project's development and demonstration entrypoints in all three profiles, so a standard operation does not become an approval question. Take the exact absolute script paths and one verb per entry from the project agent guide; grant each reviewed command as written, with a `*` only for a script-validated argument such as a commit SHA or test selector. The runtime matches a grant only against a simple command line: a compound line (`;`, `&&`, `|`, a heredoc) or `$` expansion inside double quotes never matches, and a leading variable assignment changes the command text away from the bare entry. Never grant `docker compose *`, `docker *`, `docker-compose *` or an `env *` wrapper: the entrypoints own container, volume and network lifecycle, and a broad Docker pattern also grants removal outside the accepted scope. Keep read-only `docker ps`, `docker ps -a`, `docker logs *` and `docker inspect *` for diagnosis.
+Grant the project's development and demonstration entrypoints in all three profiles, so a standard operation does not become an approval question. Take the exact absolute script paths and one verb per entry from the project agent guide; grant each reviewed command as written, with a `*` only for a script-validated argument such as a commit SHA or test selector. The runtime matches a grant only against a simple command line: a compound line (`;`, `&&`, `|`, a heredoc) or `$` expansion inside double quotes never matches, and a leading variable assignment changes the command text away from the bare entry. Never grant `docker compose *`, `docker *`, `docker-compose *` or an `env *` wrapper: the entrypoints own container, volume and network lifecycle, and a broad Docker pattern also grants removal outside the accepted scope. Keep read-only `docker ps`, `docker ps -a`, `docker logs *`, `docker inspect *`, `docker volume ls` and `docker network ls` for diagnosis and for verifying that a retired demo left no container, volume or network behind.
 
 ```sh
 DEV_ENTRYPOINT='<absolute development entrypoint from the project guide>'
 DEMO_ENTRYPOINT='<absolute demonstration entrypoint from the project guide>'
-hermes -p "$PROFILE" config set command_allowlist "[\"$DEV_ENTRYPOINT check\",\"$DEV_ENTRYPOINT test\",\"$DEV_ENTRYPOINT test-selected *\",\"$DEV_ENTRYPOINT test-all\",\"$DEMO_ENTRYPOINT build *\",\"$DEMO_ENTRYPOINT start *\",\"$DEMO_ENTRYPOINT status\",\"$DEMO_ENTRYPOINT stop\",\"$DEMO_ENTRYPOINT retire\",\"$DEMO_ENTRYPOINT retire *\",\"$DEMO_ENTRYPOINT user\",\"docker ps\",\"docker ps -a\",\"docker logs *\",\"docker inspect *\"]"
+hermes -p "$PROFILE" config set command_allowlist "[\"$DEV_ENTRYPOINT check\",\"$DEV_ENTRYPOINT test\",\"$DEV_ENTRYPOINT test-selected *\",\"$DEV_ENTRYPOINT test-all\",\"$DEMO_ENTRYPOINT build *\",\"$DEMO_ENTRYPOINT start *\",\"$DEMO_ENTRYPOINT status\",\"$DEMO_ENTRYPOINT stop\",\"$DEMO_ENTRYPOINT retire\",\"$DEMO_ENTRYPOINT retire *\",\"$DEMO_ENTRYPOINT user\",\"docker ps\",\"docker ps -a\",\"docker logs *\",\"docker inspect *\",\"docker volume ls\",\"docker network ls\"]"
 hermes -p "$PROFILE" config get command_allowlist
 ```
 
