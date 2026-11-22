@@ -148,7 +148,8 @@ class ReasoningContractTests(unittest.TestCase):
             "Keep the configured model and provider.",
             "`background=true`, `pty=true`",
             "Read the first stdout line `{\"type\":\"thread.started\",\"thread_id\":\"<uuid>\"}`; record `thread_id` on the card.",
-            "Wait for the process with the profile's terminal cap and let the exit signal end the wait.",
+            "Wait for the process with the profile's 14400-second terminal cap and let the exit signal end the wait.",
+            "The cap bounds the wait; it is not the worker-run limit.",
             "When a wait returns without new output, do not wait again: record the last output and block the card as a capability finding.",
         ]:
             self.assertTrue(text in result, text)
@@ -587,6 +588,19 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn("only Codex CLI writes productive project code", coder)
         planner = render_role(self.template("planner"), self.values("planner"), "planner")
         self.assertIn("When a ticket's environment is itself under construction, cut a separate card for it; a product card never carries an open environment defect.", planner)
+
+    def test_worker_wait_cap_and_card_hang_cap_are_recipe_level(self):
+        setup = (ROOT / "references/setup.md").read_text()
+        self.assertIn("For the Coder and Reviewer profiles only, set the per-wait cap.", setup)
+        self.assertIn('hermes -p "$PROFILE" config set terminal.timeout 14400', setup)
+        self.assertIn('hermes -p "$PROFILE" config get terminal.timeout', setup)
+        update = (ROOT / "references/update.md").read_text()
+        self.assertIn("Reconcile `terminal.timeout` to `14400` on the Coder and Reviewer profiles and read it back", update)
+        release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
+        self.assertIn("Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget.", release)
+        planner = render_role(self.template("planner"), self.values("planner"), "planner")
+        self.assertIn("Give every Coder card `--max-runtime 8h`.", planner)
+        self.assertIn("This caps a runaway worker run for dispatcher recovery; it is not a work budget.", planner)
 
     def test_reviewer_returns_questions_to_coder_without_inventing_defects(self):
         text = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")

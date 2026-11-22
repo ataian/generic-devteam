@@ -219,6 +219,7 @@ class BrownfieldPackageTests(unittest.TestCase):
             "Check each story, criterion, technical constraint, and exception against phase scope, gate, commit boundary, "
             "and reviewer binding.",
             "--initial-status blocked", "idempotency key", "explicit completion contract",
+            "Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget.",
             "Read back each returned exact card before further writes.",
             "Leave later advancement to the dispatcher and independent review gates.",
         ):

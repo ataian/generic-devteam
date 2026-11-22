@@ -98,6 +98,13 @@ hermes -p "$PROFILE" config get kanban.auto_subscribe_on_create
 hermes -p "$PROFILE" config get security.protected_instruction_files
 ```
 
+For the Coder and Reviewer profiles only, set the per-wait cap. A wait call may occupy that cap and ends with the process; it does not extend the worker-run limit. A worker may raise this cap to the card runtime, so the Coder passes `timeout=14400` explicitly to each wait.
+
+```sh
+hermes -p "$PROFILE" config set terminal.timeout 14400
+hermes -p "$PROFILE" config get terminal.timeout
+```
+
 Disable the automatic skill-review trigger only in the Planner profile:
 
 ```sh
