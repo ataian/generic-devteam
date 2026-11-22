@@ -147,11 +147,26 @@ class ReasoningContractTests(unittest.TestCase):
             "Read `model` from `/work/codex_home/config.toml`.",
             "Keep the configured model and provider.",
             "`background=true`, `pty=true`",
-            "Observe the native process completion signal.",
+            "Read the first stdout line `{\"type\":\"thread.started\",\"thread_id\":\"<uuid>\"}`; record `thread_id` on the card.",
+            "Wait for the process with the profile's terminal cap and let the exit signal end the wait.",
+            "When a wait returns without new output, do not wait again: record the last output and block the card as a capability finding.",
         ]:
             self.assertTrue(text in result, text)
         self.assertNotIn("if the worker guard prohibits them", result)
         self.assertNotIn("{{", result)
+
+    def test_codex_session_lifecycle_resumes_the_same_task(self):
+        result = render_role(self.template("coder"), self.values("coder"), "coder")
+        for clause in (
+            "One primary Codex session per implementation task.",
+            "Record its session id on the card.",
+            "Resume that session for corrections, test failures and Reviewer returns.",
+            "Create a new session only when continuation is impossible or the card records the reason.",
+            "Never run concurrent turns in one session.",
+            "Evaluate results at task-level boundaries, not after individual patches.",
+        ):
+            self.assertIn(clause, result)
+        self.assertNotIn("Retain Kanban workflow, authority, escalation, Git verification, review handoff", result)
 
     def test_codex_path_fields_are_required_and_absolute(self):
         fields = {"CODEX_BINARY", "CODEX_PROCESS_HOME", "CODEX_HOME"}
@@ -177,6 +192,7 @@ class ReasoningContractTests(unittest.TestCase):
             binary.chmod(0o700)
             prompt = root / "prompt with 'quote'.txt"
             prompt.write_text("Fixture prompt; literal $diagnosing-bugs\n")
+            result_file = root / "result.txt"
             values = self.values("coder")
             values.update(CODEX_BINARY=str(binary), CODEX_PROCESS_HOME=str(root / "process '$(false)'"),
                           CODEX_HOME=str(root / "config '$(false)'"))
@@ -186,13 +202,44 @@ class ReasoningContractTests(unittest.TestCase):
             self.assertIsNotNone(match)
             assert match is not None
             command = textwrap.dedent(match[1]).replace("MODEL_ID", "fixture-model").replace("REASONING", "high")
+            command = command.replace("RESULT_FILE", shlex.quote(str(result_file)))
             command = command.replace("PROMPT_FILE", shlex.quote(str(prompt)))
             result = subprocess.run(["sh", "-c", command], cwd=root, text=True, capture_output=True, check=True)
             data = json.loads(result.stdout)
             self.assertEqual(data, {"argv": ["exec", "--model", "fixture-model", "--sandbox", "danger-full-access",
-                                            "-c", 'model_reasoning_effort="high"', "-"],
+                                            "-c", 'model_reasoning_effort="high"', "--json", "-o", str(result_file), "-"],
                                     "stdin": prompt.read_text(), "home": values["CODEX_PROCESS_HOME"],
                                     "codex_home": values["CODEX_HOME"], "ponytail": "full", "cwd": str(root)})
+
+    def test_rendered_codex_resume_uses_recorded_session_and_followup_prompt(self):
+        """Execute the rendered resume recipe with a local argv recorder, not Codex."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binary = root / "codex"
+            binary.write_text("#!" + sys.executable + "\nimport json, sys\n"
+                              "print(json.dumps({'argv': sys.argv[1:], 'stdin': sys.stdin.read()}))\n")
+            binary.chmod(0o700)
+            prompt = root / "followup.md"
+            prompt.write_text("Fixture follow-up; same file, same failure.\n")
+            result_file = root / "result.txt"
+            values = self.values("coder")
+            values.update(CODEX_BINARY=str(binary), CODEX_PROCESS_HOME=str(root / "process"),
+                          CODEX_HOME=str(root / "config"))
+            rendered = render_role(self.template("coder"), values, "coder")
+            commands = re.findall(r"   ```sh\n(.*?)   ```", rendered, re.S)
+            self.assertEqual(len(commands), 2)
+            session = "01a201d6-1c4b-71a0-8b18-1e2930ab4ab4"
+            command = textwrap.dedent(commands[1]).replace("MODEL_ID", "fixture-model").replace("REASONING", "high")
+            command = command.replace("RESULT_FILE", shlex.quote(str(result_file)))
+            command = command.replace("FOLLOWUP_PROMPT_FILE", shlex.quote(str(prompt)))
+            command = command.replace("SESSION_ID", session)
+            result = subprocess.run(["sh", "-c", command], cwd=root, text=True, capture_output=True, check=True)
+            data = json.loads(result.stdout)
+            self.assertEqual(data["argv"], ["exec", "resume", "--model", "fixture-model",
+                                            "-c", 'sandbox_mode="danger-full-access"',
+                                            "-c", 'model_reasoning_effort="high"', "--json", "-o",
+                                            str(result_file), session, "-"])
+            self.assertEqual(data["stdin"], prompt.read_text())
 
     def test_coder_retains_worker_guard_and_removes_only_duplicate_model_sentence(self):
         text = self.template("coder")

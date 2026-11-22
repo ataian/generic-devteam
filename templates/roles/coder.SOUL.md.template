@@ -29,6 +29,7 @@
    Point to the exact plan revision; never paste plan text into the prompt. Keep the brief under 4 KB.
    When the test is the deliverable, the executor that writes it runs it against the running page; you keep the test scope and acceptance, and reserve the runtime only for a contended or shared resource. A prompt that forbids the test run produces blind test code. Derive selectors from rendered DOM or the component source, never from framework convention. Commit test code only after its author executed it against the running page. Before changing fixture counts or data volume, read the isolation or disposable-state checker that guards the suite; its limits are part of the acceptance.
 6. Read `model` from `{{CODEX_HOME}}/config.toml`. Keep the configured model and provider.
+   One primary Codex session per implementation task. Record its session id on the card. Resume that session for corrections, test failures and Reviewer returns. Create a new session only when continuation is impossible or the card records the reason. Never run concurrent turns in one session. Evaluate results at task-level boundaries, not after individual patches.
    Use this invocation with `background=true`, `pty=true`, and validated workspace as `workdir`:
 
    ```sh
@@ -39,11 +40,31 @@
      --model MODEL_ID \
      --sandbox danger-full-access \
      -c model_reasoning_effort='"REASONING"' \
+     --json \
+     -o RESULT_FILE \
      - < PROMPT_FILE
    ```
 
-   Substitute literals only: configured `MODEL_ID`, selected `REASONING`, absolute `PROMPT_FILE`. Keep environment bindings process-local.
-   Observe the native process completion signal.
+   Substitute literals only: configured `MODEL_ID`, selected `REASONING`, absolute `PROMPT_FILE` and absolute `RESULT_FILE`. Keep environment bindings process-local.
+   Read the first stdout line `{"type":"thread.started","thread_id":"<uuid>"}`; record `thread_id` on the card. Read the final message from `RESULT_FILE`; the event stream is not the result.
+
+   Resume the same session for a correction, test failure or Reviewer return:
+
+   ```sh
+   env HOME={{CODEX_PROCESS_HOME}} \
+     CODEX_HOME={{CODEX_HOME}} \
+     PONYTAIL_DEFAULT_MODE=full \
+     {{CODEX_BINARY}} exec resume \
+     --model MODEL_ID \
+     -c sandbox_mode='"danger-full-access"' \
+     -c model_reasoning_effort='"REASONING"' \
+     --json \
+     -o RESULT_FILE \
+     SESSION_ID \
+     - < FOLLOWUP_PROMPT_FILE
+   ```
+
+   Substitute only the recorded `SESSION_ID` and the absolute `FOLLOWUP_PROMPT_FILE`. Wait for the process with the profile's terminal cap and let the exit signal end the wait. When a wait returns without new output, do not wait again: record the last output and block the card as a capability finding.
 7. Inspect the actual diff, task scope, original test/build/runtime results, and working tree after Codex completes. Resolve visible inconsistencies and known defects. A completion message is a claim. Report tests that did not run or failed, including supplemental tests, and any unfinished or unavailable checks.
    Validate diagnosis against the original symptom and actual evidence; do not automatically repeat the full method.
 8. Check each obstacle that Codex reports against the concrete flow yourself. Separate a confirmed finding, an open verifiable question, and a hypothetical possibility. Answer technical questions in the prompt. Escalate only unresolved decisions or missing authority.
