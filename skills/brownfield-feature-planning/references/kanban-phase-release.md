@@ -47,7 +47,6 @@ Existing card: development decisions, consequential failures and remedies, block
 1. Wait until all cards exist before linking missing approved dependencies. Read each exact card. Use [bounded extraction](kanban-status-inspection.md#read-and-reduce-before-output-truncation) only when native reads lack required evidence.
 2. Before first release, require every card blocked. On partial release, preserve completed transitions and verify current runs and dependency gates on released cards.
 3. Check assignee, workspace, skill, runtime/retry fields, and completion contract. Check each story, criterion, technical constraint, and exception against phase scope, gate, commit boundary, and reviewer binding.
-   Set the independent Reviewer profile explicitly on every implementation card and read it back. A card bound to the Planner or the Coder is not independently reviewed.
 4. Resolve each plan reference to its approved revision. Verify every notification binding against the intended destination. Verify the first ticket has no parent and the final ticket has no child in the approved chain. Preserve valid links to follow-up tickets outside the chain. Verify each intermediate ticket's intended predecessor and successor.
 5. If parsing fails after a successful write, re-read the recorded exact ID. Do not repeat the write. Stop release on unresolved mismatches. Preserve partial progress.
 

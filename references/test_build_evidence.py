@@ -119,13 +119,14 @@ class BuildEvidenceTests(unittest.TestCase):
     def test_release_and_recovery_guidance_is_maker_owned(self):
         release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
         recovery = (ROOT / "skills/brownfield-feature-planning/references/kanban-triage-recovery.md").read_text()
+        inspection = (ROOT / "skills/brownfield-feature-planning/references/kanban-status-inspection.md").read_text()
         for clause in (
-            "Set the independent Reviewer profile explicitly on every implementation card and read it back.",
             "Subscribe on the project board:",
             "kanban --board <board> notify-subscribe <task>",
         ):
             with self.subTest(clause=clause):
                 self.assertIn(clause, release)
+        self.assertIn("On handoff, verify reviewer assignment and implementer `review_requested` provenance.", inspection)
         self.assertIn("Before reopening, verify prior handoff and required continuation.", recovery)
         self.assertIn("hermes kanban --board <board> reopen-review <task>", recovery)
         self.assertIn("Do not hardcode a coder.", recovery)

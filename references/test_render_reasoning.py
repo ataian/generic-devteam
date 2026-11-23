@@ -808,7 +808,7 @@ class ReasoningContractTests(unittest.TestCase):
             "Keep excerpts aligned with the authoritative accepted plan; do not repeat the whole plan.",
             "Distinguish binding requirements and architectural constraints from implementation suggestions.",
             "Leave execution-time technical decisions within the accepted goal and constraints to Example.",
-            "Set assignee, reviewer, workspace, dependencies, and required runtime fields natively",
+            "Set assignee, workspace, dependencies, and required runtime fields through the Kanban tools",
             "actor-behaviour-benefit",
             "Clarity takes precedence over word or line limits.",
             "Do not create implementation tickets before acceptance.",
