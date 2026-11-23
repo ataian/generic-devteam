@@ -6,7 +6,7 @@
 **Primary change:** Hermes Coder role, installed skill inventory, role delivery/update contracts  
 **Preserve:** Planner and Reviewer behavior, Kanban workflow and authority, Team-Codex engineering quality, existing approval and security boundaries
 
-**Revision 2 (2026-11-23), decided by Max, reviewed four times by Fujiko:** the hard variant. It supersedes the `<= 5 KB` aim in §4/W1, the demo treatment in §3.2 and §3.4, and the skill scope in §4/W2. Section 9 carries the decided texts, the measured result and the deviation; read it before the sections it supersedes.
+**Revision 2 (2026-11-23), decided by Max, reviewed five times by Fujiko:** the hard variant. It supersedes the `<= 5 KB` aim in §4/W1, the demo treatment in §3.2 and §3.4, and the skill scope in §4/W2. Section 9 carries the decided texts, the measured result and the deviation; read it before the sections it supersedes.
 
 ## 1. Mission — implement, not investigate
 
@@ -70,7 +70,7 @@ Current assignments come from `manifest.json` version 2.14.4. The table specifie
 | `hindsight` | Planner + Hermes Coder + Reviewer | **Keep the current shared-bank capability**. Remove mandatory per-task recall from the Coder SOUL; decision-specific recall remains possible. |
 | Native Kanban capabilities | Core Hermes | **Keep** existing dispatcher, subscription, cards, status flow and tools. Do not create a second workflow skill. |
 | Native `sdlc-review` | Reviewer | **Untouched**. |
-| Planner-only Maker skills (`brownfield-feature-planning`, `dev-environment`, `devteam-cleanup`, `minimal-change-engineering`, `prototype`, `retro`, etc.) | Planner | **Untouched**. |
+| Planner-only Maker skills (`brownfield-feature-planning`, `dev-environment`, `devteam-cleanup`, `minimal-change-engineering`, `prototype`, `retro`, etc.) | Planner | **Untouched**, with one exception in §10: `brownfield-feature-planning/references/kanban-phase-release.md:32` and `:49` drop the per-card skill requirement. |
 
 The manifest may have additional indirect role-specific targets, autoload entries, or installation bindings. Reconcile **all** Coder-specific target references against the table in a bounded, mechanical search. No discovery of new approaches or new replacement skills.
 
@@ -132,7 +132,7 @@ Any configuration that already enforces the correct semantics is **not to be re-
 
 Edit `templates/roles/coder.SOUL.md.template` to a compact role contract with only: identity/authority, delegation/session continuity, blockers/decision boundaries, Kanban handoffs, operational safety and concise reporting. Remove the 2.14.4 technical investigation, independent review, test strategy, harness/consumer discovery and repetitive CLI manual sections.
 
-**Target:** the §9.2 text after four Fujiko review rounds — 8,247 bytes and 69 lines rendered, down from 19,463 bytes / 140 lines. The `<= 5 KB` aim is not met; §9.4 records the deviation and why the smaller drafts were under-specified. Token reduction is a constraint, not an excuse to remove an authorization guard. Keep only placeholders actually used, reconcile `manifest.role_templates.coder.render_fields`, rendering tests and setup/update personalization; do not silently change confirmed model/provider or secret handling.
+**Target:** the §9.2 text after five Fujiko review rounds — 8,280 bytes and 69 lines rendered, down from 19,463 bytes / 140 lines. The `<= 5 KB` aim is not met; §9.4 records the deviation and why the smaller drafts were under-specified. Token reduction is a constraint, not an excuse to remove an authorization guard. Keep only placeholders actually used, reconcile `manifest.role_templates.coder.render_fields`, rendering tests and setup/update personalization; do not silently change confirmed model/provider or secret handling.
 
 ### W2 — Re-target installed skills and integrations
 
@@ -194,7 +194,8 @@ Add/adjust narrowly focused fixtures for §5. Do not run an unrelated live devte
 | Demo handover | Existing reviewed-commit and cleanup authorization rules still apply; no unsafe delete or unreviewed release. |
 | Repeated or resumed task | No automatic SOUL-driven re-reading/replanning; Codex session and board history remain continuous. |
 | Protection of other roles | Planner and Reviewer SOULs, Kanban transitions, shared caches and non-Coder skills remain functionally unchanged. |
-| Coder SOUL size (§9.2) | Rendered SOUL is 69 lines and 8,247 bytes with the repository fixture bindings; no authority boundary, permission rule, guard rule or invocation literal disappears — the four Fujiko review rounds of 2026-11-23 (§9.7–§9.10) are the evidence for this row. |
+| Coder SOUL size (§9.2) | Rendered SOUL is 69 lines and 8,280 bytes with the repository fixture bindings; no authority boundary, permission rule, guard rule or invocation literal disappears — the five Fujiko review rounds of 2026-11-23 (§9.7–§9.11) are the evidence for this row. |
+| Card skill pins (§10) | The phase-release procedure no longer requires a card skill; the rendered Planner SOUL is unchanged; a card created without `skills` dispatches normally. |
 | Demo handover card (§9.3) | `demo-handover` is the only Coder surface carrying the runtime procedure; it is installed in the Coder home and discoverable there. The Coder SOUL keeps only the pointer and the password literal. Planner and Reviewer keep their own condensed clauses unchanged, as §7 requires. |
 
 **Negative assertions:** After a normal Codex completion, the Hermes Coder **must not** run source/diff inspection, independently run unit/integration/E2E tests, rebuild a verification matrix, call Coder-only code-analysis tools, or perform a second technical acceptance judgment. If it does, 3.0.0 is not complete.
@@ -214,7 +215,7 @@ The `wait` polling overhead has **already been resolved as Hermes runtime config
 ## 7. Explicit non-goals
 
 - No general Devteam redesign, merging Coder into Planner, new agent hierarchy or new Kanban state machine.
-- No modifications to Planner or Reviewer work methods or independent review thresholds.
+- No modifications to Planner or Reviewer work methods or independent review thresholds. One bounded exception, delivered as its own changeset (§10): the card-creation procedure in the Brownfield phase-release reference drops the per-card skill requirement.
 - No weakening of security, permissions, approved scope, Git protection, required checks or demo cleanup safety.
 - No removal of Codex engineering capabilities, existing subagents, build-evidence, diagnosis or chosen code-analysis capability from Team-Codex.
 - No new Coder-side review gate, code-quality gate, test-matrix gate, continuous polling loop or automatic investigative task.
@@ -229,7 +230,8 @@ Maker `3.0.0` is finished when:
 3. Fresh setup and supported update/retirement paths have verified, role-specific results for the **intended Coder skill inventory**.
 4. A Coder can drive a normal ticket and its Reviewer return **without independently examining or verifying product code**.
 5. The original authorization, escalation, session-resume, Kanban and independent Reviewer contracts remain effective.
-6. The change report lists: removed Coder obligations, retained process/authority obligations, shifted skills (with exact target roles), migrated assets, remaining authorized retirement blockers, tests and commit SHA.
+6. The §10 card-pin changeset is committed separately: the phase-release procedure carries `Set no `skills`:`, its test is re-pointed, and the rendered Planner SOUL is unchanged.
+7. The change report lists: removed Coder obligations, retained process/authority obligations, shifted skills (with exact target roles), migrated assets, authorized retirement blockers, tests and commit SHA.
 
 **Final implementation instruction:** *Delete redundant Coder engineering obligations rather than translating them into shorter engineering obligations. Keep process ownership, decision authority and the minimal Codex bridge. Codex engineers; Reviewer reviews; Hermes Coder makes the work proceed.*
 
@@ -266,7 +268,7 @@ Two rules move to the implementer instead of staying with the Coder, and they la
 
 ### 9.2 The Coder SOUL text
 
-Write exactly this to `templates/roles/coder.SOUL.md.template`. Measured: 8,436 bytes unrendered; 8,247 bytes and 69 lines rendered with the fixture bindings of `references/test_render_reasoning.py`; baseline `2.14.4`: 19,652 bytes unrendered, 19,463 bytes and 140 lines rendered. All figures were measured with the same counting method.
+Write exactly this to `templates/roles/coder.SOUL.md.template`. Measured: 8,469 bytes unrendered; 8,280 bytes and 69 lines rendered with the fixture bindings of `references/test_render_reasoning.py`; baseline `2.14.4`: 19,652 bytes unrendered, 19,463 bytes and 140 lines rendered. All figures were measured with the same counting method.
 
 Render fields that occur: `CODEX_BINARY`, `CODEX_HOME`, `CODEX_PROCESS_HOME`, `CODEX_REASONING_DEFAULT`, `CODEX_REASONING_MAX`, `DEMO_PASSWORD`, `HINDSIGHT_BANK_NAME`, `KANBAN_BOARD_NAME`, `PLANER_NAME`, `PLANNER_PROFILE`, `PROJECT_NAME`, `REVIEWER_NAME`, `REVIEWER_PROFILE`, `ROLE_NAME` — the same set as `manifest.role_templates.coder.render_fields` today, so the manifest keeps its field list unchanged.
 
@@ -333,7 +335,7 @@ Two properties are load-bearing and must not be reformatted:
 ## Review handoff
 
 - `kanban_request_review(summary=..., reviewer="{{REVIEWER_PROFILE}}")`; never `kanban_complete` on your own implementation. Check `ok: true` and `status: "review"`, correct or escalate a failed handoff, and make no project changes until the native return.
-- Summary: `Commit:` exact candidate commit or baseline, `Result:` Codex-reported outcome, `Checks:` performed, reused, failed or unrun, `Risks / gaps:` unresolved issues, `Session:` only when not already on the card. Name actor and revision: Codex-reported is neither Coder-run nor Reviewer-accepted.
+- Summary: `Commit:` exact candidate commit or baseline, `Result:` Codex-reported outcome, `Checks:` performed, reused, failed or unrun, `Risks / gaps:` unresolved issues, `Session:` only when not already on the card. State which actor ran each check and the exact commit it ran against; never report a Codex result as your own check.
 
 ## Evidence, Git, memory
 
@@ -388,12 +390,12 @@ Section sizes include their heading, measured on the same text:
 | Delegate (was `Task execution`) | 8,382 B | 871 B |
 | Session (was `Codex controls and risk`) | 3,635 B | 2,104 B |
 | Blockers (was `Exception routing`) | 2,378 B | 2,609 B |
-| Review handoff | — (inside step 11) | 579 B |
+| Review handoff | — (inside step 11) | 612 B |
 | Evidence, Git, memory | 2,288 B | 1,131 B |
 | Communication | 1,489 B | — |
 | Project binding | 148 B | 148 B |
 
-**Deviation.** Max approved 3.5–4 KB; the text lands at 8.2 KB rendered, 57.6 % below the baseline and 1.0 KB larger than the draft that the first two rounds rejected. The growth is not padding: every addition closes a finding that proved a rule had been cut. What remains is authority, permission, guard, Kanban transition, exact invocation literal, or a rule three review rounds proved load-bearing.
+**Deviation.** Max approved 3.5–4 KB; the text lands at 8.3 KB rendered, 57.6 % below the baseline and 1.0 KB larger than the draft that the first two rounds rejected. The growth is not padding: every addition closes a finding that proved a rule had been cut. What remains is authority, permission, guard, Kanban transition, exact invocation literal, or a rule five review rounds proved load-bearing.
 
 Moving the `Session` block into a skill does not work: its bindings are render fields, and `references/setup.md` copies own skills with unchanged bytes, so the process home, the sandbox flag and the allowlisted binary would be dropped, not relocated. A skill could only carry prose. The deviation therefore stands on fidelity, not on a missed load.
 
@@ -524,3 +526,76 @@ Plan sha256 `3559cca4…75fd`. Verdict: **APPROVED WITH FINDINGS** — "the role
 | `:82`–`:105` prescribed an edit that is no longer needed | MINOR | Row corrected to "unchanged" |
 | five documentation sites state a removed Coder duty | MINOR | New row naming `update.md:86`, `native-workflow.md:40`, `upstream-sources.md:14`, `development-verification.md:22`, `README.md:131` |
 | W6's rationale named a password rule the text does not contain | MINOR | Rewritten: no render field is needed because the sentence stays in the SOUL |
+
+---
+
+## 10. Card skill pins — separate changeset (decided 2026-11-23)
+
+### 10.1 Trigger, cause, evidence
+
+Card `t_c6a2fd76` (sg1, `carter`) died twice before its first turn and blocked. The card carried `skills: ["superpowers:verification-before-completion"]`.
+
+Cause, corrected against the first reading of this section: the Maker **does** prescribe a per-card skill. `skills/brownfield-feature-planning/references/kanban-phase-release.md:32` puts `required skill` into the create set, `:49` verifies it, `templates/roles/planner.SOUL.md.template:78` sends the Planner into that procedure, and `--skill` is the field for it (`hermes_cli/kanban_parser.py:189`). The Planner followed its procedure.
+
+What the procedure lacks is the constraint the runtime enforces asymmetrically: it never says the skill must be one the assignee can load, and `gateway/session_kanban.py:386-388` raises only when *no* pinned skill resolves. Measured at the two sibling cards the Planner created in one turn (2026-11-22 16:35:36):
+
+| Card | `skills` | Outcome |
+|---|---|---|
+| `t_0c69298a` | `["codex", "superpowers:executing-plans"]` | `codex` resolved, the unavailable skill was dropped silently, the card ran to `done` |
+| `t_c6a2fd76` | `["superpowers:verification-before-completion"]` | nothing resolved, `kanban_skills_unavailable`, runs 36 and 37 crashed, `gave_up` at 2/2 |
+
+`superpowers` reaches the Planner only (`references/integrations.md:139`); `carter` has no such plugin. The asymmetry makes the defect invisible on one card and fatal on the next.
+
+### 10.2 The change — the owning clause, once
+
+`skills/brownfield-feature-planning/references/kanban-phase-release.md:32`, line as it stands:
+
+```markdown
+3. Set native assignee and workspace, `--initial-status blocked`, idempotency key, required skill, explicit completion contract, explicit customer limits, and required runtime/retry fields. Do not invent discretionary attempt budgets. Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget. Check `--max-retries` semantics before setting a consecutive-failure limit. The breaker threshold counts failures, not extra attempts.
+```
+
+becomes:
+
+```markdown
+3. Set native assignee and workspace, `--initial-status blocked`, idempotency key, explicit completion contract, explicit customer limits, and required runtime/retry fields. Set no `skills`: role skills come from setup. Do not invent discretionary attempt budgets. Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget. Check `--max-retries` semantics before setting a consecutive-failure limit. The breaker threshold counts failures, not extra attempts.
+```
+
+and line `:49`, `3. Check assignee, workspace, skill, runtime/retry fields, and completion contract.` becomes `3. Check assignee, workspace, runtime/retry fields, and completion contract.`
+
+`templates/roles/planner.SOUL.md.template:78` stays unchanged. The rule belongs where the card is built; a second copy in the SOUL would drift from it, and the SOUL already points into this procedure.
+
+A card that genuinely needs a discipline states it in the body and its criteria — the same file already requires the body to carry criteria and binding limits (`:28`–`:31`).
+
+### 10.3 Consequences
+
+| Site | Disposition |
+|---|---|
+| `references/test_brownfield_planning.py:308` | Re-point: the assertion pins the old sentence including `required skill`; it must carry the new sentence with `Set no `skills`:` in its place. Measured on a copy: unchanged, the suite turns red |
+| `references/test_render_reasoning.py:811` | Unchanged. The Planner sentence it pins is not edited |
+| `references/setup.md`, `references/update.md` | Unchanged: role skills are delivered and read back by setup |
+| Existing cards | None carries a pin. Measured 2026-11-23 over 19 board databases, 148 cards: every card with a non-empty `skills` value is `done`; no open card has one |
+| Team rollout | Reaches a team with its next Maker update; `update_team.py` reports local drift and overwrites nothing. Existing teams keep working, the rule only prevents new pins |
+| Runtime check at `kanban_create` | **Non-goal.** A create-time validation is Hermes core, not the Maker. This changeset removes the instruction, not the mechanism |
+| Byte budget | `kanban-phase-release.md` stays far below its 26,000-byte cap (currently 10,721) |
+
+### 10.4 Verification
+
+Positive: the release reference contains `Set no `skills`:` exactly once and no longer contains `required skill` or `workspace, skill,`; `test_brownfield_planning.py` passes with the re-pointed assertion; a `kanban_create` without `skills` dispatches a worker normally (observed on `t_c6a2fd76`, run 36 sequence re-run after the pin was removed).
+
+Negative: `plan-versioning-semver` unchanged; `templates/roles/planner.SOUL.md.template` unchanged; `manifest.json` and `SKILL.md` bump to `3.0.0` with W1–W6, and this changeset is committed separately so the card-pin rule can be reverted without reverting the Coder role change.
+
+Acceptance: the §5 row "Card skill pins (§10)" and §8 item 6 carry it.
+
+### 9.11 Fujiko review, round 5 — findings and disposition
+
+Plan sha256 `dce9c113…c03c04`, HEAD `a4af6bd`. Verdict: CHANGES REQUIRED; CAC audited line by line. §9.2 and §9.3 passed every CAC test except one wording ambiguity; §10 failed on a false premise. Report: `REVIEW_3.0.0_Coder-Cutter_v5.md`.
+
+| Finding | Severity | Disposition |
+|---|---|---|
+| §10 did not reach the Maker instruction that prescribes the pin; its causal claim was false | MAJOR | §10 rebuilt: the owning clause is `kanban-phase-release.md:32`/`:49`; the Planner SOUL stays unchanged; §10.1 states the procedure and the missing constraint |
+| §10.2's fenced line was not the byte-exact target and would turn `test_render_reasoning.py:816` red | MAJOR | The SOUL line is no longer edited; the change sits in the release reference, with `:308` re-pointed |
+| §10.3's card measurement pointed at a §9.5 row that does not exist | MINOR | Replaced by the measurement itself: 19 board databases, 148 cards, no open card with a pin |
+| §10.4 named `plan-versioning` instead of `plan-versioning-semver` | MINOR | Corrected |
+| §10.4 stated the rollback purpose inverted | MINOR | Rewritten: the pin rule is revertable without the Coder role change |
+| No acceptance row and no definition-of-done item | MINOR | §5 row and §8 item added |
+| §9.2 `:336` "on which revision" was ambiguous between plan revision and commit | MINOR | Now "State which actor ran each check and the exact commit it ran against" |
