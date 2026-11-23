@@ -98,7 +98,7 @@ class BuildEvidenceTests(unittest.TestCase):
         self.assertIn("[setup grant recipe](setup.md#project-command-grants)", legacy)
         self.assertIn("`docker compose *`", legacy)
         self.assertIn("### Project command grants", setup)
-        self.assertIn("Reconcile `terminal.timeout` to `14400` and `timeouts.tools.sequential_call`/`concurrent_batch` to `15000` on the Coder and Reviewer profiles and read all three back", update)
+        self.assertIn("Reconcile the wait configuration", update)
         for text in (setup, update):
             self.assertIn("A role does not extend its own list", text)
             self.assertNotIn('"docker *"', text)

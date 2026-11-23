@@ -644,7 +644,12 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn("the tool deadline MUST exceed the wait window", setup)
         self.assertNotIn("15000", render_role(self.template("coder"), self.values("coder"), "coder"))
         update = (ROOT / "references/update.md").read_text()
-        self.assertIn("Reconcile `terminal.timeout` to `14400` and `timeouts.tools.sequential_call`/`concurrent_batch` to `15000` on the Coder and Reviewer profiles and read all three back", update)
+        apply_section = update.split("## Activity and application", 1)[1]
+        self.assertIn("Reconcile the wait configuration", apply_section)
+        self.assertLess(apply_section.index("Apply the reviewed proposal"),
+                        apply_section.index("Reconcile the wait configuration"))
+        inspect_section = update.split("## Prepare and review one team", 1)[1].split("## Planner Kanban tools", 1)[0]
+        self.assertNotIn("Reconcile `terminal.timeout`", inspect_section)
         release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
         self.assertIn("Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget.", release)
         planner = render_role(self.template("planner"), self.values("planner"), "planner")

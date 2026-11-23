@@ -85,7 +85,7 @@
    - For Planner-only `prototype`, use [its delivery recipe](integrations.md#prototype) for collisions, complete-tree loading, dependent SOUL clauses, and local-rule reconciliation.
    - For `diagnosing-bugs`, inspect collisions through [the owned-skill recipe](integrations.md#diagnosing-bugs) before the normal proposal. Include its complete tree and dependent Coder call clause in the same approval. Resolve missing bindings or local conflicts before application. The legacy SOUL-only path still withholds unknown-baseline skills. Reconcile required diagnosis delivery in scope before applying dependent policy. Withhold dependent outputs until delivery and native loading are verified, even if metadata advanced. Read back its complete saved tree, unambiguous Codex discovery, and the Coder's explicit call policy separately. Saved files and discovery do not establish actual diagnosis behavior.
    - On every update, including a file no-op, compare each role's native `command_allowlist` with its verified list in the private setup JSON (`confirmed_bindings.command_allowlists`). For an absent or obsolete baseline, derive the expected entries as below; never adopt the live list as its own baseline. Report the exact additions, removals and unrelated local grants before approval. Change only approved entries. Save a new baseline only after native readback matches the approved result; otherwise leave reconciliation pending. A role does not extend its own list.
-   - Reconcile `terminal.timeout` to `14400` and `timeouts.tools.sequential_call`/`concurrent_batch` to `15000` on the Coder and Reviewer profiles and read all three back.
+   - Note the wait-configuration values for the Coder and Reviewer profiles for the approval scope; set them only in [Activity and application](#activity-and-application).
 2. **Resolve missing legacy bindings before planning.** The Maker/operator uses confirmed evidence, without repeating setup. Withhold the affected proposal if required evidence remains missing.
 
    | Trigger | Confirmed values and guards |
@@ -279,6 +279,7 @@
 
 2. **Check the file transaction.** The helper rebuilds the proposal from its exact Git revision and rechecks target hashes/modes, installation metadata, and visible activity. It backs up every target and the old installation record before the first target write. It verifies exact target bytes and modes before advancing metadata. Replacement is atomic per file only. External writers can race between checks and replacement. Private team state is trusted operator input and cannot isolate hostile same-UID processes.
 3. **Continue by result.** Inspect the run under [Failure and rollback](#failure-and-rollback). After success, finish CAC steps 4–5 when applicable, required skill retirement, and workflow readbacks before claiming completion. Report each team's actual result.
+4. **Reconcile the wait configuration.** Report the intended `terminal.timeout` and `timeouts.tools` values from [Setup](setup.md#3-fresh-profiles-confirmed-models) for the Coder and Reviewer profiles, obtain authorization, set them natively, read all three keys back, and record the readback in the existing private setup record. The file helper changes no configuration.
 
 ## Required skill retirement
 
