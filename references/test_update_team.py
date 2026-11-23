@@ -421,6 +421,8 @@ class UpdaterTests(unittest.TestCase):
         self.assertNotIn('a demonstration runtime is not permanent', coder.read_text())
         handover = Path(self.roles['coder']['home']) / 'skills' / 'demo-handover' / 'SKILL.md'
         self.assertTrue(handover.is_file(), handover)
+        self.assertEqual(handover.read_bytes(),
+                         (Path(__file__).resolve().parents[1] / 'skills/demo-handover/SKILL.md').read_bytes())
         self.assertIn('`demo.sh retire`', handover.read_text())
         self.assertIn('`demo.sh user`', handover.read_text())
         self.assertNotIn('demo.sh retire', coder.read_text())
@@ -1224,7 +1226,7 @@ class UpdaterTests(unittest.TestCase):
             (3, 4, ('After successful file application', 'concurrent drift', '`skills.auto_load`',
                     'only proven, pristine, authorized team-owned trees', 'foreign, shared, edited',
                     'without deleting, masking, or overwriting')),
-            (4, 5, ('`complete` only', 'fresh native discovery', 'task and resume', 'both harnesses',
+            (4, 5, ('`complete` only', 'fresh native discovery', 'task and resume', 'Ponytail registration in the Team-Codex context',
                     'PONYTAIL_DEFAULT_MODE=full', 'even after installation metadata advances',
                     'Repeat the file proposal and companion checks', 'files updated; team update incomplete')),
         ):

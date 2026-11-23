@@ -230,7 +230,7 @@ class DiagnosisContracts(unittest.TestCase):
         recipe = (ROOT / "references/integrations.md").read_text()
         require(recipe, ("<CODEX_PROCESS_HOME>/.agents/skills/diagnosing-bugs/", "all resolved skill candidates",
                          "complete file sets and bytes", "native discovery", "references/method.md",
-                         "After role delivery", "$diagnosing-bugs", "without a model call or bug experiment"))
+                         "After instruction delivery", "## Skills", "without a model call or bug experiment"))
         update = (ROOT / "references/update.md").read_text()
         require(update, ("New owned skills", "same existing whole-tree mapping", "legacy", "diagnosing-bugs",
                          "Read back its complete saved tree, unambiguous Codex discovery, and the Team-Codex explicit call policy separately.",

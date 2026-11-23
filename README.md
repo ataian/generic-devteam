@@ -114,7 +114,7 @@ The file helper classifies obsolete copies and deletes nothing. Complete the [re
 The Planner receives Matt Pocock's original `grill-me`, `grilling`, `domain-modeling`, and `to-questionnaire` skills at the same pinned revision.
 Its SOUL requires `grilling` for requirements and conditionally loads domain modelling during that interview.
 Glossaries capture vocabulary; requirements and phase gates remain in the accepted plan. Unaccepted ADRs remain proposed.
-Coder and Reviewer consume relevant accepted definitions through existing routing; role authority and native dispatch remain unchanged.
+The Reviewer consumes relevant accepted definitions through existing routing; role authority and native dispatch remain unchanged.
 Interview, design, and explicit plan acceptance remain separate. Acquisition and readbacks use the [integration recipe](references/integrations.md#grill-me).
 Use `to-questionnaire` on request to draft a Markdown questionnaire for one external expert; creation does not authorize sending or accepting new scope.
 The Planner decomposes work by actor, behaviour, benefit, and independently verifiable outcomes, not technical layers.

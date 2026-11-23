@@ -316,7 +316,9 @@ class ReasoningContractTests(unittest.TestCase):
                 self.assertIn(literal, rendered)
         self.assertEqual(rendered.count("`Synthetic-Demo-Pass`"), 1)
         self.assertEqual(rendered.count("`demo-handover`"), 1)
-        self.assertEqual(len(rendered.splitlines()), 69)
+        fixture = render_role(self.template("coder"), self.values("coder"), "coder")
+        self.assertEqual(len(fixture.encode()), 8280)
+        self.assertEqual(len(fixture.splitlines()), 69)
 
     def test_voltagent_specialists_keep_original_settings_outside_parent_matrix(self):
         """Rendered instruction contract; no live Codex execution."""
@@ -798,6 +800,11 @@ class ReasoningContractTests(unittest.TestCase):
                 rendered = render_role(self.template(role), self.values(role), role)
                 self.assertNotIn("caveman", rendered.lower())
                 self.assertRegex(rendered.lower(), r"compact|labeled")
+        for role in ("planner", "reviewer"):
+            with self.subTest(role=role):
+                rendered = render_role(self.template(role), self.values(role), role)
+                self.assertIn("Preserve requirements, conditions, open findings, and necessary evidence without a fixed character limit.", rendered)
+                self.assertIn("Reference an existing entry only if the recipient can retrieve it unambiguously.", rendered)
         coder = self.template("coder")
         self.assertIn("Compact technical English for the team, exact identifiers and quoted values; distinguish implemented, tested, independently reviewed and approved.", coder)
         for label in ("Goal:", "Scope:", "Constraints:", "Evidence:", "Acceptance:", "Verify:"):
@@ -805,6 +812,8 @@ class ReasoningContractTests(unittest.TestCase):
         contract = (ROOT / "templates/team-codex-AGENTS.md").read_text()
         for label in ("Change:", "Checked:", "Open:"):
             self.assertIn(label, contract)
+        self.assertIn("Record one failing run of a new test before the production change.", contract)
+        self.assertIn("For persisted value-set, enum, schema or outbound-mapping changes, verify stored data and every export path.", contract)
         self.assertNotIn("caveman", contract.lower())
         self.assertIn("sdlc-review", self.template("reviewer"))
 
