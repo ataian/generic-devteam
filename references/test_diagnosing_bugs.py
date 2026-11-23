@@ -195,15 +195,18 @@ class DiagnosisContracts(unittest.TestCase):
         output = render_role(template, values, "coder")
         self.assertEqual(output, re.sub(r"\{\{([A-Z0-9_]+)\}\}", lambda m: values[m[1]], template))
         require(output, (
+            "a new session needs a continuity failure recorded on the card",
+            "Require the compact result: `Change:`, `Checked:` with decisive evidence, `Open:` failures, unrun checks and material limits.",
+            "never `kanban_complete` on your own implementation",
+            "Preserve explicit customer financial and resource caps, configured limits, provider quotas, operational permissions and native failure-loop guards.",
+        ))
+        codex = (ROOT / "templates/team-codex-AGENTS.md").read_text()
+        require(codex, (
             "For bug/diagnosis tasks, require the literal `$diagnosing-bugs` cue in each Codex task and resume, never as a shell variable.",
             "Pass the exact symptom, accepted context, and verification criteria; require the skill for unexplained failures or regressions emerging during implementation too.",
             "Validate diagnosis against the original symptom and actual evidence; do not automatically repeat the full method.",
-            "On restart or resume, include current state, relevant delta, remaining work and standing constraints.",
-            "In every actual task, restart and resume prompt, require a compact result: `Change:` outcome, "
-            "`Checked:` actual result, checked state and decisive evidence, `Open:` failures, unrun checks and material limits.",
-            "Never use `kanban_complete` to close your own implementation.",
-            "Preserve explicit customer financial/resource caps, configured limits, provider quotas, operational permissions, and native failure-loop guards.",
         ))
+        self.assertNotIn("$diagnosing-bugs", output)
         self.assertNotIn("$caveman", output)
         self.assertNotIn("## Phase 1", template)
         for role in ("planner", "reviewer"):
@@ -230,7 +233,7 @@ class DiagnosisContracts(unittest.TestCase):
                          "After role delivery", "$diagnosing-bugs", "without a model call or bug experiment"))
         update = (ROOT / "references/update.md").read_text()
         require(update, ("New owned skills", "same existing whole-tree mapping", "legacy", "diagnosing-bugs",
-                         "Read back its complete saved tree, unambiguous Codex discovery, and the Coder's explicit call policy separately.",
+                         "Read back its complete saved tree, unambiguous Codex discovery, and the Team-Codex explicit call policy separately.",
                          "Saved files and discovery do not establish actual diagnosis behavior."))
 
     def test_export_relative_links_and_contract_mutations(self):

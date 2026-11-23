@@ -13,7 +13,7 @@ MANIFEST = json.loads((ROOT / "manifest.json").read_text())
 class BuildEvidenceTests(unittest.TestCase):
     def test_complete_role_skill_tree_and_targets(self):
         item = MANIFEST["own_skills"]["build-evidence"]
-        self.assertEqual(item["targets"], {"hermes": ["coder", "reviewer"], "codex": ["team-codex"]})
+        self.assertEqual(item["targets"], {"hermes": ["reviewer"], "codex": ["team-codex"]})
         self.assertEqual(item["skill_path"], "skills/build-evidence/SKILL.md")
         self.assertNotIn("build-evidence", MANIFEST["upstream_components"])
         inventory = {path.relative_to(ROOT).as_posix()
@@ -68,8 +68,11 @@ class BuildEvidenceTests(unittest.TestCase):
         planner = (ROOT / "templates/roles/planner.SOUL.md.template").read_text()
         reviewer = (ROOT / "templates/roles/reviewer.SOUL.md.template").read_text()
         self.assertIn("Command grants come from Maker setup or update; never change your own `command_allowlist`", coder)
-        self.assertIn("require the literal `$build-evidence` cue", coder)
-        self.assertIn("the reference owns selector derivation and the isolation-checker limit", coder)
+        codex = (ROOT / "templates/team-codex-AGENTS.md").read_text()
+        self.assertIn("use the literal `$build-evidence` cue for the affected mode", codex)
+        self.assertIn("the reference owns selector derivation and the isolation-checker limit", codex)
+        self.assertNotIn("$build-evidence", coder)
+        self.assertNotIn("the reference owns selector derivation", coder)
         self.assertIn("load `build-evidence` via `skill_view` and its reference for that mode", reviewer)
         self.assertIn("never change this profile's `command_allowlist`", planner)
         self.assertIn("never change this profile's `command_allowlist`", reviewer)

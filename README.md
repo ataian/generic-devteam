@@ -100,10 +100,11 @@ The Reviewer uses a separate fresh-context pass for material security, data-inte
 A technical helper can satisfy that pass only with all required HIGH-reasoning, independence, invariant-coverage and permission conditions, validated against returned evidence; otherwise a targeted pass remains required.
 This requirement does not duplicate every test suite or restart the full review after each correction.
 The Reviewer reuses valid evidence and reruns affected checks while retaining required independent and final-state acceptance checks.
-Planner, Coder, Reviewer and Team-Codex receive the selected complete Graphify/CBM integration, including native configuration and discovery readbacks.
+Planner, Reviewer and Team-Codex receive the selected complete Graphify/CBM integration, including native configuration and discovery readbacks.
 Reviewer retains conditional library-version/consumer and independent visual acceptance checks without the three implementation-oriented skill bundles.
 Package changes do not activate these rules in existing teams; use the separately authorized team-update procedure.
-The Coder owns implementation decisions within the accepted goal and binding constraints.
+The Coder coordinates execution: it delegates the ticket to Team-Codex with the binding references and limits, keeps one Codex session per ticket, and hands the candidate to the independent Reviewer without reviewing the code, re-running tests or producing a second technical brief.
+The Coder owns decisions Codex cannot take within the accepted goal and binding constraints.
 Reviewer findings and customer-decision questions return to the Coder first; only the Coder escalates a missing customer decision through needs-input to the Planner.
 The Planner checks actual blockers and coordinates sufficient customer answers in Mattermost.
 Technical interruptions preserve unfinished review; approval completes the exact reviewed commit directly to DONE.
@@ -128,7 +129,7 @@ These aids use no Coder/Codex pipeline, tickets, automated tests, independent re
 Open and use the aid directly; carry the learned decision into planning. Later product work retains its normal gates.
 Broad mechanical changes use conditional Expand–Migrate–Contract planning with working, verified intermediate states and existing native dependency/review gates.
 These are bounded adaptations of Matt Pocock's `to-spec` and `to-tickets`, not installations of either skill or a new tracker/approval workflow.
-Team-Codex receives the owned [diagnosing-bugs](skills/diagnosing-bugs/README.md) adaptation; Coder explicitly invokes it and validates original evidence without repeating full diagnosis.
+Team-Codex receives the owned [diagnosing-bugs](skills/diagnosing-bugs/README.md) adaptation; Team-Codex explicitly invokes it and validates original evidence without repeating full diagnosis.
 Concrete symptom/cause evidence and an exact reproducible check preserve the direct-fix path for clear bugs.
 Unclear or competing causes, intermittent/state-dependent failures, performance isolation, or an unresolved/recurring apparent fix trigger the full method, including regressions emerging during ordinary implementation.
 Existing Planner routing, risk-sensitive verification, and independent review remain unchanged; complete-tree setup/update and native discovery checks do not prove live behavior.

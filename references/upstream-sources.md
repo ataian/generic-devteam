@@ -11,23 +11,25 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | Skill / local source | Target |
 |---|---|
 | <a id="own-planning"></a>[brownfield-feature-planning](../skills/brownfield-feature-planning/SKILL.md) | Hermes Planner |
-| <a id="own-build-evidence"></a>[build-evidence](../skills/build-evidence/SKILL.md) | Coder, Reviewer and Team-Codex |
+| <a id="own-build-evidence"></a>[build-evidence](../skills/build-evidence/SKILL.md) | Reviewer and Team-Codex |
+| <a id="own-demo-handover"></a>[demo-handover](../skills/demo-handover/SKILL.md) | Hermes Coder |
 | <a id="own-dev-environment"></a>[dev-environment](../skills/dev-environment/SKILL.md) | Hermes Planner |
 | <a id="own-diagnosis"></a>[diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | Team-Codex |
 | <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes Planner |
-| <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Planner and Coder |
+| <a id="own-plan-versioning"></a>[plan-versioning-semver](../skills/plan-versioning-semver/SKILL.md) | Planner and Team-Codex |
 | <a id="own-prototype"></a>[prototype](../skills/prototype/SKILL.md) | Hermes Planner |
 | <a id="own-retro"></a>[retro](../skills/retro/SKILL.md) | Hermes Planner |
 | <a id="own-devteam-cleanup"></a>[devteam-cleanup](../skills/devteam-cleanup/SKILL.md) | Hermes Planner |
-| <a id="own-screenshot"></a>[screenshot-to-code](../skills/screenshot-to-code/SKILL.md) | Planner, Coder and Team-Codex |
+| <a id="own-screenshot"></a>[screenshot-to-code](../skills/screenshot-to-code/SKILL.md) | Planner and Team-Codex |
 
 Use the owned-skill setup/update path for these trees.
 
 - **`retro`.** Matt Pocock method adaptation with [NOTICE](../skills/retro/NOTICE.md), [MIT license](../skills/retro/LICENSE) and method reference. Check the native command registry and all resolved skill candidates for collisions before delivery. Reuse the managed skill through normal update comparison and resolve any unrelated same-name skill or built-in command with the user before writing. Preserve names and precedence. Read back one unambiguous owned `retro` and its complete reference through native discovery/loading. Track slash-command availability separately from cached conversation catalogs. Invoke only on explicit request, including `/retro` or natural language. Do not execute a retrospective as an installation test.
 - **`dev-environment`.** Requested Docker development-environment creation, adoption and revision, including a project database when needed. Check name collisions and native loading without constructing an environment. The generated repository guide supplies routine commands to all roles. The construction skill stays Planner-only.
-- **`build-evidence`.** Build-, browser- and process-dependent test evidence: production-build selectors, portless test containers, and the JFR socket observer. Deliver the complete tree to Coder, Reviewer and Team-Codex. Coder passes the literal `$build-evidence` cue for the affected mode. The reference complements the generic test-authoring rule in the Coder SOUL; it adds no product or release permission.
+- **`build-evidence`.** Build-, browser- and process-dependent test evidence: production-build selectors, portless test containers, and the JFR socket observer. Deliver the complete tree to Reviewer and Team-Codex. Team-Codex passes the literal `$build-evidence` cue for the affected mode. The reference complements the Team-Codex skill block; it adds no product or release permission.
+- **`demo-handover`.** Demo runtime procedure for a released demo handover card: retire the previous runtime, start at the reviewed commit, create the demonstration user, seed data, record the card facts. Coder only, copied unchanged; the password stays in the role instructions. [Delivery recipe](integrations.md#demo-handover).
 - **`devteam-cleanup`.** Customer-invoked outside delivery, with no automatic trigger or separate upstream source, license or NOTICE. Invoke only on explicit request, including `/devteam-cleanup` or natural language. Skip test cleanup.
-- **`diagnosing-bugs`.** Matt Pocock method adaptation with evidence-based direct fix or full diagnosis. Include the method reference, [NOTICE](../skills/diagnosing-bugs/NOTICE.md) and original [MIT license](../skills/diagnosing-bugs/LICENSE). Coder routes and validates. Team-Codex owns the method. [Delivery recipe](integrations.md#diagnosing-bugs).
+- **`diagnosing-bugs`.** Matt Pocock method adaptation with evidence-based direct fix or full diagnosis. Include the method reference, [NOTICE](../skills/diagnosing-bugs/NOTICE.md) and original [MIT license](../skills/diagnosing-bugs/LICENSE). Team-Codex owns routing, invocation and validation of the method. [Delivery recipe](integrations.md#diagnosing-bugs).
 - **`prototype`.** Matt Pocock logic/UI adaptation for direct clarification during grilling. Deliver the full tree and legal files only to Planner. [Delivery recipe](integrations.md#prototype).
 
 <a id="own-roles"></a>
@@ -100,7 +102,7 @@ CBM's existing static asset evidence derives from its selected `v0.12.1` source;
 | <a id="superpowers"></a>Superpowers | [obra/superpowers](https://github.com/obra/superpowers) | Complete plugin repository including `.hermes-plugin/plugin.yaml`, `__init__.py` and `skills/` | Hermes Planner |
 | <a id="grill-me"></a>grill-me / grilling / domain-modeling / to-questionnaire | [mattpocock/skills](https://github.com/mattpocock/skills) | Complete `skills/productivity/grill-me`, `skills/productivity/grilling`, `skills/engineering/domain-modeling`, and `skills/productivity/to-questionnaire` trees, including `GLOSSARY-FORMAT.md`, `ADR-FORMAT.md`, `agents/openai.yaml`, and applicable legal files including root MIT `LICENSE`; same manifest revision | Hermes Planner |
 | <a id="hindsight"></a>Hindsight integration | [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) | Complete `hindsight-integrations/hermes`; connect the existing Hindsight service | All Hermes roles |
-| <a id="ponytail"></a>Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Complete repository with Hermes plugin, `.codex-plugin/plugin.json`, skills and hooks | Hermes Coder and Team-Codex |
+| <a id="ponytail"></a>Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Complete repository with `.codex-plugin/plugin.json`, skills and hooks | Team-Codex |
 | <a id="find-skills"></a>find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) | Complete `skills/find-skills` | Team-Codex |
 | <a id="codex-agents"></a>Codex-Custom-Agents | [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents) | The original files listed below | Team-Codex |
 
@@ -123,7 +125,7 @@ The Codex agent `reviewer` does not replace the independent Hermes Reviewer.
 
 | Component | Original source | Required scope | Target |
 |---|---|---|---|
-| <a id="codebase-memory"></a>Codebase-memory | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | Suitable official release and complete native Hermes/Codex integration: original skill, MCP, hooks and the Codex subagents belonging to CBM; preserve `LICENSE` and release `THIRD_PARTY_NOTICES.md`. | Planner, Coder, Reviewer and Team-Codex |
-| <a id="graphify"></a>Graphify | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Runtime; for Hermes `graphify/skill-claw.md` and complete `graphify/skills/claw/references/`, for Codex `graphify/skill-codex.md` and complete `graphify/skills/codex/references/`; preserve `LICENSE`, `LICENSE-MIT` and `NOTICE`. | Planner, Coder, Reviewer and Team-Codex |
+| <a id="codebase-memory"></a>Codebase-memory | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | Suitable official release and complete native Hermes/Codex integration: original skill, MCP, hooks and the Codex subagents belonging to CBM; preserve `LICENSE` and release `THIRD_PARTY_NOTICES.md`. | Planner, Reviewer and Team-Codex |
+| <a id="graphify"></a>Graphify | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Runtime; for Hermes `graphify/skill-claw.md` and complete `graphify/skills/claw/references/`, for Codex `graphify/skill-codex.md` and complete `graphify/skills/codex/references/`; preserve `LICENSE`, `LICENSE-MIT` and `NOTICE`. | Planner, Reviewer and Team-Codex |
 
 Follow the selected [Code analysis](code-analysis.md) recipe. Verify availability and setup outputs. Reserve behavioral qualification for separate authorization.

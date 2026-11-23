@@ -280,9 +280,9 @@ class UpdaterTests(unittest.TestCase):
         self.assertIn("`Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code`", target.read_text())
         coder = (Path(self.roles['coder']['home']) / 'SOUL.md').read_text()
         self.assertIn('kanban_block(kind="needs_input", reason=...)', coder)
-        self.assertIn('Keep card and Coder assignment.', coder)
-        self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder)
-        self.assertIn('Send one TIMER request to `fixture-planner`', coder)
+        self.assertIn('keep card and assignment', coder)
+        self.assertIn('confirm the existing subscription wakes `fixture-planner`', coder)
+        self.assertIn('one TIMER request to fixture-planner through `kanban_create`', coder)
         record = json.loads((self.state / 'installation.json').read_text())
         self.assertEqual(record['confirmed_values']['PROJECT_DIR'], setup['confirmed_values']['PROJECT_DIR'])
         self.assertEqual(record['confirmed_values']['REPOSITORY_ROOTS'], setup['confirmed_values']['REPOSITORY_ROOTS'])
@@ -324,7 +324,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertFalse(coder.read_text().startswith('Local retained rule.\n'))
         self.assertIn(str(coder), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         self.assertIn(paths['CODEX_HOME'] + '/config.toml', coder.read_text())
-        self.assertIn('Check the `kanban_request_review` response', coder.read_text())
+        self.assertIn('Check `ok: true` and `status: \"review\"`', coder.read_text())
         record = u.load_record(self.home)[2]
         for key, value in paths.items():
             self.assertEqual(record['confirmed_values'][key], value)
@@ -416,12 +416,15 @@ class UpdaterTests(unittest.TestCase):
             with self.subTest(role=role):
                 text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
                 self.assertEqual(text.count('`Synthetic-Pre214-Pass-1`'), 1)
-        for role in ('coder', 'reviewer'):
-            with self.subTest(lifecycle=role):
-                self.assertIn('a demonstration runtime is not permanent',
-                              (Path(self.roles[role]['home']) / 'SOUL.md').read_text())
-        self.assertIn('`demo.sh retire`', coder.read_text())
-        self.assertIn('`demo.sh user`', coder.read_text())
+        self.assertIn('a demonstration runtime is not permanent',
+                      (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text())
+        self.assertNotIn('a demonstration runtime is not permanent', coder.read_text())
+        handover = Path(self.roles['coder']['home']) / 'skills' / 'demo-handover' / 'SKILL.md'
+        self.assertTrue(handover.is_file(), handover)
+        self.assertIn('`demo.sh retire`', handover.read_text())
+        self.assertIn('`demo.sh user`', handover.read_text())
+        self.assertNotIn('demo.sh retire', coder.read_text())
+        self.assertIn('read the `demo-handover` skill', coder.read_text())
         self.assertIn('recorded login works on the running system',
                       (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text())
 
@@ -540,7 +543,7 @@ class UpdaterTests(unittest.TestCase):
                 review='Reported local route deviation; Maker text authoritative',
                 dependency_review='Fixture file-only migration; runtime unchanged')
         self.assertNotIn('Local binding mandate', coder.read_text())
-        self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder.read_text())
+        self.assertIn('confirm the existing subscription wakes `fixture-planner`', coder.read_text())
 
     def test_113_installation_adopts_confirmed_role_bindings(self):
         self.check_historical_binding_upgrade('da11a12710aace9a0522c88fd8fb3ef378711d0c')
@@ -1001,17 +1004,17 @@ class UpdaterTests(unittest.TestCase):
         sources = {entry['source'] for entry in record['managed']}
         self.assertIn('skills/build-evidence/SKILL.md', sources)
         self.assertIn('skills/build-evidence/references/production-build-selectors.md', sources)
-        for role, subpath in (('coder', 'skills'), ('reviewer', 'skills'),
-                              ('team-codex', '.agents/skills')):
+        for role, subpath in (('reviewer', 'skills'), ('team-codex', '.agents/skills')):
             target = Path(self.roles[role]['home']) / subpath / 'build-evidence/SKILL.md'
             self.assertTrue(target.is_file(), (role, target))
+        self.assertFalse((Path(self.roles['coder']['home']) / 'skills/build-evidence/SKILL.md').exists())
         coder = Path(self.roles['coder']['home']) / 'SOUL.md'
         reviewer = Path(self.roles['reviewer']['home']) / 'SOUL.md'
-        self.assertIn('$build-evidence', coder.read_text())
+        self.assertNotIn('$build-evidence', coder.read_text())
         self.assertIn('never change your own `command_allowlist`', coder.read_text())
         self.assertIn('never change this profile\'s `command_allowlist`', reviewer.read_text())
 
-        target = Path(self.roles['coder']['home']) / 'skills/build-evidence/references/jfr-observer.md'
+        target = Path(self.roles['reviewer']['home']) / 'skills/build-evidence/references/jfr-observer.md'
         local = b'\nLocal build note.\n'
         target.write_bytes(target.read_bytes() + local)
         self.change('skills/build-evidence/SKILL.md', '\nNew build evidence rule.\n')

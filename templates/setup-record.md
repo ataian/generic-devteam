@@ -42,7 +42,7 @@ Per target, record actual native identity or exact path, configuration source, p
 - Per-role model/provider/reasoning settings, effective overrides, and native configuration readbacks: pending.
 - Team-Codex process HOME, separate CODEX_HOME, binary, protected access location/status, and Git identity configuration readbacks: pending.
 - Team-Codex instructions: source template path/hash and Maker SemVer/commit, confirmed homes/cwd, target path, previous and installed hashes/modes, backup location, effective instruction sources in order, override/limit and full-content results: pending.
-- Board/workspace, bank ownership and per-role memory bindings, selected analysis integration and target paths for Planner, Coder, Reviewer and Team-Codex: pending.
+- Board/workspace, bank ownership and per-role memory bindings, selected analysis integration and target paths for Planner, Reviewer and Team-Codex: pending.
 - Planner communication identity, authorized users/channels, subscriptions, dispatcher/notifier ownership, and activation state: pending.
 - Component source repository/subpath, exact revision, license, complete file inventory/hashes, actual target, and discovery/configuration readbacks for each assigned component: pending.
 
