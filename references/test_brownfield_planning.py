@@ -305,9 +305,12 @@ class BrownfieldPackageTests(unittest.TestCase):
             self.assertIn(clause, text)
         self.assertNotIn("who may authorize an extension", text)
         self.assertNotIn("retry allowances", text)
-        self.assertIn("Set native assignee and workspace, `--initial-status blocked`, idempotency key, required skill, "
-                      "explicit completion contract, explicit customer limits, and required runtime/retry fields. "
+        self.assertIn("Set native assignee and workspace, `--initial-status blocked`, idempotency key, explicit "
+                      "completion contract, explicit customer limits, and required runtime/retry fields. "
+                      "Set no `skills`: role skills come from setup. "
                       "Do not invent discretionary attempt budgets.", release)
+        self.assertNotIn("required skill", release)
+        self.assertNotIn("workspace, skill,", release)
         for source in (text, release):
             self.assertNotIn("Use native run logs for detailed execution output.", source)
             self.assertIn("Native run outputs remain available evidence, not an authored run-log duty.", source)
