@@ -47,82 +47,54 @@ class DevelopmentEnvironmentTests(unittest.TestCase):
     def test_absent_usable_and_incomplete_paths_preserve_scope(self):
         text = self.text()
         for clause in (
-            "absent, usable, or incomplete/incompatible; an inspection failure is not absence",
-            "Default to `docker/dev/` under the code repository root.",
-            "Preserve working layout, local inputs and data.",
-            "A documentation-only task preserves the current database and reports this gap",
-            "preserve reusable parts and name the precise missing capability",
-            "Missing host capabilities are prerequisites to resolve with the operator",
-            "Additional third-party services or simulators belong to separately agreed project-specific work.",
-            "this skill adds no separate approval process",
+            "Reuse a working toolchain and entrypoint",
+            "If absent, plan the tools under `docker/dev/`",
+            "If incomplete, fix only the gap within the accepted scope",
+            "Preserve local inputs and data",
+            "Documentation-only adoption authorizes no rebuild",
+            "Resolve missing Docker access with the operator",
         ):
             with self.subTest(clause=clause):
                 self.assertIn(clause, text)
 
-    def test_guides_and_root_pointer_keep_audience_separation(self):
-        text = self.text()
-        guides = text.split("5. **Write the two guides.**", 1)[1].split("6. **Verify and hand over.**", 1)[0]
-        for clause in ("`docker/dev/AGENTS.md`", "`docker/dev/HOWTO-human.md`",
-                       "standalone instructions for a human using Linux without agents",
-                       "Keep the agent guide self-contained for ordinary work.",
-                       "root AGENTS.md pointer requiring the agent guide for development planning, implementation and review",
-                       "Require its container commands for builds, tests and development servers.",
-                       "both audiences can follow their own guide, with no unresolved command placeholders"):
-            self.assertIn(clause, guides)
-        self.assertIn("Agent instructions contain no pointer to the human guide and no instruction prohibiting its reading.", text)
-
-    def test_integrated_database_and_branch_clone_preservation_contract(self):
-        text = self.text()
-        self.assertIn("include the compatible database service and persistent storage in the same development Compose project", text)
-        branch = text.split("## PostgreSQL branch databases\n", 1)[1].split("## Acceptance cases", 1)[0]
-        for clause in (
-            "project's agreed schema and permitted data source",
-            "the application does not target the template",
-            "collision handling for branch-name normalization and database identifier limits",
-            "createdb --template=<template> --owner=<role> <branch_database>",
-            "Check source sessions, privileges and target absence before creation",
-            "Coordinate unknown or external connections rather than terminating them.",
-            "Reuse an existing target only when its recorded branch binding matches",
-            "Verify the actual database and role before migrations, seeding or write tests.",
-            "Returning to a branch reuses its database and state rather than cloning again.",
-            "Reset only explicitly selected disposable branch/test state",
-            "without altering the baseline or another branch",
-        ):
-            with self.subTest(clause=clause):
-                self.assertIn(clause, branch)
-        self.assertIn("operational data requires a separate explicit authorization", text)
-        acceptance = text.split("## Acceptance cases\n", 1)[1]
-        self.assertIn("Change one, then verify the baseline and the other branch remain unchanged.", acceptance)
-        self.assertIn("naming collision and a connected-template failure", acceptance)
-
-    def test_runtime_operations_keep_source_and_external_boundaries(self):
-        text = self.text()
-        scope = text.split("## Operating scope\n", 1)[1].split("## Procedure", 1)[0]
-        for clause in (
-            "start, stop, restart, rebuild and recreate these resources without further customer approval",
-            "generate synthetic data and reset disposable development state",
-            "Coordinate disruptive operations with other team users of the same runtime",
-            "Preserve source work, credentials, operational data, unrelated resources and the PostgreSQL baseline",
-            "Host administration, shared infrastructure and external effects retain their existing authorization boundaries.",
-            "development operations, not publication or deployment",
-            "the Reviewer operates the runtime without repairing product code",
-        ):
-            self.assertIn(clause, scope)
-        self.assertIn("Routine pause/resume retains state", text)
-        self.assertIn("Verify reuse of the tool container and retained dependencies/caches without rebuilding or reinstalling.", text)
-
-    def test_demo_handoff_requires_access_and_honest_evidence(self):
+    def test_only_guide_carries_environment_specific_operations(self):
         text = self.text()
         for clause in (
-            "verify application readiness and provide the concrete browser URL and SSH local-forward command when needed",
-            "confirmed SSH access and actual loopback ports",
-            "disclose any untested client-side access",
-            "Leave the demonstrated application running for customer use",
-            "Publish development listeners only on loopback by default.",
-            "A version command, running container or skipped test is not that evidence.",
-            "required missing evidence prevents a readiness claim",
+            "Guide: one short `docker/dev/AGENTS.md`, or the actual guide path in an adopted layout.",
+            "Content: only environment-specific changes to the coder's workflow.",
+            "Use one line per operation with a short label and exact invocation.",
+            "State non-obvious targets or destructive effects where relevant.",
+            "Loader: root `AGENTS.md` requires the guide by repository-relative path when a task uses the environment.",
         ):
             self.assertIn(clause, text)
+        self.assertNotIn("Caveman", text)
+        self.assertNotIn("HOWTO-human.md", text)
+
+    def test_optional_database_targets_only_development_state(self):
+        text = self.text()
+        for clause in ("add a project-compatible database to development Compose only if needed for coding",
+                       "verify the dev target before writes",
+                       "If branch databases are agreed", "preserve its state on return",
+                       "Reset only the selected disposable state"):
+            self.assertIn(clause, text)
+
+    def test_tools_see_working_tree_and_deployment_stays_separate(self):
+        text = self.text()
+        for clause in ("Do not install these tools on the host", "not an agent sandbox",
+                       "Bind-mount the current checkout directly", "without staging, copying or synchronizing",
+                       "optionally start the app from source", "starting and stopping them is part of your development and demonstration authority",
+                       "Keep deployment files out of the development checkout; when the customer keeps them together, the disposable worktree is the documented standard path."):
+            self.assertIn(clause, text)
+
+    def test_acceptance_exercises_edit_and_new_test(self):
+        acceptance = self.text().split("## Verify the developer workflow\n", 1)[1]
+        for clause in ("Reviewer follows the guide", "runs a real project build",
+                       "one reversible source change and a new, untracked targeted test",
+                       "Rerun the selected test after the edit.",
+                       "Its result must reflect the change without staging files or rebuilding the tool image.",
+                       "any unverified capability on the existing task"):
+            self.assertIn(clause, acceptance)
+        self.assertNotIn("demonstration", acceptance.lower())
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ Planversionen und spätere Zielprojektversionen sind unabhängig.
 | Anteil | Herkunft und tatsächliche Behandlung |
 |---|---|
 | Paketvertrag, Textrenderer und Dokumentation | Neu aus bestätigtem Auftrag; MIT dieses Pakets. |
-| `dev-environment` 0.1.0 | Owned Planner-only Docker development-environment construction/adoption procedure, authored by Max and Mariko (Hermes Agent). Uses this package's MIT license; no upstream source or separate skill legal files. Project toolchains, optional integrated database and PostgreSQL branch templates; no installation or live-runtime qualification implied. |
+| `dev-environment` 0.2.0 | Owned Planner-only containerized toolchain recipe by Max and Mariko (Hermes Agent). Uses this package's MIT license; no upstream source or separate skill legal files. |
 | Drei Rollen-SOUL-Vorlagen | Aus vorhandenen Rollen-SOULs im ausdrücklich bestätigten Auftrag abgeleitet und danach revidiert zu einem knappen englischen Regeltext; Reviewer als maßgebliche Nutzerfassung integriert. Persönliche Bindungen durch deklarierte Felder ersetzt; die beauftragte Bereinigung der Coder-Modellpolicy ist enthalten. Private Quellen sind keine Paketprüfungsabhängigkeit. |
 | `screenshot-to-code` 1.0.1 | Kanonisches eigenständiges Paket, Autorenfeld `Max, Mariko (Hermes Agent)`. Vollständiger Skillbaum ohne Rendering und ohne Transportumbenennung. Eigene vollständige [Lizenz](skills/screenshot-to-code/LICENSE) mit `Copyright (c) 2026 screenshot-to-code contributors` unverändert. Fassung 1.0.1 ist die englische Fassung nach TAS-Sprachvorgabe und damit nicht bytegleich zum kanonischen Paket 1.0.0; `source_sha256` im Manifest nennt weiterhin die kanonischen Dateiidentitäten. |
 | `minimal-change-engineering` 1.0.1 | Übernommene, vom Nutzer bearbeitete Skillfassung. MIT-Angabe im Frontmatter; keine separate Lizenz-/Notice-Datei im Skillbaum. Der historische Autoren-/Auditverweis im Skill ist dadurch nicht zusätzlich belegt. |
@@ -95,17 +95,14 @@ There is no automatic upstream synchronization or claim of measured review-quali
 
 ## Fremdkomponenten und technische Grenzen
 
-TAS is an external authoring dependency from [ataian/tas](https://github.com/ataian/tas), identified in the manifest and [source recipe](references/upstream-sources.md#tas).
-The Maker ships no normative TAS copy and assigns no TAS team-role installation; the complete upstream package retains its own MIT and third-party notices.
+Earlier Maker versions used [TAS](https://github.com/ataian/tas) for authoring. Its MIT and third-party notices remain with the upstream package.
 Matt Pocock's `to-questionnaire` is an unchanged Planner-only upstream asset in the existing pinned Matt component, not an owned adaptation or bundled Maker copy. Preserve its complete tree and the original root MIT license through the integration recipe.
 
 Fremdkomponenten sind Bezugsidentitäten mit dokumentierten Zielrezepten, keine
 mitexportierten Installationen. Ihre konkreten Bezugsstände behalten eigene
 Lizenzen/Notices; unsere MIT-Lizenz lizenziert sie nicht um. Rechercheidentitäten
 in nativen Rezepten sind keine Installationspins oder Runtimegarantien.
-For the two Caveman writing skills, `source_revision` pins the original release in the `caveman` component.
-`caveman-review.source_component` reuses that source identity.
-Their upstream texts remain unchanged; role SOULs extend their prose scope and preserve the review workflow.
+Earlier releases assigned the original [Caveman and Caveman Review](https://github.com/JuliusBrussee/caveman) skills. Their licenses and notices remain with those upstream assets.
 
 The manifest stage `setup-recipe` describes a recipe package, not qualified live-team behavior. General timeout/retry/rate-limit investigation and synthetic behavioral experiments are outside normal setup scope.
 

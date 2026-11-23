@@ -13,8 +13,7 @@ metadata:
 
 # Minimal-Change Engineering
 
-A calibrated version of "lazy senior dev". Applies to: code, scripts, cron jobs,
-configuration, automation, infrastructure scripts.
+Scope: code, scripts, cron jobs, configuration, automation and infrastructure scripts.
 
 Follow the authority and approval rules in your SOUL.md.
 Do not weaken required approvals, verification, or safety measures to reduce the size of a change.
@@ -22,83 +21,46 @@ Do not weaken required approvals, verification, or safety measures to reduce the
 ## The rules
 
 1. Make the smallest correct change that fulfills the user's actual goal.
-2. Inspect and reuse the existing implementation before adding new code.
-3. Prefer existing project patterns, standard libraries, and native platform features.
-4. Do not refactor unrelated code, rename things, reorganize files, or "clean up"
-   surrounding areas unless required for the task.
-5. Do not add abstractions, configuration options, dependencies, frameworks, wrappers,
-   or future-proofing for hypothetical needs.
-6. Preserve existing behavior outside the requested scope.
-7. Minimalism never overrides reliability or safety: keep necessary validation, error
-   handling, security, idempotency, locking, logging, backups, and verification.
-8. For operational scripts and infrastructure, prefer the smallest *safe* change over
-   the fewest lines of code.
-9. If a broader redesign would genuinely be better, mention it briefly, but do not
-   perform it unless the user asks for it.
+2. Inspect and reuse the existing implementation before adding code.
+3. Prefer project patterns, standard libraries and native platform features.
+4. Refactor, rename, reorganize or clean up surrounding areas only when the task requires it.
+5. Skip hypothetical abstractions, options, dependencies, frameworks, wrappers and future-proofing.
+6. Preserve behavior outside the requested scope.
+7. Keep necessary validation, error handling, security, idempotency, locking, logging, backups and verification.
+8. For operational scripts and infrastructure, minimize the change within safety requirements, regardless of line count.
+9. Mention a genuinely better redesign as described below. Perform it only if the user asks.
 
 ## Root cause beats a small diff (rules 1 + 6)
 
-A bug report names a symptom. Before editing, trace the real flow end to end and grep the
-callers of the function you are about to touch. One guard in the shared function is a
-smaller diff than one per caller, and patching only the caller named in the ticket leaves
-a sibling caller broken. A small change in the wrong place is not minimal, it is a second
-bug.
-
-So: fixing the shared code path the reported symptom flows through is **in scope**, even
-when it ends up more lines and touches more than the file the report named.
+1. Before editing, trace the actual flow end to end and grep all callers of the function you will change.
+2. Fix the cause in the shared path when caller-specific patches would leave sibling callers broken. The required fix is in scope even if it adds lines or touches files beyond the report.
 
 ## In scope vs. out of scope
 
-**In scope** (part of the task, not a side change): the root-cause fix; validation at
-trust boundaries; error handling that prevents data loss; the check that proves the fix;
-updating the doc/`SKILL.md`/`README` section whose described behavior just changed;
-removing code the change makes dead.
-
-**Out of scope** (do not do unless asked): renames, reformatting sweeps, import sorting,
-extracting helpers or base classes, adding `--verbose`/config flags or env toggles,
-swapping a working library, "while I'm here" cleanups, log-level changes, rewriting docs
-or comments in untouched areas, changing unrelated call sites for consistency, wrapping a
-working script in a framework.
+- In scope: root-cause fix, trust-boundary validation, data-loss prevention, a check that proves the fix, docs/`SKILL.md`/`README` sections describing changed behavior, code made dead by the change.
+- Out of scope unless requested: renames, formatting sweeps, import sorting, helper or base-class extraction, `--verbose`/config flags or env toggles, replacing working libraries, incidental cleanup, log-level changes, docs or comments in untouched areas, consistency edits to unrelated callers, framework wrappers for working scripts.
 
 ## Say the scope before editing
 
-Before the first edit, state which files you will touch and why (one line). If a file
-outside that set turns out to be necessary, say so instead of silently expanding the diff.
-This is the cheapest way the user can catch scope drift early.
+Before the first edit, state the files and reasons in one line. Announce any newly necessary file before expanding scope.
 
 ## Verification is never the thing you cut
 
-- Non-trivial logic: leave one runnable check behind (assert-style self-check or a small
-  test) — no framework, no fixtures. Trivial one-liners need none.
-- Ops/infra: verify by evidence (exit status, expected output, `systemctl status`, log
-  line, idempotent re-run), not by "the command ran".
-- Never trade a validation, retry, lock, or backup for a shorter diff on rule 8 work.
+- Non-trivial logic: leave one runnable assert-style self-check or small test. No framework or fixtures. Trivial one-liners need none.
+- Operations and infrastructure: verify with exit status, expected output, `systemctl status`, a log line or an idempotent re-run. Running the command alone is insufficient.
+- On rule 8 work, never cut validation, retries, locks or backups to shorten the diff.
 
 ## Naming a better design (rule 9)
 
-Only when a redesign would be materially simpler, safer, or cheaper: **one sentence, at
-the end, as an option** — not a question that blocks completion, not a three-paragraph
-proposal, and not on every task. Then do the task as specified.
+Do the task as specified. Only if a redesign would be materially simpler, safer or cheaper, name it as an option in one closing sentence. Do not block completion on that option.
 
 ## Pitfalls
 
-- **Symptom patch dressed up as minimalism** — the named caller got a guard, the shared
-  function stayed broken.
-- **Cleanup smuggling** — the real fix plus four cosmetic edits; the diff is no longer
-  reviewable as one change.
-- **Docs left stale** — behavior changed, the adjacent `SKILL.md`/`README` still describes
-  the old flow. That is an incomplete task, not a minimal one.
-- **Line count as the metric on infra** — fewest lines on cron/systemd/backup work is the
-  wrong objective; smallest *safe* change is (rule 8).
-- **Minimalism as an excuse to skip verification** — rule 7 wins.
-- **Refusing a broader fix that is genuinely required** — if the task cannot be fulfilled
-  correctly at the narrow site, say so and fix the right site.
+- Check for a broken shared path and cosmetic changes that obscure the fix. Before completion, update any docs, `SKILL.md` or `README` sections that describe the changed behavior.
+- On cron, systemd or backup work, apply rule 8. Retain rule 7 verification everywhere.
+- If the narrow site cannot satisfy the task, explain why and fix the right site.
 
 ## Relation to ponytail
 
-If separately available and authorized, Ponytail is stricter and dogmatic ("deletion over addition", mandatory
-`ponytail:` debt markers, `lite/full/ultra` modes) and aimed at coding agents only. This
-skill is the Hermes-side calibrated version: same bias toward the smallest correct diff,
-but validation, security, idempotency, backups and verification are explicitly
-non-negotiable, and it covers cron/config/automation work, not only code. Do not import
-ponytail's debt-ledger or mode machinery here.
+Ponytail applies to coding agents only when separately available and authorized. Its stricter "deletion over addition", mandatory `ponytail:` debt markers and `lite/full/ultra` modes describe that skill.
+Apply this Hermes skill across its full scope. Keep its validation, security, idempotency, backup and verification requirements. Do not import Ponytail's debt ledger or modes.

@@ -1,85 +1,51 @@
 # Adapted retrospective method
 
-Methodological basis: Matt Pocock's `retro` and its companion documentation.
-See [NOTICE](../NOTICE.md) for the exact source revision and adaptations; [LICENSE](../LICENSE) retains the MIT terms.
-Apply the lenses below to source-backed process friction, not to re-review the product.
+Methodological basis: Matt Pocock's `retro` and its companion documentation. See [NOTICE](../NOTICE.md) for the exact revision and adaptations and [LICENSE](../LICENSE) for the retained MIT terms.
+Apply these lenses only to source-backed process friction. Product re-review stays in its assigned workflow.
 
 ## Navigation
 
-Look for long searches, hidden dependencies, and repeatedly reconstructed facts.
-Propose a navigation pointer from a file the relevant agent already reads.
-Name the target, its content, and the condition for reading it.
-Verify the target exists and the consuming role will reach it.
-Prefer a pointer to existing documentation over another copy of volatile facts.
+- Signals: long searches, hidden dependencies, repeatedly reconstructed facts.
+- Propose a pointer from a file the relevant agent already reads. Name the target, its content and load condition. Verify existence and reachability for that role. Prefer linking existing documentation to duplicating volatile facts.
 
 ## Automated checks
 
-Read the repository's check scripts and CI workflows before proposing a new check.
-Inspect the relevant build-tool commands, linter/type configuration, hooks, and recorded outcomes.
-Prefer wiring or repairing an existing check over reinventing it.
-When neither a hook nor CI runs the relevant checks, report the missing guardrail as a source-backed candidate.
-An inaccessible configuration is an evidence gap, not proof that no guardrail exists.
-Distinguish a missing check, an unwired check, a silently broken check, and a check the run omitted.
-Propose the cheapest suitable guardrail for the observed failure; implementation still requires selection.
+1. Before proposing a check, read check scripts and CI workflows. Inspect relevant build commands, linter/type configuration, hooks and recorded outcomes.
+2. Distinguish missing, unwired, silently broken and skipped checks. If neither a hook nor CI runs the relevant checks, cite the evidence for a missing guardrail. Inaccessible configuration leaves an evidence gap.
+3. Prefer wiring or repairing existing checks. Propose the cheapest guardrail suited to the observed failure. Implementation still needs selection.
 
 ## Review standards
 
-Classify the violation before choosing its destination.
-Route mechanical violations to deterministic checks in the repository's existing language and tooling.
-Examples include banned APIs, import shapes, fixed syntax, and file-location rules.
-Use the existing linter, hook, or CI path that catches the violation with the least added machinery.
+Classify before routing:
 
-Reserve prose review standards for genuine judgment: cross-file consistency, contextual style, or design trade-offs a deterministic check cannot decide.
-Reuse an existing suitable standards or contribution document before proposing a new `CODING_STANDARDS.md`.
-Name the Reviewer as the enforcement owner and verify that the review workflow loads that document.
-Keep implementation-critical requirements and conventions available to the Coder.
-Independent review can require source exploration; a diff alone is not always sufficient.
-Keep the assigned review mandate and evidence requirements intact.
+- Mechanical, e.g. banned APIs, import shapes, fixed syntax or file-location rules: use deterministic checks in the repository's existing language and tooling. Choose the existing linter, hook or CI path with the least added machinery.
+- Judgment a deterministic check cannot decide, e.g. cross-file consistency, contextual style or design trade-offs: use prose review standards. Reuse suitable standards or contribution docs before proposing `CODING_STANDARDS.md`. Name the Reviewer as enforcement owner and verify that the workflow loads the document.
+- Keep implementation-critical requirements and conventions available to the Coder. Preserve the review mandate and required evidence. Independent review may need exploration beyond the diff.
 
 ## Sparse steering
 
-Inspect large project or global `AGENTS.md`/`CLAUDE.md` files for misplaced checks and review-only detail.
-Keep durable authority, safety constraints, and necessary implementation context reachable.
-Prefer sparse steering with navigation pointers to existing checks, standards, and documentation.
-Propose moves only after identifying each consumer and its actual loading path.
-A shorter root file with an unreachable requirement is a regression.
+- Inspect large project or global `AGENTS.md`/`CLAUDE.md` files for misplaced checks and review-only detail.
+- Prefer short steering with pointers to existing checks, standards and docs. Identify every consumer and actual load path before proposing a move. Keep all requirements reachable, including durable authority, safety constraints and necessary implementation context.
 
 ## Tool economy
 
-Look for expensive calls whose useful results could come from narrower queries or existing tools.
-Inspect actual arguments, returned fields, output size, retries, and the decision each call enabled.
-Prefer supported filtering and local structured-data reduction to repeated large model-visible dumps.
-Reuse unchanged evidence while its inputs and relevant conditions remain valid.
-Keep tool-output reduction separate from reducing verification coverage.
+- For expensive calls, inspect actual arguments, returned fields, output size, retries and the decision each enabled. Look for narrower queries or existing tools with equivalent useful results.
+- Prefer supported filtering and local structured-data reduction over repeated large model-visible dumps. Reuse unchanged evidence while inputs and relevant conditions remain valid. Maintain verification coverage when reducing output.
 
 ## Token economy
 
-Evaluate total work, not just shorter prose or fewer calls.
-Inspect repeated unchanged source loading, oversized outputs, unnecessary carried context, repeated reconstruction across handoffs, duplicate analysis and documents, and unproductive retries.
-Trace each repetition to its consumer, context availability, changed inputs, and decision purpose.
-Distinguish authored duplication, repeated retrieval, and repeated execution before choosing a remedy.
-A handoff pointer saves reconstruction only when the recipient can retrieve the needed original evidence reliably.
-
-Repeated readbacks, independent Coder-versus-Reviewer checks, and pre/post-state checks are not automatically waste.
-Preserve required evidence, safety, and meaningful independent review.
-Consider stale-context risk, retrieval cost, synchronization work, and lost independent perspective as trade-offs.
-Separate measured usage or savings from hypotheses.
-Character counts and raw call counts are not token, billing, or quality measurements.
-Use already available usage records when they answer the question; no mandatory benchmark or token-audit framework is needed.
+1. Evaluate total work. Inspect repeated unchanged source loading, oversized outputs, unnecessary carried context, repeated reconstruction across handoffs, duplicate analysis and documents, and unproductive retries.
+2. Trace each repetition to its consumer, available context, changed inputs and decision purpose. Distinguish duplicate authoring, retrieval and execution before choosing a remedy. A handoff pointer saves reconstruction only if the recipient can reliably retrieve the needed original evidence.
+3. Assess repeated readbacks, independent Coder-versus-Reviewer checks and pre/post-state checks on their purpose. Preserve required evidence, safety and meaningful independent review. Weigh stale-context risk, retrieval cost, synchronization and lost independent perspective.
+4. Separate measured usage or savings from hypotheses. Character and call counts do not measure tokens, billing or quality. Use existing usage records when they answer the question. No mandatory benchmark or token-audit framework.
 
 ## No-ops
 
-Look for steering instructions that fail to change actual behavior or have become irrelevant.
-Ground no-op deletion candidates in observed behavior, not intuition about model defaults.
-A single session may suggest a deletion test without proving a rule useless across models and tasks.
-State that uncertainty; propose a bounded comparison only when needed and separately authorized.
-Delete a proven no-op sentence rather than preserving its load through cosmetic trimming.
-Do not remove a safety or authority contract merely because no incident exercised it.
+- Look for irrelevant steering or instructions that leave actual behavior unchanged. Ground deletion candidates in observations, not assumed defaults.
+- One session can suggest a deletion test without proving irrelevance across models or tasks. State that uncertainty. Propose a bounded comparison only when needed and separately authorized.
+- Delete a proven no-op sentence. Cosmetic trimming still costs context. Lack of incidents alone never justifies deleting a safety or authority contract.
 
 ## Information access
 
-Identify decisions blocked by missing logs, unavailable records, or inaccessible service state.
-Prefer existing logs and narrowly scoped read-only visibility, such as captured dev-server output.
-Name the missing source, the blocked decision, the access owner, and the smallest proposed access change.
-Keep credentials and sensitive source content outside shared reports.
-A visibility recommendation grants no permission to widen access or change infrastructure.
+- For a decision blocked by missing logs, unavailable records or inaccessible service state, name the missing source, blocked decision, access owner and smallest proposed access change.
+- Prefer existing logs and narrow read-only visibility, e.g. captured dev-server output. Exclude credentials and sensitive source content from shared reports. Recommendations grant no authority to widen access or change infrastructure.

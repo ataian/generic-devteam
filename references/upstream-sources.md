@@ -1,9 +1,6 @@
 # Sources
 
-This overview names sources, required scope and target roles. The setup
-is in [setup.md](setup.md) and [integrations.md](integrations.md).
-"Coder" denotes the Hermes coding orchestrator, "Team-Codex" its separate
-Codex work context; "all Hermes roles" means Planner, Coder and Reviewer.
+Use this inventory with [Setup](setup.md) and [Integrations](integrations.md). Coder is the Hermes orchestrator and Team-Codex is its separate Codex work context. All Hermes roles are Planner, Coder and Reviewer.
 
 ## Bundled components
 
@@ -14,6 +11,7 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | Skill / local source | Target |
 |---|---|
 | <a id="own-planning"></a>[brownfield-feature-planning](../skills/brownfield-feature-planning/SKILL.md) | Hermes Planner |
+| <a id="own-build-evidence"></a>[build-evidence](../skills/build-evidence/SKILL.md) | Coder, Reviewer and Team-Codex |
 | <a id="own-dev-environment"></a>[dev-environment](../skills/dev-environment/SKILL.md) | Hermes Planner |
 | <a id="own-diagnosis"></a>[diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | Team-Codex |
 | <a id="own-minimal"></a>[minimal-change-engineering](../skills/minimal-change-engineering/SKILL.md) | Hermes Planner |
@@ -23,62 +21,41 @@ Bind that launcher through the Maker's [recovery binding step](setup.md#bind-the
 | <a id="own-devteam-cleanup"></a>[devteam-cleanup](../skills/devteam-cleanup/SKILL.md) | Hermes Planner |
 | <a id="own-screenshot"></a>[screenshot-to-code](../skills/screenshot-to-code/SKILL.md) | Planner, Coder and Team-Codex |
 
-The owned `retro` adapts Matt Pocock's method; retain its complete [NOTICE](../skills/retro/NOTICE.md), [MIT license](../skills/retro/LICENSE), and method reference.
-It is not an upstream runtime component. Copy its complete tree through the normal own-skill setup/update path.
-Before installing or updating it, check the target's native command registry and all resolved skill candidates for `retro` collisions.
-Reuse the same managed skill through the normal update comparison; resolve any unrelated same-name skill or built-in command with the user before writing, rather than silently renaming or shadowing it.
-Read back one unambiguous owned `retro` and its complete reference through native discovery/loading; distinguish slash-command availability from an existing conversation's cached catalog.
-Do not execute a retrospective as an installation test. Invocation requires an explicit user request, such as `/retro` or a natural-language retrospective request.
+Use the owned-skill setup/update path for these trees.
 
-The owned `dev-environment` covers requested Docker development-environment creation, adoption and revision, including a project database when needed.
-Copy its complete tree through the existing own-skill setup/update path. Check target name collisions and native loading without running environment construction.
-Its generated repository agent guide supplies routine commands to all roles; the construction skill remains Planner-only.
-
-The owned `devteam-cleanup` has no upstream source, license or NOTICE of its own.
-It is a customer-invoked procedure outside the delivery flow: copy it through the same own-skill path and keep it free of automatic triggers.
-Do not run a cleanup as an installation test. Invocation requires an explicit user request, such as `/devteam-cleanup` or a natural-language cleanup request.
-
-The owned `diagnosing-bugs` adapts Matt Pocock's method with evidence-based direct-fix/full-diagnosis selection.
-Copy its complete tree, [NOTICE](../skills/diagnosing-bugs/NOTICE.md), original [MIT license](../skills/diagnosing-bugs/LICENSE), and method reference through the [owned-skill recipe](integrations.md#diagnosing-bugs).
-Coder routes and validates; Team-Codex owns the method. This is not an additional upstream runtime component.
-
-The owned `prototype` adapts Matt Pocock's logic/UI method for direct clarification during grilling.
-Deliver its complete tree and legal files only to the Planner through [the owned-skill recipe](integrations.md#prototype).
+- **`retro`.** Matt Pocock method adaptation with [NOTICE](../skills/retro/NOTICE.md), [MIT license](../skills/retro/LICENSE) and method reference. Check the native command registry and all resolved skill candidates for collisions before delivery. Reuse the managed skill through normal update comparison and resolve any unrelated same-name skill or built-in command with the user before writing. Preserve names and precedence. Read back one unambiguous owned `retro` and its complete reference through native discovery/loading. Track slash-command availability separately from cached conversation catalogs. Invoke only on explicit request, including `/retro` or natural language. Do not execute a retrospective as an installation test.
+- **`dev-environment`.** Requested Docker development-environment creation, adoption and revision, including a project database when needed. Check name collisions and native loading without constructing an environment. The generated repository guide supplies routine commands to all roles. The construction skill stays Planner-only.
+- **`build-evidence`.** Build-, browser- and process-dependent test evidence: production-build selectors, portless test containers, and the JFR socket observer. Deliver the complete tree to Coder, Reviewer and Team-Codex. Coder passes the literal `$build-evidence` cue for the affected mode. The reference complements the generic test-authoring rule in the Coder SOUL; it adds no product or release permission.
+- **`devteam-cleanup`.** Customer-invoked outside delivery, with no automatic trigger or separate upstream source, license or NOTICE. Invoke only on explicit request, including `/devteam-cleanup` or natural language. Skip test cleanup.
+- **`diagnosing-bugs`.** Matt Pocock method adaptation with evidence-based direct fix or full diagnosis. Include the method reference, [NOTICE](../skills/diagnosing-bugs/NOTICE.md) and original [MIT license](../skills/diagnosing-bugs/LICENSE). Coder routes and validates. Team-Codex owns the method. [Delivery recipe](integrations.md#diagnosing-bugs).
+- **`prototype`.** Matt Pocock logic/UI adaptation for direct clarification during grilling. Deliver the full tree and legal files only to Planner. [Delivery recipe](integrations.md#prototype).
 
 <a id="own-roles"></a>
-The SOUL templates for [Planner](../templates/roles/planner.SOUL.md.template),
-[Coder](../templates/roles/coder.SOUL.md.template) and
-[Reviewer](../templates/roles/reviewer.SOUL.md.template) each belong to the
-corresponding Hermes profile. Replace only the provided placeholders with confirmed
-values; preserve the remaining content.
-The Reviewer SOUL contains the proportional Spec/technical-quality investigation method; its [adaptation provenance](../NOTICE.md#bounded-review-adaptation-code-review) records the exact Matt source and differences.
-Render and deliver that SOUL through [Role bindings](native-workflow.md#2-personalize-role-souls), without a separate `code-review` skill or method file.
-Native `sdlc-review` remains the original review lifecycle prerequisite.
+Render only confirmed placeholders and preserve all other bytes. Deliver [Planner](../templates/roles/planner.SOUL.md.template), [Coder](../templates/roles/coder.SOUL.md.template) and [Reviewer](../templates/roles/reviewer.SOUL.md.template) to their respective Hermes profiles through [Role bindings](native-workflow.md#2-personalize-role-souls).
+The Reviewer SOUL owns proportional Spec/technical-quality investigation. Keep native `sdlc-review` as the review lifecycle prerequisite. Deliver no separate `code-review` skill or method file. [Exact Matt source and adaptation](../NOTICE.md#bounded-review-adaptation-code-review).
 
 <a id="tas"></a>
-## TAS authoring upstream
+<a id="tas-authoring-upstream"></a>
+## TAS attribution
 
-TAS is maintained only in [ataian/tas](https://github.com/ataian/tas), not in this Maker.
-For Maker instruction authoring/review, read the selected TAS `SKILL.md` completely and follow all required references before drafting.
-Resolve its references against that TAS entrypoint, not the Maker checkout.
-Use the sibling `../tas/SKILL.md` relative to the Maker root when that checkout is the commissioned TAS working tree; verify its Git origin and record its HEAD plus local changes.
-Otherwise use a complete checkout of `upstream_components.tas.original_repo` at its manifest `source_revision`, outside active discovery.
-Reuse a verified checkout or obtain it only within the authorized file-work scope; reading these instructions does not authorize installation or checkout replacement.
-If the source or a required reference is missing or unreadable, report the exact path and stop the affected authoring step.
-Keep `SKILL.md`, `references/`, provenance, and all legal files together; maintain normative wording upstream rather than copying it back here.
+[TAS 1.2.0](https://github.com/ataian/tas) at `fe3a7d251518b793fedaec3041558c2840b4c796` was the Maker authoring baseline, including writing-for-agents and addition reconciliation.
+Its complete standalone entrypoint, `references/`, provenance and `third_party/` legal files remain upstream.
+For current Maker instruction authoring and review, read [Compact Artifact Contract](cac-authoring.md).
 
-The manifest pin identifies published TAS `1.2.0`, including the writing-for-agents adaptation and the addition-reconciliation rule.
-Pin maintenance requires verification of the actual published commit before advancing `source_revision`.
-Record local working-tree changes separately from that published identity.
-TAS has no team-role targets and is not installed into Planner, Coder, Reviewer, or Team-Codex by setup or team updates.
-Their existing SOUL and Caveman contracts remain unchanged; ordinary team setup does not load this authoring branch.
+<a id="caveman"></a>
+<a id="caveman-review"></a>
+## Caveman attribution
+
+Previous Maker manifests used [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) `v4.1.0` at `1e91f1306d602d4ca23618701b1185575ae1869b`.
+`skills/caveman` supplied writing guidance to all Hermes roles and Team-Codex. `skills/caveman-review` supplied finding format to Reviewer.
+Both used the same revision and original `LICENSE`, `LICENSE-MIT`, and `NOTICE`.
+For existing teams, use [CAC migration](update.md#cac-migration) and recorded provenance.
 
 ## Third-party components
 
 Read `upstream_components` in the [manifest](../manifest.json) as the required source inventory.
-The TAS entry is an authoring dependency with empty `targets`; use its separate branch above, not the target-installation recipes.
 For independent assets, use `original_repo`, exact `source_revision`, complete `subpaths`, `legal_files`, and assigned `targets`.
-Resolve `source_component` before acquisition; `caveman-review` inherits the Caveman commit.
+Resolve any `source_component` before acquisition.
 Acquire those commits outside active discovery without searching for a newer version during setup or team updates.
 Compare complete file inventories and original bytes, including hidden files, companions, and applicable legal files above selected subtrees.
 For `subpaths: ["."]`, retain the complete plugin repository, not only its skills or entry manifest.
@@ -105,18 +82,17 @@ Update pins, affected recipes and coupled hash evidence coherently through the n
 Do not infer individual skill or adapter versions from a repository release number.
 Pins are required source targets, not approval for operational changes.
 
-Maintenance provenance, checked 11 November 2026: Superpowers `v7.0.2`, Caveman `v4.1.0`, CBM `v0.12.1`, Graphify `v0.9.106` and Codex `rust-v0.167.1` resolve to the manifest commits.
+On 11 November 2026, Superpowers `v7.0.2`, Caveman `v4.1.0`, CBM `v0.12.1`, Graphify `v0.9.106` and Codex `rust-v0.167.1` resolved to their then-current manifest commits.
 Graphify's default branch is `v8`, not `main`.
 Ponytail, Matt Pocock's selected skills, the Hindsight adapter and find-skills use the inspected default-branch commits.
 Ponytail's plugin manifests identify `5.3.3`; the Hindsight adapter manifests identify `1.2.4`, independently of the service release.
 The six VoltAgent files retain the existing manifest commit, which matched upstream HEAD.
-Caveman's selected skill/legal bytes match the newer HEAD; retain the release commit.
+Caveman's selected skill and legal bytes matched the newer HEAD. The historical pin used the release commit.
 Graphify's bundle hashes now derive from the selected release, replacing the historical `86c57be8204673c2a1b9849a3292a7dd3ab373d8` evidence.
 CBM's existing static asset evidence derives from its selected `v0.12.1` source; it is not installer-output or live-runtime evidence.
 
 | Component | Original source | Required scope | Target |
 |---|---|---|---|
-| TAS | [ataian/tas](https://github.com/ataian/tas) | Complete standalone root skill tree, provenance and all `third_party/` legal files; see [authoring branch](#tas) | Maker authoring/review only; no team-role installation |
 | <a id="hermes-core"></a>Hermes base | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), [documentation](https://hermes-agent.nousresearch.com/docs/) | Existing functional Hermes installation | All Hermes roles |
 | <a id="hermes-codex"></a>Hermes-codex | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Complete `skills/autonomous-ai-agents/codex` | Hermes Coder |
 | <a id="hermes-review"></a>sdlc-review | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Complete `skills/devops/sdlc-review` | Hermes Reviewer |
@@ -125,16 +101,12 @@ CBM's existing static asset evidence derives from its selected `v0.12.1` source;
 | <a id="grill-me"></a>grill-me / grilling / domain-modeling / to-questionnaire | [mattpocock/skills](https://github.com/mattpocock/skills) | Complete `skills/productivity/grill-me`, `skills/productivity/grilling`, `skills/engineering/domain-modeling`, and `skills/productivity/to-questionnaire` trees, including `GLOSSARY-FORMAT.md`, `ADR-FORMAT.md`, `agents/openai.yaml`, and applicable legal files including root MIT `LICENSE`; same manifest revision | Hermes Planner |
 | <a id="hindsight"></a>Hindsight integration | [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) | Complete `hindsight-integrations/hermes`; connect the existing Hindsight service | All Hermes roles |
 | <a id="ponytail"></a>Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Complete repository with Hermes plugin, `.codex-plugin/plugin.json`, skills and hooks | Hermes Coder and Team-Codex |
-| <a id="caveman"></a>Caveman | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Complete `skills/caveman`, root `LICENSE`, `LICENSE-MIT`, `NOTICE`; writing only | All Hermes roles and Team-Codex |
-| <a id="caveman-review"></a>Caveman Review | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Complete `skills/caveman-review` and the same legal files and revision; finding format only | Hermes Reviewer |
 | <a id="find-skills"></a>find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) | Complete `skills/find-skills` | Team-Codex |
 | <a id="codex-agents"></a>Codex-Custom-Agents | [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents) | The original files listed below | Team-Codex |
 
 ### Codex custom agents: original files
 
-The [manifest](../manifest.json) is the version inventory for this component.
-Read `upstream_components.codex-custom-agents`: `original_repo`, `source_revision`, `subpaths`, and `legal_files`.
-Setup and updates use that exact revision, not a moving branch or the historical research anchor.
+For setup and updates use `original_repo`, exact `source_revision`, `subpaths` and `legal_files` from [`upstream_components.codex-custom-agents`](../manifest.json).
 
 - `categories/04-quality-security/test-automator.toml`
 - `categories/04-quality-security/security-auditor.toml`
@@ -154,6 +126,4 @@ The Codex agent `reviewer` does not replace the independent Hermes Reviewer.
 | <a id="codebase-memory"></a>Codebase-memory | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | Suitable official release and complete native Hermes/Codex integration: original skill, MCP, hooks and the Codex subagents belonging to CBM; preserve `LICENSE` and release `THIRD_PARTY_NOTICES.md`. | Planner, Coder, Reviewer and Team-Codex |
 | <a id="graphify"></a>Graphify | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Runtime; for Hermes `graphify/skill-claw.md` and complete `graphify/skills/claw/references/`, for Codex `graphify/skill-codex.md` and complete `graphify/skills/codex/references/`; preserve `LICENSE`, `LICENSE-MIT` and `NOTICE`. | Planner, Coder, Reviewer and Team-Codex |
 
-Use only the selected branch in [Code analysis](code-analysis.md).
-This source inventory does not replace its concrete setup recipe.
-Verify availability and setup outputs without behavioral qualification.
+Follow the selected [Code analysis](code-analysis.md) recipe. Verify availability and setup outputs. Reserve behavioral qualification for separate authorization.

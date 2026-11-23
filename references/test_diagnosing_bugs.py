@@ -20,68 +20,79 @@ REVISION = "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d"
 # Bind concrete diagnostic conditions to operative guidance, not fixture labels.
 SCENARIOS = {
     "simple evidenced boundary error with exact failing test": ("SKILL.md", (
-        "Use the direct-fix path only when all three conditions hold:",
-        "Concrete evidence supports both the symptom and its cause.",
-        "The affected flow and required correction are clear.",
-        "A focused test or reproducible check can demonstrate the exact bug and its correction.",
-        "Demonstrate the error, correct its cause, and run relevant verification.",
+        "Use direct fix only if concrete evidence supports both symptom and cause, the affected flow and required "
+        "correction are clear, and a focused test or reproducible check can demonstrate the exact bug and its "
+        "correction.",
+        "Demonstrate the error, fix the cause, then verify.",
+        "Verify resolution of the original symptom and passing required regression, acceptance and risk checks.",
         "Do not generate alternatives, build a separate harness, or further minimize an already simple case to satisfy a checklist.",
     )),
     "first targeted investigation leaves two competing causes": ("SKILL.md", (
-        "The cause remains unclear after the first targeted investigation.",
-        "Multiple plausible causes need distinguishing.",
-        "Switch as soon as uncertainty is evident, before guessed fix attempts.",
-        "Read [the full method](references/method.md) completely when any full-diagnosis trigger applies.",
+        "Cause still unclear after the initial investigation, or plausible causes need distinguishing.",
+        "Switch before attempting guessed fixes, as soon as uncertainty is evident or any trigger applies:",
+        "Read [the full method](references/method.md) completely.",
     )),
     "intermittent state/timing/environment failure": ("SKILL.md", (
-        "The failure is intermittent or depends on state, timing, or environment.",
+        "Intermittent failure or dependence on state, timing or environment.",
     )),
     "performance regression": ("SKILL.md", (
-        "A performance regression needs measurement and isolation.",
+        "Performance regression requiring measurement and isolation.",
     )),
     "apparent fix leaves symptom or bug recurs": ("SKILL.md", (
-        "An apparent fix leaves the original symptom unresolved, or the failure recurs.",
-        "Reuse completed investigation, repros, and checks instead of restarting.",
-        "Technical deepening within accepted scope needs no new Planner or customer approval.",
+        "Original symptom survives an apparent fix or recurs.",
+        "Reuse completed investigation, repros and checks.",
+        "Deepening within accepted scope requires no new Planner or customer approval.",
     )),
     "ordinary implementation develops unexplained test regression": ("SKILL.md", (
-        "Use for bug/diagnosis tasks and unexplained test failures or regressions found during ordinary implementation.",
+        "Trigger: bug or diagnosis task, or an unexplained test failure or regression during ordinary implementation.",
     )),
     "clear cause but material security/data-integrity risk": ("SKILL.md", (
-        "Preserve required security, data-integrity, acceptance, and independent-review checks on both paths.",
-        "Risk alone does not require prolonged cause exploration; ticket or diff size does not select the path.",
+        "Both paths retain required security, data-integrity, acceptance and independent-review checks.",
+        "Risk alone does not require extended cause exploration. Ticket and diff size do not select the path.",
+    )),
+    "handoff with a required check unavailable": ("SKILL.md", (
+        "Use compact bullets within task conventions.",
+        "Cause: confirmed cause, if established.",
+        "Checked: meaningful verification and retrievable original evidence.",
+        "Open: remaining uncertainty and any failed, unavailable, or incomplete required checks with their consequences.",
+        "Keep the existing handoff and independent review.",
+        "No separate diagnosis dossier is required.",
     )),
     "ambiguous cause needs discriminating probes": ("references/method.md", (
-        "Where ambiguity remains, rank competing falsifiable hypotheses by evidence and state each prediction.",
-        "Use each targeted probe to distinguish those predictions; change one variable at a time.",
+        "Remaining ambiguity: rank competing falsifiable hypotheses by evidence and state each prediction.",
+        "Probe to distinguish predictions, changing one variable at a time.",
         "Prefer a debugger or REPL, then targeted boundary instrumentation, over indiscriminate logging.",
-        "Ask through existing routing only when customer knowledge, a decision, or permission is needed.",
+        "Ask through existing routing only for needed customer knowledge, decisions or permissions.",
     )),
     "rare failure and slow necessary integration check": ("references/method.md", (
-        "For intermittent failures, record reproduction rates and controlled conditions before and after the fix.",
-        "A single green run does not establish resolution.",
-        "Optimize toward seconds without dropping necessary slow integration checks.",
-        "For performance regressions, establish a baseline and measure/profile, compare, or bisect before declaring cause or improvement.",
+        "Intermittent failure: record reproduction rates and controlled conditions before and after the fix.",
+        "A single green run is insufficient,",
+        "Aim for seconds while keeping necessary slow integration checks.",
+        "Performance: establish a baseline and measure/profile, compare or bisect before claiming cause or "
+        "improvement.",
     )),
     "no loop; protected production artifact required": ("references/method.md", (
-        "Without a reproducible loop, label hypotheses provisional and use them only to guide safe evidence collection.",
-        "Do not claim a confirmed cause or fix without supporting evidence.",
-        "Request required environment/access, redacted artifacts, or production-instrumentation permission through existing routing.",
+        "No reproducible loop: report attempts and missing evidence. Use provisional hypotheses only to guide safe "
+        "evidence collection.",
+        "Claims of confirmed cause or fix require supporting evidence.",
+        "Request required environment/access, redacted artifacts or production-instrumentation permission through "
+        "existing routing.",
         "Missing reproduction grants no additional access or operational authority.",
     )),
     "chain bug cannot be locked down by single-caller test": ("references/method.md", (
-        "Use a regression seam that exercises the real failure pattern, including multi-caller or chain behavior when needed.",
-        "Run the regression red before the fix, then green afterward.",
-        "Rerun the original unminimized scenario after the fix.",
-        "Document a missing suitable seam or required access precisely; preserve explicit acceptance and safety checks.",
-        "A missing seam neither waives a required check nor authorizes architecture redesign.",
+        "at a seam that exercises the real failure, including multi-caller or chain behavior as needed.",
+        "\n2. Run the regression red before fixing the evidenced cause within scope, then green afterward.",
+        "\n3. Rerun the original unminimized scenario.",
+        "Document any missing suitable seam or required access precisely. Keep explicit acceptance and safety checks.",
+        "A missing seam gives no waiver or authority to redesign architecture.",
     )),
     "human reproduction and task-owned cleanup": ("references/method.md", (
-        "Use human-assisted reproduction only as a necessary last resort through existing communication and protected-input facilities.",
+        "Use human-assisted repro only as a necessary last resort, through existing communication and "
+        "protected-input facilities.",
         "Never collect passwords or tokens as observations.",
         "Remove only task-owned temporary artifacts and instrumentation within existing ownership and approval limits.",
-        "Retain a useful repro as regression coverage or in a clearly designated debug area when justified.",
-        "State confirmed cause and meaningful verification in existing commit, handoff, or task conventions.",
+        "any useful repro as regression coverage or in a clearly designated debug area when justified.",
+        "Use existing commit, handoff or task conventions for confirmed cause and meaningful verification.",
     )),
 }
 
@@ -147,31 +158,32 @@ class DiagnosisContracts(unittest.TestCase):
 
     def test_full_method_pointer_and_original_symptom_signal(self):
         require(self.text("SKILL.md"), (
-            "If the required reference is missing or unreadable, report its path and stop the affected diagnosis.",
+            "If missing or unreadable, report its path and stop the affected diagnosis.",
         ))
         require(self.text("references/method.md"), (
-            "Read relevant accepted glossary definitions and ADRs; distinguish desired behavior from observed code.",
-            "Build and run a symptom-specific red/green-capable feedback loop with available project tools.",
-            "Assert the exact symptom, not merely absence of a crash.",
-            "Improve loop speed, specificity, and determinism.",
-            "Reproduce the actual reported failure and capture decisive evidence.",
-            "Minimize where it reduces diagnostic uncertainty: remove one input, step, caller, or dependency at a time while preserving the same failure.",
+            "Read relevant accepted glossary definitions and ADRs. Distinguish required behavior from observed code.",
+            "Build and run a red/green feedback loop for the exact symptom. Use existing project tools by default.",
+            "A no-crash assertion alone is insufficient.",
+            "Improve speed, specificity and determinism.",
+            "Reproduce the reported failure and capture decisive evidence.",
+            "Minimize only where it reduces diagnostic uncertainty. Remove one input, step, caller or dependency "
+            "at a time while preserving the same failure.",
         ))
         for option in ("unit", "integration", "e2e", "HTTP", "CLI", "browser", "trace replay", "harness", "property/fuzz", "bisection", "differential"):
             self.assertIn(option, self.text("references/method.md"))
 
     def test_secrets_scope_and_existing_native_guards_remain_binding(self):
         require(self.text("SKILL.md"), (
-            "Keep all probes within existing scope, resource limits, operational permissions, and native safeguards.",
-            "Redact credentials and PII before returning outputs or captured artifacts.",
-            "Use protected input/data paths; do not expand secret environment values into commands or logs.",
+            "Probes: stay within scope, resource limits, operational permissions and native safeguards.",
+            "Redact credentials and PII before returning output or captured artifacts.",
+            "Data: use protected input/data paths. Never expand secret environment values into commands or logs.",
         ))
         require(self.text("references/method.md"), (
-            "Use available project tools instead of installing a new framework by default.",
-            "Production instrumentation and load testing require their existing operational permission.",
-            "Preserve the user's dirty tree; use an isolated authorized work area for destructive bisection.",
+            "Use existing project tools by default.",
+            "Production instrumentation and load testing require existing operational permission.",
+            "Preserve the user's dirty tree. Use an isolated authorized work area for destructive bisection.",
             "Tag temporary instrumentation for safe cleanup.",
-            "If red is forced by a code or fixture mutation, compare with a pristine copy to verify that mutation first.",
+            "If a code or fixture mutation forces red, first compare it with a pristine copy to verify the mutation.",
         ))
 
     def test_coder_explicit_routing_and_validation_survive_renderer(self):
@@ -186,10 +198,13 @@ class DiagnosisContracts(unittest.TestCase):
             "For bug/diagnosis tasks, require the literal `$diagnosing-bugs` cue in each Codex task and resume, never as a shell variable.",
             "Pass the exact symptom, accepted context, and verification criteria; require the skill for unexplained failures or regressions emerging during implementation too.",
             "Validate diagnosis against the original symptom and actual evidence; do not automatically repeat the full method.",
-            "The literal `$caveman` token belongs in every new Codex prompt, also after a restart or resume.",
+            "On restart or resume, include current state, relevant delta, remaining work and standing constraints.",
+            "In every actual task, restart and resume prompt, require a compact result: `Change:` outcome, "
+            "`Checked:` actual result, checked state and decisive evidence, `Open:` failures, unrun checks and material limits.",
             "Never use `kanban_complete` to close your own implementation.",
             "Preserve explicit customer financial/resource caps, configured limits, provider quotas, operational permissions, and native failure-loop guards.",
         ))
+        self.assertNotIn("$caveman", output)
         self.assertNotIn("## Phase 1", template)
         for role in ("planner", "reviewer"):
             self.assertNotIn("$diagnosing-bugs", (ROOT / f"templates/roles/{role}.SOUL.md.template").read_text())

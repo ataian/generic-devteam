@@ -26,41 +26,45 @@ REVISION = "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d"
 # This checks instruction coverage, not an agent's response to the request.
 SCENARIOS = {
     "machen wir Retro": ("SKILL.md", (
-        "Start only on an explicit user request.",
-        "Never start automatically after completion or a notification.",
+        "Trigger: explicit user request only,",
+        "Completion or notifications never trigger a retro automatically.",
     )),
     "Retrospektive zum letzten Lauf": ("SKILL.md", (
-        "Default to the current conversation when the user names no other target.",
-        "If the target is ambiguous and retrieval cannot resolve it, ask one scope question.",
+        "Default to the current conversation. Find any named session, ticket or project using narrow read-only "
+        "searches.",
+        "If retrieval leaves the target ambiguous, ask one scope question.",
     )),
     "/retro session <historical-id>; compressed context": ("SKILL.md", (
-        "Locate the named session, ticket, or project through narrow read-only searches.",
-        "Include relevant original Coder, Reviewer, and Codex records when available.",
-        "Label compressed, missing, inaccessible, or summary-only evidence as gaps.",
-        "Do not reconstruct missing events or infer historical instructions from current templates.",
+        "Find any named session, ticket or project using narrow read-only searches.",
+        "including original Coder, Reviewer and Codex records when available.",
+        "label compressed, missing, inaccessible or summary-only evidence as coverage gaps.",
+        "Never reconstruct missing events or infer historical instructions from current templates.",
     )),
     "Smooth run; no useful candidate": ("SKILL.md", (
-        "Return no changes when the sources support no useful candidate.",
-        "Use categories as lenses, not finding quotas.",
+        "Return no changes when evidence supports no useful candidate.",
+        "Apply every relevant method lens to the bounded sources. No finding quotas.",
     )),
     "Did delivery fulfill the accepted product scope?": ("SKILL.md", (
-        "Route product acceptance, delivery-scope verdicts, and code-review requests to their assigned workflow.",
-        "Use product defects and failed checks only as evidence of process friction.",
+        "Routing: send product acceptance, delivery-scope verdicts and code review to their assigned workflows.",
+        "Product defects and failed checks serve only as evidence of process friction here.",
     )),
     "Save tokens by dropping independent review and readbacks": ("references/method.md", (
-        "Evaluate total work, not just shorter prose or fewer calls.",
-        "Repeated readbacks, independent Coder-versus-Reviewer checks, and pre/post-state checks are not automatically waste.",
-        "Preserve required evidence, safety, and meaningful independent review.",
+        "Evaluate total work.",
+        "Character and call counts do not measure tokens, billing or quality.",
+        "Assess repeated readbacks, independent Coder-versus-Reviewer checks and pre/post-state checks "
+        "on their purpose.",
+        "Preserve required evidence, safety and meaningful independent review.",
         "Separate measured usage or savings from hypotheses.",
     )),
     "Mechanical violation; existing check is unwired": ("references/method.md", (
-        "Read the repository's check scripts and CI workflows before proposing a new check.",
-        "Prefer wiring or repairing an existing check over reinventing it.",
-        "Route mechanical violations to deterministic checks in the repository's existing language and tooling.",
+        "Before proposing a check, read check scripts and CI workflows.",
+        "Prefer wiring or repairing existing checks.",
+        "Mechanical, e.g. banned APIs, import shapes, fixed syntax or file-location rules: "
+        "use deterministic checks in the repository's existing language and tooling.",
     )),
     "User asks for retro, not maintenance": ("SKILL.md", (
-        "Keep findings as proposals until the user explicitly selects changes and authorizes their implementation scope.",
-        "Keep native `/refine` skill-and-memory maintenance separate; do not invoke or improvise it automatically.",
+        "Proposals require explicit user selection and authorized implementation scope before action.",
+        "Native `/refine`: separate skill-and-memory maintenance. Never invoke or improvise it automatically.",
     )),
 }
 
@@ -107,7 +111,7 @@ class RetroPackageTests(unittest.TestCase):
     def test_required_method_load_is_reachable(self):
         require_clauses(self.text("SKILL.md"), (
             "Read [the adapted method](references/method.md) completely before analysis.",
-            "If that reference is missing or unreadable, report its path and stop analysis.",
+            "If missing or unreadable, report its path and stop analysis.",
         ))
         method = self.text("references/method.md")
         self.assertFalse(method.startswith("---"))
@@ -156,9 +160,9 @@ class RetroPackageTests(unittest.TestCase):
         method = self.text("references/method.md")
         require_clauses(method, (
             "Keep implementation-critical requirements and conventions available to the Coder.",
-            "Independent review can require source exploration; a diff alone is not always sufficient.",
-            "Reuse an existing suitable standards or contribution document before proposing a new `CODING_STANDARDS.md`.",
-            "Ground no-op deletion candidates in observed behavior, not intuition about model defaults.",
+            "Independent review may need exploration beyond the diff.",
+            "Reuse suitable standards or contribution docs before proposing `CODING_STANDARDS.md`.",
+            "Ground deletion candidates in observations, not assumed defaults.",
         ))
         for topic in ("repeated unchanged source loading", "oversized outputs", "unnecessary carried context",
                       "repeated reconstruction across handoffs", "duplicate analysis and documents", "unproductive retries"):
@@ -179,11 +183,15 @@ class RetroPackageTests(unittest.TestCase):
 
     def test_short_prioritized_proposals_and_bounded_evidence(self):
         require_clauses(self.text("SKILL.md"), (
-            "Return a short severity-ordered list in the requesting conversation unless the user requests another destination.",
-            "Observation and exact source; process cause with fact versus hypothesis; proposed change, location, and owner.",
-            "Expected benefit and material trade-off; observable success criterion when useful.",
-            "Keep each candidate traceable to an original event or inspected configuration.",
-            "Read only the relevant event ranges; avoid whole-archive dumps.",
+            "Return a short list ordered by severity in the requesting conversation, unless the user requests "
+            "another destination.",
+            "Use compact bullets for each candidate.",
+            "Observation: what happened and exact source.",
+            "Cause: process cause, with facts distinct from hypotheses.",
+            "Proposal: change, location, and owner.",
+            "Effect: expected benefit and material trade-off. Include an observable success criterion when useful.",
+            "Ground each candidate in an original event or inspected configuration.",
+            "Read only relevant ranges of original messages, tool results, board events, run records and Git history,",
         ))
 
 

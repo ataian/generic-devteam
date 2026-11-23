@@ -1,12 +1,7 @@
 # Standalone process retrospective
 
 Load the standalone `retro` skill only for an explicit user request.
-Follow its complete `SKILL.md` and required method reference; it owns the retrospective procedure.
-If native loading is unavailable, read `../../retro/SKILL.md` relative to this file and follow its required reference.
-Report the missing skill if neither path is available.
 
-The skill analyzes process and environment, not product acceptance or delivery-scope fulfillment.
-Return proposals in the requesting conversation by default.
-When the user explicitly requests ticket persistence:
-Record a ticket retrospective on the existing card.
-Follow `retro` for source bounds, coverage gaps, write verification, and the separate implementation authorization.
+1. Load it natively. If unavailable, read `../../retro/SKILL.md` relative to this file. Report the missing skill if neither path is available.
+2. Follow the complete `SKILL.md` and its required method reference. Scope: process and environment. Product acceptance and delivery-scope fulfillment stay outside the retrospective.
+3. Return proposals in the requesting conversation by default. If the user explicitly asks for ticket persistence, record the retrospective on the existing card. Follow `retro` for source bounds, coverage gaps, write verification, and separate implementation authorization.

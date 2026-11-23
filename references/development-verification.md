@@ -1,9 +1,7 @@
 # Maker development verification
 
-Use this reference only for an explicit Maker authoring, review, or separately commissioned qualification task.
-Do not load it as a prerequisite for ordinary setup or a file update.
-Run checks that cover the changed contract in the existing suite.
-Do not add a second test framework or bypass native delegation guards.
+Use for explicit Maker authoring, review or separately commissioned qualification. Ordinary setup and file updates have their own checks.
+Cover the changed contract in the existing suite. Keep native delegation guards and the existing test framework.
 
 ## Package and helper regression
 
@@ -15,51 +13,22 @@ python3 -B -m unittest discover -s references -p 'test_*.py' -v
 git diff --check
 ```
 
-Use the existing updater fixtures for template parsing, initialization, pristine baselines,
-three-way merge, local edits, conflicts, legacy unknown baselines, partial writes, and rollback.
-Use `test_bound_recovery.py` for binding, shell quoting, modes, and setup-independent invocation.
-Use `test_triage_recovery.py` with the installed Hermes interpreter and synthetic scratch databases.
-Retain skipped/denied native transitions as missing evidence; never bypass their guard.
-Keep all development fixtures outside installed role skill trees.
-Cover legacy active Planner-review returns and parked clarification recovery/reopen in the existing synthetic recovery tests.
-Keep pending independent review, same-card history, original implementer provenance, counters, and parent gates intact.
-Check migration order, old-contract worker preservation, local authority reconciliation, and saved-files versus effective-loading evidence in the existing instruction tests.
+Keep development fixtures outside installed role skill trees. Use the following checks where affected.
 
-Check manifest file existence, sorted uniqueness, version equality, relative links and anchors.
-Compare component assignments, transforms, role fields, complete own skill bytes, helpers, and legal files with the approved baseline.
-Check JSON/TOML/YAML and shell/Python syntax where affected.
-Render synthetic role values through the existing renderer; compare nonplaceholder bytes.
-Review changed instructions under [upstream TAS](upstream-sources.md#tas), including their conditions and required references.
-Use `test_diagnosing_bugs.py` for static proportional-path, method-pointer, delivery/legal, and explicit Coder-call contracts, not model-behavior claims.
-Use `test_prototype.py` for Planner-only clarification authority, branch/legal coverage, delivery, and updater regressions; these package checks add no tests or review gate to throwaway demos.
-Use `test_dev_environment.py` and rendered-role checks for create/adopt/incomplete paths, two-guide routing, PostgreSQL branch isolation, runtime authority and demo-access contracts.
-The updater fixtures exercise Planner-only environment-skill delivery, local adaptations, new-skill collisions and rollback. These checks do not execute Docker, PostgreSQL or live agents.
-Use the existing updater fixtures for newly assigned Team-Codex diagnosis trees, collisions, dependency decisions, local edits, baselines, and retained rollback additions.
-Trace setup references semantically; a keyword scan alone does not establish scope.
-Walk missing dependencies, collisions, resume, defaults/overrides, model availability, and update dependency decisions.
+- **Package.** Check manifest paths, sorted uniqueness, version equality, links and anchors. Compare assignments, transforms, role fields, full owned skill bytes, helpers and legal files with the approved baseline. Check affected JSON/TOML/YAML and shell/Python syntax. Render synthetic values through the existing renderer and compare nonplaceholder bytes.
+- **Instruction fidelity.** Use [CAC authoring](cac-authoring.md) to compare old and new decisions, evidence and required loads, including negative and exception cases. Follow setup references through missing dependencies, collisions, resume, defaults/overrides, model availability and update dependency decisions. Check migration order, old-contract workers, local authority reconciliation and the difference between saved files and effective loading.
+- **Update fixtures.** Cover template parsing, initialization, pristine and unknown legacy baselines, three-way merge, local edits, conflicts, partial writes and rollback. Exercise Planner-only environment delivery and Team-Codex diagnosis tree additions, dependency decisions, collisions, adaptations and retained additions on rollback. These fixtures need no Docker, PostgreSQL or live agents.
+- **Recovery.** Use `test_bound_recovery.py` for binding, shell quoting, modes and setup-independent invocation. Run `test_triage_recovery.py` with the installed Hermes interpreter and synthetic databases. Cover legacy active Planner-review returns and parked clarification recovery/reopen. Preserve pending independent review, same-card history, original implementer provenance, counters and parent gates. Record skipped or denied transitions as missing evidence and keep the guard.
+- **Skill contracts.** Use `test_diagnosing_bugs.py` for proportional paths, method pointer, delivery/legal and explicit Coder invocation. Use `test_prototype.py` for Planner-only clarification authority, branch/legal coverage, delivery and updates. Keep throwaway demos outside package review gates. Use `test_dev_environment.py` and renderer checks for checkout-based tooling, guide scope, developer-workflow acceptance and deployment boundaries. Treat these as static contracts.
+- **Native Codex loading.** Use the isolated [Team-Codex prompt check](integrations.md#team-codex-instructions) for the selected CLI. Cover separate homes, existing home text, home override, nested project instructions and truncation. Compare the assembled instructions and include a failed shadowing expectation. Record the exact CLI version and fixture context separately from the manifest pin and actual team adoption.
 
 ## Reviewer method and team routing
 
-Upstream `sdlc-review` describes human decisions as an escalation through `kanban_block` and request-changes as a defect return.
-The Maker Reviewer explicitly refines that routing: customer-decision questions return to Coder first through `kanban_request_changes`, without inventing a defect.
-Only the Coder escalates unresolved customer decisions through the Planner.
-Genuine technical interruptions still block and recover unfinished review with its provenance.
-Keep upstream method, lenses, baseline checks, automatic loading, native guards, independent critical-invariant passes, and exact-commit approval unchanged.
-The Reviewer SOUL owns proportional investigation: direct small corrections or distinct parallel Spec/technical-quality axes, followed by decisive-evidence validation and gap closure, not an automatic third full review.
-Use `test_review_investigation.py` for rendered/exported instruction scenarios and operative-body/qualification mutations; these are static contracts, not executed model behavior.
-The updater fixtures exercise actual SOUL delivery, local-rule preservation/collisions, pristine baselines and rollback without another transport.
-Check ordinary, missing-plan, correction, qualified/unqualified HIGH helper and unavailable-capability paths against the same required coverage and native outcomes.
-Inspect the available native delegation schema and effective model/provider/reasoning before relying on helper evidence.
-The inspected built-in schema supports parallel `tasks` with separate `goal`/`context`; it has no generic per-task model/reasoning fields.
-Native route/configuration can override inherited settings; prompt requests alone do not establish the required HIGH level.
-Use only an existing permitted compatible path; do not add profile settings or bypass guards to make the policy pass.
-This is a team-specific policy refinement, not a claim of universal upstream compatibility or live compliance.
-Inspect the installed skill and transition semantics when qualifying that boundary; report concrete drift rather than patching, shadowing, or disabling upstream.
-The upstream startup instruction to read the handoff first and the artifact lens instruction to read cold retain their existing read-order tension.
-
-Assess the combined contract through the existing implementation phase and its independent Reviewer.
-Map integrated acceptance to that phase instead of adding a closing ticket or a Planner technical re-review.
-Check that final Planner reporting uses existing ticket results and verdicts and distinguishes pending publication.
+- **Routing.** Upstream `sdlc-review` sends human decisions through `kanban_block` and defects through request-changes. The Maker Reviewer returns customer questions to Coder through `kanban_request_changes` without inventing a defect. Only Coder escalates unresolved decisions through Planner. Technical interruptions block and recover unfinished review with provenance. Preserve upstream method, lenses, baseline checks, preload, native guards, independent critical-invariant passes and exact-commit approval.
+- **Investigation.** The Reviewer SOUL owns direct small corrections or distinct parallel Spec and technical-quality reviews, followed by decisive-evidence validation and gap closure. Skip an automatic third full review. Use `test_review_investigation.py` for rendered/exported scenarios and operative-body/qualification mutations. Use the updater fixtures for actual SOUL delivery, preserved local rules, collisions, pristine baselines and rollback. Compare ordinary, missing-plan, correction, qualified/unqualified HIGH helper and unavailable-capability cases against the same coverage and native outcomes.
+- **Helper qualification.** Inspect native schema and effective model/provider/reasoning before crediting evidence. The inspected built-in schema supports parallel `tasks` with separate `goal`/`context` and lacks generic per-task model/reasoning fields. Native configuration can override inheritance. Verify HIGH on the actual route. Use an existing permitted compatible route and keep profile settings and guards intact.
+- **Compatibility.** Qualify this team-specific routing against the installed skill and transitions. Report concrete drift. Keep upstream unpatched, unshadowed and enabled. Preserve the existing read-order tension between startup handoff-first and the artifact lens's cold read. Static contracts do not establish live compliance or general upstream compatibility.
+- **Acceptance.** Map integrated acceptance to the existing implementation phase and its independent Reviewer. Add no closing ticket or Planner technical re-review. Verify the final Planner report uses existing ticket results and verdicts and identifies pending publication.
 
 ## Separately commissioned behavioral qualification
 
@@ -68,7 +37,7 @@ Do not turn this section into a pending setup checklist.
 Select only checks needed by the commissioned question:
 
 - Hindsight: inspect adapter/SDK forwarding if needed; use authorized synthetic role/shared/untagged data to distinguish retain, recall, reflect, prefetch, and consolidation. Preserve `per_tag`, `any_strict`, and tag semantics.
-- Codex: check main-process model/reasoning requests, HIGH/HIGH selection, retries/resumes, bounded review escalation, unchanged VoltAgent pins at the manifest revision, and persistent Ponytail/Caveman behavior. Verify that main-process selections do not override these six specialists. Run individual helpers only when commissioned.
+- Codex: check main-process model/reasoning requests, HIGH/HIGH selection, retries/resumes, bounded review escalation, unchanged VoltAgent pins at the manifest revision, and persistent Ponytail behavior and effective team-local writing instructions. Verify that main-process selections do not override these six specialists. Run individual helpers only when commissioned.
 - Git: if commit behavior is in scope, use an isolated repository without local identity and compare author/committer on its actual commit with the confirmed team identity.
 - Analysis: in an authorized scratch repository, index `probe_entry` calling `probe_leaf`, query that relationship, add `probe_added`, and verify the native update path. For CBM distinguish MCP, hooks, cache binding, subagents, and watcher behavior.
 - Communication: distinguish mention, free response, DM, unauthorized-user/channel rejection, and actual subscription delivery. Use synthetic ingress without model calls for rejection checks where supported.

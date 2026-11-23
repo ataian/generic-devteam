@@ -1,10 +1,11 @@
-"""Isolated updater contracts. No live Hermes imports or profile writes."""
+"""Isolated updater contracts. No live Hermes calls or profile writes."""
 from typing import Any
 import json
 import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -50,6 +51,8 @@ class UpdaterTests(unittest.TestCase):
         values['CODEX_BINARY'] = '/synthetic/bin/codex'
         values['CODEX_PROCESS_HOME'] = self.roles['team-codex']['home']
         values['CODEX_HOME'] = str(Path(self.roles['coder']['home']) / 'devteam/codex-home')
+        # Synthetic demonstration password; never a real credential.
+        values['DEMO_PASSWORD'] = 'Synthetic-Demo-Passphrase-9'
         self.bindings = {'board': 'sample', 'roles': self.roles, 'triage_recovery': {
             'python': '/synthetic/python',
             'script': str(self.home / 'skills/brownfield-feature-planning/scripts/recover_triage.py'),
@@ -191,6 +194,7 @@ class UpdaterTests(unittest.TestCase):
         plan = self.proposal()
         proposal = json.loads(plan.read_text())
         self.assertFalse(proposal['conflicts'])
+        self.assertIn(str(target), {item['path'] for item in proposal['adaptations']})
         self.assertEqual(marker.read_bytes(), before_metadata)
         result = u.apply(self.home, plan, decision='proceed', review='Checked template record round trip',
                          dependency_review='Reviewed operational changes; no runtime migration authorized')
@@ -214,7 +218,10 @@ class UpdaterTests(unittest.TestCase):
             self.assertEqual(managed['installed_hash'], u.digest(Path(entry['target']).read_bytes()))
             self.assertEqual(managed['baseline'], u.digest(entry['content']))
             self.assertEqual((self.state / 'baselines' / managed['baseline']).read_bytes(), entry['content'])
-        self.assertEqual(target.read_bytes(), before_targets[str(target)][0] + b'\nNew upstream instruction.\n')
+        new_file = next(entry for entry in new_expected
+                        if entry['source'] == 'skills/brownfield-feature-planning/SKILL.md')
+        self.assertEqual(target.read_bytes(), new_file['content'])
+        self.assertFalse(target.read_text().startswith('Local heading'))
         self.assertEqual(json.loads((Path(result['run']) / 'result.json').read_text())['status'], 'applied')
         self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
         self.assertEqual(marker.read_bytes(), before_metadata)
@@ -267,12 +274,13 @@ class UpdaterTests(unittest.TestCase):
         result = u.apply(self.home, plan, decision='proceed', review='Checked bindings and local note',
                          dependency_review='Approved file-only migration')
         self.assertEqual(result['status'], 'applied')
-        self.assertTrue(target.read_text().startswith('Local team note\n'))
+        self.assertFalse(target.read_text().startswith('Local team note\n'))
+        self.assertIn(str(target), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         self.assertIn("`/synthetic/client's workspace`", target.read_text())
         self.assertIn("`Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code`", target.read_text())
         coder = (Path(self.roles['coder']['home']) / 'SOUL.md').read_text()
         self.assertIn('kanban_block(kind="needs_input", reason=...)', coder)
-        self.assertIn('Keep the same card and Coder assignment.', coder)
+        self.assertIn('Keep card and Coder assignment.', coder)
         self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder)
         self.assertIn('Send one TIMER request to `fixture-planner`', coder)
         record = json.loads((self.state / 'installation.json').read_text())
@@ -308,11 +316,13 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(coder.read_bytes(), before_coder)
         setup_path.write_text('```json\n' + json.dumps(setup) + '\n```\n')
         coder.write_text('Local retained rule.\n' + coder.read_text())
-        result = u.apply(self.home, self.proposal(), decision='proceed',
-                         review='Checked bound invocation and unchanged local rule',
+        plan = self.proposal()
+        result = u.apply(self.home, plan, decision='proceed',
+                         review='Checked bound invocation and replaced local rule',
                          dependency_review='Confirmed Codex paths; file-only fixture update')
         self.assertEqual(result['status'], 'applied')
-        self.assertTrue(coder.read_text().startswith('Local retained rule.\n'))
+        self.assertFalse(coder.read_text().startswith('Local retained rule.\n'))
+        self.assertIn(str(coder), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         self.assertIn(paths['CODEX_HOME'] + '/config.toml', coder.read_text())
         self.assertIn('Check the `kanban_request_review` response', coder.read_text())
         record = u.load_record(self.home)[2]
@@ -329,6 +339,148 @@ class UpdaterTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Codex process HOME differs'):
             u.desired(self.repo, self.base, self.roles, values, bindings=self.bindings)
 
+    def test_fresh_team_renders_demonstration_password_only_into_the_three_souls(self):
+        record = self.initialize()
+        self.assertEqual(record['confirmed_values']['DEMO_PASSWORD'], 'Synthetic-Demo-Passphrase-9')
+        for role in ('planner', 'coder', 'reviewer'):
+            with self.subTest(role=role):
+                text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
+                self.assertEqual(text.count('`Synthetic-Demo-Passphrase-9`'), 1)
+                self.assertNotIn('{{DEMO_PASSWORD}}', text)
+        for entry in record['managed']:
+            if entry['source'].startswith('skills/'):
+                with self.subTest(source=entry['source'], role=entry['role']):
+                    self.assertNotIn(b'Synthetic-Demo-Passphrase-9', Path(entry['target']).read_bytes())
+
+    def test_missing_or_unsafe_demonstration_password_blocks_fresh_role_output(self):
+        setup = u.setup_data(self.state)
+        path = self.state / 'setup.md'
+        absent = dict(setup['confirmed_values'])
+        absent.pop('DEMO_PASSWORD')
+        path.write_text('```json\n' + json.dumps(dict(setup, confirmed_values=absent)) + '\n```\n')
+        with self.assertRaisesRegex(ValueError, 'DEMO_PASSWORD'):
+            u.initialize(self.repo, self.home, 'fresh-team', self.roles)
+        for value in ('', '   ', 'two\nlines', 'tick`value', 'back\\slash', 'tilde~value', '{{DEMO_PASSWORD}}'):
+            values = dict(setup['confirmed_values'], DEMO_PASSWORD=value)
+            path.write_text('```json\n' + json.dumps(dict(setup, confirmed_values=values)) + '\n```\n')
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                u.initialize(self.repo, self.home, 'fresh-team', self.roles)
+            self.assertFalse((self.state / 'installation.json').exists())
+
+    def pre2140_installation(self):
+        """Exact 2.13.1 source fixture: the last Maker without DEMO_PASSWORD."""
+        original = Path(__file__).resolve().parents[1]
+        commit = '675e05180b4277d78206d63beb2ff71cee2f4f73'
+        self.git('fetch', '-q', str(original), commit)
+        self.assertEqual(u.package_version(self.repo, commit), '2.13.1')
+        setup = u.setup_data(self.state)
+        old = dict(setup, confirmed_values={key: value for key, value in setup['confirmed_values'].items()
+                                            if key != 'DEMO_PASSWORD'})
+        (self.state / 'setup.md').write_text('```json\n' + json.dumps(old) + '\n```\n')
+        for entry in u.desired(self.repo, commit, self.roles, old['confirmed_values'], bindings=self.bindings):
+            target = Path(entry['target'])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(entry['content'])
+            target.chmod(entry['mode'])
+        return u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=commit,
+                            basis_evidence='Synthetic exact 2.13.1 installation without DEMO_PASSWORD')
+
+    def test_pre2140_team_adopts_demonstration_password_only_after_verified_apply(self):
+        self.pre2140_installation()
+        marker = self.state / 'installation.json'
+        before_marker = marker.read_bytes()
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        before_coder = coder.read_bytes()
+        with self.assertRaisesRegex(ValueError, 'DEMO_PASSWORD'):
+            self.proposal()
+        self.assertEqual(marker.read_bytes(), before_marker)
+        self.assertEqual(coder.read_bytes(), before_coder)
+
+        setup = u.setup_data(self.state)
+        setup['confirmed_values']['DEMO_PASSWORD'] = 'Synthetic-Pre214-Pass-1'
+        (self.state / 'setup.md').write_text('```json\n' + json.dumps(setup) + '\n```\n')
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertFalse(proposal['conflicts'])
+        # Adoption is not persisted before the verified target write.
+        self.assertNotIn('DEMO_PASSWORD', json.loads(marker.read_text())['confirmed_values'])
+        self.assertNotIn(b'Synthetic-Pre214-Pass-1', coder.read_bytes())
+
+        result = u.apply(self.home, plan, decision='proceed',
+                         review='Checked demo lifecycle, teardown verb and literal password in all three SOULs',
+                         dependency_review='Reviewed operational recipe change; file-only fixture update')
+        self.assertEqual(result['status'], 'applied')
+        record = u.load_record(self.home)[2]
+        self.assertEqual(record['confirmed_values']['DEMO_PASSWORD'], 'Synthetic-Pre214-Pass-1')
+        for role in ('planner', 'coder', 'reviewer'):
+            with self.subTest(role=role):
+                text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
+                self.assertEqual(text.count('`Synthetic-Pre214-Pass-1`'), 1)
+        for role in ('coder', 'reviewer'):
+            with self.subTest(lifecycle=role):
+                self.assertIn('a demonstration runtime is not permanent',
+                              (Path(self.roles[role]['home']) / 'SOUL.md').read_text())
+        self.assertIn('`demo.sh retire`', coder.read_text())
+        self.assertIn('`demo.sh user`', coder.read_text())
+        self.assertIn('recorded login works on the running system',
+                      (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text())
+
+        # A later update reuses the recorded value without reading setup.md again.
+        (self.state / 'setup.md').rename(self.state / 'audit-only.md')
+        later = json.loads(self.proposal().read_text())
+        self.assertFalse(later['conflicts'])
+        self.assertEqual(later['confirmed_values']['DEMO_PASSWORD'], 'Synthetic-Pre214-Pass-1')
+        for entry in later['entries']:
+            self.assertEqual(u.digest(u.decoded(entry['merged'])), entry['before_hash'])
+
+    def test_cli_output_redacts_the_demonstration_password(self):
+        script = Path(__file__).with_name('update_team.py')
+        roles = self.root / 'native-roles.json'
+        roles.write_text(json.dumps(self.roles))
+
+        def cli(*arguments):
+            result = subprocess.run([sys.executable, '-B', str(script), '--repo', str(self.repo), *arguments],
+                                    text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            return result.stdout
+
+        printed = cli('init', '--home', str(self.home), '--team-id', 'cli-demo', '--roles', str(roles))
+        self.assertNotIn('Synthetic-Demo-Passphrase-9', printed)
+        self.assertEqual(json.loads(printed)['confirmed_values']['DEMO_PASSWORD'], '{{DEMO_PASSWORD}}')
+        self.change()
+        printed = cli('plan', '--home', str(self.home))
+        self.assertNotIn('Synthetic-Demo-Passphrase-9', printed)
+        proposal = json.loads(printed)
+        self.assertEqual(proposal['confirmed_values']['DEMO_PASSWORD'], '{{DEMO_PASSWORD}}')
+        for entry in proposal['entries']:
+            payload = u.decoded(entry['new_base'])
+            self.assertNotIn(b'Synthetic-Demo-Passphrase-9', payload)
+            if entry['target'].endswith('/SOUL.md'):
+                self.assertIn(b'`{{DEMO_PASSWORD}}`', payload)
+        # The private proposal keeps the exact bytes the helper applies.
+        stored = json.loads(Path(proposal['proposal']).read_text())
+        souls = [entry for entry in stored['entries'] if entry['target'].endswith('/SOUL.md')]
+        self.assertTrue(souls)
+        for entry in souls:
+            self.assertIn(b'Synthetic-Demo-Passphrase-9', u.decoded(entry['new_base']))
+
+    def test_cli_redaction_swaps_only_the_rendered_literal(self):
+        secret = 'Synthetic-Demo-Passphrase-9'
+        masked = u.redacted({'merged': u.encoded(b'password `' + secret.encode() + b'` in demonstration text\n'),
+                             'new_base': u.encoded(b'no secret here\n'),
+                             'confirmed_values': {'DEMO_PASSWORD': secret, 'PROJECT_NAME': 'keep'}}, secret)
+        self.assertIsInstance(masked, dict)
+        assert isinstance(masked, dict)
+        self.assertEqual(u.decoded(masked['merged']), b'password `{{DEMO_PASSWORD}}` in demonstration text\n')
+        self.assertEqual(u.decoded(masked['new_base']), b'no secret here\n')
+        self.assertEqual(masked['confirmed_values'], {'DEMO_PASSWORD': '{{DEMO_PASSWORD}}', 'PROJECT_NAME': 'keep'})
+        stray = u.redacted({'merged': u.encoded(secret.encode() + b' outside code\n')}, secret)
+        self.assertIsInstance(stray, dict)
+        assert isinstance(stray, dict)
+        self.assertEqual(stray['merged'], u.WITHHELD)
+        self.assertEqual(u.redacted({'a': ['b', {'DEMO_PASSWORD': secret}]}, secret),
+                         {'a': ['b', {'DEMO_PASSWORD': '{{DEMO_PASSWORD}}'}]})
+
     def pre200_installation(self):
         """Exact local source fixture, not an inferred package-version baseline."""
         original = Path(__file__).resolve().parents[1]
@@ -344,7 +496,7 @@ class UpdaterTests(unittest.TestCase):
         return u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=commit,
                             basis_evidence='Synthetic exact 1.1.22 source and complete managed-tree installation')
 
-    def test_pre200_update_preserves_local_caps_and_pending_migration_record(self):
+    def test_pre200_update_reports_and_replaces_local_text(self):
         target_version = json.loads((self.repo / 'manifest.json').read_text())['version']
         record = self.pre200_installation()
         self.assertEqual(record['maker_version'], '1.1.22')
@@ -366,27 +518,29 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(updated['maker_version'], target_version)
         self.assertEqual(updated['roles'], self.roles)
         self.assertEqual(updated['confirmed_bindings'], self.bindings)
-        self.assertTrue(coder.read_text().startswith(local))
+        self.assertFalse(coder.read_text().startswith(local))
+        self.assertIn(str(coder), {item['path'] for item in proposal['adaptations']})
         self.assertIn('kanban_block(kind="needs_input", reason=...)', coder.read_text())
         self.assertNotIn('through native `kanban_request_review`', coder.read_text())
         reviewer = (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text()
         self.assertIn('only the Coder escalates it through the Planner.', reviewer)
         self.assertEqual(setup.read_bytes(), before_setup)
 
-    def test_pre200_conflicting_local_planner_route_withholds_file_application(self):
+    def test_pre200_local_planner_route_is_reported_and_replaced(self):
         self.pre200_installation()
         coder = Path(self.roles['coder']['home']) / 'SOUL.md'
         old = 'Route the same task to `fixture-planner` through native `kanban_request_review`.'
         self.assertIn(old, coder.read_text())
         coder.write_text(coder.read_text().replace(old, 'Local binding mandate: route all decisions to Planner review.'))
-        before = coder.read_bytes()
-        metadata = (self.state / 'installation.json').read_bytes()
         plan = self.proposal()
-        self.assertIn(str(coder), json.loads(plan.read_text())['conflicts'])
-        with self.assertRaises(ValueError):
-            u.apply(self.home, plan, decision='proceed', review='Unresolved explicit local route conflict')
-        self.assertEqual(coder.read_bytes(), before)
-        self.assertEqual((self.state / 'installation.json').read_bytes(), metadata)
+        proposal = json.loads(plan.read_text())
+        self.assertFalse(proposal['conflicts'])
+        self.assertIn(str(coder), {item['path'] for item in proposal['adaptations']})
+        u.apply(self.home, plan, decision='proceed',
+                review='Reported local route deviation; Maker text authoritative',
+                dependency_review='Fixture file-only migration; runtime unchanged')
+        self.assertNotIn('Local binding mandate', coder.read_text())
+        self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder.read_text())
 
     def test_113_installation_adopts_confirmed_role_bindings(self):
         self.check_historical_binding_upgrade('da11a12710aace9a0522c88fd8fb3ef378711d0c')
@@ -550,8 +704,10 @@ class UpdaterTests(unittest.TestCase):
         main = self.home / 'skills/dev-environment/SKILL.md'
         main.write_bytes(b'Approved local environment note\n' + main.read_bytes())
         self.change('skills/dev-environment/SKILL.md', '\nUpdated environment instruction.\n')
-        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture environment update reviewed')
-        self.assertTrue(main.read_bytes().startswith(b'Approved local environment note\n'))
+        plan = self.proposal()
+        self.assertIn(str(main), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
+        u.apply(self.home, plan, decision='proceed', review='Fixture environment update reviewed')
+        self.assertFalse(main.read_bytes().startswith(b'Approved local environment note\n'))
         self.assertTrue(main.read_bytes().endswith(b'Updated environment instruction.\n'))
 
     def test_new_dev_environment_collision_addition_and_guarded_rollback(self):
@@ -607,8 +763,10 @@ class UpdaterTests(unittest.TestCase):
         main = self.home / 'skills/prototype/SKILL.md'
         main.write_bytes(b'Approved local planning note\n' + main.read_bytes())
         self.change('skills/prototype/SKILL.md', '\nUpdated prototype clarification instruction.\n')
-        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture prototype update reviewed')
-        self.assertTrue(main.read_bytes().startswith(b'Approved local planning note\n'))
+        plan = self.proposal()
+        self.assertIn(str(main), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
+        u.apply(self.home, plan, decision='proceed', review='Fixture prototype update reviewed')
+        self.assertFalse(main.read_bytes().startswith(b'Approved local planning note\n'))
         self.assertTrue(main.read_bytes().endswith(b'Updated prototype clarification instruction.\n'))
 
     def test_new_prototype_tree_collision_and_guarded_rollback(self):
@@ -730,8 +888,10 @@ class UpdaterTests(unittest.TestCase):
         main.write_bytes(b'Local approved note\n' + main.read_bytes())
         main.chmod(0o640)
         self.change('skills/diagnosing-bugs/SKILL.md', '\nNew diagnosis instruction.\n')
-        u.apply(self.home, self.proposal(), decision='proceed', review='Fixture local adaptation checked')
-        self.assertTrue(main.read_bytes().startswith(b'Local approved note\n'))
+        plan = self.proposal()
+        self.assertIn(str(main), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
+        u.apply(self.home, plan, decision='proceed', review='Fixture local adaptation reported and replaced')
+        self.assertFalse(main.read_bytes().startswith(b'Local approved note\n'))
         self.assertTrue(main.read_bytes().endswith(b'New diagnosis instruction.\n'))
         self.assertEqual(u.file_mode(main), 0o640)
 
@@ -752,11 +912,12 @@ class UpdaterTests(unittest.TestCase):
         result = u.apply(self.home, plan, decision='proceed', review='Agent reviewed local drift',
                          dependency_review='User approved file-only migration; no runtime change')
         self.assertEqual(result['status'], 'applied')
-        self.assertTrue(target.read_text().startswith('Local team note'))
+        self.assertFalse(target.read_text().startswith('Local team note'))
+        self.assertIn(str(target), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         skill = self.home / 'skills/brownfield-feature-planning/SKILL.md'
         self.assertNotIn('New upstream instruction.', skill.read_text())
 
-    def test_reviewer_investigation_reaches_existing_soul_and_preserves_local_policy(self):
+    def test_reviewer_investigation_reaches_existing_soul_and_replaces_local_policy(self):
         """Actual old/new SOUL delivery; no runtime activation or model call."""
         source = self.repo / 'templates/roles/reviewer.SOUL.md.template'
         candidate = source.read_text()
@@ -780,16 +941,17 @@ class UpdaterTests(unittest.TestCase):
         source.write_text(candidate)
         self.commit('deliver candidate investigation through existing SOUL mapping')
         proposal = self.proposal()
-        result = u.apply(self.home, proposal, decision='proceed', review='Static candidate and local-cap compatibility')
+        self.assertIn(str(target), {item['path'] for item in json.loads(proposal.read_text())['adaptations']})
+        result = u.apply(self.home, proposal, decision='proceed', review='Static candidate and local-cap replacement')
         self.assertEqual(result['status'], 'applied')
         self.assertIn(heading, target.read_text())
         self.assertIn('Spec / requirement fidelity', target.read_text())
         self.assertIn('Technical quality / standards', target.read_text())
-        self.assertTrue(target.read_text().endswith(local))
+        self.assertFalse(target.read_text().endswith(local))
         _, _, record = u.load_record(self.home)
         managed = next(e for e in record['managed'] if e['target'] == str(target))
         baseline = (self.state / 'baselines' / managed['baseline']).read_bytes()
-        self.assertEqual(target.read_bytes(), baseline + local.encode())
+        self.assertEqual(target.read_bytes(), baseline)
         self.assertEqual(managed['transform'], 'render-role-v1')
         self.assertEqual(managed['installed_hash'], u.digest(target.read_bytes()))
         for role, before in neighbors.items():
@@ -797,7 +959,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
         self.assertEqual(target.read_bytes(), old['content'] + local.encode())
 
-    def test_reviewer_investigation_local_rule_collision_withholds_all_writes(self):
+    def test_reviewer_investigation_local_text_is_reported_and_replaced(self):
         self.initialize()
         source = self.repo / 'templates/roles/reviewer.SOUL.md.template'
         target = Path(self.roles['reviewer']['home']) / 'SOUL.md'
@@ -805,27 +967,25 @@ class UpdaterTests(unittest.TestCase):
         self.assertIn(clause, source.read_text())
         target.write_text(target.read_text().replace(clause, 'Locally amended small-correction policy'))
         source.write_text(source.read_text().replace(clause, 'Revised upstream small-correction policy'))
-        self.commit('synthetic conflicting reviewer policy')
-        before = {e['target']: Path(e['target']).read_bytes()
-                  for e in json.loads((self.state / 'installation.json').read_text())['managed']}
-        marker = (self.state / 'installation.json').read_bytes()
+        self.commit('synthetic reviewer policy revision')
         proposal = self.proposal()
-        self.assertTrue(json.loads(proposal.read_text())['conflicts'])
-        with self.assertRaises(ValueError):
-            u.apply(self.home, proposal, decision='proceed', review='Unresolved local policy collision')
-        self.assertEqual((self.state / 'installation.json').read_bytes(), marker)
-        for path, content in before.items():
-            self.assertEqual(Path(path).read_bytes(), content)
+        data = json.loads(proposal.read_text())
+        self.assertFalse(data['conflicts'])
+        self.assertIn(str(target), {item['path'] for item in data['adaptations']})
+        u.apply(self.home, proposal, decision='proceed', review='Reported local policy replacement')
+        self.assertIn('Revised upstream small-correction policy', target.read_text())
+        self.assertNotIn('Locally amended small-correction policy', target.read_text())
 
-    def test_three_way_keeps_local_edits_and_pristine_new_baseline(self):
+    def test_local_edit_is_replaced_and_new_baseline_is_pristine(self):
         self.initialize()
         target = self.home / 'skills/brownfield-feature-planning/SKILL.md'
         target.write_text('Local heading\n' + target.read_text())
         self.change()
         plan = self.proposal()
+        self.assertIn(str(target), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         result = u.apply(self.home, plan, decision='proceed', review='Agent checked all changed context files')
         self.assertEqual(result['status'], 'applied')
-        self.assertTrue(target.read_text().startswith('Local heading\n'))
+        self.assertFalse(target.read_text().startswith('Local heading\n'))
         self.assertTrue(target.read_text().endswith('New upstream instruction.\n'))
         record = json.loads((self.state / 'installation.json').read_text())
         entry = next(x for x in record['managed'] if x['target'] == str(target))
@@ -836,19 +996,47 @@ class UpdaterTests(unittest.TestCase):
         self.assertNotIn('New upstream instruction.', target.read_text())
         self.assertEqual(json.loads((self.state / 'installation.json').read_text())['maker_commit'], self.base)
 
-    def test_conflict_stops_without_target_writes(self):
+    def test_build_evidence_and_grant_rules_reach_fresh_and_existing_teams(self):
+        record = self.initialize()
+        sources = {entry['source'] for entry in record['managed']}
+        self.assertIn('skills/build-evidence/SKILL.md', sources)
+        self.assertIn('skills/build-evidence/references/production-build-selectors.md', sources)
+        for role, subpath in (('coder', 'skills'), ('reviewer', 'skills'),
+                              ('team-codex', '.agents/skills')):
+            target = Path(self.roles[role]['home']) / subpath / 'build-evidence/SKILL.md'
+            self.assertTrue(target.is_file(), (role, target))
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        reviewer = Path(self.roles['reviewer']['home']) / 'SOUL.md'
+        self.assertIn('$build-evidence', coder.read_text())
+        self.assertIn('never change your own `command_allowlist`', coder.read_text())
+        self.assertIn('never change this profile\'s `command_allowlist`', reviewer.read_text())
+
+        target = Path(self.roles['coder']['home']) / 'skills/build-evidence/references/jfr-observer.md'
+        local = b'\nLocal build note.\n'
+        target.write_bytes(target.read_bytes() + local)
+        self.change('skills/build-evidence/SKILL.md', '\nNew build evidence rule.\n')
+        plan = self.proposal()
+        adaptations = {item['path']: item for item in json.loads(plan.read_text())['adaptations']}
+        self.assertEqual(adaptations[str(target)]['version'], record['maker_version'])
+        result = u.apply(self.home, plan, decision='proceed', review='Reported and replaced local build note')
+        self.assertFalse(target.read_bytes().endswith(local))
+        self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
+        self.assertTrue(target.read_bytes().endswith(local))
+
+    def test_local_managed_text_replacement_precedes_both_sides(self):
         self.initialize()
         target = self.home / 'skills/brownfield-feature-planning/SKILL.md'
         target.write_text(target.read_text().replace('name:', 'local-name:', 1))
         source = self.repo / 'skills/brownfield-feature-planning/SKILL.md'
         source.write_text(source.read_text().replace('name:', 'upstream-name:', 1))
-        self.commit('conflict')
-        before = target.read_bytes()
+        self.commit('local and upstream text change')
         plan = self.proposal()
-        self.assertTrue(json.loads(plan.read_text())['conflicts'])
-        with self.assertRaises(ValueError):
-            u.apply(self.home, plan, decision='proceed', review='checked')
-        self.assertEqual(target.read_bytes(), before)
+        data = json.loads(plan.read_text())
+        self.assertFalse(data['conflicts'])
+        self.assertIn(str(target), {item['path'] for item in data['adaptations']})
+        u.apply(self.home, plan, decision='proceed', review='Reported local text replacement')
+        self.assertIn('upstream-name:', target.read_text())
+        self.assertNotIn('local-name:', target.read_text())
 
     def test_activity_and_semantic_review_gates_and_skip(self):
         self.initialize()
@@ -986,8 +1174,8 @@ class UpdaterTests(unittest.TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(b'Local upstream asset; preserve edits.\n')
             external[str(target)] = target.read_bytes()
-        names = ('tas', 'codex-cli', 'superpowers', 'grill-me', 'hindsight', 'ponytail',
-                 'caveman', 'find-skills', 'codex-custom-agents', 'codebase-memory', 'graphify')
+        names = ('codex-cli', 'superpowers', 'grill-me', 'hindsight', 'ponytail',
+                 'find-skills', 'codex-custom-agents', 'codebase-memory', 'graphify')
         for index, name in enumerate(names):
             with self.subTest(component=name):
                 item = manifest['upstream_components'][name]
@@ -1012,6 +1200,360 @@ class UpdaterTests(unittest.TestCase):
                 for target, original in external.items():
                     self.assertNotIn(target, managed)
                     self.assertEqual(Path(target).read_bytes(), original)
+
+    def test_cac_recipe_orders_staging_files_retirement_and_readbacks(self):
+        """Static checks of the required operator order, with no native execution."""
+        recipe = (self.repo / 'references/update.md').read_text()
+        heading = '## CAC migration\n'
+        self.assertIn(heading, recipe.splitlines(keepends=True))
+        section = recipe.split(heading, 1)[1].split('\n## ', 1)[0]
+        ordered = ('1. **Inspect**', '2. **Approve and back up**', '3. **Stage CAC**',
+                   '4. **Apply files, then retire legacy bindings**', '5. **Verify and resume**',
+                   '6. **Roll back**')
+        positions = [section.index(step) for step in ordered]
+        self.assertEqual(positions, sorted(positions))
+        for start, end, clauses in (
+            (0, 1, ('pre-update manifest', 'absence from the target manifest',
+                    'CODEX_PROCESS_HOME', 'CODEX_HOME', 'AGENTS.override.md', 'nested project', 'truncation')),
+            (1, 2, ('`pending`', 'outside all discovery roots', 'complete inventories, hashes, ownership, modes',
+                    'activity decision')),
+            (2, 3, ('`$CODEX_HOME/AGENTS.md`', 'preserve local text', 'withhold dependent file application')),
+            (3, 4, ('After successful file application', 'concurrent drift', '`skills.auto_load`',
+                    'only proven, pristine, authorized team-owned trees', 'foreign, shared, edited',
+                    'without deleting, masking, or overwriting')),
+            (4, 5, ('`complete` only', 'fresh native discovery', 'task and resume', 'both harnesses',
+                    'PONYTAIL_DEFAULT_MODE=full', 'even after installation metadata advances',
+                    'Repeat the file proposal and companion checks', 'files updated; team update incomplete')),
+        ):
+            for clause in clauses:
+                with self.subTest(step=ordered[start], clause=clause):
+                    self.assertIn(clause, section[positions[start]:positions[end]])
+        apply = section[positions[3]:positions[4]]
+        self.assertLess(apply.index('After successful file application'), apply.index('reconcile `skills.auto_load`'))
+        self.assertLess(apply.index('reconcile `skills.auto_load`'), apply.index('Retire only proven'))
+        rollback = section[positions[-1]:]
+        for clause in ('file-helper rollback', 'later edits', 'only recorded, authorized changes',
+                       'native readbacks', 'renewed `pending`'):
+            self.assertIn(clause, rollback)
+        self.assertLess(rollback.index('Restore required legacy trees'),
+                        rollback.index('Restore the prior Codex home instruction after reverting dependent SOULs'))
+        for heading in ('Prepare and review one team', 'Activity and application', 'Verify and hand off'):
+            body = recipe.split(f'## {heading}\n', 1)[1].split('\n## ', 1)[0]
+            self.assertIn('(#cac-migration)', body)
+        companion = recipe.split('## Required upstream companion update\n', 1)[1].split('\n## ', 1)[0]
+        self.assertNotIn('Caveman, caveman-review', companion)
+        self.assertNotIn('integrations.md#caveman', companion)
+
+    def test_cac_recipe_requires_fresh_native_checks_and_journaled_recovery(self):
+        recipe = (self.repo / 'references/update.md').read_text()
+        cac = recipe.split('## CAC migration\n', 1)[1].split('\n## ', 1)[0]
+        approval = cac.split('2. **Approve and back up**', 1)[1].split('3. **Stage CAC**', 1)[0]
+        self.assertIn('Generic upstream approval alone does not authorize CAC writes', approval)
+        companion = recipe.split('## Required upstream companion update\n', 1)[1].split('\n## ', 1)[0]
+        self.assertIn('Route existing-team Team-Codex instruction writes and legacy Caveman reconciliation '
+                      'through [CAC migration](#cac-migration)', companion)
+        for action in ('staging', 'dependent file application', 'each retirement mutation',
+                       'each rollback mutation'):
+            self.assertIn('immediately before ' + action, cac)
+        for evidence in ('`current_run_id`', '`claim_lock`', '`ended_at`', 'worker, dispatcher, and session',
+                         'defer affected writes', 'read-only'):
+            self.assertIn(evidence, cac)
+        retirement = cac.split('4. **Apply files, then retire legacy bindings**', 1)[1]
+        self.assertLess(retirement.index('Persist and read back the intent'), retirement.index('mv --no-copy'))
+        for recovery in ('original present and quarantine absent', 'original absent and quarantine present',
+                         'both paths present', 'both paths absent', 'no copy/delete fallback'):
+            self.assertIn(recovery, cac.lower())
+        rollback = cac.split('6. **Roll back**', 1)[1]
+        self.assertLess(rollback.index('before restoring either'), rollback.index('Restore required legacy trees'))
+        self.assertLess(rollback.index('Restore required legacy trees'), rollback.index('run the file-helper rollback'))
+        self.assertLess(rollback.index('run the file-helper rollback'),
+                        rollback.index('Restore the prior Codex home instruction'))
+
+    def cac_rename(self, source, destination):
+        """Run the documented stock command on disposable paths."""
+        recipe = (self.repo / 'references/update.md').read_text()
+        commands = [line.strip() for line in recipe.splitlines() if line.lstrip().startswith('mv --no-copy ')]
+        self.assertEqual(len(commands), 1, 'CAC recipe must provide a rename-only command')
+        help_text = subprocess.run(['mv', '--help'], capture_output=True, text=True, timeout=10).stdout
+        if '--no-copy' not in help_text:
+            self.skipTest('GNU mv with --no-copy is required for the documented rename command')
+        return subprocess.run(['sh', '-c', commands[0]], capture_output=True, text=True, timeout=10,
+                              env=dict(os.environ, SOURCE=str(source), DESTINATION=str(destination)))
+
+    def test_cac_quarantine_interruptions_and_coordinated_rollback(self):
+        before = self.cac_revisions()
+        coder = Path(self.roles['coder']['home'])
+        soul = coder / 'SOUL.md'
+        old_soul = soul.read_bytes()
+        instruction = Path(before['confirmed_values']['CODEX_HOME']) / 'AGENTS.md'
+        local = b'# Local instructions\n'
+        staged = local + b'# Fixture CAC instruction\n'
+        u.atomic(instruction, local, None)
+        u.atomic(instruction, staged, u.digest(local))
+
+        original = coder / 'skills/caveman'
+        legacy = {'SKILL.md': (b'# Legacy writing skill\n', 0o640),
+                  'legal/LICENSE': (b'License fixture\n', 0o600)}
+        original.mkdir(mode=0o750)
+        for name, (data, mode) in legacy.items():
+            u.atomic(original / name, data, None, mode)
+        inode = original.stat().st_ino
+        config = coder / 'config.yaml'
+        old_config = b'skills:\n  auto_load: [local-skill, caveman, ponytail]\n'
+        retired_config = b'skills:\n  auto_load: [local-skill, ponytail]\n'
+        u.atomic(config, old_config, None)
+        private = u.private_dir(self.state / 'cac-quarantine')
+        quarantine = private / 'coder caveman'
+        backup = private / 'verified backup'
+        shutil.copytree(original, backup)
+
+        result = u.apply(self.home, self.proposal(), decision='proceed', review='Fixture stage readback',
+                         dependency_review='Approved CAC fixture scope')
+        run = Path(result['run'])
+        new_soul = soul.read_bytes()
+        self.assertIn(b'Fixture legacy requirement: load caveman', old_soul)
+        self.assertNotIn(b'Fixture legacy requirement: load caveman', new_soul)
+        u.atomic(config, retired_config, u.digest(old_config))
+        setup = self.state / 'setup.md'
+        intent = (f'\nCAC pending: retire {original} into {quarantine}; '
+                  f'backup {backup}; dependent file run {run}; inode {inode}.\n').encode()
+        u.atomic(setup, setup.read_bytes() + intent, u.fingerprint(setup))
+
+        # Interruption after intent, before rename. The pending source still holds the whole tree.
+        self.assertIn(intent, setup.read_bytes())
+        self.assertEqual(original.stat().st_ino, inode)
+        self.assertFalse(os.path.lexists(quarantine))
+        moved = self.cac_rename(original, quarantine)
+        self.assertEqual(moved.returncode, 0, moved.stderr)
+        # Interruption after rename, before receipt. Reopen the same intent and read both paths.
+        self.assertIn(intent, setup.read_bytes())
+        self.assertFalse(os.path.lexists(original))
+        self.assertEqual(quarantine.stat().st_ino, inode)
+        self.assertEqual(quarantine.stat().st_mode & 0o777, 0o750)
+        for name, (data, mode) in legacy.items():
+            self.assertEqual((quarantine / name).read_bytes(), data)
+            self.assertEqual(u.file_mode(quarantine / name), mode)
+            self.assertEqual((backup / name).read_bytes(), data)
+
+        # Restore the tree and autoload before the actual file-helper rollback restores its consumers.
+        restoring = f'\nCAC pending: restore {quarantine} to {original}.\n'.encode()
+        u.atomic(setup, setup.read_bytes() + restoring, u.fingerprint(setup))
+        moved = self.cac_rename(quarantine, original)
+        self.assertEqual(moved.returncode, 0, moved.stderr)
+        self.assertIn(restoring, setup.read_bytes())
+        self.assertEqual(original.stat().st_ino, inode)
+        self.assertFalse(os.path.lexists(quarantine))
+        u.atomic(config, old_config, u.digest(retired_config))
+        self.assertEqual(soul.read_bytes(), new_soul)
+        self.assertEqual(instruction.read_bytes(), staged)
+        self.assertEqual(u.rollback(self.home, run, decision='proceed')['status'], 'rolled-back')
+        self.assertEqual(config.read_bytes(), old_config)
+        self.assertEqual(soul.read_bytes(), old_soul)
+        self.assertEqual(instruction.read_bytes(), staged)
+        u.atomic(instruction, local, u.digest(staged))
+        self.assertEqual(instruction.read_bytes(), local)
+        self.assertEqual(u.load_record(self.home)[2], before)
+
+    def test_cac_quarantine_exposes_drift_and_preserves_occupied_shared_targets(self):
+        original = self.home / 'skills/caveman'
+        original.mkdir()
+        skill = original / 'SKILL.md'
+        u.atomic(skill, b'pristine\n', None)
+        pristine = u.fingerprint(skill)
+        private = u.private_dir(self.state / 'cac-quarantine')
+        quarantine = private / 'planner caveman'
+
+        # A local edit and a second consumer's hard link invalidate pristine/exclusive ownership.
+        other = Path(self.roles['reviewer']['home']) / 'shared-skill.md'
+        os.link(skill, other)
+        with self.assertRaisesRegex(ValueError, 'regular file'):
+            u.fingerprint(skill)
+        skill.write_bytes(b'local edit\n')
+        self.assertNotEqual(u.digest(skill.read_bytes()), pristine)
+        self.assertEqual(skill.stat().st_nlink, 2)
+        self.assertEqual(other.read_bytes(), b'local edit\n')
+        self.assertFalse(os.path.lexists(quarantine))
+
+        # Use an independently pristine tree for retirement, then recreate the discovery path.
+        original = Path(self.roles['reviewer']['home']) / 'skills/caveman-review'
+        original.mkdir(parents=True)
+        u.atomic(original / 'SKILL.md', b'pristine\n', None)
+        moved = self.cac_rename(original, quarantine)
+        self.assertEqual(moved.returncode, 0, moved.stderr)
+        (quarantine / 'SKILL.md').write_bytes(b'later quarantine edit\n')
+        self.assertNotEqual(u.fingerprint(quarantine / 'SKILL.md'), pristine)
+        original.mkdir()
+        occupied = original.stat().st_ino
+        self.cac_rename(quarantine, original)
+        self.assertEqual(original.stat().st_ino, occupied)
+        self.assertEqual(list(original.iterdir()), [])
+        original.rmdir()
+        shared = self.home / 'skills'
+        original.symlink_to(shared, target_is_directory=True)
+        self.cac_rename(quarantine, original)
+        self.assertEqual(original.readlink(), shared)
+        self.assertEqual((quarantine / 'SKILL.md').read_bytes(), b'later quarantine edit\n')
+        self.assertEqual(other.read_bytes(), b'local edit\n')
+
+    def test_cac_native_recheck_detects_new_claim_without_file_drift(self):
+        import sqlite3
+        try:
+            from hermes_cli import kanban_db as native
+        except ImportError:
+            self.skipTest('Installed Hermes Python required for the native claim readback')
+
+        board = self.root / 'fixture-board.db'
+        coder = self.roles['coder']
+        soul = Path(coder['home']) / 'SOUL.md'
+        before = (u.fingerprint(soul), u.file_mode(soul))
+        writer = sqlite3.connect(board)
+        self.addCleanup(writer.close)
+        with writer:
+            writer.executescript(native.SCHEMA_SQL)
+            writer.execute("INSERT INTO tasks(id,title,assignee,status,created_at) VALUES "
+                           "('fixture-task','Fixture task',?,'ready',1)", (coder['id'],))
+        reader = sqlite3.connect(board.as_uri() + '?mode=ro', uri=True)
+        self.addCleanup(reader.close)
+        reader.row_factory = sqlite3.Row
+        with reader:
+            reader.execute('BEGIN')
+            self.assertIsNone(native.list_tasks(reader)[0].claim_lock)
+            self.assertEqual(native.list_runs(reader, 'fixture-task'), [])
+        with writer:
+            writer.execute("INSERT INTO task_runs(id,task_id,profile,status,claim_lock,started_at) "
+                           "VALUES (1,'fixture-task',?,'running','fixture-claim',2)", (coder['id'],))
+            writer.execute("UPDATE tasks SET status='running',claim_lock='fixture-claim',current_run_id=1")
+        worker = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(60)'],
+                                  env=dict(os.environ, HERMES_HOME=coder['home']))
+        try:
+            with reader:
+                reader.execute('BEGIN')
+                task, = native.list_tasks(reader)
+                run, = native.list_runs(reader, task.id)
+                self.assertEqual((task.current_run_id, task.claim_lock), (run.id, 'fixture-claim'))
+                self.assertEqual(run.profile, coder['id'])
+                self.assertIsNone(run.ended_at)
+            self.assertIn(worker.pid, u.activity(self.roles)['visible_pids'])
+            self.assertEqual((u.fingerprint(soul), u.file_mode(soul)), before)
+        finally:
+            worker.terminate()
+            worker.wait(timeout=5)
+
+    def cac_revisions(self):
+        """Build synthetic old/new Maker revisions without acquiring upstream trees."""
+        manifest_path = self.repo / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        components = manifest['upstream_components']
+        components['caveman'] = {'source_revision': 'a' * 40, 'targets': {
+            'hermes': ['planner', 'coder', 'reviewer'], 'codex': ['team-codex']}}
+        components['caveman-review'] = {'source_component': 'caveman', 'targets': {'hermes': ['reviewer']}}
+        manifest_path.write_text(json.dumps(manifest))
+        coder = self.repo / 'templates/roles/coder.SOUL.md.template'
+        coder_template = coder.read_text()
+        legacy_clause = '\nFixture legacy requirement: load caveman.\n'
+        coder.write_text(coder_template + legacy_clause)
+        installed_coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        installed_coder.write_bytes(installed_coder.read_bytes() + legacy_clause.encode())
+        self.commit('fixture legacy upstream assignments')
+        before = self.initialize()
+
+        for name in ('caveman', 'caveman-review'):
+            del components[name]
+        source = 'templates/team-codex-AGENTS.md'
+        (self.repo / source).write_text('# Fixture CAC instruction\n')
+        manifest['files'] = sorted(set(manifest['files']) | {source})
+        major, minor, _ = map(int, before['maker_version'].split('.'))
+        manifest['version'] = f'{major}.{minor + 1}.0'
+        manifest_path.write_text(json.dumps(manifest))
+        skill = self.repo / 'SKILL.md'
+        skill.write_text(skill.read_text().replace(f"version: {before['maker_version']}\n",
+                                                  f"version: {manifest['version']}\n", 1))
+        coder.write_text(coder_template)
+        self.change('templates/roles/coder.SOUL.md.template', '\nUse the compact task and resume form.\n')
+        return before
+
+    def test_cac_file_only_update_leaves_legacy_companions_pending_on_repeat(self):
+        before = self.cac_revisions()
+        setup = self.state / 'setup.md'
+        setup.write_text(setup.read_text() + f"\nCAC migration: pending; exact base {before['maker_commit']}.\n"
+                         'Fixture interruption: staged CAC; retirement and effective loading unverified.\n')
+        values = u.setup_data(self.state)['confirmed_values']
+        code_home = Path(values['CODEX_HOME'])
+        process_home = Path(values['CODEX_PROCESS_HOME'])
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        coder.write_text('Local rule: keep the approved resource cap.\n\n' + coder.read_text())
+        plan = self.proposal()
+        external = {
+            code_home / 'AGENTS.md': b'# Local rules and staged CAC\nKeep the local review boundary.\n',
+            code_home / 'AGENTS.override.md': b'# Local override\nKeep the local escalation rule.\n',
+            code_home / 'config.toml': b'model = "fixture-model"\n[plugins."ponytail@team-ponytail"]\nenabled = true\n',
+            self.root / 'workspace/nested/AGENTS.md': b'# Project rules\nPreserve local scope.\n',
+            self.root / 'workspace/.agents/skills/caveman/SKILL.md': b'# Foreign project copy\n',
+            self.root / 'coder/plugins/ponytail/plugin.yaml': b'name: ponytail\n',
+            process_home / '.agents/skills/caveman/SKILL.md': b'# Legacy Codex copy\n',
+        }
+        for role in ('planner', 'coder', 'reviewer'):
+            home = Path(self.roles[role]['home'])
+            external[home / 'config.yaml'] = b'skills:\n  auto_load: [local-skill, caveman]\n'
+            external[home / 'skills/caveman/SKILL.md'] = b'# Legacy Hermes copy\n'
+        external[self.root / 'reviewer/skills/caveman-review/SKILL.md'] = b'# Locally edited review copy\n'
+        for path, contents in external.items():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(contents)
+            path.chmod(0o640)
+        saved_setup = setup.read_bytes()
+
+        proposal = json.loads(plan.read_text())
+        self.assertIn('manifest.json:upstream_components', proposal['dependencies'])
+        self.assertFalse(proposal['obsolete'])
+        with self.assertRaisesRegex(ValueError, 'Operational dependency changes'):
+            u.apply(self.home, plan, decision='proceed', review='Checked fixture scope')
+        result = u.apply(self.home, plan, decision='proceed', review='Checked local rule preservation',
+                         dependency_review='Fixture file-only decision; companion collision remains open')
+        self.assertEqual(result['status'], 'applied')
+        updated = u.load_record(self.home)[2]
+        self.assertNotEqual(updated['maker_version'], before['maker_version'])
+        self.assertEqual(updated['maker_commit'], proposal['maker_commit'])
+        self.assertFalse(coder.read_text().startswith('Local rule: keep the approved resource cap.\n'))
+        self.assertIn(str(coder), {item['path'] for item in proposal['adaptations']})
+        repeat = json.loads(self.proposal().read_text())
+        self.assertFalse(repeat['dependencies'] or repeat['conflicts'] or repeat['obsolete'])
+        self.assertTrue(all(u.digest(u.decoded(entry['merged'])) == entry['before_hash']
+                            for entry in repeat['entries']))
+        self.assertEqual(setup.read_bytes(), saved_setup)
+        self.assertIn('CAC migration: pending', setup.read_text())
+        for path, contents in external.items():
+            with self.subTest(path=path):
+                self.assertNotIn(str(path), {entry['target'] for entry in updated['managed']})
+                self.assertEqual(path.read_bytes(), contents)
+                self.assertEqual(path.stat().st_mode & 0o777, 0o640)
+
+    def test_cac_file_rollback_leaves_simulated_companion_changes_for_operator(self):
+        """A clean Codex home starts without AGENTS.md; only fixture writes stage it."""
+        before = self.cac_revisions()
+        plan = self.proposal()
+        code_home = Path(before['confirmed_values']['CODEX_HOME'])
+        instruction = code_home / 'AGENTS.md'
+        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
+        old_soul = coder.read_bytes()
+        self.assertFalse(instruction.exists())
+        self.assertEqual(u.apply(self.home, plan, decision='skip')['status'], 'skipped')
+        self.assertEqual(coder.read_bytes(), old_soul)
+        self.assertFalse(instruction.exists())
+        code_home.mkdir(parents=True)
+        instruction.write_bytes(b'# Staged CAC fixture\n')
+        result = u.apply(self.home, plan, decision='proceed', review='Checked fixture SOUL change',
+                         dependency_review='Approved fixture file-only scope')
+        run = Path(result['run'])
+        self.assertNotEqual(coder.read_bytes(), old_soul)
+        self.assertEqual(instruction.read_bytes(), b'# Staged CAC fixture\n')
+        instruction.write_bytes(b'# Later local work in team AGENTS.md\n')
+        rolled_back = u.rollback(self.home, run, decision='proceed')
+        self.assertEqual(rolled_back['status'], 'rolled-back')
+        self.assertEqual(coder.read_bytes(), old_soul)
+        self.assertEqual(u.load_record(self.home)[2], before)
+        self.assertEqual(instruction.read_bytes(), b'# Later local work in team AGENTS.md\n')
+        self.assertNotIn(str(instruction), rolled_back['retained_additions'])
 
     def test_obsolete_file_is_retained_and_classified(self):
         self.initialize()
@@ -1153,7 +1695,7 @@ class UpdaterTests(unittest.TestCase):
             previous[str(main)] = main.read_bytes()
         managed_previous = {
             item['target'] for item in u.load_record(self.home)[2]['managed']
-            if item['role'] == 'reviewer' and item['source'].startswith('skills/')}
+            if item['role'] == 'reviewer' and any(item['source'].startswith(f'skills/{name}/') for name in names)}
         unaffected = {
             str(path): path.read_bytes()
             for role in ('planner', 'coder', 'team-codex')
@@ -1182,7 +1724,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual(result['status'], 'applied')
         _, _, record = u.load_record(self.home)
         self.assertEqual(set(record['retained_obsolete']), managed_previous)
-        self.assertFalse(set(previous) & {item['target'] for item in record['managed']})
+        self.assertFalse(managed_previous & {item['target'] for item in record['managed']})
         for target, content in previous.items():
             self.assertEqual(Path(target).read_bytes(), content)
         for target, content in unaffected.items():
@@ -1433,14 +1975,19 @@ class UpdaterTests(unittest.TestCase):
                 self.assertEqual((self.state / 'installation.json').read_bytes(), before)
                 target.write_bytes(saved)
 
-    def test_present_empty_file_is_not_a_missing_file(self):
+    def test_present_empty_file_is_replaced_as_a_local_deviation(self):
         self.initialize()
         target = self.home / 'SOUL.md'
+        before = target.read_bytes()
         target.write_bytes(b'')
         self.change()
         plan = self.proposal()
-        self.assertNotIn(str(target), json.loads(plan.read_text())['conflicts'])
-        u.apply(self.home, plan, decision='proceed', review='checked deliberate empty local file')
+        data = json.loads(plan.read_text())
+        self.assertNotIn(str(target), data['conflicts'])
+        self.assertIn(str(target), {item['path'] for item in data['adaptations']})
+        result = u.apply(self.home, plan, decision='proceed', review='checked deliberate empty local file')
+        self.assertEqual(target.read_bytes(), before)
+        self.assertEqual(u.rollback(self.home, Path(result['run']), decision='proceed')['status'], 'rolled-back')
         self.assertEqual(target.read_bytes(), b'')
 
     def test_updates_preserve_local_modes_and_private_state(self):
