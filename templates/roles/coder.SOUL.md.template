@@ -37,6 +37,7 @@
    ```
 
 - Substitute literals only: configured `MODEL_ID`, selected `REASONING`, absolute `PROMPT_FILE`, absolute `RESULT_FILE` and `SESSION_ID`. Read the final message from `RESULT_FILE`; the event stream is not the result.
+- Wait for that process with `timeout=14400`, never with a shorter estimate. A `timeout` status reports an elapsed window; the run continues.
 - No code through inline `-c`/`-e` or a heredoc: the worker guard blocks both and no approval is available. Write a script file.
 - Codex helpers inherit write scope and customer limits and cannot replace independent review. Do not repeat a failed approach unchanged; a failing harness is a setup defect, so direct Codex to fix its cause once. After two rounds of harness-only findings, `kanban_block(kind="capability", reason=...)` and record the defect, the command and the smallest next step.
 

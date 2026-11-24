@@ -197,7 +197,6 @@ class ReasoningContractTests(unittest.TestCase):
             "Record `thread_id` from the `thread.started` line",
         ]:
             self.assertTrue(text in result, text)
-        self.assertNotIn("14400", result)
         self.assertNotIn("28800", result)
         self.assertNotIn("do not wait again", result)
         self.assertNotIn("if the worker guard prohibits them", result)
@@ -317,8 +316,8 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertEqual(rendered.count("`Synthetic-Demo-Pass`"), 1)
         self.assertEqual(rendered.count("`demo-handover`"), 1)
         fixture = render_role(self.template("coder"), self.values("coder"), "coder")
-        self.assertEqual(len(fixture.encode()), 8280)
-        self.assertEqual(len(fixture.splitlines()), 69)
+        self.assertEqual(len(fixture.encode()), 8422)
+        self.assertEqual(len(fixture.splitlines()), 70)
 
     def test_voltagent_specialists_keep_original_settings_outside_parent_matrix(self):
         """Rendered instruction contract; no live Codex execution."""
@@ -670,6 +669,28 @@ class ReasoningContractTests(unittest.TestCase):
         planner = render_role(self.template("planner"), self.values("planner"), "planner")
         self.assertIn("When a ticket's environment is itself under construction, cut a separate card for it; a product card never carries an open environment defect.", planner)
 
+    def test_wait_window_matches_the_configured_terminal_timeout(self):
+        """Contract: the role text carries the profile's exact wait window.
+
+        The Maker renders the SOUL and writes `terminal.timeout` in the same run; a pointer
+        ("the configured window") is not resolvable by the role. Lauf 10 showed both roles
+        polling in 45–900 s windows despite the profile value.
+        """
+        setup = (ROOT / "references/setup.md").read_text()
+        windows = re.findall(r"config set terminal\.timeout (\d+)", setup)
+        self.assertEqual(len(windows), 1, "setup.md must set exactly one terminal.timeout value")
+        window = windows[0]
+        for role in ("coder", "reviewer"):
+            text = render_role(self.template(role), self.values(role), role)
+            with self.subTest(role=role):
+                self.assertIn(f"`timeout={window}`", text)
+                self.assertIn("A `timeout` status reports an elapsed window; the run continues.", text)
+                self.assertNotIn("15000", text)
+                self.assertNotIn("28800", text)
+        reviewer = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
+        self.assertEqual(len(reviewer.encode()), 20204)
+        self.assertEqual(len(reviewer.splitlines()), 120)
+
     def test_worker_wait_cap_and_card_hang_cap_are_recipe_level(self):
         setup = (ROOT / "references/setup.md").read_text()
         self.assertIn("For the Coder and Reviewer profiles only, set the wait window and the tool-call deadline as configuration", setup)
@@ -680,6 +701,9 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn('hermes -p "$PROFILE" config get timeouts.tools.sequential_call', setup)
         self.assertIn('hermes -p "$PROFILE" config get timeouts.tools.concurrent_batch', setup)
         self.assertIn("the tool deadline MUST exceed the wait window", setup)
+        self.assertIn("A `wait` returns the moment the process exits, so the window is an upper bound, never a sleep.", setup)
+        self.assertIn("read at runtime from `TERMINAL_TIMEOUT` in the worker process, which falls back to 180 s", setup)
+        self.assertIn("the Coder card's 8 h `--max-runtime` is what makes a 14400 s wait effective", setup)
         self.assertNotIn("15000", render_role(self.template("coder"), self.values("coder"), "coder"))
         update = (ROOT / "references/update.md").read_text()
         apply_section = update.split("## Activity and application", 1)[1]

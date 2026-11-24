@@ -1,7 +1,7 @@
 ---
 name: generic-devteam
 description: Set up or update a native Hermes project team.
-version: 3.0.0
+version: 3.0.2
 author: Max
 license: MIT
 platforms: [linux]
