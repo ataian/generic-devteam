@@ -101,7 +101,7 @@ class BuildEvidenceTests(unittest.TestCase):
         self.assertIn("[setup grant recipe](setup.md#project-command-grants)", legacy)
         self.assertIn("`docker compose *`", legacy)
         self.assertIn("### Project command grants", setup)
-        self.assertIn("Reconcile the wait configuration", update)
+        self.assertIn("Reconcile the profile settings", update)
         for text in (setup, update):
             self.assertIn("A role does not extend its own list", text)
             self.assertNotIn('"docker *"', text)

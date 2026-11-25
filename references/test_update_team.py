@@ -85,6 +85,78 @@ class UpdaterTests(unittest.TestCase):
     def proposal(self):
         return u.prepare(self.repo, self.home, 'HEAD')
 
+    def test_keep_plan_apply_and_followup(self):
+        self.initialize()
+        targets = [self.home / 'skills/brownfield-feature-planning/SKILL.md', self.home / 'SOUL.md']
+        self.change()
+        local = {}
+        for target in targets:
+            local[str(target)] = target.read_bytes() + b'\nLocal team rule.\n'
+            target.write_bytes(local[str(target)])
+
+        def cli(*args):
+            result = subprocess.run([sys.executable, '-B', u.__file__, '--repo', str(self.repo), *args],
+                                    capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            return json.loads(result.stdout)
+
+        first = cli('plan', '--home', str(self.home))
+        self.assertEqual(first.get('keep'), [])
+        self.assertEqual({a['path'] for a in first['adaptations']}, set(local))
+        second = cli('plan', '--home', str(self.home), '--keep', str(targets[0]), '--keep', str(targets[1]))
+        self.assertNotEqual(first['proposal'], second['proposal'])
+        proposal = json.loads(Path(second['proposal']).read_text())
+        self.assertEqual(proposal['keep'], sorted(local))
+        pristine = {}
+        for entry in proposal['entries']:
+            if entry['target'] in local:
+                self.assertEqual(u.decoded(entry['merged']), local[entry['target']])
+                pristine[entry['target']] = u.decoded(entry['new_base'])
+        inodes = {p: Path(p).stat().st_ino for p in local}
+        result = cli('apply', '--home', str(self.home), '--proposal', second['proposal'],
+                     '--activity-decision', 'proceed', '--semantic-review', 'Keep both local rules')
+        journal = json.loads((Path(result['run']) / 'result.json').read_text())
+        self.assertEqual({f['target'] for f in journal['files'] if f['kept']}, set(local))
+        _, _, record = u.load_record(self.home)
+        self.assertNotIn('keep', record)
+        for entry in record['managed']:
+            p = entry['target']
+            if p in local:
+                self.assertEqual((Path(p).read_bytes(), Path(p).stat().st_ino), (local[p], inodes[p]))
+                self.assertEqual(entry['installed_hash'], u.digest(pristine[p]))
+                self.assertEqual((self.state / 'baselines' / entry['baseline']).read_bytes(), pristine[p])
+        following = cli('plan', '--home', str(self.home))
+        self.assertEqual(following['keep'], [])
+        self.assertEqual({a['path'] for a in following['adaptations']}, set(local))
+
+    def test_keep_rejects_unmodified_target(self):
+        self.initialize()
+        with self.assertRaisesRegex(ValueError, 'adaptation'):
+            u.prepare(self.repo, self.home, keep=[str(self.home / 'SOUL.md')])
+
+    def test_apply_rejects_settings_type_drift(self):
+        self.initialize()
+        path = self.proposal()
+        proposal = json.loads(path.read_text())
+        proposal['settings']['planner']['kanban.auto_subscribe_on_create'] = 0
+        path.write_text(json.dumps(proposal))
+        with self.assertRaisesRegex(ValueError, 'drift'):
+            u.apply(self.home, path, decision='proceed', review='checked')
+
+    def test_settings_required_only_in_target_manifest(self):
+        path = self.repo / 'manifest.json'
+        manifest = json.loads(path.read_text())
+        manifest.pop('settings', None)
+        path.write_text(json.dumps(manifest))
+        self.commit('old manifest without settings')
+        self.initialize()
+        with self.assertRaisesRegex(ValueError, 'settings'):
+            self.proposal()
+        manifest['settings'] = {'planner': {'kanban.auto_subscribe_on_create': False}}
+        path.write_text(json.dumps(manifest))
+        self.commit('target settings')
+        self.assertEqual(json.loads(self.proposal().read_text())['settings'], manifest['settings'])
+
     def deassigned_reviewer_skill(self, name='screenshot-to-code'):
         """Install one Maker skill into the Reviewer home, then deassign it."""
         manifest_path = self.repo / 'manifest.json'

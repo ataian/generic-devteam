@@ -679,6 +679,16 @@ class ReasoningContractTests(unittest.TestCase):
         setup = (ROOT / "references/setup.md").read_text()
         windows = re.findall(r"config set terminal\.timeout (\d+)", setup)
         self.assertEqual(len(windows), 1, "setup.md must set exactly one terminal.timeout value")
+        settings = MANIFEST.get("settings", {})
+        self.assertEqual(set(settings), {"planner", "coder", "reviewer"})
+        for role, values in settings.items():
+            expected_keys = {"kanban.auto_subscribe_on_create"}
+            if role != "planner":
+                expected_keys.update(("terminal.timeout", "timeouts.tools.sequential_call", "timeouts.tools.concurrent_batch"))
+            self.assertEqual(set(values), expected_keys)
+            for key, value in values.items():
+                self.assertRegex(setup, rf'(?m)^hermes -p "\$PROFILE" config set {re.escape(key)} {json.dumps(value)}$')
+            self.assertIs(values["kanban.auto_subscribe_on_create"], False)
         window = windows[0]
         for role in ("coder", "reviewer"):
             text = render_role(self.template(role), self.values(role), role)
@@ -707,9 +717,9 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertNotIn("15000", render_role(self.template("coder"), self.values("coder"), "coder"))
         update = (ROOT / "references/update.md").read_text()
         apply_section = update.split("## Activity and application", 1)[1]
-        self.assertIn("Reconcile the wait configuration", apply_section)
+        self.assertIn("Reconcile the profile settings", apply_section)
         self.assertLess(apply_section.index("Apply the reviewed proposal"),
-                        apply_section.index("Reconcile the wait configuration"))
+                        apply_section.index("Reconcile the profile settings"))
         inspect_section = update.split("## Prepare and review one team", 1)[1].split("## Planner Kanban tools", 1)[0]
         self.assertNotIn("Reconcile `terminal.timeout`", inspect_section)
         release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
@@ -1290,7 +1300,7 @@ class ReviewerEquipmentTests(unittest.TestCase):
             self.assertIn(clause, section)
         self.assertIn("Within that approved update, retiring every `pristine` candidate is mandatory, not an optional second choice.", section)
         self.assertIn("Retain obsolete files that are not managed skill copies and preserve locally edited obsolete trees", update)
-        self.assertIn("A current managed target is not obsolete: its local edit is an adaptation that the approved scope replaces after backup.", update)
+        self.assertIn("A current managed target is not obsolete: its local edit is an adaptation that the approved decision either replaces or retains.", update)
         self.assertNotIn("Preserve existing installations unless a separate concrete reconciliation is authorized.", update)
         for relative in ("README.md", "references/code-analysis.md", "templates/setup-record.md"):
             self.assertIn("#required-skill-retirement", (ROOT / relative).read_text())

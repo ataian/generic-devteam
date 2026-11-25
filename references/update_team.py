@@ -622,7 +622,8 @@ def obsolete_targets(candidates):
     return sorted(target for record in candidates for target in record['targets'])
 
 
-def prepare(repo, home, ref='HEAD'):
+def prepare(repo, home, ref='HEAD', keep=()):
+    keep = sorted(set(keep))
     state, raw, old = load_record(home)
     commit = revision(repo, ref)
     version = package_version(repo, commit)
@@ -648,6 +649,8 @@ def prepare(repo, home, ref='HEAD'):
             raise ValueError('Missing or corrupt pristine baseline')
     bindings = dict(old['confirmed_bindings'])
     new_manifest = json.loads(blob(repo, commit, 'manifest.json'))
+    if 'settings' not in new_manifest:
+        raise ValueError('Target manifest missing settings')
     if (not old['legacy_skills_unknown'] and new_manifest.get('recovery_launcher')
             and 'triage_recovery' not in bindings):
         setup = setup_data(state)['confirmed_bindings']
@@ -681,7 +684,6 @@ def prepare(repo, home, ref='HEAD'):
         except ValueError:
             dependencies.append(source)
     old_manifest = json.loads(blob(repo, old['maker_commit'], 'manifest.json'))
-    new_manifest = json.loads(blob(repo, commit, 'manifest.json'))
     if old_manifest.get('upstream_components') != new_manifest.get('upstream_components'):
         dependencies.append('manifest.json:upstream_components')
     entries, conflicts, adaptations = [], [], []
@@ -700,20 +702,24 @@ def prepare(repo, home, ref='HEAD'):
             # A missing managed target is damage, not authored text.
             merged, conflict = b'', True
         else:
-            # Managed SOULs and Maker skill trees are authoritative. Report a local
-            # deviation with its installed version, then replace it.
             merged, conflict = new, False
             if local != base:
+                if target in keep:
+                    merged = local
                 adaptations.append({'path': target, 'version': old['maker_version'],
                                     'state': 'modified'})
         if conflict:
             conflicts.append(target)
         entries.append(dict(entry, before_hash=digest(local) if local is not None else None, before_mode=before_mode,
                             baseline=digest(new), new_base=encoded(new), merged=encoded(merged or b''), conflict=conflict))
+    invalid = set(keep) - {item['path'] for item in adaptations}
+    if invalid:
+        raise ValueError('Not a current adaptation: ' + ', '.join(sorted(invalid)))
     obsolete = obsolete_candidates(stored, sorted(set(stored) - new_targets), old['roles'])
     proposal = {'schema': SCHEMA, 'team_id': old['team_id'], 'home': str(home), 'repo': str(Path(repo).resolve()),
                 'record_hash': digest(raw), 'maker_commit': commit, 'maker_version': version,
                 'confirmed_bindings': bindings, 'confirmed_values': values,
+                'settings': new_manifest['settings'], 'keep': keep,
                 'entries': entries, 'adaptations': adaptations, 'obsolete': obsolete,
                 'conflicts': conflicts, 'dependencies': dependencies,
                 'notices': ['legacy skills: baseline unknown; withheld'] if old['legacy_skills_unknown'] else [],
@@ -751,10 +757,10 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
         raise ValueError('Operational dependency changes: report effect/recommendation, obtain user decision, withhold dependent files')
     # Rebuild from exact Git commits and current files. Never trust proposal target
     # paths or merged bytes as an arbitrary write payload.
-    fresh_path = prepare(proposal['repo'], home, proposal['maker_commit'])
+    fresh_path = prepare(proposal['repo'], home, proposal['maker_commit'], proposal.get('keep', []))
     fresh = json.loads(required_read(fresh_path))
-    for key in ('entries', 'adaptations', 'obsolete', 'dependencies', 'maker_version', 'notices', 'confirmed_bindings', 'confirmed_values'):
-        if fresh[key] != proposal[key]:
+    for key in ('entries', 'adaptations', 'keep', 'settings', 'obsolete', 'dependencies', 'maker_version', 'notices', 'confirmed_bindings', 'confirmed_values'):
+        if key not in proposal or json_bytes(fresh[key]) != json_bytes(proposal[key]):
             raise ValueError('Proposal/source/target drift; prepare and review again')
     if fingerprint(state / 'installation.json') != proposal['record_hash'] or read(path) != proposal_raw:
         raise ValueError('Metadata/proposal changed during preflight')
@@ -775,7 +781,8 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
             atomic(backup / str(index), before, None)
         journal['files'].append({'target': entry['target'], 'before_hash': entry['before_hash'],
                                  'after_hash': digest(decoded(entry['merged'])), 'backup': str(index),
-                                 'mode': entry['before_mode'], 'after_mode': entry['mode']})
+                                 'mode': entry['before_mode'], 'after_mode': entry['mode'],
+                                 'kept': entry['target'] in proposal['keep']})
     atomic(run / 'result.json', json_bytes(journal), None)
     try:
         observed = require_decision(old['roles'], decision)
@@ -794,7 +801,7 @@ def apply(home, proposal_path, decision=None, review=None, dependency_review=Non
                 atomic(entry['target'], merged, entry['before_hash'], entry['mode'])
             baseline = store_baseline(state, new)
             managed.append({key: entry[key] for key in ('role', 'source', 'target', 'transform')} |
-                           {'baseline': baseline, 'installed_hash': digest(merged)})
+                           {'baseline': baseline, 'installed_hash': digest(new)})
         for entry in proposal['entries']:
             if fingerprint(entry['target']) != digest(decoded(entry['merged'])) or file_mode(entry['target']) != entry['mode']:
                 raise ValueError('Final target readback mismatch: ' + entry['target'])
@@ -902,6 +909,8 @@ def main():
     plan = commands.add_parser('plan')
     plan.add_argument('--home', type=Path, required=True)
     plan.add_argument('--target', default='HEAD')
+    plan.add_argument('--keep', action='append', default=[], metavar='ABSOLUTE_PATH',
+                      help='Retain this adapted target for this run (repeat per target)')
     for name, option in [('apply', '--proposal'), ('rollback', '--run')]:
         command = commands.add_parser(name)
         command.add_argument('--home', type=Path, required=True)
@@ -924,7 +933,7 @@ def main():
                                 json.loads(required_read(args.roles)) if args.roles else None, args.legacy_souls,
                                 args.base_commit, args.basis_evidence)
         elif args.command == 'plan':
-            path = prepare(args.repo, args.home, args.target)
+            path = prepare(args.repo, args.home, args.target, args.keep)
             output = {'proposal': str(path), **json.loads(required_read(path))}
         elif args.command == 'apply':
             output = apply(args.home, args.proposal, args.activity_decision, args.semantic_review, args.dependency_decision)

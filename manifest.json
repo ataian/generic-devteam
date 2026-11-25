@@ -1,8 +1,25 @@
 {
   "name": "generic-devteam",
-  "version": "3.0.4",
+  "version": "3.1.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
+  "settings": {
+    "planner": {
+      "kanban.auto_subscribe_on_create": false
+    },
+    "coder": {
+      "kanban.auto_subscribe_on_create": false,
+      "terminal.timeout": 14400,
+      "timeouts.tools.sequential_call": 15000,
+      "timeouts.tools.concurrent_batch": 15000
+    },
+    "reviewer": {
+      "kanban.auto_subscribe_on_create": false,
+      "terminal.timeout": 14400,
+      "timeouts.tools.sequential_call": 15000,
+      "timeouts.tools.concurrent_batch": 15000
+    }
+  },
   "files": [
     "AGENTS.md",
     "LICENSE",

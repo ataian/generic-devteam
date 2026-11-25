@@ -100,6 +100,8 @@ hermes -p "$PROFILE" config get kanban.auto_subscribe_on_create
 hermes -p "$PROFILE" config get security.protected_instruction_files
 ```
 
+Source for `kanban.auto_subscribe_on_create` above and the wait settings below: `manifest.json → settings`. If the examples differ, use the manifest values for the role.
+
 For the Coder and Reviewer profiles only, set the wait window and the tool-call deadline as configuration; role prose does not configure either. Unset, `timeouts.tools` falls back to 420 s and ends a wait before the wait returns its own result. `terminal.timeout` bounds one wait, `timeouts.tools.sequential_call` one tool call and `timeouts.tools.concurrent_batch` one parallel batch; the tool deadline MUST exceed the wait window. The window stays below the card runtime on purpose: when it elapses the role reads the run's state and lets it continue, and the card's `--max-runtime` remains the hard end. A `wait` returns the moment the process exits, so the window is an upper bound, never a sleep.
 
 The window a running worker accepts is read at runtime from `TERMINAL_TIMEOUT` in the worker process, which falls back to 180 s; `terminal.timeout` reaches it only through the environment. The dispatcher raises it to the card runtime minus 30 s, so the Coder card's 8 h `--max-runtime` is what makes a 14400 s wait effective. A read-back of `terminal.timeout` proves the profile value, not the window the worker will accept.
