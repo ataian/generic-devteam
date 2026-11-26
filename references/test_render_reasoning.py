@@ -112,9 +112,16 @@ class ReasoningContractTests(unittest.TestCase):
         self.assertIn(trigger, planner)
         self.assertLess(planner.index("Use these checks within existing design work"), planner.index(trigger))
         self.assertLess(planner.index(trigger), planner.index('3. Use "Project binding" paths.'))
+        requested = 'skill_view(name="dev-environment", file_path="references/requested-demo.md")'
+        self.assertIn(requested, planner)
+        self.assertLess(planner.index("5. At plan acceptance"), planner.index(requested))
+        self.assertLess(planner.index(requested), planner.index("6. Commit the accepted plan"))
         tickets = planner.split("7. Create small implementation tickets", 1)[1].split("8. Create dependent", 1)[0]
         self.assertNotIn("agent-guide path in each relevant ticket", tickets)
-        self.assertIn("When the project has a demonstration runtime, add a final `Demo handover` card", tickets)
+        self.assertIn("Only for a requested demonstration, add a final `Demo handover` card", tickets)
+        self.assertIn("assigned to example-role, blocked on the last implementation ticket", tickets)
+        for obsolete in ("retire a running demonstration runtime", "teardown verb", "docker", "compose"):
+            self.assertNotIn(obsolete, tickets)
         self.assertIn("For a completed demo handover, state the reviewed commit, the verified browser URL", planner)
         for role in ("coder", "reviewer"):
             self.assertNotIn(trigger, self.template(role))
@@ -137,32 +144,57 @@ class ReasoningContractTests(unittest.TestCase):
                 with self.subTest(role=role, field=field), self.assertRaises(ValueError):
                     render_role(self.template(role), values, role)
 
-    def test_demonstration_lifecycle_and_usage_verbs_reach_each_role(self):
+    def test_requested_demo_is_owned_loaded_and_closed_by_the_named_role(self):
         """Static rendered instruction contract; no runtime or demo is exercised."""
         rendered = {role: render_role(self.template(role), self.values(role), role)
                     for role in ("planner", "coder", "reviewer")}
-        lifecycle = ("demonstration runtime is not permanent; at most one exists and shows the last independently "
-                     "reviewed commit. Replacing it includes retiring the previous one after verifying exclusive "
-                     "ownership of its containers, volumes, network and private runtime directory, and verifying "
-                     "they are gone; a stopped runtime is not a retired one. Preserve review evidence "
-                     "and unrelated resources.")
+        planner, coder, reviewer = rendered["planner"], rendered["coder"], rendered["reviewer"]
         skill = (ROOT / "skills/demo-handover/SKILL.md").read_text()
-        self.assertIn(lifecycle, skill)
-        self.assertIn(lifecycle, rendered["reviewer"])
-        self.assertNotIn(lifecycle, rendered["coder"])
-        self.assertIn("read the `demo-handover` skill", rendered["coder"])
-        self.assertIn("a stopped runtime is not a retired one", rendered["planner"])
-        self.assertIn("retire a running demonstration runtime.", rendered["planner"])
-        teardown = ("Use the project's documented teardown verb (`demo.sh retire` or equivalent); never compose "
-                    "container, volume, network or directory removal yourself — an unattended guard refuses it.")
-        self.assertIn(teardown, rendered["planner"])
-        self.assertIn(teardown, skill)
-        self.assertIn("Create the demonstration user via `demo.sh user`, with the password supplied only through the environment variable the script documents.", skill)
-        self.assertNotIn("demo.sh retire", rendered["coder"])
-        self.assertIn("Its demonstration user's password is `Example`, supplied only through the environment variable the script documents, never as an argument and never on a card.", rendered["coder"])
-        self.assertIn("recorded login works on the running system with the password `Example`", rendered["reviewer"])
-        self.assertIn("the demonstration user and its login name", rendered["planner"])
-        self.assertIn("The password is `Example`; never write it on a card.", rendered["planner"])
+        reference = (ROOT / "skills/dev-environment/references/requested-demo.md").read_text()
+
+        # Planner: ask once, load the retirement step, retire before commit and every ticket, stop on failure.
+        self.assertIn("ask whether the customer wants a new demonstration", planner)
+        self.assertIn('skill_view(name="dev-environment", file_path="references/requested-demo.md")', planner)
+        self.assertIn("Without an explicit demo request, proceed to step 6 without demo work.", planner)
+        self.assertIn("retire any previous demo before step 6 or any ticket", planner)
+        self.assertIn("stop the entire plan and resolve the issue directly with the customer", planner)
+        self.assertNotIn("retire a running demonstration runtime", planner)
+        self.assertNotIn("teardown verb", planner)
+        self.assertIn("Only for a requested demonstration, add a final `Demo handover` card", planner)
+
+        # Coder: starts only on the released card, keeps the refusal and the card facts.
+        self.assertIn("read the `demo-handover` skill", coder)
+        self.assertIn("Start the runtime at the reviewed commit. If build or start refuses existing state, "
+                      "stop and report the refusal; do not purge, rename or bypass it.", skill)
+        self.assertIn("Create the demonstration user with the project’s documented command.", skill)
+        self.assertIn("Record the reviewed commit, the URL, the login name and the exact data-creation command on the card.", skill)
+        self.assertNotIn("demo.sh retire", coder)
+        self.assertNotIn("demo.sh user", coder)
+        self.assertNotIn("teardown verb", coder)
+
+        # Reviewer: one functional end check, not a second retirement ownership.
+        self.assertIn("On the final demo handover card, verify the demo runs at the reviewed commit", reviewer)
+        self.assertIn("the promised functionality works with the recorded data", reviewer)
+        self.assertIn("Container uptime alone is not a functional check.", reviewer)
+        self.assertNotIn("retiring the previous one", reviewer)
+        self.assertNotIn("teardown verb", reviewer)
+
+        # Retirement criteria live once, at the Planner's loaded reference.
+        for clause in ("Inspect the project’s demo state, including stopped remnants.",
+                       "Verified absence completes this step; an inspection failure does not.",
+                       "Before removal, verify exclusive ownership of the old demo’s containers, volumes, "
+                       "network and private runtime directory.",
+                       "A stopped runtime is not retired.",
+                       "stop before committing the plan or writing any ticket",
+                       "Do not apply and revert a planned product fix to bypass this prerequisite."):
+            with self.subTest(clause=clause):
+                self.assertIn(clause, reference)
+
+        # Password literal once per role, never on a card; no unresolved field; closing report retained.
+        self.assertIn("The password is `Example`; never write it on a card.", planner)
+        self.assertIn("Its demonstration user's password is `Example`", coder)
+        self.assertIn("with the password `Example`", reviewer)
+        self.assertIn("send a short Mattermost customer report", planner)
         for role, text in rendered.items():
             with self.subTest(role=role):
                 self.assertNotIn("{{", text)
@@ -173,8 +205,10 @@ class ReasoningContractTests(unittest.TestCase):
             with self.subTest(role=role):
                 values = dict(self.values(role), DEMO_PASSWORD=password)
                 text = render_role(self.template(role), values, role)
-                self.assertIn("`" + password + "`", text)
+                self.assertEqual(text.count("`" + password + "`"), 1)
                 self.assertNotIn("{{DEMO_PASSWORD}}", text)
+        planner = render_role(self.template("planner"), dict(self.values("planner"), DEMO_PASSWORD=password), "planner")
+        self.assertIn("The password is `" + password + "`; never write it on a card.", planner)
 
     def test_demonstration_password_rejects_instruction_and_fence_breakouts(self):
         for bad in ("", " ", " leading", "trailing ", "line\nbreak", "tick`break", "back\\slash",
@@ -698,7 +732,7 @@ class ReasoningContractTests(unittest.TestCase):
                 self.assertNotIn("15000", text)
                 self.assertNotIn("28800", text)
         reviewer = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
-        self.assertEqual(len(reviewer.encode()), 20204)
+        self.assertEqual(len(reviewer.encode()), 19851)
         self.assertEqual(len(reviewer.splitlines()), 120)
 
     def test_worker_wait_cap_and_card_hang_cap_are_recipe_level(self):
@@ -896,7 +930,7 @@ class ReasoningContractTests(unittest.TestCase):
             "Set assignee, workspace, dependencies, and required runtime fields through the Kanban tools",
             "actor-behaviour-benefit",
             "Clarity takes precedence over word or line limits.",
-            "Do not create implementation tickets before acceptance.",
+            "obtain explicit plan acceptance before creating tickets.",
         ):
             self.assertIn(clause, planner)
         self.assertNotIn("{{", planner)
@@ -931,7 +965,7 @@ class ReasoningContractTests(unittest.TestCase):
             "For broad mechanical changes, use Brownfield's conditional Expand–Migrate–Contract planning procedure.",
             "Do not repeat settled questions.",
             "Include relevant accepted glossary and ADR state in that baseline; bind exact paths and commits for separate records.",
-            "Do not create implementation tickets before acceptance.",
+            "obtain explicit plan acceptance before creating tickets.",
         ):
             with self.subTest(clause=clause):
                 self.assertIn(clause, workflow)
@@ -1381,7 +1415,7 @@ class DomainModelingContractTests(unittest.TestCase):
             "Keep requirements and phase gates in the accepted plan; use its existing acceptance gate.",
             "Include relevant accepted glossary and ADR state in that baseline; bind exact paths and commits for separate records.",
             "Leave execution-time technical decisions within the accepted goal and constraints",
-            "Do not create implementation tickets before acceptance.",
+            "obtain explicit plan acceptance before creating tickets.",
         ):
             self.assertIn(clause, planner)
         setup = (ROOT / "references/setup.md").read_text()

@@ -25,14 +25,21 @@ class DevelopmentEnvironmentTests(unittest.TestCase):
     def test_complete_planner_only_skill_and_portable_metadata(self):
         text = self.text()
         manifest = json.loads((ROOT / "manifest.json").read_text())
+        reference = PACKAGE / "references/requested-demo.md"
         self.assertIn("dev-environment", manifest["own_skills"])
         entry = manifest["own_skills"]["dev-environment"]
         self.assertEqual(entry["targets"], {"hermes": ["planner"]})
         self.assertEqual(entry["skill_path"], "skills/dev-environment/SKILL.md")
-        self.assertEqual(entry["transport"], {"SKILL.md": "SKILL.md"})
+        self.assertEqual(entry["transport"], {
+            "SKILL.md": "SKILL.md",
+            "references/requested-demo.md": "references/requested-demo.md",
+        })
         self.assertEqual([p for p in manifest["files"] if p.startswith("skills/dev-environment/")],
-                         ["skills/dev-environment/SKILL.md"])
-        self.assertEqual({p.name for p in PACKAGE.iterdir()}, {"SKILL.md"})
+                         ["skills/dev-environment/SKILL.md",
+                          "skills/dev-environment/references/requested-demo.md"])
+        self.assertEqual({p.relative_to(PACKAGE).as_posix() for p in PACKAGE.rglob("*") if p.is_file()},
+                         {"SKILL.md", "references/requested-demo.md"})
+        self.assertTrue(reference.is_file(), "Missing requested-demo reference")
         self.assertNotIn("dev-environment", manifest["upstream_components"])
         header, body = text[4:].split("\n---\n", 1)
         meta = yaml_load(header)
@@ -43,6 +50,30 @@ class DevelopmentEnvironmentTests(unittest.TestCase):
         self.assertNotIn("disable-model-invocation", meta)
         self.assertNotRegex(body, r"/home/|/workspace/|\bMTB\b|\bSG1\b|check_candidate_skill")
         local_links(PACKAGE)
+        local_links(PACKAGE / "references")
+
+    def test_requested_demo_reference_is_delivered_and_resolvable(self):
+        """Static delivery contract: the Planner loads the reference only after plan acceptance."""
+        call = 'skill_view(name="dev-environment", file_path="references/requested-demo.md")'
+        planner = (ROOT / "templates/roles/planner.SOUL.md.template").read_text()
+        self.assertIn(call, planner)
+        setup = (ROOT / "references/setup.md").read_text()
+        self.assertIn(call, setup)
+        self.assertIn("leaves delivery incomplete", setup)
+        text = self.text()
+        self.assertIn("- [Requested demo](references/requested-demo.md): Planner only, immediately after plan acceptance "
+                      "and only for an explicit demo request. Skip this reference during ordinary development-environment work.", text)
+        self.assertNotIn("## Demonstration lifecycle", text)
+        self.assertNotIn("A demonstration runtime is not permanent", text)
+        reference = (PACKAGE / "references/requested-demo.md").read_text()
+        self.assertTrue(reference.startswith("# Retire the previous demo\n"))
+        for clause in ("Inspect the project’s demo state, including stopped remnants.",
+                       "Verified absence completes this step; an inspection failure does not.",
+                       "A stopped runtime is not retired.",
+                       "stop before committing the plan or writing any ticket"):
+            with self.subTest(clause=clause):
+                self.assertIn(clause, reference)
+        self.assertNotIn(call, reference)
 
     def test_absent_usable_and_incomplete_paths_preserve_scope(self):
         text = self.text()

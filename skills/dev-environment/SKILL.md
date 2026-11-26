@@ -36,18 +36,14 @@ metadata:
 ## Hand over one operating guide
 
 - Guide: one short `docker/dev/AGENTS.md`, or the actual guide path in an adopted layout.
-- Entrypoint: give the guide one script with one verb per operation (`docker/dev/dev.sh up`, `check`, `stop`, `test`, `reset`). `check` runs the selected component's static checks without the test suites. A compound command line, or `$` expansion inside double quotes, never matches an agent grant.
+- Entrypoint: give the guide one verb per operation with the exact invocation the project uses. `check` runs the selected component's static checks without the test suites. A compound command line, or `$` expansion inside double quotes, never matches an agent grant.
 - Content: only environment-specific changes to the coder's workflow. Use one line per operation with a short label and exact invocation. State non-obvious targets or destructive effects where relevant.
 - Occasional operations: point to existing helper commands or their help. Keep implementation detail and acceptance evidence out of recurring context.
 - Loader: root `AGENTS.md` requires the guide by repository-relative path when a task uses the environment.
 
-## Demonstration lifecycle
+## Optional reference
 
-- A demonstration runtime is not permanent. At most one acceptance demo exists; it shows the last independently reviewed commit.
-- Before replacing it, verify exclusive ownership of the previous demo's containers, volumes, network and private runtime directory. Retire it through the project's teardown verb and verify they are gone; a stopped runtime is not a retired one. Preserve review evidence and unrelated resources.
-- Do not compose container, volume, network or directory removal yourself; an unattended guard refuses it.
-- If the build or start verb refuses existing runtime state, stop and report the exact refusal. Do not purge, rename or bypass that state.
-- Judge readiness from the project's status and version output, not from container uptime. A started container is not a working demo.
+- [Requested demo](references/requested-demo.md): Planner only, immediately after plan acceptance and only for an explicit demo request. Skip this reference during ordinary development-environment work.
 
 ## Verify the developer workflow
 
@@ -56,4 +52,4 @@ metadata:
   1. The Coder prepares one reversible source change and a new, untracked targeted test in a disposable checkout with synthetic test data.
   2. The Reviewer follows the guide in a disposable checkout, runs a real project build and checks both source states independently with the Coder's probe. Rerun the selected test after the edit. Its result must reflect the change without staging files or rebuilding the tool image.
 - Verify source startup or branch selection when included in the accepted task. Record results and any unverified capability on the existing task. Acceptance ends at the developer workflow.
-- Demo handover: separate closure step with its own card, not an environment acceptance case; it runs the built application through the app compose.
+- A requested demo handover has its own card; it is not a development-environment acceptance case.

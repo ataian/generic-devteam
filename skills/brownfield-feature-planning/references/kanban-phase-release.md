@@ -18,7 +18,6 @@ Carry outcomes, dependencies, and verification into the accepted plan, phases, a
 2. Select the project board explicitly on every call. On rejection, inspect native help. Setup established the surface.
 3. Get the notification destination from project rules and reuse the verified gateway origin for the participant and `chat_type`. Match the gateway's literal type: a private Mattermost channel can be reported as `group`, so do not infer `channel` from its display label. Re-derive only if the binding changed or the relevant origin fields were not established. Old subscriptions and the current desktop conversation are not sources for the destination.
 4. Reuse setup facts for gateway, dispatcher, adapter ownership, routing, and file identity. Skip per-release rechecks.
-5. When the planned change repairs the demo teardown command itself, check before plan acceptance whether the existing approved teardown can satisfy the pre-release gate. If not, escalate the circular prerequisite to the operator and keep the release blocked. Do not propose applying and reverting the same product fix simply to get through the gate.
 
 ## 2. Create blocked cards and persist progress
 

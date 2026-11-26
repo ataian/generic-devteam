@@ -103,7 +103,7 @@ class PrototypeTests(unittest.TestCase):
         for clause in ('skill_view(name="prototype")', "During grilling", "write isolated throwaway",
                        "without Coder, Codex, tickets, automated tests, independent review, or extra approval rounds",
                        "Product implementation retains the normal workflow and gates",
-                       "Do not create implementation tickets before acceptance.",
+                       "obtain explicit plan acceptance before creating tickets.",
                        "Assign implementation to", "If a prototype clarified a decision"):
             self.assertIn(clause, rendered)
         for role in ("coder", "reviewer"):
