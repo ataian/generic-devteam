@@ -228,6 +228,25 @@ class BrownfieldPackageTests(unittest.TestCase):
         for obsolete in ("create only missing phases", "complete accepted phase list", "Write a short goal"):
             self.assertNotIn(obsolete, release)
 
+    def test_cards_carry_no_skill_pin(self):
+        """A card-level skill pin kills a worker the assignee cannot load.
+
+        SG1 run 10: `superpowers:verification-before-completion` on a Coder card whose profile
+        has no Superpowers; the worker died before its first turn and the card stood for
+        hours. Equipment comes from setup, method from the role text — the field must not
+        return, and neither must its old wording.
+        """
+        release = (SKILL / "references/kanban-phase-release.md").read_text()
+        planner = (ROOT / "templates/roles/planner.SOUL.md.template").read_text()
+        self.assertIn("Set no `skills`: role skills come from setup", release)
+        for name, text in (("kanban-phase-release.md", release),
+                           ("planner.SOUL.md.template", planner)):
+            with self.subTest(target=name):
+                self.assertNotRegex(text, r"(?i)\b(required|pinned|pin) skills?\b")
+                self.assertNotRegex(text, r"(?i)\bchoose (a |the )?skills? (for|on) (the |each )?card")
+        self.assertNotIn("Check assignee, workspace, skill, runtime/retry fields", release)
+        self.assertNotIn("idempotency key, required skill", release)
+
     def test_synthesis_and_domain_rules_have_one_role_source(self):
         text = (SKILL / "SKILL.md").read_text()
         release = (SKILL / "references/kanban-phase-release.md").read_text()
@@ -305,9 +324,12 @@ class BrownfieldPackageTests(unittest.TestCase):
             self.assertIn(clause, text)
         self.assertNotIn("who may authorize an extension", text)
         self.assertNotIn("retry allowances", text)
-        self.assertIn("Set native assignee and workspace, `--initial-status blocked`, idempotency key, required skill, "
-                      "explicit completion contract, explicit customer limits, and required runtime/retry fields. "
+        self.assertIn("Set native assignee and workspace, `--initial-status blocked`, idempotency key, explicit "
+                      "completion contract, explicit customer limits, and required runtime/retry fields. "
+                      "Set no `skills`: role skills come from setup. "
                       "Do not invent discretionary attempt budgets.", release)
+        self.assertNotIn("required skill", release)
+        self.assertNotIn("workspace, skill,", release)
         for source in (text, release):
             self.assertNotIn("Use native run logs for detailed execution output.", source)
             self.assertIn("Native run outputs remain available evidence, not an authored run-log duty.", source)

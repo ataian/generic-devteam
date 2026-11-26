@@ -6,6 +6,7 @@ Trigger: resolved blocker or interrupted run. Use additional checks below for in
 - Preserve assigned implementation/review owners, native guards, and runtime policies. Leave dispatch to the dispatcher.
 - Triage means blocked work in this team. Never deliberately send work there.
 - Screen a real Coder escalation for an overlooked in-scope solution before involving the customer. If found, record the correction and resume the Coder without a customer round. Otherwise coordinate permitted recovery or obtain the missing decision in Mattermost.
+- For a missing worker credential with an explicitly authorized local source, verify source accessibility and an unambiguous match without emitting the value. Give the worker only the source and injection procedure. Scope the value to the consuming process, with tracing off; never pass it in argument vectors, tickets, tool results, or logs. Verify the injection prerequisite before releasing a retry.
 - Record a sufficient customer answer and its scope on the existing ticket. Amend the versioned plan and affected ticket bindings before release when required. Post with `kanban_comment(task_id=..., body=...)` and read back the decision before resuming. A sufficient answer needs no further start request.
 - A Mattermost wake carries no active Reviewer authority. Use ordinary unblock or guarded triage recovery. Reserve request-changes for active review.
 - Keep capability failures and verified quota pauses blocked until their actual cause is resolved. Verify quota reset before authorized native one-time resumption.

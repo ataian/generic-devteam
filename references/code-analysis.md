@@ -1,6 +1,6 @@
 # Set up code analysis
 
-Configure only the **Graphify or CBM** branch confirmed in [Setup](setup.md) for Planner, Coder, Reviewer and Team-Codex.
+Configure only the **Graphify or CBM** branch confirmed in [Setup](setup.md) for Planner, Reviewer and Team-Codex.
 Use during authorized setup or the approved [upstream companion update](update.md#required-upstream-companion-update), including restoration of missing selected assets and bindings.
 Preserve analysis assets during [required skill retirement](update.md#required-skill-retirement).
 Use the pinned [sources and licenses](upstream-sources.md#code-analysis-exactly-one-alternative).
@@ -27,7 +27,7 @@ Require runtime/skill compatibility before copying the complete original bundles
 
 | Consumer | Original main file → `SKILL.md` | References → `references/` | Target directory |
 |---|---|---|---|
-| Planner, Coder and Reviewer | `graphify/skill-claw.md` | `graphify/skills/claw/references/` complete | `<ROLE_HOME>/skills/graphify/` |
+| Planner and Reviewer | `graphify/skill-claw.md` | `graphify/skills/claw/references/` complete | `<ROLE_HOME>/skills/graphify/` |
 | Team-Codex | `graphify/skill-codex.md` | `graphify/skills/codex/references/` complete | `<CODEX_PROCESS_HOME>/.agents/skills/graphify/` |
 
 Compare full file sets and bytes with the source, including `LICENSE`, `LICENSE-MIT` and `NOTICE`. Deliver the original, complete skill.
@@ -35,7 +35,7 @@ Graphify's `graphify/install.py` maps Hermes to claw. Use the explicit profile t
 
 ### 2. Bind and read back
 
-- **Setup.** Verify native discovery/loading of the original `graphify` skill in Planner, Coder, Reviewer and Team-Codex. Bind the confirmed output CWD, corpus and runtime interpreter without generating a graph. Keep separate outputs per repository. The skill/CLI route needs no extra MCP service. Add a watcher only if its need and effects were confirmed during preparation.
+- **Setup.** Verify native discovery/loading of the original `graphify` skill in Planner, Reviewer and Team-Codex. Bind the confirmed output CWD, corpus and runtime interpreter without generating a graph. Keep separate outputs per repository. The skill/CLI route needs no extra MCP service. Add a watcher only if its need and effects were confirmed during preparation.
 - **Project use.** Retain the full original query, update, export, hook and merge references. Use `/graphify <CORPUS>`, `graphify query ...`, and `/graphify <CORPUS> --update` only for an explicitly authorized project task. Semantic document/image processing requires approved data/provider scope.
 
 <a id="codebase-memory"></a>
@@ -91,7 +91,7 @@ Deliver the complete original integration. CBM's Codex subagents supplement Volt
 Before running, require existing role and Team-Codex homes. Use confirmed absolute `ROLE_HOME`, `CODEX_HOME`, `CODEX_PROCESS_HOME` and `CBM_BIN_DIR`. The latter contains the original binary actually used.
 
 ```sh
-# Run for Planner, Coder and Reviewer with their respective ROLE_HOME.
+# Run for Planner and Reviewer with their respective ROLE_HOME.
 HERMES_HOME="$ROLE_HOME" \
   "$CBM_BIN_DIR/codebase-memory-mcp" install \
   --clients=hermes --skip-binary --dir="$CBM_BIN_DIR"
@@ -124,7 +124,7 @@ For a different existing runtime, verify options, target resolution and pinned g
 
 | Context | Expected original integration |
 |---|---|
-| Planner, Coder and Reviewer | `skills/codebase-memory/SKILL.md`, MCP entry in `config.yaml`, shell hook `hooks.pre_llm_call` |
+| Planner and Reviewer | `skills/codebase-memory/SKILL.md`, MCP entry in `config.yaml`, shell hook `hooks.pre_llm_call` |
 | Team-Codex | MCP in `config.toml`, activation pointer in `AGENTS.md`, `skills/codebase-memory/SKILL.md` |
 | Team-Codex subagents | `agents/codebase-memory-scout.toml`, `agents/codebase-memory.toml` (Verify), `agents/codebase-memory-auditor.toml` |
 | Team-Codex hooks | `SessionStart` and `SubagentStart`; existing `hooks.json`, otherwise native TOML storage |

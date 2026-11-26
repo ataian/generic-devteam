@@ -123,8 +123,15 @@ Follow the CAC journal and backup steps. After drift checks, recheck native acti
 ## Owned diagnosing-bugs — Team-Codex
 
 - **Deliver.** Check native names/commands and all resolved skill candidates across user, project/ancestor, config, admin and system roots. Reuse the managed skill through normal update comparison. Resolve unrelated name collisions with the user before replacement or shadowing. After ownership, local-edit, backup and approval checks, copy the complete tree unchanged from the selected Maker revision to `<CODEX_PROCESS_HOME>/.agents/skills/diagnosing-bugs/` through the existing mapping. Include `references/method.md`, README, NOTICE and the full MIT license.
-- **Verify.** Before role personalization, compare complete file sets and bytes. Under the bound Team-Codex HOME/CODEX_HOME, read back one unambiguous native discovery entry and full `SKILL.md` and `references/method.md` via the established read-only interface, without a model call or bug experiment. After role delivery, read back the literal `$diagnosing-bugs` task/resume clause, emerging-regression instruction, original-evidence validation, compact task/resume contract, process binding, native handoff and independent review.
+- **Verify.** Before role personalization, compare complete file sets and bytes. Under the bound Team-Codex HOME/CODEX_HOME, read back one unambiguous native discovery entry and full `SKILL.md` and `references/method.md` via the established read-only interface, without a model call or bug experiment. After instruction delivery, read back the `## Skills` block of the delivered Team-Codex instructions: the literal `$diagnosing-bugs` cue, the brief with symptom and verification criteria, validation against original evidence, and the compact result contract. The Coder SOUL carries none of these cues; reading them there is a failed readback.
 - **Record and recover.** Record saved-tree, discovery and call-policy evidence separately in the private setup/update record. Leave live diagnosis and running-conversation adoption unverified. Use guarded file-update rollback. Newly added files require separate removal approval.
+
+<a id="demo-handover"></a>
+## Owned demo-handover — Coder only
+
+- **Deliver.** Check native names and all resolved Coder skill candidates for collisions. Reuse the managed skill through normal update comparison. After ownership, local-edit, backup and approval checks, copy `skills/demo-handover/SKILL.md` unchanged to the confirmed Coder home's `skills/demo-handover/` through the existing `own_skills.targets` mapping. No render field and no Team-Codex target: the procedure is prose and the demonstration password stays in the role instructions.
+- **Verify.** Before role personalization, compare the saved file byte-for-byte with the selected Maker revision. After SOUL delivery, read back one unambiguous native discovery entry and the full `SKILL.md` in the Coder home, plus the literal `demo-handover` pointer and the password literal in the delivered SOUL.
+- **Record and recover.** Keep saved-file and discovery evidence separate from live behavior in the private setup/update record. Use guarded file-update rollback. A newly added file requires separate removal approval.
 
 <a id="prototype"></a>
 ## Owned prototype — Planner only
@@ -186,21 +193,12 @@ Restore only recorded own skill targets from their preserved pre-change state wi
 Removal of new files requires deletion approval; preserve other skills, profiles, and global configuration.
 
 <a id="ponytail"></a>
-## Ponytail — Coder und Team-Codex separat
+## Ponytail — Team-Codex
 
 Use the complete [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) repository, including `plugin.yaml`, `__init__.py`, `.codex-plugin/plugin.json`, skills, hooks, runtime JavaScript and MIT license. Verify Node on the actual Codex worker PATH for the original hooks. [Upstream installation guide](https://github.com/DietrichGebert/ponytail/blob/main/INSTALL.md).
 
-```sh
-hermes -p "$CODER" plugins install DietrichGebert/ponytail --ref "$PONYTAIL_REVISION" --enable
-```
-
-Set `PONYTAIL_REVISION` from the manifest's `ponytail.source_revision` for both harnesses.
-
-Only for the author's documented root-`plugin.json`/manifest-gate conflict, read the original instructions at the pinned commit.
-If that supported route applies, place the complete unchanged pinned repository at the confirmed `<Coderhome>/plugins/ponytail`.
-Then use profile-scoped `hermes -p "$CODER" plugins enable ponytail` within the same approved plugin/PM scope.
-Verify native registration and exact source bytes; do not patch manifests or bypass trust/scanner decisions.
-For another error or an unsupported route, preserve the partial state and report the concrete blocker.
+Set `PONYTAIL_REVISION` from the manifest's `ponytail.source_revision`.
+No Hermes role receives the plugin; only the Team-Codex context does.
 
 ### Team-Codex pinned local source
 
@@ -240,7 +238,6 @@ If this CLI cannot register the exact local source or replace its old binding sa
 Do not fall back to moving `main` or treat successful command exit as pin verification.
 Native source evidence: Codex `rust-v0.167.1`, `codex-rs/cli/src/marketplace_cmd.rs`, `codex-rs/cli/src/plugin_cmd.rs`, and `codex-rs/core-plugins/src/marketplace.rs` at the manifest CLI commit.
 
-- **Hermes Coder default.** Inspect the actual process without changing its HOME. In `__init__.py`, precedence is `PONYTAIL_DEFAULT_MODE`, then `defaultMode` in `$XDG_CONFIG_HOME/ponytail/config.json` (or `$HOME/.config/ponytail/config.json` if XDG is unset), then built-in `full`. Use and read back the persistent built-in default if unopposed. For a conflicting shared override, preserve global defaults and use only an authorized supported profile-local `PONYTAIL_DEFAULT_MODE=full` binding. Report inability to secure that binding from the shared owner. Keep the plugin and YAML schema unchanged.
 - **Team-Codex default.** `hooks/ponytail-config.js` reads the same default. Supply `PONYTAIL_DEFAULT_MODE=full` in the `env` prefix with HOME/CODEX_HOME on every call via the Coder SOUL binding. This takes precedence over inherited XDG without editing personal files. SessionStart selects the mode. `hooks/ponytail-runtime.js` writes it to `.ponytail-active` under actual `PLUGIN_DATA`, also per project where applicable. `/ponytail full` is a process-local mode change.
 - **Readback.** Verify actual plugin root and native registration, `/hooks` approval for original SessionStart, SubagentStart and UserPromptSubmit, default sources, process binding, data root and existing mode record. Record missing approvals. A SOUL clause or slash change alone cannot prove persistence. Skip injection conversations and worker, resume and child experiments.
 - **Recovery.** Revert only own plugin registration, hook approval and associated mode files. Preserve shared runtimes and personal plugins.
@@ -387,7 +384,7 @@ Revert only own Planner adapter activation and recorded config, Home and allowli
 
 ## Codeanalyse und Quellenstand
 
-Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to Planner, Coder, Reviewer and Team-Codex.
+Apply exactly the confirmed alternative, `codebase-memory` or `graphify`, to Planner, Reviewer and Team-Codex.
 Read only that branch of [Code analysis](code-analysis.md) as setup instructions.
 For CBM deliver the complete official Codex subagents alongside the six [unchanged VoltAgent helpers](#codex-agents).
 Verify setup targets, native discovery and connection/configuration readbacks without analysis experiments.

@@ -85,6 +85,78 @@ class UpdaterTests(unittest.TestCase):
     def proposal(self):
         return u.prepare(self.repo, self.home, 'HEAD')
 
+    def test_keep_plan_apply_and_followup(self):
+        self.initialize()
+        targets = [self.home / 'skills/brownfield-feature-planning/SKILL.md', self.home / 'SOUL.md']
+        self.change()
+        local = {}
+        for target in targets:
+            local[str(target)] = target.read_bytes() + b'\nLocal team rule.\n'
+            target.write_bytes(local[str(target)])
+
+        def cli(*args):
+            result = subprocess.run([sys.executable, '-B', u.__file__, '--repo', str(self.repo), *args],
+                                    capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            return json.loads(result.stdout)
+
+        first = cli('plan', '--home', str(self.home))
+        self.assertEqual(first.get('keep'), [])
+        self.assertEqual({a['path'] for a in first['adaptations']}, set(local))
+        second = cli('plan', '--home', str(self.home), '--keep', str(targets[0]), '--keep', str(targets[1]))
+        self.assertNotEqual(first['proposal'], second['proposal'])
+        proposal = json.loads(Path(second['proposal']).read_text())
+        self.assertEqual(proposal['keep'], sorted(local))
+        pristine = {}
+        for entry in proposal['entries']:
+            if entry['target'] in local:
+                self.assertEqual(u.decoded(entry['merged']), local[entry['target']])
+                pristine[entry['target']] = u.decoded(entry['new_base'])
+        inodes = {p: Path(p).stat().st_ino for p in local}
+        result = cli('apply', '--home', str(self.home), '--proposal', second['proposal'],
+                     '--activity-decision', 'proceed', '--semantic-review', 'Keep both local rules')
+        journal = json.loads((Path(result['run']) / 'result.json').read_text())
+        self.assertEqual({f['target'] for f in journal['files'] if f['kept']}, set(local))
+        _, _, record = u.load_record(self.home)
+        self.assertNotIn('keep', record)
+        for entry in record['managed']:
+            p = entry['target']
+            if p in local:
+                self.assertEqual((Path(p).read_bytes(), Path(p).stat().st_ino), (local[p], inodes[p]))
+                self.assertEqual(entry['installed_hash'], u.digest(pristine[p]))
+                self.assertEqual((self.state / 'baselines' / entry['baseline']).read_bytes(), pristine[p])
+        following = cli('plan', '--home', str(self.home))
+        self.assertEqual(following['keep'], [])
+        self.assertEqual({a['path'] for a in following['adaptations']}, set(local))
+
+    def test_keep_rejects_unmodified_target(self):
+        self.initialize()
+        with self.assertRaisesRegex(ValueError, 'adaptation'):
+            u.prepare(self.repo, self.home, keep=[str(self.home / 'SOUL.md')])
+
+    def test_apply_rejects_settings_type_drift(self):
+        self.initialize()
+        path = self.proposal()
+        proposal = json.loads(path.read_text())
+        proposal['settings']['planner']['kanban.auto_subscribe_on_create'] = 0
+        path.write_text(json.dumps(proposal))
+        with self.assertRaisesRegex(ValueError, 'drift'):
+            u.apply(self.home, path, decision='proceed', review='checked')
+
+    def test_settings_required_only_in_target_manifest(self):
+        path = self.repo / 'manifest.json'
+        manifest = json.loads(path.read_text())
+        manifest.pop('settings', None)
+        path.write_text(json.dumps(manifest))
+        self.commit('old manifest without settings')
+        self.initialize()
+        with self.assertRaisesRegex(ValueError, 'settings'):
+            self.proposal()
+        manifest['settings'] = {'planner': {'kanban.auto_subscribe_on_create': False}}
+        path.write_text(json.dumps(manifest))
+        self.commit('target settings')
+        self.assertEqual(json.loads(self.proposal().read_text())['settings'], manifest['settings'])
+
     def deassigned_reviewer_skill(self, name='screenshot-to-code'):
         """Install one Maker skill into the Reviewer home, then deassign it."""
         manifest_path = self.repo / 'manifest.json'
@@ -280,9 +352,9 @@ class UpdaterTests(unittest.TestCase):
         self.assertIn("`Planning: /synthetic/plans; implementation: /synthetic/client's workspace/code`", target.read_text())
         coder = (Path(self.roles['coder']['home']) / 'SOUL.md').read_text()
         self.assertIn('kanban_block(kind="needs_input", reason=...)', coder)
-        self.assertIn('Keep card and Coder assignment.', coder)
-        self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder)
-        self.assertIn('Send one TIMER request to `fixture-planner`', coder)
+        self.assertIn('keep card and assignment', coder)
+        self.assertIn('confirm the existing subscription wakes `fixture-planner`', coder)
+        self.assertIn('one TIMER request to fixture-planner through `kanban_create`', coder)
         record = json.loads((self.state / 'installation.json').read_text())
         self.assertEqual(record['confirmed_values']['PROJECT_DIR'], setup['confirmed_values']['PROJECT_DIR'])
         self.assertEqual(record['confirmed_values']['REPOSITORY_ROOTS'], setup['confirmed_values']['REPOSITORY_ROOTS'])
@@ -324,7 +396,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertFalse(coder.read_text().startswith('Local retained rule.\n'))
         self.assertIn(str(coder), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
         self.assertIn(paths['CODEX_HOME'] + '/config.toml', coder.read_text())
-        self.assertIn('Check the `kanban_request_review` response', coder.read_text())
+        self.assertIn('Check `ok: true` and `status: \"review\"`', coder.read_text())
         record = u.load_record(self.home)[2]
         for key, value in paths.items():
             self.assertEqual(record['confirmed_values'][key], value)
@@ -407,7 +479,7 @@ class UpdaterTests(unittest.TestCase):
         self.assertNotIn(b'Synthetic-Pre214-Pass-1', coder.read_bytes())
 
         result = u.apply(self.home, plan, decision='proceed',
-                         review='Checked demo lifecycle, teardown verb and literal password in all three SOULs',
+                         review='Checked requested demo, functional end check and literal password in all three SOULs',
                          dependency_review='Reviewed operational recipe change; file-only fixture update')
         self.assertEqual(result['status'], 'applied')
         record = u.load_record(self.home)[2]
@@ -416,14 +488,22 @@ class UpdaterTests(unittest.TestCase):
             with self.subTest(role=role):
                 text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
                 self.assertEqual(text.count('`Synthetic-Pre214-Pass-1`'), 1)
-        for role in ('coder', 'reviewer'):
-            with self.subTest(lifecycle=role):
-                self.assertIn('a demonstration runtime is not permanent',
-                              (Path(self.roles[role]['home']) / 'SOUL.md').read_text())
-        self.assertIn('`demo.sh retire`', coder.read_text())
-        self.assertIn('`demo.sh user`', coder.read_text())
-        self.assertIn('recorded login works on the running system',
-                      (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text())
+        reviewer = (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text()
+        self.assertIn('On the final demo handover card, verify the demo runs at the reviewed commit', reviewer)
+        self.assertIn('Container uptime alone is not a functional check.', reviewer)
+        self.assertNotIn('a demonstration runtime is not permanent', reviewer)
+        self.assertNotIn('a demonstration runtime is not permanent', coder.read_text())
+        self.assertNotIn('retiring the previous one', reviewer)
+        handover = Path(self.roles['coder']['home']) / 'skills' / 'demo-handover' / 'SKILL.md'
+        self.assertTrue(handover.is_file(), handover)
+        self.assertEqual(handover.read_bytes(),
+                         (Path(__file__).resolve().parents[1] / 'skills/demo-handover/SKILL.md').read_bytes())
+        self.assertNotIn('`demo.sh retire`', handover.read_text())
+        self.assertNotIn('`demo.sh user`', handover.read_text())
+        self.assertIn('If build or start refuses existing state, stop and report the refusal', handover.read_text())
+        self.assertNotIn('demo.sh retire', coder.read_text())
+        self.assertIn('read the `demo-handover` skill', coder.read_text())
+        self.assertIn('recorded login works on the running system', reviewer)
 
         # A later update reuses the recorded value without reading setup.md again.
         (self.state / 'setup.md').rename(self.state / 'audit-only.md')
@@ -540,7 +620,7 @@ class UpdaterTests(unittest.TestCase):
                 review='Reported local route deviation; Maker text authoritative',
                 dependency_review='Fixture file-only migration; runtime unchanged')
         self.assertNotIn('Local binding mandate', coder.read_text())
-        self.assertIn('The existing subscription wakes `fixture-planner` for customer coordination.', coder.read_text())
+        self.assertIn('confirm the existing subscription wakes `fixture-planner`', coder.read_text())
 
     def test_113_installation_adopts_confirmed_role_bindings(self):
         self.check_historical_binding_upgrade('da11a12710aace9a0522c88fd8fb3ef378711d0c')
@@ -692,8 +772,13 @@ class UpdaterTests(unittest.TestCase):
 
     def test_dev_environment_complete_tree_delivery_and_local_update(self):
         record = self.initialize()
+        source = self.repo / 'skills/dev-environment'
+        files = {p.relative_to(self.repo).as_posix(): p.read_bytes()
+                 for p in source.rglob('*') if p.is_file()}
+        self.assertEqual(set(files), {'skills/dev-environment/SKILL.md',
+                                      'skills/dev-environment/references/requested-demo.md'})
         entries = [e for e in record['managed'] if e['source'].startswith('skills/dev-environment/')]
-        self.assertEqual({e['source'] for e in entries}, {'skills/dev-environment/SKILL.md'})
+        self.assertEqual({e['source'] for e in entries}, set(files))
         self.assertEqual({e['role'] for e in entries}, {'planner'})
         for entry in entries:
             self.assertEqual(entry['target'], str(self.home / entry['source']))
@@ -701,22 +786,32 @@ class UpdaterTests(unittest.TestCase):
             self.assertEqual(Path(entry['target']).read_bytes(), (self.repo / entry['source']).read_bytes())
         for role in ('coder', 'reviewer', 'team-codex'):
             self.assertFalse((Path(self.roles[role]['home']) / 'skills/dev-environment').exists())
-        main = self.home / 'skills/dev-environment/SKILL.md'
-        main.write_bytes(b'Approved local environment note\n' + main.read_bytes())
-        self.change('skills/dev-environment/SKILL.md', '\nUpdated environment instruction.\n')
+        edits = {'skills/dev-environment/SKILL.md': b'Approved local environment note\n',
+                 'skills/dev-environment/references/requested-demo.md': b'Approved local retirement note\n'}
+        for relative, note in edits.items():
+            target = self.home / relative
+            target.write_bytes(note + target.read_bytes())
+        for relative in sorted(files):
+            self.change(relative, '\nUpdated instruction for ' + Path(relative).name + '.\n')
         plan = self.proposal()
-        self.assertIn(str(main), {item['path'] for item in json.loads(plan.read_text())['adaptations']})
+        paths = {item['path'] for item in json.loads(plan.read_text())['adaptations']}
+        for relative in edits:
+            self.assertIn(str(self.home / relative), paths)
         u.apply(self.home, plan, decision='proceed', review='Fixture environment update reviewed')
-        self.assertFalse(main.read_bytes().startswith(b'Approved local environment note\n'))
-        self.assertTrue(main.read_bytes().endswith(b'Updated environment instruction.\n'))
+        for relative, note in edits.items():
+            text = (self.home / relative).read_bytes()
+            self.assertFalse(text.startswith(note))
+            self.assertTrue(text.endswith(b'\nUpdated instruction for ' + Path(relative).name.encode() + b'.\n'))
 
     def test_new_dev_environment_collision_addition_and_guarded_rollback(self):
         path = self.repo / 'manifest.json'
         manifest = json.loads(path.read_text())
         self.assertIn('dev-environment', manifest['own_skills'])
         entry = manifest['own_skills'].pop('dev-environment')
-        relative = 'skills/dev-environment/SKILL.md'
-        content = (self.repo / relative).read_bytes()
+        files = {p.relative_to(self.repo).as_posix(): p.read_bytes()
+                 for p in (self.repo / 'skills/dev-environment').rglob('*') if p.is_file()}
+        self.assertEqual(set(files), {'skills/dev-environment/SKILL.md',
+                                      'skills/dev-environment/references/requested-demo.md'})
         self.git('rm', '-r', 'skills/dev-environment')
         path.write_text(json.dumps(manifest))
         self.commit('fixture before environment assignment')
@@ -726,28 +821,69 @@ class UpdaterTests(unittest.TestCase):
         before = (self.state / 'installation.json').read_bytes()
         manifest['own_skills']['dev-environment'] = entry
         path.write_text(json.dumps(manifest))
-        (self.repo / relative).parent.mkdir()
-        (self.repo / relative).write_bytes(content)
+        for relative, content in files.items():
+            p = self.repo / relative
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(content)
         self.commit('fixture add Planner environment skill')
         target.mkdir()
         main = target / 'SKILL.md'
         main.write_bytes(b'Unrelated local skill.\n')
+        reference = target / 'references/requested-demo.md'
+        reference.parent.mkdir()
+        reference.write_bytes(b'Unrelated local reference.\n')
         plan = self.proposal()
-        self.assertIn(str(main), json.loads(plan.read_text())['conflicts'])
+        conflicts = json.loads(plan.read_text())['conflicts']
+        self.assertIn(str(main), conflicts)
+        self.assertIn(str(reference), conflicts)
         with self.assertRaisesRegex(ValueError, 'Text conflicts'):
             u.apply(self.home, plan, decision='proceed', review='Fixture unresolved collision')
         self.assertEqual(main.read_bytes(), b'Unrelated local skill.\n')
+        self.assertEqual(reference.read_bytes(), b'Unrelated local reference.\n')
         self.assertEqual((self.state / 'installation.json').read_bytes(), before)
         main.unlink()  # Resolve only this disposable fixture collision.
+        reference.unlink()
+        reference.parent.rmdir()
         plan = self.proposal()
-        entries = [e for e in json.loads(plan.read_text())['entries'] if e['source'] == relative]
-        self.assertEqual(len(entries), 1)
-        self.assertEqual(entries[0]['role'], 'planner')
+        entries = [e for e in json.loads(plan.read_text())['entries'] if e['source'] in files]
+        self.assertEqual({e['source'] for e in entries}, set(files))
+        self.assertEqual({e['role'] for e in entries}, {'planner'})
         result = u.apply(self.home, plan, decision='proceed', review='Fixture environment addition reviewed')
-        self.assertEqual(main.read_bytes(), content)
+        for relative, content in files.items():
+            self.assertEqual((self.home / relative).read_bytes(), content)
         restored = u.rollback(self.home, Path(result['run']), decision='proceed')
-        self.assertEqual(set(restored['retained_additions']), {str(main)})
+        self.assertEqual(set(restored['retained_additions']), {str(self.home / relative) for relative in files})
         self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+
+    def test_310_layout_adopts_the_missing_requested_demo_reference(self):
+        """Synthetic exact 3.1.0 files; the new reference must reach the Planner on update."""
+        original = Path(__file__).resolve().parents[1]
+        old = '8add46c01a31dd3f149819fd29305c5d16fa05c8'
+        reference = 'skills/dev-environment/references/requested-demo.md'
+        setup = u.setup_data(self.state)
+        # Rebuild the verified 3.1.0 installation from its exact source files.
+        self.git('fetch', '-q', str(original), old)
+        self.assertEqual(u.package_version(self.repo, old), '3.1.0')
+        for item in u.desired(self.repo, old, self.roles, setup['confirmed_values'], bindings=self.bindings):
+            target = Path(item['target'])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(item['content'])
+            target.chmod(item['mode'])
+        installed = self.home / reference
+        installed.unlink()  # 3.1.0 has no requested-demo reference at all.
+        u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=old,
+                     basis_evidence='Synthetic exact 3.1.0 files without the requested-demo reference')
+        self.assertFalse(installed.exists())
+        plan = self.proposal()
+        proposal = json.loads(plan.read_text())
+        self.assertFalse(proposal['conflicts'])
+        added = [e for e in proposal['entries'] if e['source'] == reference]
+        self.assertEqual([(e['role'], e['target']) for e in added], [('planner', str(installed))])
+        u.apply(self.home, plan, decision='proceed', review='Fixture reference addition reviewed',
+                dependency_review='Reviewed recipe dependency; file-only fixture update')
+        for relative in ('skills/dev-environment/SKILL.md', reference):
+            self.assertEqual((self.home / relative).read_bytes(), (self.repo / relative).read_bytes())
+        self.assertIn('file_path="references/requested-demo.md"', (self.home / 'SOUL.md').read_text())
 
     def test_prototype_complete_tree_maps_only_to_planner(self):
         record = self.initialize()
@@ -1001,17 +1137,17 @@ class UpdaterTests(unittest.TestCase):
         sources = {entry['source'] for entry in record['managed']}
         self.assertIn('skills/build-evidence/SKILL.md', sources)
         self.assertIn('skills/build-evidence/references/production-build-selectors.md', sources)
-        for role, subpath in (('coder', 'skills'), ('reviewer', 'skills'),
-                              ('team-codex', '.agents/skills')):
+        for role, subpath in (('reviewer', 'skills'), ('team-codex', '.agents/skills')):
             target = Path(self.roles[role]['home']) / subpath / 'build-evidence/SKILL.md'
             self.assertTrue(target.is_file(), (role, target))
+        self.assertFalse((Path(self.roles['coder']['home']) / 'skills/build-evidence/SKILL.md').exists())
         coder = Path(self.roles['coder']['home']) / 'SOUL.md'
         reviewer = Path(self.roles['reviewer']['home']) / 'SOUL.md'
-        self.assertIn('$build-evidence', coder.read_text())
+        self.assertNotIn('$build-evidence', coder.read_text())
         self.assertIn('never change your own `command_allowlist`', coder.read_text())
         self.assertIn('never change this profile\'s `command_allowlist`', reviewer.read_text())
 
-        target = Path(self.roles['coder']['home']) / 'skills/build-evidence/references/jfr-observer.md'
+        target = Path(self.roles['reviewer']['home']) / 'skills/build-evidence/references/jfr-observer.md'
         local = b'\nLocal build note.\n'
         target.write_bytes(target.read_bytes() + local)
         self.change('skills/build-evidence/SKILL.md', '\nNew build evidence rule.\n')
@@ -1221,7 +1357,7 @@ class UpdaterTests(unittest.TestCase):
             (3, 4, ('After successful file application', 'concurrent drift', '`skills.auto_load`',
                     'only proven, pristine, authorized team-owned trees', 'foreign, shared, edited',
                     'without deleting, masking, or overwriting')),
-            (4, 5, ('`complete` only', 'fresh native discovery', 'task and resume', 'both harnesses',
+            (4, 5, ('`complete` only', 'fresh native discovery', 'task and resume', 'Ponytail registration in the Team-Codex context',
                     'PONYTAIL_DEFAULT_MODE=full', 'even after installation metadata advances',
                     'Repeat the file proposal and companion checks', 'files updated; team update incomplete')),
         ):

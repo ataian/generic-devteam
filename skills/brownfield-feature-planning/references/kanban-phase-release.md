@@ -16,7 +16,7 @@ Carry outcomes, dependencies, and verification into the accepted plan, phases, a
 
 1. Read specification and plan at approved Git revisions. Inspect current HEAD, branch, and working tree. Record accepted revisions separately from later documentation-only commits.
 2. Select the project board explicitly on every call. On rejection, inspect native help. Setup established the surface.
-3. Get notification destination and participant from project rules. Re-derive only if the project binding changed. Old subscriptions and the current desktop conversation are not sources for the destination.
+3. Get the notification destination from project rules and reuse the verified gateway origin for the participant and `chat_type`. Match the gateway's literal type: a private Mattermost channel can be reported as `group`, so do not infer `channel` from its display label. Re-derive only if the binding changed or the relevant origin fields were not established. Old subscriptions and the current desktop conversation are not sources for the destination.
 4. Reuse setup facts for gateway, dispatcher, adapter ownership, routing, and file identity. Skip per-release rechecks.
 
 ## 2. Create blocked cards and persist progress
@@ -29,7 +29,7 @@ Carry outcomes, dependencies, and verification into the accepted plan, phases, a
    - Verification: state the checks needed to establish these criteria, including relevant failure cases.
    - Dependencies and binding: planned story/prerequisite identity, blockers, absolute accepted plan/phase paths, exact Git commits, phase identifier, and planning repository root. Bind separate phase plans or specifications by absolute path and exact Git commit.
    - Keep criteria and implementation context concise. Leave standard procedures in role rules and omit whole-plan copies and successful-test catalogues.
-3. Set native assignee and workspace, `--initial-status blocked`, idempotency key, required skill, explicit completion contract, explicit customer limits, and required runtime/retry fields. Do not invent discretionary attempt budgets. Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget. Check `--max-retries` semantics before setting a consecutive-failure limit. The breaker threshold counts failures, not extra attempts.
+3. Set native assignee and workspace, `--initial-status blocked`, idempotency key, explicit completion contract, explicit customer limits, and required runtime/retry fields. Set no `skills`: role skills come from setup. Do not invent discretionary attempt budgets. Give every Coder card `--max-runtime 8h`; it caps the whole worker run for dispatcher recovery, not the work budget. Check `--max-retries` semantics before setting a consecutive-failure limit. The breaker threshold counts failures, not extra attempts.
 4. Read back each returned exact card before further writes. Compare ticket/phase identity, title, approved references, body, and native limits against approved-revision files. Use the persisted card as the creation checkpoint.
 5. Bind the verified notification destination. Read `notify-list --json`. Compare platform, channel, chat type, participant, notifier profile, and delivery mode literally.
    Subscribe on the project board: `hermes -p <planner-profile> kanban --board <board> notify-subscribe <task> ...`, then read the same board and task back. A subscription created without the board binds to the wrong installation.
@@ -46,7 +46,7 @@ Existing card: development decisions, consequential failures and remedies, block
 
 1. Wait until all cards exist before linking missing approved dependencies. Read each exact card. Use [bounded extraction](kanban-status-inspection.md#read-and-reduce-before-output-truncation) only when native reads lack required evidence.
 2. Before first release, require every card blocked. On partial release, preserve completed transitions and verify current runs and dependency gates on released cards.
-3. Check assignee, workspace, skill, runtime/retry fields, and completion contract. Check each story, criterion, technical constraint, and exception against phase scope, gate, commit boundary, and reviewer binding.
+3. Check assignee, workspace, runtime/retry fields, and completion contract. Check each story, criterion, technical constraint, and exception against phase scope, gate, commit boundary, and reviewer binding.
 4. Resolve each plan reference to its approved revision. Verify every notification binding against the intended destination. Verify the first ticket has no parent and the final ticket has no child in the approved chain. Preserve valid links to follow-up tickets outside the chain. Verify each intermediate ticket's intended predecessor and successor.
 5. If parsing fails after a successful write, re-read the recorded exact ID. Do not repeat the write. Stop release on unresolved mismatches. Preserve partial progress.
 

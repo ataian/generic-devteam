@@ -43,7 +43,7 @@ Prerequisites: owner-confirmed candidate references and authorized credential so
 
 ## Safe mutation and recovery
 
-1. Before interrupting services, complete read-only preflight and acquire artifacts. Preserve environment values, Compose override order, mounts, dependencies, and later-start configuration. Provide existing-instance provisioning. Empty-directory initialization SQL does not provision existing volumes.
+1. Before interrupting services, complete read-only preflight and acquire artifacts. For an irreversible replacement, also confirm the authorized credential delivery path for provisioning and authenticated acceptance in the actual executing context before retiring the old instance. Check only presence, never values; an interactive login or a successful disposable run does not establish delivery to a managed worker. Preserve environment values, Compose override order, mounts, dependencies, and later-start configuration. Provide existing-instance provisioning. Empty-directory initialization SQL does not provision existing volumes.
 2. Back up affected data and verify restoration. Require backup before catalog replacement, including direct importer calls. Record original configuration/image identity and check for operator edits before rewriting or restoring files.
 3. Serialize conflicting operations and bound external calls. Return clear nonzero failures. Clean only authorized invocation-owned resources.
 4. Keep disablement separate from deletion and image rollback separate from DB rollback. Route out-of-scope main-schema changes to a separate upgrade decision.

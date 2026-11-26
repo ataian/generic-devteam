@@ -13,7 +13,7 @@ MANIFEST = json.loads((ROOT / "manifest.json").read_text())
 class BuildEvidenceTests(unittest.TestCase):
     def test_complete_role_skill_tree_and_targets(self):
         item = MANIFEST["own_skills"]["build-evidence"]
-        self.assertEqual(item["targets"], {"hermes": ["coder", "reviewer"], "codex": ["team-codex"]})
+        self.assertEqual(item["targets"], {"hermes": ["reviewer"], "codex": ["team-codex"]})
         self.assertEqual(item["skill_path"], "skills/build-evidence/SKILL.md")
         self.assertNotIn("build-evidence", MANIFEST["upstream_components"])
         inventory = {path.relative_to(ROOT).as_posix()
@@ -68,8 +68,11 @@ class BuildEvidenceTests(unittest.TestCase):
         planner = (ROOT / "templates/roles/planner.SOUL.md.template").read_text()
         reviewer = (ROOT / "templates/roles/reviewer.SOUL.md.template").read_text()
         self.assertIn("Command grants come from Maker setup or update; never change your own `command_allowlist`", coder)
-        self.assertIn("require the literal `$build-evidence` cue", coder)
-        self.assertIn("the reference owns selector derivation and the isolation-checker limit", coder)
+        codex = (ROOT / "templates/team-codex-AGENTS.md").read_text()
+        self.assertIn("use the literal `$build-evidence` cue for the affected mode", codex)
+        self.assertIn("the reference owns selector derivation and the isolation-checker limit", codex)
+        self.assertNotIn("$build-evidence", coder)
+        self.assertNotIn("the reference owns selector derivation", coder)
         self.assertIn("load `build-evidence` via `skill_view` and its reference for that mode", reviewer)
         self.assertIn("never change this profile's `command_allowlist`", planner)
         self.assertIn("never change this profile's `command_allowlist`", reviewer)
@@ -84,9 +87,8 @@ class BuildEvidenceTests(unittest.TestCase):
             "\\\"$DEV_ENTRYPOINT check\\\"",
             "\\\"$DEV_ENTRYPOINT test-selected *\\\"",
             "\\\"$DEV_ENTRYPOINT test-all\\\"",
-            "\\\"$DEMO_ENTRYPOINT retire *\\\"",
             "\\\"$DEMO_ENTRYPOINT user\\\"",
-            "Never grant `docker compose *`, `docker *`, `docker-compose *` or an `env *` wrapper",
+            "Never grant an `env *` wrapper.",
             "never as an argument and never in a grant",
         ):
             with self.subTest(clause=clause):
@@ -96,14 +98,76 @@ class BuildEvidenceTests(unittest.TestCase):
             self.assertIn("confirmed_bindings.command_allowlists", text)
         legacy = next(row for row in update.splitlines() if row.startswith("   | Pre-`2.14.0` command grants"))
         self.assertIn("[setup grant recipe](setup.md#project-command-grants)", legacy)
-        self.assertIn("`docker compose *`", legacy)
+        self.assertIn("four Docker entries", legacy)
+        self.assertIn("keep it unresolved for the operator", legacy)
+        self.assertIn("do not narrow the wildcard grants to specific verbs", legacy)
         self.assertIn("### Project command grants", setup)
-        self.assertIn("Reconcile the wait configuration", update)
+        self.assertIn("Reconcile the profile settings", update)
         for text in (setup, update):
             self.assertIn("A role does not extend its own list", text)
-            self.assertNotIn('"docker *"', text)
+            self.assertNotIn("docker volume ls", text)
             self.assertNotIn("env * docker *", text)
+        self.assertIn("Treat a baseline missing any required Docker entry as obsolete", update)
         self.assertIn('hermes -p "$PROFILE" config get command_allowlist', setup)
+
+    def test_docker_grants_decode_to_both_clis_and_all_subcommands(self):
+        """Decode the setup grant example; this evaluates the list, never a Docker command."""
+        setup = (ROOT / "references/setup.md").read_text()
+        grant = next(line for line in setup.splitlines() if "config set command_allowlist" in line)
+        encoded = grant.split('config set command_allowlist "', 1)[1].rsplit('"', 1)[0]
+        entries = json.loads(encoded.replace('\\"', '"'))
+        self.assertIn("$DEV_ENTRYPOINT check", entries)
+        self.assertIn("$DEMO_ENTRYPOINT user", entries)
+        for entry in ("docker", "docker *", "docker-compose", "docker-compose *"):
+            with self.subTest(entry=entry):
+                self.assertIn(entry, entries)
+        self.assertEqual([e for e in entries if e.startswith("docker")],
+                         ["docker", "docker *", "docker-compose", "docker-compose *"])
+        self.assertNotIn("env *", entries)
+        for clause in (
+            "Independently grant `docker`, `docker *` (including `docker compose *`), `docker-compose` "
+            "and `docker-compose *` in all three profiles.",
+            "Keep the Docker grants regardless of project scripts or demo choice.",
+            "They are not project-scoped and can affect other workloads; existing deny rules remain binding.",
+        ):
+            self.assertIn(clause, setup)
+        record = (ROOT / "templates/setup-record.md").read_text()
+        self.assertIn("all operations on any daemon accessible to the CLI", record)
+        self.assertIn("including an alternate context or remote daemon", record)
+        self.assertIn("existing deny rules", record)
+
+    def test_requested_demo_reference_owns_retirement_and_the_coder_refuses_state(self):
+        reference = (ROOT / "skills/dev-environment/references/requested-demo.md").read_text()
+        for clause in (
+            "Inspect the project’s demo state, including stopped remnants.",
+            "Verified absence completes this step; an inspection failure does not.",
+            "Before removal, verify exclusive ownership of the old demo’s containers, volumes, network and private runtime directory.",
+            "A stopped runtime is not retired.",
+            "stop before committing the plan or writing any ticket",
+            "Do not apply and revert a planned product fix to bypass this prerequisite.",
+        ):
+            with self.subTest(clause=clause):
+                self.assertIn(clause, reference)
+        handover = (ROOT / "skills/demo-handover/SKILL.md").read_text()
+        self.assertIn("If build or start refuses existing state, stop and report the refusal; "
+                      "do not purge, rename or bypass it.", handover)
+        self.assertNotIn("teardown verb", handover)
+        self.assertNotIn("A demonstration runtime is not permanent", handover)
+        self.assertIn("At most one demonstration runtime exists; use the last independently reviewed commit.",
+                      handover)
+        planner = (ROOT / "templates/roles/planner.SOUL.md.template").read_text()
+        self.assertNotIn("retire a running demonstration runtime", planner)
+        self.assertNotIn("teardown verb", planner)
+        self.assertIn("Without an explicit demo request, proceed to step 6 without demo work.", planner)
+        no_branch = planner.split("Without an explicit demo request,", 1)[1].split("If requested,", 1)[0]
+        self.assertNotIn("record", no_branch)
+        self.assertNotIn("readback", no_branch)
+        dev = (ROOT / "skills/dev-environment/SKILL.md").read_text()
+        self.assertNotIn("## Demonstration lifecycle", dev)
+        self.assertIn("- A requested demo handover has its own card; it is not a development-environment acceptance case.", dev)
+        release = (ROOT / "skills/brownfield-feature-planning/references/kanban-phase-release.md").read_text()
+        self.assertNotIn("repairs the demo teardown command", release)
+        self.assertNotIn("demo", release.lower())
 
     def test_managed_files_are_authoritative_and_adaptations_carry_path_and_version(self):
         update = (ROOT / "references/update.md").read_text()
@@ -130,26 +194,6 @@ class BuildEvidenceTests(unittest.TestCase):
         self.assertIn("Before reopening, verify prior handoff and required continuation.", recovery)
         self.assertIn("hermes kanban --board <board> reopen-review <task>", recovery)
         self.assertIn("Do not hardcode a coder.", recovery)
-
-    def test_demo_lifecycle_is_narrow_and_uses_project_verbs(self):
-        dev = (ROOT / "skills/dev-environment/SKILL.md").read_text()
-        for clause in (
-            "A demonstration runtime is not permanent. At most one acceptance demo exists",
-            "Retire it through the project's teardown verb and verify they are gone; a stopped runtime is not a retired one.",
-            "Do not compose container, volume, network or directory removal yourself",
-            "If the build or start verb refuses existing runtime state, stop and report the exact refusal.",
-            "Judge readiness from the project's status and version output, not from container uptime.",
-        ):
-            with self.subTest(clause=clause):
-                self.assertIn(clause, dev)
-
-    def test_demo_retirement_is_verifiable_with_read_only_listings(self):
-        setup = (ROOT / "references/setup.md").read_text()
-        grant = next(line for line in setup.splitlines() if "config set command_allowlist" in line)
-        tail = grant.split("docker inspect *", 1)[1]
-        for entry in ("docker volume ls", "docker network ls"):
-            with self.subTest(entry=entry):
-                self.assertIn(entry, tail)
 
 
 if __name__ == "__main__":

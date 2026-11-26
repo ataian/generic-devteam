@@ -1,8 +1,25 @@
 {
   "name": "generic-devteam",
-  "version": "2.14.4",
+  "version": "3.1.1",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
+  "settings": {
+    "planner": {
+      "kanban.auto_subscribe_on_create": false
+    },
+    "coder": {
+      "kanban.auto_subscribe_on_create": false,
+      "terminal.timeout": 14400,
+      "timeouts.tools.sequential_call": 15000,
+      "timeouts.tools.concurrent_batch": 15000
+    },
+    "reviewer": {
+      "kanban.auto_subscribe_on_create": false,
+      "terminal.timeout": 14400,
+      "timeouts.tools.sequential_call": 15000,
+      "timeouts.tools.concurrent_batch": 15000
+    }
+  },
   "files": [
     "AGENTS.md",
     "LICENSE",
@@ -49,7 +66,9 @@
     "skills/build-evidence/references/jfr-observer.md",
     "skills/build-evidence/references/portless-testcontainers.md",
     "skills/build-evidence/references/production-build-selectors.md",
+    "skills/demo-handover/SKILL.md",
     "skills/dev-environment/SKILL.md",
+    "skills/dev-environment/references/requested-demo.md",
     "skills/devteam-cleanup/SKILL.md",
     "skills/diagnosing-bugs/LICENSE",
     "skills/diagnosing-bugs/NOTICE.md",
@@ -190,7 +209,6 @@
       "status": "included",
       "targets": {
         "hermes": [
-          "coder",
           "reviewer"
         ],
         "codex": [
@@ -198,11 +216,28 @@
         ]
       },
       "origin": "Owned reference for build-, browser- and process-dependent test evidence, authored from run 9 evidence.",
-      "changes": "Copy the complete skill tree unchanged. Coder passes the literal `$build-evidence` cue for the affected mode; Reviewer uses it to judge build-specific evidence.",
+      "changes": "Copy the complete skill tree unchanged. Reviewer uses it to judge build-specific evidence; Team-Codex passes the literal `$build-evidence` cue for the affected mode.",
       "origin_ref": "references/upstream-sources.md#own-build-evidence",
       "license_path": null,
       "notice_path": null,
       "skill_path": "skills/build-evidence/SKILL.md",
+      "transport": {
+        "SKILL.md": "SKILL.md"
+      }
+    },
+    "demo-handover": {
+      "status": "included",
+      "targets": {
+        "hermes": [
+          "coder"
+        ]
+      },
+      "origin": "Owned demo runtime handover procedure, moved unchanged out of the Coder SOUL.",
+      "changes": "Copy the skill unchanged. The Coder reads it on a released demo handover card; the demonstration password stays in the role instructions.",
+      "origin_ref": "references/upstream-sources.md#own-demo-handover",
+      "license_path": null,
+      "notice_path": null,
+      "skill_path": "skills/demo-handover/SKILL.md",
       "transport": {
         "SKILL.md": "SKILL.md"
       }
@@ -221,7 +256,8 @@
       "notice_path": "NOTICE.md",
       "skill_path": "skills/dev-environment/SKILL.md",
       "transport": {
-        "SKILL.md": "SKILL.md"
+        "SKILL.md": "SKILL.md",
+        "references/requested-demo.md": "references/requested-demo.md"
       }
     },
     "devteam-cleanup": {
@@ -249,7 +285,7 @@
         ]
       },
       "origin": "Owned proportional adaptation of Matt Pocock's diagnosing-bugs; exact source revision and changes in the skill NOTICE.",
-      "changes": "Copy the complete tree unchanged. Team-Codex classifies evidence before direct fix or full diagnosis; Coder explicitly invokes and validates results.",
+      "changes": "Copy the complete tree unchanged. Team-Codex classifies evidence before direct fix or full diagnosis and invokes the skill itself.",
       "origin_ref": "references/upstream-sources.md#own-diagnosis",
       "license_path": "skills/diagnosing-bugs/LICENSE",
       "notice_path": "skills/diagnosing-bugs/NOTICE.md",
@@ -279,8 +315,10 @@
       "status": "included",
       "targets": {
         "hermes": [
-          "planner",
-          "coder"
+          "planner"
+        ],
+        "codex": [
+          "team-codex"
         ]
       },
       "origin": "Übernommene, vom Nutzer bearbeitete Skillfassung; Autorenfeld Mariko, kein Lizenzfeld im Frontmatter.",
@@ -331,8 +369,7 @@
       "status": "included",
       "targets": {
         "hermes": [
-          "planner",
-          "coder"
+          "planner"
         ],
         "codex": [
           "team-codex"
@@ -482,9 +519,7 @@
         "."
       ],
       "targets": {
-        "hermes": [
-          "coder"
-        ],
+        "hermes": [],
         "codex": [
           "team-codex"
         ]
@@ -552,7 +587,6 @@
       "targets": {
         "hermes": [
           "planner",
-          "coder",
           "reviewer"
         ],
         "codex": [
@@ -595,7 +629,6 @@
       "targets": {
         "hermes": [
           "planner",
-          "coder",
           "reviewer"
         ],
         "codex": [

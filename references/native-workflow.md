@@ -37,7 +37,7 @@ Render the [Planner](../templates/roles/planner.SOUL.md.template), [Coder](../te
 - **Render.** The pure [text renderer](render_text.py) validates the field set and substitutes once. Reject missing, extra or damaged fields. Require nonempty single-line names and valid technical IDs and project name under their syntax and path rules. Preserve values and every non-placeholder byte without truncation or normalization. Apply context-specific Markdown escaping and shell-quote Codex paths in shell fences. Keep code values and `DEMO_PASSWORD` raw. Append no persona or rules.
 - **Deliver.** Compare rendered output against the personalization accepted in preparation. Write only `SOUL.md` in each confirmed role home. Preserve foreign or concurrently changed files. Ask again only for a newly observed conflict or scope change.
 - **Read back.** Compare complete saved bytes with generated output and use the native interface to verify full loading. The Reviewer SOUL owns proportional investigation and conditional critical-invariant helper credit. Keep native `sdlc-review` preloaded. Deliver no separate method reference or helper profile.
-- **Check call policy.** After SOUL delivery, verify the Coder's explicit diagnosis call and the Planner's direct clarification exception.
+- **Check call policy.** After SOUL delivery, verify the explicit diagnosis call in the Team-Codex instructions and the Planner's direct clarification exception.
 
 ## 3. Bind technical values to actual targets
 
@@ -49,7 +49,7 @@ Render the [Planner](../templates/roles/planner.SOUL.md.template), [Coder](../te
 | Bank | Effective provider/bank and exact per-role tags/match settings |
 | Models/reasoning | Native configuration and effective overrides; existing role default/max fields |
 | Team-Codex | Actual binary, separate process/config homes, access and identity under [Integrations](integrations.md#team-codex), plus [effective home instructions](integrations.md#team-codex-instructions) |
-| Analysis | Planner, Coder, Reviewer and Team-Codex: exactly the confirmed branch, complete assets and native connection/configuration readbacks |
+| Analysis | Planner, Reviewer and Team-Codex: exactly the confirmed branch, complete assets and native connection/configuration readbacks |
 | Communication | Planner-only bot, exact authorized user/channel/DM IDs and genuine Home binding; later task subscriptions remain operational |
 
 - **Workspace.** Bind Planner `PROJECT_DIR`, native `terminal.cwd` and board default workspace to the confirmed workspace. Bind `REPOSITORY_ROOTS` to confirmed boundaries with separate planning and implementation assignments. Preserve nested or distinct roots. Record confirmed repository absence. Keep Planner's Git-root, cwd, board and ticket checks.
