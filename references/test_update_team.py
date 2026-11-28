@@ -506,7 +506,7 @@ class UpdaterTests(unittest.TestCase):
                          dependency_review='Reviewed one-off 4.0.0 adoption; no live team touched')
         self.assertEqual(result['status'], 'applied')
         updated = u.load_record(self.home)[2]
-        self.assertEqual(updated['maker_version'], '4.0.0')
+        self.assertEqual(updated['maker_version'], u.package_version(self.repo, self.base))
         self.assertNotIn('DEMO_PASSWORD', updated['confirmed_values'])
         self.assertNotIn('DEMO_PASSWORD', updated['confirmed_bindings'])
         for role in ('planner', 'coder', 'reviewer'):

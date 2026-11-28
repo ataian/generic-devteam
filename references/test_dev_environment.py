@@ -213,10 +213,9 @@ class PinnedEnvironmentDeliveryTests(unittest.TestCase):
                 self.assertIn("[disposable-demo](integrations.md#disposable-demo)", text)
                 self.assertIn("[dev-environment](integrations.md#dev-environment)", text)
 
-    def test_versions_move_together_to_4_0_0(self):
+    def test_package_versions_match(self):
         skill = read("SKILL.md")
-        self.assertIn("version: 4.0.0", skill)
-        self.assertEqual(MANIFEST["version"], "4.0.0")
+        self.assertIn(f"version: {MANIFEST['version']}", skill.splitlines())
 
     def test_role_contracts_route_environment_work_and_keep_no_retired_skill(self):
         planner = read("templates/roles/planner.SOUL.md.template")

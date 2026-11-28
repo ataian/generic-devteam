@@ -27,3 +27,6 @@ metadata:
 
 - Name the build mode, the running target and the observation limit in the result.
 - Distinguish a check that exercised the real target from one that exercised a reconstruction.
+- If disposable Cypress cleanup deletes the recording, plan pixel capture before the run. For headless Electron, use the native Cypress recording, not the Xvfb root, which can be black.
+- Extract only relevant post-login app frames inside the verified test container. Crop out the runner log. Never copy raw recordings that may contain credentials or delay scoped cleanup.
+- Report print-interface DOM evidence separately from native PDF evidence.
