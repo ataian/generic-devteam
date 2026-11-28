@@ -9,7 +9,7 @@ MANIFEST = json.loads((ROOT / "manifest.json").read_text())
 PINS = {
     "disposable-demo": {
         "repo": "https://github.com/ataian/disposable-demo",
-        "revision": "2c6331d1fc73ae25744d11399feafc19f798c13b",
+        "revision": "84dde633d1c990400ecc13999b12ffcace61a16e",
         "subpaths": [
             "SKILL.md",
             "README.md",
