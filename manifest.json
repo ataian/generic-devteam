@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "settings": {
@@ -453,7 +453,7 @@
     },
     "disposable-demo": {
       "original_repo": "https://github.com/ataian/disposable-demo",
-      "source_revision": "84dde633d1c990400ecc13999b12ffcace61a16e",
+      "source_revision": "3c021170f93118e71d859117d2af460949a28ca7",
       "legal_files": [],
       "subpaths": [
         "SKILL.md",
