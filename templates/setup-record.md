@@ -1,7 +1,7 @@
 # Private setup record
 
 - Scope: authorized target setup only. Use `<actual planner home>/devteam/setup.md` outside project, Git and exports. Owner directory 0700, file 0600.
-- Secrets: record credential locations and access-check status only. `DEMO_PASSWORD` is the single exception and lives only in the JSON block below.
+- Secrets: record credential locations and access-check status only. The demo password choice lives only in `<project>/demo/settings.json` (mode 0600, excluded from Git); record its mode, location and Git-exclusion status, never the value.
 - Authority: native profiles, board and service objects establish current state. This record grants no rollout or operation permission.
 
 ## Authorizations and readiness
@@ -16,9 +16,9 @@ Before installation resolve all foreseeable choices: project/workspace, reposito
 
 ## Confirmed data
 
-Store all confirmed raw data in the single JSON block. Use [Setup](../references/setup.md) for `json.dumps` and `json.loads` readback. Preserve existing keys, types and confirmed overrides on resume/update. Empty objects mean unrecorded values. `DEMO_PASSWORD` is the only secret here; keep it in private team state. Outside that state it exists only as the rendered SOUL literal.
+Store all confirmed raw data in the single JSON block. Use [Setup](../references/setup.md) for `json.dumps` and `json.loads` readback. Preserve existing keys, types and confirmed overrides on resume/update. Empty objects mean unrecorded values. A new record has no demo password value; a historical record may retain the retired `DEMO_PASSWORD` key only until its 4.0.0 adoption removes it, and the project settings file owns every fresh choice.
 
-- `confirmed_values`: names, project, bank, board, profile IDs, models, reasoning and the demonstration password. Preserve confirmed `PLANER_NAME`, `CODER_NAME`, `REVIEWER_NAME`, `PROJECT_NAME`, `HINDSIGHT_BANK_NAME`, `KANBAN_BOARD_NAME`, `PLANNER_PROFILE`, `CODER_PROFILE`, `REVIEWER_PROFILE`, `DEMO_PASSWORD`, `CODEX_MODEL`, `PLANNER_REASONING`, `CODER_REASONING`, `CODEX_REASONING_DEFAULT`, `CODEX_REASONING_MAX`, `ROLE_REASONING_DEFAULT`, `ROLE_REASONING_HIGH`.
+- `confirmed_values`: names, project, bank, board, profile IDs, models and reasoning. Preserve confirmed `PLANER_NAME`, `CODER_NAME`, `REVIEWER_NAME`, `PROJECT_NAME`, `HINDSIGHT_BANK_NAME`, `KANBAN_BOARD_NAME`, `PLANNER_PROFILE`, `CODER_PROFILE`, `REVIEWER_PROFILE`, `CODEX_MODEL`, `PLANNER_REASONING`, `CODER_REASONING`, `CODEX_REASONING_DEFAULT`, `CODEX_REASONING_MAX`, `ROLE_REASONING_DEFAULT`, `ROLE_REASONING_HIGH`.
 - Workspace: `PROJECT_DIR` is canonical and absolute. `REPOSITORY_ROOTS` is one line with separate planning and implementation assignments or confirmed absence.
 - Native configuration only: fixed Planner/Hermes-Coder reasoning and Codex model ID. Add no role-render fields for them.
 - Coder render paths: verified absolute `CODEX_BINARY` entrypoint, process home `CODEX_PROCESS_HOME`, config home `CODEX_HOME`. Use raw paths without shell quoting. Match process HOME to `confirmed_bindings.roles.team-codex.home`.
@@ -41,6 +41,7 @@ Per target, record actual native identity or exact path, configuration source, p
 - Required shared dependency availability and established interface readbacks: pending.
 - Per-role model/provider/reasoning settings, effective overrides, and native configuration readbacks: pending.
 - Docker grants: the `docker`, `docker *`, `docker-compose` and `docker-compose *` entries in all three profiles cover all operations on any daemon accessible to the CLI, including an alternate context or remote daemon. They are not project-scoped, can affect other workloads, and do not override existing deny rules. Record the native readback.
+- Project demo settings: `<project>/demo/settings.json` path, choice mode (`shared`, `random` or absent), file mode 0600, Git-exclusion and untracked readback, and completion: pending. Never the value.
 - Team-Codex process HOME, separate CODEX_HOME, binary, protected access location/status, and Git identity configuration readbacks: pending.
 - Team-Codex instructions: source template path/hash and Maker SemVer/commit, confirmed homes/cwd, target path, previous and installed hashes/modes, backup location, effective instruction sources in order, override/limit and full-content results: pending.
 - Board/workspace, bank ownership and per-role memory bindings, selected analysis integration and target paths for Planner, Reviewer and Team-Codex: pending.

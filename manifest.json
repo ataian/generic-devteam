@@ -1,6 +1,6 @@
 {
   "name": "generic-devteam",
-  "version": "3.1.1",
+  "version": "4.0.0",
   "recovery_launcher": "skills/brownfield-feature-planning/scripts/recover-triage",
   "stage": "setup-recipe",
   "settings": {
@@ -36,6 +36,7 @@
     "references/native-workflow.md",
     "references/render_text.py",
     "references/setup.md",
+    "references/setup_settings.py",
     "references/test_bound_recovery.py",
     "references/test_brownfield_planning.py",
     "references/test_build_evidence.py",
@@ -46,6 +47,7 @@
     "references/test_render_reasoning.py",
     "references/test_retro.py",
     "references/test_review_investigation.py",
+    "references/test_setup_settings.py",
     "references/test_triage_recovery.py",
     "references/test_update_team.py",
     "references/update.md",
@@ -66,9 +68,6 @@
     "skills/build-evidence/references/jfr-observer.md",
     "skills/build-evidence/references/portless-testcontainers.md",
     "skills/build-evidence/references/production-build-selectors.md",
-    "skills/demo-handover/SKILL.md",
-    "skills/dev-environment/SKILL.md",
-    "skills/dev-environment/references/requested-demo.md",
     "skills/devteam-cleanup/SKILL.md",
     "skills/diagnosing-bugs/LICENSE",
     "skills/diagnosing-bugs/NOTICE.md",
@@ -114,7 +113,6 @@
       "render_fields": [
         "CODER_NAME",
         "CODER_PROFILE",
-        "DEMO_PASSWORD",
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
@@ -146,7 +144,6 @@
         "CODEX_PROCESS_HOME",
         "CODEX_REASONING_DEFAULT",
         "CODEX_REASONING_MAX",
-        "DEMO_PASSWORD",
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
@@ -173,7 +170,6 @@
       },
       "render_fields": [
         "CODER_NAME",
-        "DEMO_PASSWORD",
         "HINDSIGHT_BANK_NAME",
         "KANBAN_BOARD_NAME",
         "PLANER_NAME",
@@ -223,41 +219,6 @@
       "skill_path": "skills/build-evidence/SKILL.md",
       "transport": {
         "SKILL.md": "SKILL.md"
-      }
-    },
-    "demo-handover": {
-      "status": "included",
-      "targets": {
-        "hermes": [
-          "coder"
-        ]
-      },
-      "origin": "Owned demo runtime handover procedure, moved unchanged out of the Coder SOUL.",
-      "changes": "Copy the skill unchanged. The Coder reads it on a released demo handover card; the demonstration password stays in the role instructions.",
-      "origin_ref": "references/upstream-sources.md#own-demo-handover",
-      "license_path": null,
-      "notice_path": null,
-      "skill_path": "skills/demo-handover/SKILL.md",
-      "transport": {
-        "SKILL.md": "SKILL.md"
-      }
-    },
-    "dev-environment": {
-      "status": "included",
-      "targets": {
-        "hermes": [
-          "planner"
-        ]
-      },
-      "origin": "Owned Docker development-environment construction and adoption procedure, authored for this package.",
-      "changes": "Copy the complete skill tree unchanged. The Planner invokes it for requested environment work; setup and updates do not run it.",
-      "origin_ref": "references/upstream-sources.md#own-dev-environment",
-      "license_path": null,
-      "notice_path": "NOTICE.md",
-      "skill_path": "skills/dev-environment/SKILL.md",
-      "transport": {
-        "SKILL.md": "SKILL.md",
-        "references/requested-demo.md": "references/requested-demo.md"
       }
     },
     "devteam-cleanup": {
@@ -488,6 +449,55 @@
         ]
       },
       "recipe_ref": "references/integrations.md#grill-me",
+      "recipe_status": "documented"
+    },
+    "disposable-demo": {
+      "original_repo": "https://github.com/ataian/disposable-demo",
+      "source_revision": "2c6331d1fc73ae25744d11399feafc19f798c13b",
+      "legal_files": [],
+      "subpaths": [
+        "SKILL.md",
+        "README.md",
+        "scripts/demo.sh",
+        "scripts/demo_state.py",
+        "scripts/demo_accounts.py",
+        "templates/AGENTS.md",
+        "templates/compose.yaml",
+        "templates/init.example.sql",
+        "templates/realm.example.json",
+        "templates/seed.example.sql",
+        "tests/smoke.md"
+      ],
+      "targets": {
+        "hermes": [
+          "planner",
+          "coder",
+          "reviewer"
+        ]
+      },
+      "recipe_ref": "references/integrations.md#disposable-demo",
+      "recipe_status": "documented"
+    },
+    "dev-environment": {
+      "original_repo": "https://github.com/ataian/dev-environment",
+      "source_revision": "3205d3a70fe6ad65c191d07172e106895b75fa04",
+      "legal_files": [],
+      "subpaths": [
+        "SKILL.md",
+        "references/install.md",
+        "references/toolchain.md",
+        "scripts/dev.sh",
+        "scripts/dev-runner.py",
+        "scripts/run-in-tools.sh"
+      ],
+      "targets": {
+        "hermes": [
+          "planner",
+          "coder",
+          "reviewer"
+        ]
+      },
+      "recipe_ref": "references/integrations.md#dev-environment",
       "recipe_status": "documented"
     },
     "hindsight": {

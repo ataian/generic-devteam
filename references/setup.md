@@ -1,7 +1,7 @@
 # Guided native target setup
 
 - Scope: authorized target setup only. Use established supported interfaces and recipes. Skip recurring parser, source, loader and SDK investigations.
-- Inputs: confirmed nonsecret data only, except the single demonstration password in section 2. Never interpolate raw user text as shell code.
+- Inputs: confirmed nonsecret data only, except the single demo password choice in section 2, which is stored only at `<project>/demo/settings.json`. Never interpolate raw user text as shell code.
 
 Use English for development communication and artifacts. Preserve exact identifiers, quotations, errors, and deliberately localized product text.
 
@@ -30,7 +30,7 @@ Use English for development communication and artifacts. Preserve exact identifi
 | Codex identity | Explicitly authorized `user.name`/`user.email` reuse, provenance, access method and protected login route; discovery alone is not consent |
 | Shared objects | Existing service endpoints; intended board/bank names; create versus authorized reuse and ownership |
 | Communication | Mattermost server/team, intended Planner bot, human and any additional authorized users, allowed project channel, channel type and DM participants; existing IDs or explicit creation intent |
-| Execution scope | Exact local writes, including team-owned Codex home instructions, profile assets, shared PM/configuration effects, external identity actions and activation; prepare protected access where possible |
+| Execution scope | Exact local writes, including team-owned Codex home instructions, profile assets, the `<project>/demo/settings.json` choice and its Git exclusion, shared PM/configuration effects, external identity actions and activation; prepare protected access where possible |
 
 - Inventory: complete pinned plugin packages and legal files. Check runtime/asset compatibility before scope acceptance.
 - Absent Codex or selected analysis runtime: disclose exact first-installation release/source, paths and effects. Accepted upfront scope covers that installation without repeating version questions per component.
@@ -40,9 +40,18 @@ Use English for development communication and artifacts. Preserve exact identifi
 - `PROJECT_NAME`: one segment without slash, backslash or traversal.
 - Workspace: confirm its canonical absolute path independently of the name. Use it for `PROJECT_DIR`, `terminal.cwd` and board default workspace. Never derive the path from the name.
 - `REPOSITORY_ROOTS`: one line with separate planning and implementation roots. Preserve nested checkouts and multiple roots. No repository moves, Git initialization or project tool installs.
-- `DEMO_PASSWORD`: ask once for the team's shared demonstration password and require an answer before creation. No default; without a value no role file is rendered. It is the only secret the Maker stores: private team state only (setup JSON, installation record, proposals, run journals), never chat output, tickets, memory, Hindsight or profile configuration. The three SOULs carry it as a literal.
 - Before creation: check existing project instructions and native profile/board bindings for contradictions.
 - Planner write authority includes the project's `HERMES.md`. It describes only the local installation; the Planner reconciles its board and workspace entries with the card binding and records the correction.
+
+### Project demo password choice
+
+Ask once during every new team creation, also when demo installation is deferred: one shared password for the demo accounts, or a generated password for each account? Skipping selects the disposable-demo default. No role field, render input, grant, setup JSON value or SOUL literal carries the password for a new team.
+
+- Store explicit choices only at `<project>/demo/settings.json` under `password`: `{"mode":"shared","value":"…"}` or `{"mode":"random"}`. An absent file or key keeps the skill default. A settings-only `demo/` is neither an installed nor a running demo.
+- Write it with `references/setup_settings.py`: `python3 -B references/setup_settings.py --project "$PROJECT_DIR" --mode shared` reads the value from stdin; `--mode random` needs no input. The helper validates before mutation, creates `demo/` (mode 0700) when absent, writes the file atomically with mode 0600, requires an operator-owned regular file, preserves unrelated keys and an existing `password` choice, and adds the narrow `demo/.gitignore` rule `/settings.json` only when the project is in Git and the path is not already ignored. It verifies the settings path is ignored and untracked before writing a secret. A tracked, symlinked, malformed or unwritable destination blocks that write; outside Git it creates no repository and no ignore file. Never pass the value as an argument, print it, echo it, or write it to a ticket, memory, Hindsight or profile configuration.
+- Skipping with no prior setting writes no file. Resume reuses an existing choice without asking again.
+- Disclose the exact project writes before the existing setup/update approval: create `demo/` if needed, the settings file, and the ignore rule only if needed. Preserve existing ignore rules.
+- Record the choice mode, completion and location in the setup record; never a second password value.
 
 ### New profile IDs
 
@@ -71,7 +80,7 @@ Use English for development communication and artifacts. Preserve exact identifi
 
 1. Keep confirmed nonsecret values once in the existing dataset. On interruption use the existing pre-profile handoff until the Planner home exists. Transfer values unchanged to the private record after creation.
 2. Present all parameters, derived IDs, target homes, create/reuse choices, models/limits, Git identity, analysis, communication permissions, concrete writes, shared effects and activation scope. Include template-based role personalization in acceptance.
-3. Disclose each deferred action, reason and execution point: protected login requiring a new home, native `/hooks` approval after configuration, genuine Planner DM `/sethome` after role delivery and adapter activation. Prepare protected credentials earlier where supported. Never collect secrets in chat or JSON; `DEMO_PASSWORD` is the qualified exception, written only to the private setup JSON.
+3. Disclose each deferred action, reason and execution point: protected login requiring a new home, native `/hooks` approval after configuration, genuine Planner DM `/sethome` after role delivery and adapter activation. Prepare protected credentials earlier where supported. Never repeat or store secrets in chat output, JSON or the setup record. The demo password choice is the qualified exception and lives only in `<project>/demo/settings.json` (mode 0600, excluded from Git); the record notes its mode and location, never the value.
 4. Obtain the start decision after resolving every foreseeable choice. Use the dataset in later steps. Substitute generated native IDs from readbacks. Read resolved homes from native outputs. Do not ask the user to invent or repeat either or reopen agreed role rules. Ask later only for a new conflict/failure, newly knowable decision, user scope change or disclosed deferred interaction.
 
 ## 3. Fresh profiles, confirmed models
@@ -133,18 +142,106 @@ Record effective protection and its management source. Report genuine conflicts.
 
 ### Project command grants
 
-Grant the project's reviewed development and demonstration scripts in the Planner, Coder and Reviewer profiles. For script entries, use absolute paths from the project guide, one verb per entry, and `*` only for a script-validated argument. Independently grant `docker`, `docker *` (including `docker compose *`), `docker-compose` and `docker-compose *` in all three profiles. A grant matches a simple command line, not a compound line (`;`, `&&`, `|`, a heredoc) or `$` expansion inside double quotes. A leading variable assignment changes the command text. Never grant an `env *` wrapper. Under “Setup targets and readbacks” in the setup record, disclose that these grants cover all operations on any daemon accessible to the CLI, including an alternate context or remote daemon. They are not project-scoped and can affect other workloads; existing deny rules remain binding.
+Grant only exact launcher invocations that the installed project guide for this project lists. Each entry is the complete command text the matcher compares: the shell-quoted absolute entrypoint, one verb, and any operand the guide itself documents. Reuse a line the guide already renders. Where the guide gives only the canonical path and verbs, render each line the same way the guide does (`entry` below; Python `shlex.join`), never by concatenating an unquoted path with a verb. Do not write an entry for a hypothetical path, an unconfigured verb or a verb the guide does not have. A demonstration launcher takes one verb and no operand. Never translate a test selector into a wildcard; grant the exact selector invocation.
+
+| Profile | Demonstration launcher | Development launcher |
+|---|---|---|
+| Planner | `status`, `retire` | none |
+| Coder | `start`, `status`; `user` only with a configured Keycloak service | `help`, `build`, `check`, `test`; plus a concrete `test-selected <selector>`, configured `start`, `update` and optional verbs the guide documents and the operator authorized |
+| Reviewer | `status` | only the read-only checks the guide documents and the operator authorized |
+
+- Include `stop` and `purge` only for a profile the operator authorized for those operations. `purge` is never a fallback for `retire`.
+- Add conditional development entries only in their exact documented form: one guide-rendered `test-selected <selector>` line per concrete selector, and `start` or `update` only when the installed guide configures that verb. Never a selector wildcard.
+- Project installation has its own authority: the authorized setup operator merges these shell-quoted absolute invocations from the installed guide into the intended profiles. Read each profile's current list with `config get command_allowlist --json`, append only missing approved entries, and apply the merged list; never set a replacement list. Preserve every existing unrelated entry and every existing independently approved Docker entry. Team creation grants nothing for an uninstalled project; no working role grants itself a permission.
+- A grant matches a simple command line, not a compound line (`;`, `&&`, `|`, a heredoc) or `$` expansion inside double quotes. A leading variable assignment changes the command text. Never grant an `env *` wrapper. An entry containing `*`, `?` or `[` is matched as a glob even inside quotes, so a launcher entry must be exact and free of those characters; the four Docker entries are the only permitted globs.
+- Independently grant `docker`, `docker *` (including `docker compose *`), `docker-compose` and `docker-compose *` in all three profiles. Keep them separate from the launcher entries above and apply them regardless of installed scripts, environments or the demo choice. Under “Setup targets and readbacks” in the setup record, disclose that these grants cover all operations on any daemon accessible to the CLI, including an alternate context or remote daemon. They are not project-scoped and can affect other workloads; existing deny rules remain binding.
 
 ```sh
-DEV_ENTRYPOINT='<absolute development entrypoint from the project guide>'
-DEMO_ENTRYPOINT='<absolute demonstration entrypoint from the project guide>'
-hermes -p "$PROFILE" config set command_allowlist "[\"$DEV_ENTRYPOINT check\",\"$DEV_ENTRYPOINT test\",\"$DEV_ENTRYPOINT test-selected *\",\"$DEV_ENTRYPOINT test-all\",\"$DEMO_ENTRYPOINT build *\",\"$DEMO_ENTRYPOINT start *\",\"$DEMO_ENTRYPOINT status\",\"$DEMO_ENTRYPOINT stop\",\"$DEMO_ENTRYPOINT retire\",\"$DEMO_ENTRYPOINT retire *\",\"$DEMO_ENTRYPOINT user\",\"docker\",\"docker *\",\"docker-compose\",\"docker-compose *\"]"
-hermes -p "$PROFILE" config get command_allowlist
+# Canonical absolute entrypoints from the installed guides. Leave one empty when
+# that environment is not installed; its block is then skipped.
+DEMO_ENTRYPOINT='<canonical absolute demonstration entrypoint from the installed demo guide>'
+DEV_ENTRYPOINT='<canonical absolute development entrypoint from the installed dev guide>'
+
+# Render one entry exactly as the installed guides do (shlex.join): the path is
+# shell-quoted, so the matcher receives the same text the shell executes.
+entry() {
+    python3 -B -c 'import shlex, sys; print(shlex.join(sys.argv[1:]))' "$@" || return 1
+}
+
+# Read, merge, apply, then compare the readback with prior plus approved entries:
+# current entries keep their order; additions are appended once.
+merge_grants() {
+    profile=$1
+    shift
+    current=$(hermes -p "$profile" config get command_allowlist --json) || return 1
+    merged=$(printf '%s' "$current" | python3 -B -c '
+import json, sys
+docker = {"docker", "docker *", "docker-compose", "docker-compose *"}
+try:
+    current = json.load(sys.stdin)
+except ValueError:
+    raise SystemExit("current command_allowlist is not JSON")
+if not isinstance(current, list) or any(not isinstance(item, str) for item in current):
+    raise SystemExit("current command_allowlist is not a string list")
+merged = list(current)
+for item in sys.argv[1:]:
+    if not item or any(char in item for char in "\x00\r\n"):
+        raise SystemExit("invalid grant entry")
+    if item not in docker and any(char in item for char in "*?["):
+        raise SystemExit("launcher grant contains a glob metacharacter")
+    if item not in merged:
+        merged.append(item)
+print(json.dumps(merged, ensure_ascii=True))
+' "$@") || return 1
+    hermes -p "$profile" config set command_allowlist "$merged" || return 1
+    readback=$(hermes -p "$profile" config get command_allowlist --json) || return 1
+    printf '%s' "$readback" | python3 -B -c '
+import json, sys
+actual = json.load(sys.stdin)
+if actual != json.loads(sys.argv[1]):
+    raise SystemExit("native readback differs from the approved merge")
+' "$merged" || return 1
+    printf '%s\n' "$readback"
+}
+
+# Independently authorized Docker grants: all three profiles, every project,
+# regardless of installed scripts, environments or the demo choice.
+merge_grants "$PLANNER_PROFILE" "docker" "docker *" "docker-compose" "docker-compose *"
+merge_grants "$CODER_PROFILE" "docker" "docker *" "docker-compose" "docker-compose *"
+merge_grants "$REVIEWER_PROFILE" "docker" "docker *" "docker-compose" "docker-compose *"
+
+# Installed disposable demo only; skip the whole block when it is absent.
+if [ -n "${DEMO_ENTRYPOINT:-}" ]; then
+    merge_grants "$PLANNER_PROFILE" \
+        "$(entry "$DEMO_ENTRYPOINT" status)" "$(entry "$DEMO_ENTRYPOINT" retire)"
+    merge_grants "$CODER_PROFILE" \
+        "$(entry "$DEMO_ENTRYPOINT" start)" "$(entry "$DEMO_ENTRYPOINT" status)"
+    merge_grants "$REVIEWER_PROFILE" "$(entry "$DEMO_ENTRYPOINT" status)"
+fi
+
+# Installed dev environment only; skip the whole block when it is absent.
+if [ -n "${DEV_ENTRYPOINT:-}" ]; then
+    merge_grants "$CODER_PROFILE" \
+        "$(entry "$DEV_ENTRYPOINT" help)" "$(entry "$DEV_ENTRYPOINT" build)" \
+        "$(entry "$DEV_ENTRYPOINT" check)" "$(entry "$DEV_ENTRYPOINT" test)"
+    merge_grants "$REVIEWER_PROFILE" "$(entry "$DEV_ENTRYPOINT" check)"
+fi
 ```
 
-Omit project entries whose entrypoint or verb the project does not have. Keep the Docker grants regardless of project scripts or demo choice. Supply the demonstration password only through the documented environment variable, never as an argument and never in a grant.
+Add one merged entry per exact documented conditional; never add a verb the installed guide does not configure or the operator did not authorize:
 
-After each role's native readback matches the approved list, save that list under the role key in `confirmed_bindings.command_allowlists` in the private setup JSON. Record the reason for each entry and verify `approvals.single_query_mode`, `unattended_mode` and `cron_mode` remain `deny`. A role does not extend its own list; a missing grant blocks the affected work.
+| Add | Only when |
+|---|---|
+| `merge_grants "$CODER_PROFILE" "$(entry "$DEV_ENTRYPOINT" start)"` | the installed guide configures `start` and the operator authorized it |
+| `merge_grants "$CODER_PROFILE" "$(entry "$DEV_ENTRYPOINT" update)"` | the installed guide configures `update` and the operator authorized it |
+| `merge_grants "$CODER_PROFILE" "$(entry "$DEV_ENTRYPOINT" test-selected TherapyServiceTest)"` | the guide documents that exact selector and the operator authorized it; one call per selector, never a wildcard |
+| `merge_grants "$CODER_PROFILE" "$(entry "$DEMO_ENTRYPOINT" user)"` | `demo.json` declares a `keycloak_service` |
+| `merge_grants "$PROFILE" "$(entry "$DEMO_ENTRYPOINT" stop)"` | the profile is explicitly authorized for `stop` |
+| `merge_grants "$PROFILE" "$(entry "$DEMO_ENTRYPOINT" purge)"` | the profile is explicitly authorized for `purge`; never a `retire` fallback |
+
+Omit project entries whose entrypoint or verb the project does not have, and any conditional verb the operator did not authorize. Add `$(entry "$DEMO_ENTRYPOINT" user)` only when `demo.json` declares a `keycloak_service`. Keep the Docker grants regardless of project scripts or demo choice. Merge into the approved list without dropping unrelated entries. Store a chosen shared demo password only in `<project>/demo/settings.json` (mode `0600`, excluded from Git), never as an argument and never in a grant.
+
+After each role's native readback matches the approved list, save that list under the role key in `confirmed_bindings.command_allowlists` in the private setup JSON. Record the reason for each entry and verify `approvals.single_query_mode`, `unattended_mode` and `cron_mode` remain `deny`. Verify each selected exact invocation with native approval readback in its execution context; a profile grant is not proof of Team-Codex runtime access. A role does not extend its own list; a missing grant blocks the affected work.
 
 In the correct native profile, use protected login and read back model configuration. Check environment/YAML, session/per-model/CLI overrides, fallbacks and required helper routes through established interfaces. Return relevant nonsecret fields and effective override sources only. A stored key or warning alone cannot prove an effective value.
 
@@ -205,7 +302,7 @@ hermes kanban boards list --json
 - Continue the private [setup record](../templates/setup-record.md) at `<actual planner home>/devteam/setup.md` outside project, Git and Maker tree (directory 0700, file 0600). Reconcile confirmed data and actual targets before overwriting. Record authorization, upfront readiness and disclosed deferred actions.
 - Completed step evidence: native identity or exact own path, previous state/hash, verified readback and next prerequisite. Use the existing target-readback, progress, blocker and installation/update sections.
 - Asset evidence: compare complete assigned inventories and legal files against manifest `source_revision`. Record required and observed sources/revisions and licenses. Keep compatible runtime reuse separate from pinned delivery. Unknown provenance cannot prove a pristine baseline.
-- Raw data: lossless single `json` block. Use `confirmed_values` for setup inputs and `confirmed_bindings` for resolved technical bindings. Preserve all existing keys/types, including native-only models/reasoning, `DEMO_PASSWORD` and role/recovery bindings. Never reconstruct raw values from prose/tables, invent missing values or store other secrets.
+- Raw data: lossless single `json` block. Use `confirmed_values` for setup inputs and `confirmed_bindings` for resolved technical bindings. Preserve all existing keys/types, including native-only models/reasoning, role/recovery bindings and a historical `DEMO_PASSWORD` from an existing record. A new record has no `DEMO_PASSWORD`. Never reconstruct raw values from prose/tables, invent missing values or store other secrets.
 
 Generate from `record_template_text` with this pure fragment. On resume use the existing record:
 
@@ -230,12 +327,13 @@ confirmed_bindings = record_data["confirmed_bindings"]
 
 Compare parsed values with the confirmed dataset and, on resume, relevant native objects. Stop the affected step for incomplete/invalid JSON, missing required confirmed input or target drift. Resolve missing input/drift before rendering or writing. Correct stale prose from readbacks without repeating choices or creates. Use these fragments for the confirmed dataset. No synthetic development regressions, behavior or research gates in setup.
 
-1. **Copy skills.** Use the [source and role matrix](upstream-sources.md#bundled-components). Copy complete own trees from `skills/` to `<role home>/skills/<name>/`, including licenses, notices and references. Keep names and bytes unchanged except the recovery launcher. Bind it through the Maker step below after copying. No source-profile discovery.
+1. **Copy skills.** Use the [source and role matrix](upstream-sources.md#bundled-components) for owned trees and the [third-party component inventory](upstream-sources.md#third-party-components) for pinned assets. Copy complete own trees from `skills/` to `<role home>/skills/<name>/`, including licenses, notices and references. Keep names and bytes unchanged except the recovery launcher. Bind it through the Maker step below after copying. No source-profile discovery.
+   - Pinned environment skills: resolve `upstream_components.disposable-demo` and `upstream_components.dev-environment` at their fixed `source_revision`; never a branch tip, working copy or development path. In every profile named by `targets`, follow the [disposable-demo](integrations.md#disposable-demo) and [dev-environment](integrations.md#dev-environment) recipes: deliver only `subpaths` unchanged under `<ROLE_HOME>/skills/<name>/`, compare bytes and Git executable bits, and record commit, installed path and readback. Do not install repository planning files. Setup delivers files only; it does not start a demo or install the project environment.
    - Team-Codex: every `own_skills` entry whose `targets.codex` names `team-codex` — currently `screenshot-to-code`, `diagnosing-bugs`, `build-evidence` and `plan-versioning-semver` — under `.agents/skills/` in process HOME. Before personalization follow the [diagnosis recipe](integrations.md#diagnosing-bugs) for collisions, full bytes and native discovery.
    - Planner: deliver `prototype` by [its recipe](integrations.md#prototype) before personalizing dependent SOUL clauses.
 2. **Verify configuration.** Compare actual Hermes/Codex native settings, limits and helper routes with preparation data. Compare all six VoltAgent TOMLs byte-for-byte with the manifest revision, including original model/reasoning. Save sources, authorization and readbacks privately. Keep the native Codex model ID out of render fields. For every assigned consumer, read back the selected [analysis bindings](code-analysis.md) from section 4. Record roots and the installed operational update reference.
 3. **Render.** In approved target setup, load [references/render_text.py](render_text.py) by reviewed package absolute path, e.g. `importlib.util.spec_from_file_location`. Never import a same-named foreign module from the search path. The renderer takes strings and has no file I/O, runtime load or CLI. Read templates in UTF-8 with the file tool.
-   - `role`: `planner`, `coder` or `reviewer`. `role_manifest`: matching `role_templates` entry. Use existing SOUL templates and confirmed raw names, project, bank, board, IDs, reasoning and `DEMO_PASSWORD` render values from `confirmed_values`. `ROLE_NAME` is the role's display name. Missing values block output. No empty defaults or invented IDs.
+   - `role`: `planner`, `coder` or `reviewer`. `role_manifest`: matching `role_templates` entry. Use existing SOUL templates and confirmed raw names, project, bank, board, IDs and reasoning render values from `confirmed_values`. `ROLE_NAME` is the role's display name. Missing values block output. No empty defaults or invented IDs.
    - Planner fields: `PROJECT_DIR`, `REPOSITORY_ROOTS`. Coder fields: `PLANNER_PROFILE`, `CODEX_BINARY`, `CODEX_PROCESS_HOME`, `CODEX_HOME`. Before rendering, match `PLANNER_PROFILE` to `confirmed_bindings.roles.planner.id` and `CODEX_PROCESS_HOME` to `confirmed_bindings.roles.team-codex.home`. The record holds actual resolved bindings. Pass raw absolute paths for shell quoting in the invocation block.
    - Exclude fixed Planner/Hermes-Coder reasoning and Codex model ID from render fields. Keep communication values with Planner. Use original technical data for shell values. Generate no separate runtime configuration. Bind recovery via the Maker step below.
 
@@ -252,13 +350,13 @@ Compare parsed values with the confirmed dataset and, on resume, relevant native
    soul_text = render_role(role_template_text, role_values, role)
    ```
 
-4. **Validate renderer contract.** Check [role fields](native-workflow.md#2-personalize-role-souls): nonempty, raw and single-line. Names at most 120 characters. No control/format characters, template braces, indentation, backticks, backslashes or fence breakouts. Unknown, missing, additional or damaged fields fail. Replace all matching occurrences exactly in one nonrecursive pass. Escape normal Markdown. Inline code and fenced process/examples get raw validated values. `DEMO_PASSWORD` is always a literal: one line, exact bytes, never instruction text. No Markdown backslashes in native IDs, bank, password or path. Preserve every non-placeholder byte. Append no persona or process rewrite.
+4. **Validate renderer contract.** Check [role fields](native-workflow.md#2-personalize-role-souls): nonempty, raw and single-line. Names at most 120 characters. No control/format characters, template braces, indentation, backticks, backslashes or fence breakouts. Unknown, missing, additional or damaged fields fail. Replace all matching occurrences exactly in one nonrecursive pass. Escape normal Markdown. Inline code and fenced process/examples get raw validated values. No Markdown backslashes in native IDs, bank or path. Preserve every non-placeholder byte. Append no persona or process rewrite.
 5. **Write.** Compare exact `soul_text` with approved personalization. Ask again only for a newly observed conflict or scope change. Recheck ownership immediately before writing. Use file tools to write `soul_text` only to the confirmed role home's `SOUL.md`. Replace only the compared neutral SOUL created for this setup. Stop for foreign or concurrently changed content. No shell interpolation or recursive global replacement.
 6. **Read back every target.** Record installed paths and exact readbacks. Verify configured modes without synthetic worker experiments.
-   - Roles: exact mapping, byte-identical complete `soul_text`, unchanged non-placeholder bytes, no leftover fields or Coder/Reviewer communication values. Compare role/project/bank/board values and technical IDs with the record. Check effective native configuration and logged restrictions.
-   - Skills: compare full file sets and bytes with source. Compare recovery launcher with bound Maker output. Verify all three original skill trees and complete companions in the Planner home. Maker references alone cannot deliver them.
-   - Planner: verify required `grilling` load, interview precedence and separate plan acceptance. Verify conditional `domain-modeling` load, authorized document boundaries, vocabulary-only glossary, proposed ADR status and existing plan gate. Verify once that the Planner text's `skill_view(name="dev-environment", file_path="references/requested-demo.md")` resolves to the installed `dev-environment` reference; an unresolvable reference leaves delivery incomplete.
-   - Coder: verify default/max values and process binding, and the installed `demo-handover` skill with its `SKILL.md` readback. Check compact task/resume instructions and propagation to fresh delegation, with scope, evidence and permissions intact. The `$diagnosing-bugs` and `$build-evidence` cues belong to the Team-Codex instructions, not to this SOUL.
+   - Roles: exact mapping, byte-identical complete `soul_text`, unchanged non-placeholder bytes, no leftover fields, no demo password field or value, and no Coder/Reviewer communication values. Compare role/project/bank/board values and technical IDs with the record. Check effective native configuration and logged restrictions.
+   - Skills: compare full file sets and bytes with source. Compare recovery launcher with bound Maker output. Verify all three original Planner skill trees and complete companions in the Planner home. Distinguish that check from verification of `disposable-demo` and `dev-environment` in every assigned profile under their [disposable-demo](integrations.md#disposable-demo) and [dev-environment](integrations.md#dev-environment) recipes. Maker references alone cannot deliver them.
+   - Planner: verify required `grilling` load, interview precedence and separate plan acceptance. Verify conditional `domain-modeling` load, authorized document boundaries, vocabulary-only glossary, proposed ADR status and existing plan gate. In the Planner profile load `references/install.md` and `references/toolchain.md` from the installed `dev-environment` skill; either unresolved reference leaves delivery incomplete.
+   - Coder: verify default/max values and process binding, and the per-role environment readback above for `disposable-demo` and `dev-environment` in Planner, Coder and Reviewer profiles. Check compact task/resume instructions and propagation to fresh delegation, with scope, evidence and permissions intact. The `$diagnosing-bugs` and `$build-evidence` cues belong to the Team-Codex instructions, not to this SOUL.
    - All three SOULs: check compact exchanges and audience boundaries. Preserve the Reviewer's review procedure. Inspect the target loader/context boundary and prove **complete effective SOUL loading** per role. Length and file existence alone cannot prove loading. Stop on truncation. Do not reduce role obligations.
    - Team-Codex: under bound homes and cwd, verify [instruction delivery and loading](integrations.md#team-codex-instructions). Record saved bytes and effective sources separately.
    - Analysis: verify selected integration, complete original skills and native activation for Planner, Reviewer and Team-Codex. No second alternative or reference-only delivery.

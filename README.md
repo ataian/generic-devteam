@@ -134,10 +134,11 @@ Concrete symptom/cause evidence and an exact reproducible check preserve the dir
 Unclear or competing causes, intermittent/state-dependent failures, performance isolation, or an unresolved/recurring apparent fix trigger the full method, including regressions emerging during ordinary implementation.
 Existing Planner routing, risk-sensitive verification, and independent review remain unchanged; complete-tree setup/update and native discovery checks do not prove live behavior.
 Relevant module/interface choices use caller-contract, complexity-encapsulation, abstraction-removal, and present-variability checks within existing design work.
-The Planner receives the owned [dev-environment skill](skills/dev-environment/SKILL.md) for requested Docker environment creation, adoption or revision.
-Tool containers provide the project toolchain on the current checkout without host installations. Developers build, run selected tests and can start the app from source.
-The project gets one short operating guide, normally `docker/dev/AGENTS.md`. Acceptance exercises a source edit and a new test. Demos and end-to-end tests of built images use the project's deployment configuration, outside this task.
-Setup may offer environment creation as a first task; neither setup nor updates execute it.
+Planner, Coder and Reviewer receive the pinned [dev-environment](https://github.com/ataian/dev-environment) skill at `3205d3a70fe6ad65c191d07172e106895b75fa04` for containerized build, check and test commands on the current checkout.
+Tool containers provide the project toolchain without host installations; developers build, run selected tests and can start the app from source.
+The installer discovers nested checkouts, native commands and selected services and writes `<project>/dev/AGENTS.md` plus a resolving pointer in each selected checkout's `AGENTS.md`; the single checkout mounts at `/workspace` and the writable cache at `/opt/project-cache`.
+Acceptance exercises a source edit and a new test. Demos and end-to-end tests of built images use the project's deployment configuration, outside this task. Setup may offer environment creation as a first task; neither setup nor updates execute it. Acquisition and readback use the [integration recipe](references/integrations.md#dev-environment).
+Planner, Coder and Reviewer also receive the pinned [disposable-demo](https://github.com/ataian/disposable-demo) skill at `2c6331d1fc73ae25744d11399feafc19f798c13b`. A requested demonstration is one final reviewed card that builds images from the reviewed commit and hands over a local disposable runtime; setup delivers files only. Acquisition and readback use the [integration recipe](references/integrations.md#disposable-demo).
 The Planner also receives the owned [retro skill](skills/retro/README.md), adapted from Matt Pocock with full-process token economy.
 Request it with `/retro`, “Machen wir eine Retro zum letzten Lauf”, or a named historical session, ticket, or project.
 It proposes source-backed process/environment improvements, not product acceptance; it changes nothing automatically and remains separate from `/refine`.

@@ -110,17 +110,17 @@ class ReasoningContractTests(unittest.TestCase):
         planner = render_role(self.template("planner"), self.values("planner"), "planner")
         trigger = 'skill_view(name="dev-environment")'
         self.assertIn(trigger, planner)
+        self.assertIn("apply its installer to the actual project root", planner)
+        self.assertIn("reuse a suitable existing environment instead of recreating it per ticket", planner)
         self.assertLess(planner.index("Use these checks within existing design work"), planner.index(trigger))
         self.assertLess(planner.index(trigger), planner.index('3. Use "Project binding" paths.'))
-        requested = 'skill_view(name="dev-environment", file_path="references/requested-demo.md")'
-        self.assertIn(requested, planner)
-        self.assertLess(planner.index("5. At plan acceptance"), planner.index(requested))
-        self.assertLess(planner.index(requested), planner.index("6. Commit the accepted plan"))
+        self.assertNotIn("requested-demo", planner)
         tickets = planner.split("7. Create small implementation tickets", 1)[1].split("8. Create dependent", 1)[0]
         self.assertNotIn("agent-guide path in each relevant ticket", tickets)
-        self.assertIn("Only for a requested demonstration, add a final `Demo handover` card", tickets)
-        self.assertIn("assigned to example-role, blocked on the last implementation ticket", tickets)
-        for obsolete in ("retire a running demonstration runtime", "teardown verb", "docker", "compose"):
+        self.assertIn("one final `Demo handover` card", tickets)
+        self.assertIn("dependent on the last reviewed implementation", tickets)
+        self.assertIn("Keep the card blocked and not eligible for automatic promotion.", tickets)
+        for obsolete in ("retire a running demonstration runtime", "teardown verb", "compose"):
             self.assertNotIn(obsolete, tickets)
         self.assertIn("For a completed demo handover, state the reviewed commit, the verified browser URL", planner)
         for role in ("coder", "reviewer"):
@@ -144,81 +144,82 @@ class ReasoningContractTests(unittest.TestCase):
                 with self.subTest(role=role, field=field), self.assertRaises(ValueError):
                     render_role(self.template(role), values, role)
 
-    def test_requested_demo_is_owned_loaded_and_closed_by_the_named_role(self):
+    def test_demo_handover_is_planned_released_and_checked_by_the_named_role(self):
         """Static rendered instruction contract; no runtime or demo is exercised."""
         rendered = {role: render_role(self.template(role), self.values(role), role)
                     for role in ("planner", "coder", "reviewer")}
         planner, coder, reviewer = rendered["planner"], rendered["coder"], rendered["reviewer"]
-        skill = (ROOT / "skills/demo-handover/SKILL.md").read_text()
-        reference = (ROOT / "skills/dev-environment/references/requested-demo.md").read_text()
 
-        # Planner: ask once, load the retirement step, retire before commit and every ticket, stop on failure.
+        # Planner: ask once, retire the previous demo on both answers, stop on unknown ownership.
+        self.assertIn("announce that the previous skill-managed project demo will be removed", planner)
         self.assertIn("ask whether the customer wants a new demonstration", planner)
-        self.assertIn('skill_view(name="dev-environment", file_path="references/requested-demo.md")', planner)
-        self.assertIn("Without an explicit demo request, proceed to step 6 without demo work.", planner)
-        self.assertIn("retire any previous demo before step 6 or any ticket", planner)
-        self.assertIn("stop the entire plan and resolve the issue directly with the customer", planner)
+        self.assertIn("Retire the previous demo on both answers without another permission request.", planner)
+        self.assertIn("Unknown ownership or an unreachable engine: stop and report", planner)
+        self.assertIn("No plus verified absence: proceed to step 6 with no demo ticket", planner)
+        self.assertNotIn("requested-demo", planner)
         self.assertNotIn("retire a running demonstration runtime", planner)
         self.assertNotIn("teardown verb", planner)
-        self.assertIn("Only for a requested demonstration, add a final `Demo handover` card", planner)
+        self.assertIn("one final `Demo handover` card", planner)
+        self.assertIn("operator-approved canonical `docker_host`", planner)
 
-        # Coder: starts only on the released card, keeps the refusal and the card facts.
-        self.assertIn("read the `demo-handover` skill", coder)
-        self.assertIn("Start the runtime at the reviewed commit. If build or start refuses existing state, "
-                      "stop and report the refusal; do not purge, rename or bypass it.", skill)
-        self.assertIn("Create the demonstration user with the project’s documented command.", skill)
-        self.assertIn("Record the reviewed commit, the URL, the login name and the exact data-creation command on the card.", skill)
+        # Planning release binds the exact reviewed commit and fails closed.
+        self.assertIn("read the completed dependency's Reviewer verdict", planner)
+        self.assertIn("write the exact reviewed commit on the card, read it back, then release it", planner)
+        self.assertIn("A missing or conflicting revision blocks release and build", planner)
+        self.assertIn("branch HEAD is not a substitute", planner)
+
+        # Coder: build from the reviewed revision, provision, and fail without substituting state.
+        self.assertIn("build the required application images from the recorded reviewed revision", coder)
+        self.assertIn("Build failure stops the card.", coder)
+        self.assertIn("Use the installed `disposable-demo` skill", coder)
+        self.assertIn("provision required accounts and roles through the project's authentication mechanism", coder)
+        self.assertIn("independently recorded `docker_daemon_id`", coder)
+        self.assertIn("No demo build verb", coder)
+        self.assertIn("do not substitute stale images, silently purge or hand over a partial demo", coder)
+        self.assertIn("put its path, never the passwords, on the card", coder)
         self.assertNotIn("demo.sh retire", coder)
         self.assertNotIn("demo.sh user", coder)
         self.assertNotIn("teardown verb", coder)
 
-        # Reviewer: one functional end check, not a second retirement ownership.
-        self.assertIn("On the final demo handover card, verify the demo runs at the reviewed commit", reviewer)
-        self.assertIn("the promised functionality works with the recorded data", reviewer)
-        self.assertIn("Container uptime alone is not a functional check.", reviewer)
+        # Reviewer: compare observed runtime state; do not replay the customer route.
+        self.assertIn("compare running service image IDs, readiness, the responding loopback URL", reviewer)
+        self.assertIn("Report each failed criterion.", reviewer)
+        self.assertIn("Do not restart the playbook, rerun Cypress or replay the customer's walkthrough.", reviewer)
         self.assertNotIn("retiring the previous one", reviewer)
         self.assertNotIn("teardown verb", reviewer)
 
-        # Retirement criteria live once, at the Planner's loaded reference.
-        for clause in ("Inspect the project’s demo state, including stopped remnants.",
-                       "Verified absence completes this step; an inspection failure does not.",
-                       "Before removal, verify exclusive ownership of the old demo’s containers, volumes, "
-                       "network and private runtime directory.",
-                       "A stopped runtime is not retired.",
-                       "stop before committing the plan or writing any ticket",
-                       "Do not apply and revert a planned product fix to bypass this prerequisite."):
-            with self.subTest(clause=clause):
-                self.assertIn(clause, reference)
-
-        # Password literal once per role, never on a card; no unresolved field; closing report retained.
-        self.assertIn("The password is `Example`; never write it on a card.", planner)
-        self.assertIn("Its demonstration user's password is `Example`", coder)
-        self.assertIn("with the password `Example`", reviewer)
+        # No demo password literal survives in new role text; the card stays credential-free.
+        self.assertIn("Never write demo credentials on a card.", planner)
+        self.assertIn("do not repeat the interview", coder)
+        for role, text in rendered.items():
+            with self.subTest(role=role):
+                self.assertNotIn("DEMO_PASSWORD", text)
         self.assertIn("send a short Mattermost customer report", planner)
         for role, text in rendered.items():
             with self.subTest(role=role):
                 self.assertNotIn("{{", text)
 
-    def test_demonstration_password_stays_one_literal_string(self):
-        password = "Demo*Pass_w0rd#1!"
-        for role in ("planner", "coder", "reviewer"):
+    def test_new_role_templates_carry_no_demonstration_password_field(self):
+        """4.0.0 retires the field for new teams; the project settings file owns the value."""
+        for role in REASONING_FIELDS:
             with self.subTest(role=role):
-                values = dict(self.values(role), DEMO_PASSWORD=password)
-                text = render_role(self.template(role), values, role)
-                self.assertEqual(text.count("`" + password + "`"), 1)
-                self.assertNotIn("{{DEMO_PASSWORD}}", text)
-        planner = render_role(self.template("planner"), dict(self.values("planner"), DEMO_PASSWORD=password), "planner")
-        self.assertIn("The password is `" + password + "`; never write it on a card.", planner)
+                self.assertNotIn("DEMO_PASSWORD", role_fields(self.template(role), role))
+                self.assertNotIn("DEMO_PASSWORD", self.template(role))
 
-    def test_demonstration_password_rejects_instruction_and_fence_breakouts(self):
+    def test_historical_demo_password_render_keeps_literal_semantics(self):
+        """Old manifests keep their field list and literal substitution (§5 upgrade path)."""
+        legacy = "{{ROLE_NAME}} reports.\n\nThe password is `{{DEMO_PASSWORD}}`; never write it on a card.\n"
+        password = "Demo*Pass_w0rd#1!"
+        text = render_role(legacy, {"ROLE_NAME": "Example", "DEMO_PASSWORD": password}, "coder")
+        self.assertEqual(text.count("`" + password + "`"), 1)
+        self.assertNotIn("{{DEMO_PASSWORD}}", text)
+        self.assertIn("The password is `" + password + "`; never write it on a card.", text)
         for bad in ("", " ", " leading", "trailing ", "line\nbreak", "tick`break", "back\\slash",
                     "tilde~value", "{{DEMO_PASSWORD}}", "\u2028separator"):
             with self.subTest(value=bad), self.assertRaises(ValueError):
-                render_role(self.template("coder"), dict(self.values("coder"), DEMO_PASSWORD=bad), "coder")
-        values = self.values("coder")
-        values.pop("DEMO_PASSWORD")
+                render_role(legacy, {"ROLE_NAME": "Example", "DEMO_PASSWORD": bad}, "coder")
         with self.assertRaises(ValueError):
-            render_role(self.template("coder"), values, "coder")
+            render_role(legacy, {"ROLE_NAME": "Example"}, "coder")
 
     def test_codex_routing_and_cli_use_concrete_values(self):
         result = render_role(self.template("coder"), self.values("coder", "low", "high"), "coder")
@@ -332,7 +333,6 @@ class ReasoningContractTests(unittest.TestCase):
     def test_coder_contract_drops_engineering_duties_and_keeps_guard_literals(self):
         """Static 3.0.0 checks: removed duties, required literals and the size contract."""
         values = self.values("coder")
-        values["DEMO_PASSWORD"] = "Synthetic-Demo-Pass"
         rendered = render_role(self.template("coder"), values, "coder")
         for removed in ("Inspect the actual diff", "build-evidence", "$diagnosing-bugs", "six VoltAgent",
                         "Maintain the project changelog", "analysis integration", "consumer per changed symbol",
@@ -347,10 +347,11 @@ class ReasoningContractTests(unittest.TestCase):
                         "the event stream is not the result", 'kind="capability"', 'kind="transient"'):
             with self.subTest(literal=literal):
                 self.assertIn(literal, rendered)
-        self.assertEqual(rendered.count("`Synthetic-Demo-Pass`"), 1)
-        self.assertEqual(rendered.count("`demo-handover`"), 1)
+        self.assertEqual(rendered.count("`disposable-demo`"), 1)
+        self.assertNotIn("demo-handover", rendered)
+        self.assertNotIn("DEMO_PASSWORD", rendered)
         fixture = render_role(self.template("coder"), self.values("coder"), "coder")
-        self.assertEqual(len(fixture.encode()), 8422)
+        self.assertEqual(len(fixture.encode()), 9586)
         self.assertEqual(len(fixture.splitlines()), 70)
 
     def test_voltagent_specialists_keep_original_settings_outside_parent_matrix(self):
@@ -732,7 +733,7 @@ class ReasoningContractTests(unittest.TestCase):
                 self.assertNotIn("15000", text)
                 self.assertNotIn("28800", text)
         reviewer = render_role(self.template("reviewer"), self.values("reviewer"), "reviewer")
-        self.assertEqual(len(reviewer.encode()), 19851)
+        self.assertEqual(len(reviewer.encode()), 19982)
         self.assertEqual(len(reviewer.splitlines()), 120)
 
     def test_worker_wait_cap_and_card_hang_cap_are_recipe_level(self):
@@ -1086,8 +1087,6 @@ class ReviewerEquipmentTests(unittest.TestCase):
         expected = {
             "brownfield-feature-planning": {"hermes": ["planner"]},
             "build-evidence": {"hermes": ["reviewer"], "codex": ["team-codex"]},
-            "demo-handover": {"hermes": ["coder"]},
-            "dev-environment": {"hermes": ["planner"]},
             "diagnosing-bugs": {"codex": ["team-codex"]},
             "minimal-change-engineering": {"hermes": ["planner"]},
             "plan-versioning-semver": {"hermes": ["planner"], "codex": ["team-codex"]},
@@ -1508,7 +1507,7 @@ class UpstreamLockTests(unittest.TestCase):
                 else:
                     source = upstream[item["source_component"]] if "source_component" in item else item
                     self.assertRegex(source.get("source_revision", ""), r"^[0-9a-f]{40}$")
-                    if name != "codex-cli":
+                    if name not in {"codex-cli", "disposable-demo", "dev-environment"}:
                         self.assertTrue(item.get("legal_files"), name)
         self.assertEqual(upstream["codex-cli"].get("source_release"), "rust-v0.167.1")
         graph = upstream["graphify"]

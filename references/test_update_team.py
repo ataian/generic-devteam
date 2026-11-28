@@ -10,6 +10,7 @@ import tempfile
 import unittest
 
 import update_team as u
+import setup_settings
 
 
 class UpdaterTests(unittest.TestCase):
@@ -182,6 +183,8 @@ class UpdaterTests(unittest.TestCase):
 
     def test_setup_scalars_survive_initialize_discovery_and_update(self):
         setup = u.setup_data(self.state)
+        # A fresh 4.0.0 setup carries no retired DEMO_PASSWORD; retirement has dedicated coverage.
+        setup['confirmed_values'].pop('DEMO_PASSWORD')
         scalars = {'CREATE_BANK': True, 'CREATE_BOARD': False, 'WATCHER': True,
                    'OPTIONAL_VALUE': None, 'INTEGER_VALUE': 7, 'NUMBER_VALUE': 1.5,
                    'STRING_VALUE': 'confirmed'}
@@ -217,6 +220,8 @@ class UpdaterTests(unittest.TestCase):
         import bind_recovery as b
 
         setup = u.setup_data(self.state)
+        # A fresh 4.0.0 setup carries no retired DEMO_PASSWORD; retirement has dedicated coverage.
+        setup['confirmed_values'].pop('DEMO_PASSWORD')
         setup['confirmed_values'].update(CODEX_MODEL='native-model-id',
                                          PLANNER_REASONING='high', CODER_REASONING='medium')
         template = (self.repo / 'templates/setup-record.md').read_text()
@@ -411,109 +416,65 @@ class UpdaterTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Codex process HOME differs'):
             u.desired(self.repo, self.base, self.roles, values, bindings=self.bindings)
 
-    def test_fresh_team_renders_demonstration_password_only_into_the_three_souls(self):
+    def test_fresh_team_records_and_renders_no_demonstration_password(self):
+        """4.0.0 new-team contract: no role field, literal or skill copy carries the value."""
         record = self.initialize()
-        self.assertEqual(record['confirmed_values']['DEMO_PASSWORD'], 'Synthetic-Demo-Passphrase-9')
+        # The retired key is not kept in active configuration even when the input record has it.
+        self.assertNotIn('DEMO_PASSWORD', record['confirmed_values'])
         for role in ('planner', 'coder', 'reviewer'):
             with self.subTest(role=role):
                 text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
-                self.assertEqual(text.count('`Synthetic-Demo-Passphrase-9`'), 1)
-                self.assertNotIn('{{DEMO_PASSWORD}}', text)
+                self.assertNotIn('Synthetic-Demo-Passphrase-9', text)
+                self.assertNotIn('DEMO_PASSWORD', text)
+                self.assertNotIn('{{', text)
         for entry in record['managed']:
             if entry['source'].startswith('skills/'):
                 with self.subTest(source=entry['source'], role=entry['role']):
                     self.assertNotIn(b'Synthetic-Demo-Passphrase-9', Path(entry['target']).read_bytes())
 
-    def test_missing_or_unsafe_demonstration_password_blocks_fresh_role_output(self):
+    def test_fresh_team_needs_no_demo_password_and_renders_none(self):
         setup = u.setup_data(self.state)
         path = self.state / 'setup.md'
         absent = dict(setup['confirmed_values'])
         absent.pop('DEMO_PASSWORD')
         path.write_text('```json\n' + json.dumps(dict(setup, confirmed_values=absent)) + '\n```\n')
-        with self.assertRaisesRegex(ValueError, 'DEMO_PASSWORD'):
-            u.initialize(self.repo, self.home, 'fresh-team', self.roles)
-        for value in ('', '   ', 'two\nlines', 'tick`value', 'back\\slash', 'tilde~value', '{{DEMO_PASSWORD}}'):
+        record = u.initialize(self.repo, self.home, 'fresh-team', self.roles)
+        self.assertNotIn('DEMO_PASSWORD', record['confirmed_values'])
+        # A retained historical value is retired, never rendered, even when it is unsafe old text.
+        for value in ('tick`value', 'two\nlines', '{{DEMO_PASSWORD}}'):
             values = dict(setup['confirmed_values'], DEMO_PASSWORD=value)
             path.write_text('```json\n' + json.dumps(dict(setup, confirmed_values=values)) + '\n```\n')
-            with self.subTest(value=value), self.assertRaises(ValueError):
-                u.initialize(self.repo, self.home, 'fresh-team', self.roles)
-            self.assertFalse((self.state / 'installation.json').exists())
+            (self.state / 'installation.json').unlink(missing_ok=True)
+            shutil.rmtree(self.state / 'baselines', ignore_errors=True)
+            with self.subTest(value=value):
+                record = u.initialize(self.repo, self.home, 'fresh-team', self.roles)
+                self.assertNotIn('DEMO_PASSWORD', record['confirmed_values'])
+            for role in ('planner', 'coder', 'reviewer'):
+                text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
+                self.assertNotIn(value.strip(), text)
 
-    def pre2140_installation(self):
-        """Exact 2.13.1 source fixture: the last Maker without DEMO_PASSWORD."""
+    OLD_311 = '4e2fe1e29c2050b8835fdb4a268e0ed14f29d410'
+
+    def environment_311_installation(self):
+        """Exact 3.1.1 source fixture, including the old owned demo/environment trees."""
         original = Path(__file__).resolve().parents[1]
-        commit = '675e05180b4277d78206d63beb2ff71cee2f4f73'
-        self.git('fetch', '-q', str(original), commit)
-        self.assertEqual(u.package_version(self.repo, commit), '2.13.1')
+        self.git('fetch', '-q', str(original), self.OLD_311)
+        self.assertEqual(u.package_version(self.repo, self.OLD_311), '3.1.1')
         setup = u.setup_data(self.state)
-        old = dict(setup, confirmed_values={key: value for key, value in setup['confirmed_values'].items()
-                                            if key != 'DEMO_PASSWORD'})
-        (self.state / 'setup.md').write_text('```json\n' + json.dumps(old) + '\n```\n')
-        for entry in u.desired(self.repo, commit, self.roles, old['confirmed_values'], bindings=self.bindings):
+        for entry in u.desired(self.repo, self.OLD_311, self.roles, setup['confirmed_values'],
+                               bindings=self.bindings):
             target = Path(entry['target'])
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(entry['content'])
             target.chmod(entry['mode'])
-        return u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=commit,
-                            basis_evidence='Synthetic exact 2.13.1 installation without DEMO_PASSWORD')
+        return u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=self.OLD_311,
+                            basis_evidence='Synthetic exact 3.1.1 installation incl. owned demo/environment trees')
 
-    def test_pre2140_team_adopts_demonstration_password_only_after_verified_apply(self):
-        self.pre2140_installation()
-        marker = self.state / 'installation.json'
-        before_marker = marker.read_bytes()
-        coder = Path(self.roles['coder']['home']) / 'SOUL.md'
-        before_coder = coder.read_bytes()
-        with self.assertRaisesRegex(ValueError, 'DEMO_PASSWORD'):
-            self.proposal()
-        self.assertEqual(marker.read_bytes(), before_marker)
-        self.assertEqual(coder.read_bytes(), before_coder)
-
-        setup = u.setup_data(self.state)
-        setup['confirmed_values']['DEMO_PASSWORD'] = 'Synthetic-Pre214-Pass-1'
-        (self.state / 'setup.md').write_text('```json\n' + json.dumps(setup) + '\n```\n')
-        plan = self.proposal()
-        proposal = json.loads(plan.read_text())
-        self.assertFalse(proposal['conflicts'])
-        # Adoption is not persisted before the verified target write.
-        self.assertNotIn('DEMO_PASSWORD', json.loads(marker.read_text())['confirmed_values'])
-        self.assertNotIn(b'Synthetic-Pre214-Pass-1', coder.read_bytes())
-
-        result = u.apply(self.home, plan, decision='proceed',
-                         review='Checked requested demo, functional end check and literal password in all three SOULs',
-                         dependency_review='Reviewed operational recipe change; file-only fixture update')
-        self.assertEqual(result['status'], 'applied')
-        record = u.load_record(self.home)[2]
-        self.assertEqual(record['confirmed_values']['DEMO_PASSWORD'], 'Synthetic-Pre214-Pass-1')
-        for role in ('planner', 'coder', 'reviewer'):
-            with self.subTest(role=role):
-                text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
-                self.assertEqual(text.count('`Synthetic-Pre214-Pass-1`'), 1)
-        reviewer = (Path(self.roles['reviewer']['home']) / 'SOUL.md').read_text()
-        self.assertIn('On the final demo handover card, verify the demo runs at the reviewed commit', reviewer)
-        self.assertIn('Container uptime alone is not a functional check.', reviewer)
-        self.assertNotIn('a demonstration runtime is not permanent', reviewer)
-        self.assertNotIn('a demonstration runtime is not permanent', coder.read_text())
-        self.assertNotIn('retiring the previous one', reviewer)
-        handover = Path(self.roles['coder']['home']) / 'skills' / 'demo-handover' / 'SKILL.md'
-        self.assertTrue(handover.is_file(), handover)
-        self.assertEqual(handover.read_bytes(),
-                         (Path(__file__).resolve().parents[1] / 'skills/demo-handover/SKILL.md').read_bytes())
-        self.assertNotIn('`demo.sh retire`', handover.read_text())
-        self.assertNotIn('`demo.sh user`', handover.read_text())
-        self.assertIn('If build or start refuses existing state, stop and report the refusal', handover.read_text())
-        self.assertNotIn('demo.sh retire', coder.read_text())
-        self.assertIn('read the `demo-handover` skill', coder.read_text())
-        self.assertIn('recorded login works on the running system', reviewer)
-
-        # A later update reuses the recorded value without reading setup.md again.
-        (self.state / 'setup.md').rename(self.state / 'audit-only.md')
-        later = json.loads(self.proposal().read_text())
-        self.assertFalse(later['conflicts'])
-        self.assertEqual(later['confirmed_values']['DEMO_PASSWORD'], 'Synthetic-Pre214-Pass-1')
-        for entry in later['entries']:
-            self.assertEqual(u.digest(u.decoded(entry['merged'])), entry['before_hash'])
-
-    def test_cli_output_redacts_the_demonstration_password(self):
+    def test_311_adoption_retires_password_and_accepts_a_fresh_choice_or_skip(self):
+        """One-off migration: real prepare/apply drops the value; the operator output never shows it."""
+        record = self.environment_311_installation()
+        old = 'Synthetic-Demo-Passphrase-9'
+        self.assertEqual(record['confirmed_values']['DEMO_PASSWORD'], old)
         script = Path(__file__).with_name('update_team.py')
         roles = self.root / 'native-roles.json'
         roles.write_text(json.dumps(self.roles))
@@ -524,25 +485,56 @@ class UpdaterTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             return result.stdout
 
-        printed = cli('init', '--home', str(self.home), '--team-id', 'cli-demo', '--roles', str(roles))
-        self.assertNotIn('Synthetic-Demo-Passphrase-9', printed)
-        self.assertEqual(json.loads(printed)['confirmed_values']['DEMO_PASSWORD'], '{{DEMO_PASSWORD}}')
-        self.change()
         printed = cli('plan', '--home', str(self.home))
-        self.assertNotIn('Synthetic-Demo-Passphrase-9', printed)
+        self.assertNotIn(old, printed)
+        self.assertNotIn('{{DEMO_PASSWORD}}', printed)
         proposal = json.loads(printed)
-        self.assertEqual(proposal['confirmed_values']['DEMO_PASSWORD'], '{{DEMO_PASSWORD}}')
-        for entry in proposal['entries']:
-            payload = u.decoded(entry['new_base'])
-            self.assertNotIn(b'Synthetic-Demo-Passphrase-9', payload)
-            if entry['target'].endswith('/SOUL.md'):
-                self.assertIn(b'`{{DEMO_PASSWORD}}`', payload)
-        # The private proposal keeps the exact bytes the helper applies.
         stored = json.loads(Path(proposal['proposal']).read_text())
-        souls = [entry for entry in stored['entries'] if entry['target'].endswith('/SOUL.md')]
-        self.assertTrue(souls)
-        for entry in souls:
-            self.assertIn(b'Synthetic-Demo-Passphrase-9', u.decoded(entry['new_base']))
+        self.assertNotIn('DEMO_PASSWORD', stored['confirmed_values'])
+        self.assertNotIn('DEMO_PASSWORD', stored['confirmed_bindings'])
+        for entry in stored['entries']:
+            payload = u.decoded(entry['new_base'])
+            self.assertNotIn(old.encode(), payload)
+            self.assertNotIn(b'DEMO_PASSWORD', payload)
+        self.assertIn(str(Path(self.roles['coder']['home']) / 'skills/demo-handover/SKILL.md'),
+                      u.obsolete_targets(stored['obsolete']))
+        self.assertIn(str(self.home / 'skills/dev-environment/references/requested-demo.md'),
+                      u.obsolete_targets(stored['obsolete']))
+
+        result = u.apply(self.home, proposal['proposal'], decision='proceed',
+                         review='Checked the rendered roles and the retired demo policy',
+                         dependency_review='Reviewed one-off 4.0.0 adoption; no live team touched')
+        self.assertEqual(result['status'], 'applied')
+        updated = u.load_record(self.home)[2]
+        self.assertEqual(updated['maker_version'], '4.0.0')
+        self.assertNotIn('DEMO_PASSWORD', updated['confirmed_values'])
+        self.assertNotIn('DEMO_PASSWORD', updated['confirmed_bindings'])
+        for role in ('planner', 'coder', 'reviewer'):
+            text = (Path(self.roles[role]['home']) / 'SOUL.md').read_text()
+            with self.subTest(role=role):
+                self.assertNotIn(old, text)
+                self.assertNotIn('DEMO_PASSWORD', text)
+        # The file helper deletes nothing; the companion retirement remains the operator's step.
+        self.assertTrue((Path(self.roles['coder']['home']) / 'skills/demo-handover/SKILL.md').is_file())
+        self.assertTrue((self.home / 'skills/dev-environment/references/requested-demo.md').is_file())
+
+        # The fresh choice uses the existing setup writer; a different value or skip is independent.
+        project = self.root / 'project'
+        project.mkdir()
+        meta = setup_settings.write_choice(str(project), {'mode': 'shared', 'value': 'Synthetic-Fresh-Pass-2'})
+        self.assertEqual(meta['status'], 'written')
+        settings = (project / 'demo/settings.json').read_text()
+        self.assertIn('Synthetic-Fresh-Pass-2', settings)
+        self.assertNotIn(old, settings)
+        self.assertNotIn(old, json.dumps(meta))
+        self.assertNotIn('Synthetic-Fresh-Pass-2', json.dumps(meta))
+        skip = self.root / 'skip-project'
+        skip.mkdir()
+        skipped = setup_settings.write_choice(str(skip), None)
+        self.assertEqual(skipped['status'], 'skipped')
+        self.assertFalse((skip / 'demo').exists())
+        self.assertNotIn('password', (skip / 'demo/settings.json').read_text()
+                         if (skip / 'demo/settings.json').exists() else '')
 
     def test_cli_redaction_swaps_only_the_rendered_literal(self):
         secret = 'Synthetic-Demo-Passphrase-9'
@@ -770,98 +762,70 @@ class UpdaterTests(unittest.TestCase):
         self.assertEqual((self.state / 'baselines' / entry['baseline']).read_bytes(), original)
         self.assertEqual(record['maker_commit'], self.git('rev-parse', 'HEAD').strip())
 
-    def test_dev_environment_complete_tree_delivery_and_local_update(self):
-        record = self.initialize()
-        source = self.repo / 'skills/dev-environment'
-        files = {p.relative_to(self.repo).as_posix(): p.read_bytes()
-                 for p in source.rglob('*') if p.is_file()}
-        self.assertEqual(set(files), {'skills/dev-environment/SKILL.md',
-                                      'skills/dev-environment/references/requested-demo.md'})
-        entries = [e for e in record['managed'] if e['source'].startswith('skills/dev-environment/')]
-        self.assertEqual({e['source'] for e in entries}, set(files))
-        self.assertEqual({e['role'] for e in entries}, {'planner'})
-        for entry in entries:
-            self.assertEqual(entry['target'], str(self.home / entry['source']))
-            self.assertEqual(entry['transform'], 'copy-v1')
-            self.assertEqual(Path(entry['target']).read_bytes(), (self.repo / entry['source']).read_bytes())
-        for role in ('coder', 'reviewer', 'team-codex'):
-            self.assertFalse((Path(self.roles[role]['home']) / 'skills/dev-environment').exists())
-        edits = {'skills/dev-environment/SKILL.md': b'Approved local environment note\n',
-                 'skills/dev-environment/references/requested-demo.md': b'Approved local retirement note\n'}
-        for relative, note in edits.items():
-            target = self.home / relative
-            target.write_bytes(note + target.read_bytes())
-        for relative in sorted(files):
-            self.change(relative, '\nUpdated instruction for ' + Path(relative).name + '.\n')
+    def test_same_name_environment_replacement_is_not_retired_after_install(self):
+        self.environment_311_installation()
+        record = u.load_record(self.home)[2]
+        root = self.home / 'skills/dev-environment'
+        hashes = {entry['target']: entry['installed_hash'] for entry in record['managed']
+                  if entry['source'].startswith('skills/dev-environment/')}
         plan = self.proposal()
-        paths = {item['path'] for item in json.loads(plan.read_text())['adaptations']}
-        for relative in edits:
-            self.assertIn(str(self.home / relative), paths)
-        u.apply(self.home, plan, decision='proceed', review='Fixture environment update reviewed')
-        for relative, note in edits.items():
-            text = (self.home / relative).read_bytes()
-            self.assertFalse(text.startswith(note))
-            self.assertTrue(text.endswith(b'\nUpdated instruction for ' + Path(relative).name.encode() + b'.\n'))
+        proposal = json.loads(plan.read_text())
+        candidates = {item['root']: item for item in proposal['obsolete'] if item['kind'] == 'tree'}
+        self.assertEqual(candidates[str(root)]['state'], 'pristine')
+        result = u.apply(self.home, plan, decision='proceed',
+                         review='Checked the 4.0.0 role and retirement scope',
+                         dependency_review='Reviewed one-off adoption; no live team touched')
+        self.assertEqual(result['status'], 'applied')
 
-    def test_new_dev_environment_collision_addition_and_guarded_rollback(self):
-        path = self.repo / 'manifest.json'
-        manifest = json.loads(path.read_text())
-        self.assertIn('dev-environment', manifest['own_skills'])
-        entry = manifest['own_skills'].pop('dev-environment')
-        files = {p.relative_to(self.repo).as_posix(): p.read_bytes()
-                 for p in (self.repo / 'skills/dev-environment').rglob('*') if p.is_file()}
-        self.assertEqual(set(files), {'skills/dev-environment/SKILL.md',
-                                      'skills/dev-environment/references/requested-demo.md'})
-        self.git('rm', '-r', 'skills/dev-environment')
-        path.write_text(json.dumps(manifest))
-        self.commit('fixture before environment assignment')
-        target = self.home / 'skills/dev-environment'
-        shutil.rmtree(target)
-        self.initialize()
-        before = (self.state / 'installation.json').read_bytes()
-        manifest['own_skills']['dev-environment'] = entry
-        path.write_text(json.dumps(manifest))
-        for relative, content in files.items():
-            p = self.repo / relative
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_bytes(content)
-        self.commit('fixture add Planner environment skill')
-        target.mkdir()
-        main = target / 'SKILL.md'
-        main.write_bytes(b'Unrelated local skill.\n')
-        reference = target / 'references/requested-demo.md'
-        reference.parent.mkdir()
-        reference.write_bytes(b'Unrelated local reference.\n')
-        plan = self.proposal()
-        conflicts = json.loads(plan.read_text())['conflicts']
-        self.assertIn(str(main), conflicts)
-        self.assertIn(str(reference), conflicts)
-        with self.assertRaisesRegex(ValueError, 'Text conflicts'):
-            u.apply(self.home, plan, decision='proceed', review='Fixture unresolved collision')
-        self.assertEqual(main.read_bytes(), b'Unrelated local skill.\n')
-        self.assertEqual(reference.read_bytes(), b'Unrelated local reference.\n')
-        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
-        main.unlink()  # Resolve only this disposable fixture collision.
-        reference.unlink()
-        reference.parent.rmdir()
-        plan = self.proposal()
-        entries = [e for e in json.loads(plan.read_text())['entries'] if e['source'] in files]
-        self.assertEqual({e['source'] for e in entries}, set(files))
-        self.assertEqual({e['role'] for e in entries}, {'planner'})
-        result = u.apply(self.home, plan, decision='proceed', review='Fixture environment addition reviewed')
-        for relative, content in files.items():
-            self.assertEqual((self.home / relative).read_bytes(), content)
-        restored = u.rollback(self.home, Path(result['run']), decision='proceed')
-        self.assertEqual(set(restored['retained_additions']), {str(self.home / relative) for relative in files})
-        self.assertEqual((self.state / 'installation.json').read_bytes(), before)
+        # Replacement first: the old tree is no longer pristine; retirement must not run.
+        pinned = root / 'references/install.md'
+        pinned.parent.mkdir(parents=True, exist_ok=True)
+        pinned.write_text('pinned tree\n')
+        state, findings = u.candidate_state('tree', root, hashes)
+        self.assertEqual(state, 'extra-files')
+        self.assertTrue(any(finding.startswith('extra: ' + str(pinned)) for finding in findings))
+        self.assertTrue((root / 'references/requested-demo.md').is_file())
 
-    def test_310_layout_adopts_the_missing_requested_demo_reference(self):
-        """Synthetic exact 3.1.0 files; the new reference must reach the Planner on update."""
+        # Correct order: back up and retire the old tree, then install the staged same-name tree.
+        backup = self.root / 'environment-backup'
+        shutil.copytree(root, backup)
+        shutil.rmtree(root)
+        stage = self.root / 'environment-stage'
+        stage.mkdir()
+        (stage / 'SKILL.md').write_text('pinned skill\n')
+        (stage / 'references').mkdir()
+        (stage / 'references/install.md').write_text('pinned install\n')
+        (stage / 'references/toolchain.md').write_text('pinned toolchain\n')
+        shutil.copytree(stage, root)
+        self.assertEqual((root / 'SKILL.md').read_text(), 'pinned skill\n')
+        self.assertFalse((root / 'references/requested-demo.md').exists())
+
+        # Interrupted replacement: old tree at quarantine, target absent; resume installs once.
+        quarantine = self.root / 'environment-quarantine'
+        shutil.rmtree(root)
+        shutil.copytree(backup, root)
+        root.rename(quarantine)
+        self.assertFalse(root.exists())
+        shutil.copytree(stage, root)
+        self.assertEqual((root / 'references/install.md').read_text(), 'pinned install\n')
+        self.assertTrue((quarantine / 'references/requested-demo.md').is_file())
+
+        # Guarded file rollback leaves a later project settings choice untouched.
+        project = self.root / 'project'
+        project.mkdir()
+        setup_settings.write_choice(str(project), {'mode': 'random'})
+        settings = project / 'demo/settings.json'
+        before = settings.read_bytes()
+        restored = u.rollback(self.home, result['run'], decision='proceed')
+        self.assertEqual(restored['status'], 'rolled-back')
+        self.assertEqual(settings.read_bytes(), before)
+        self.assertIn('read the `demo-handover` skill', (Path(self.roles['coder']['home']) / 'SOUL.md').read_text())
+
+    def test_310_layout_retires_requested_demo_and_old_environment(self):
+        """Synthetic exact 3.1.0 files; the old reference must not survive the 4.0.0 route."""
         original = Path(__file__).resolve().parents[1]
         old = '8add46c01a31dd3f149819fd29305c5d16fa05c8'
-        reference = 'skills/dev-environment/references/requested-demo.md'
         setup = u.setup_data(self.state)
-        # Rebuild the verified 3.1.0 installation from its exact source files.
         self.git('fetch', '-q', str(original), old)
         self.assertEqual(u.package_version(self.repo, old), '3.1.0')
         for item in u.desired(self.repo, old, self.roles, setup['confirmed_values'], bindings=self.bindings):
@@ -869,21 +833,23 @@ class UpdaterTests(unittest.TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(item['content'])
             target.chmod(item['mode'])
-        installed = self.home / reference
-        installed.unlink()  # 3.1.0 has no requested-demo reference at all.
         u.initialize(self.repo, self.home, 'fixture-team', self.roles, base_commit=old,
                      basis_evidence='Synthetic exact 3.1.0 files without the requested-demo reference')
-        self.assertFalse(installed.exists())
+        old_skill = self.home / 'skills/dev-environment/SKILL.md'
+        self.assertTrue(old_skill.is_file())
         plan = self.proposal()
         proposal = json.loads(plan.read_text())
         self.assertFalse(proposal['conflicts'])
-        added = [e for e in proposal['entries'] if e['source'] == reference]
-        self.assertEqual([(e['role'], e['target']) for e in added], [('planner', str(installed))])
-        u.apply(self.home, plan, decision='proceed', review='Fixture reference addition reviewed',
-                dependency_review='Reviewed recipe dependency; file-only fixture update')
-        for relative in ('skills/dev-environment/SKILL.md', reference):
-            self.assertEqual((self.home / relative).read_bytes(), (self.repo / relative).read_bytes())
-        self.assertIn('file_path="references/requested-demo.md"', (self.home / 'SOUL.md').read_text())
+        sources = {entry['source'] for entry in proposal['entries']}
+        self.assertNotIn('skills/dev-environment/SKILL.md', sources)
+        self.assertNotIn('skills/dev-environment/references/requested-demo.md', sources)
+        self.assertIn(str(old_skill), u.obsolete_targets(proposal['obsolete']))
+        u.apply(self.home, plan, decision='proceed', review='Fixture 3.1.0 retirement reviewed',
+                dependency_review='Reviewed one-off adoption; no live team touched')
+        planner = (self.home / 'SOUL.md').read_text()
+        self.assertNotIn('requested-demo', planner)
+        self.assertIn('previous skill-managed project demo will be removed', planner)
+        self.assertTrue(old_skill.is_file())
 
     def test_prototype_complete_tree_maps_only_to_planner(self):
         record = self.initialize()
@@ -1430,6 +1396,7 @@ class UpdaterTests(unittest.TestCase):
         original = coder / 'skills/caveman'
         legacy = {'SKILL.md': (b'# Legacy writing skill\n', 0o640),
                   'legal/LICENSE': (b'License fixture\n', 0o600)}
+        original.parent.mkdir(parents=True, exist_ok=True)
         original.mkdir(mode=0o750)
         for name, (data, mode) in legacy.items():
             u.atomic(original / name, data, None, mode)

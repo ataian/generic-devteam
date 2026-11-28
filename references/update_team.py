@@ -31,7 +31,12 @@ CODEX_BINDING_PREDECESSOR = 'f0e6c906dcda4cb5e600345866589086c3e29363810b8b60bc4
 # Reviewed pre-2.14.0 renderer: DEMO_PASSWORD is a new literal field; all older
 # substitutions are byte-identical, so an older team's baseline still verifies.
 DEMO_PASSWORD_PREDECESSOR = '8d4eaefbb34a3f04ab23ad2ed8e013296e17bcf2cd2350c3cf8792fb712594b6'
-REVIEWED_RENDERERS = {ROLE_BINDING_PREDECESSOR, CODEX_BINDING_PREDECESSOR, DEMO_PASSWORD_PREDECESSOR}
+# Reviewed 3.1.1 renderer at the pinned Maker baseline. Byte-identical to the
+# current renderer; admitted so a later accepted renderer change can still
+# update a 3.1.1 team that renders DEMO_PASSWORD from its own template list.
+THREE_ONE_ONE_PREDECESSOR = '034d96e0624097ce1baea19d1498f591d4aa8697a340a392139ad11f04e926c6'
+REVIEWED_RENDERERS = {ROLE_BINDING_PREDECESSOR, CODEX_BINDING_PREDECESSOR, DEMO_PASSWORD_PREDECESSOR,
+                      THREE_ONE_ONE_PREDECESSOR}
 ROLE_BINDING_FIELDS = {'PROJECT_DIR', 'REPOSITORY_ROOTS', 'PLANNER_PROFILE',
                        'CODEX_BINARY', 'CODEX_PROCESS_HOME', 'CODEX_HOME', 'DEMO_PASSWORD'}
 # Stored once in the private setup JSON and installation record; never printed.
@@ -285,6 +290,13 @@ def check_roles(roles, home=None):
         raise ValueError('Planner home mismatch')
 
 
+def declared_role_fields(repo, commit):
+    """Role fields declared by the templates at an exact commit."""
+    manifest = json.loads(blob(repo, commit, 'manifest.json'))
+    return set().union(*(role_fields(blob(repo, commit, item['template_path']).decode(), role)
+                         for role, item in manifest['role_templates'].items()))
+
+
 def desired(repo, commit, roles, values, souls_only=False, bindings=None):
     check_roles(roles)
     manifest = json.loads(blob(repo, commit, 'manifest.json'))
@@ -388,6 +400,12 @@ def initialize(repo, home, team_id, roles=None, legacy=False, base_commit=None, 
             raise ValueError('Confirmed profile ID differs from actual role binding: ' + role)
     commit = legacy_baseline(repo)['maker_commit'] if legacy else revision(repo, base_commit or 'HEAD')
     version = package_version(repo, commit)
+    # 4.0.0 retires DEMO_PASSWORD from new role instructions. A record for a
+    # target whose templates no longer declare it keeps no active copy of the
+    # retired value; historical commits that still declare it keep it.
+    if 'DEMO_PASSWORD' not in declared_role_fields(repo, commit):
+        setup['confirmed_values'].pop('DEMO_PASSWORD', None)
+        setup['confirmed_bindings'].pop('DEMO_PASSWORD', None)
     entries = desired(repo, commit, roles, setup['confirmed_values'], souls_only=legacy,
                       bindings=setup['confirmed_bindings'])
     for entry in entries:
@@ -658,8 +676,10 @@ def prepare(repo, home, ref='HEAD', keep=()):
             raise ValueError('Maker setup roles differ from recorded team')
         bindings['triage_recovery'] = setup.get('triage_recovery')
     values = dict(old['confirmed_values'])
-    needed = set().union(*(role_fields(blob(repo, commit, item['template_path']).decode(), role)
-                          for role, item in new_manifest['role_templates'].items()))
+    needed = declared_role_fields(repo, commit)
+    if 'DEMO_PASSWORD' not in needed:
+        values.pop('DEMO_PASSWORD', None)
+        bindings.pop('DEMO_PASSWORD', None)
     missing = (needed & ROLE_BINDING_FIELDS) - values.keys()
     if missing - {'PLANNER_PROFILE'}:
         if read(state / 'setup.md') is None:
