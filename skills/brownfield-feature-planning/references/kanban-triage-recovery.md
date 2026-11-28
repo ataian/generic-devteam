@@ -76,8 +76,9 @@ After operation, identity, and source checks, run the installed [bound launcher]
 1. Technical interruption during review: restore unfinished review with existing provenance. Use a Coder return only for substantive findings, questions, or required implementation continuation.
 2. Reserve `kanban_request_changes` for the active Reviewer returning findings/questions to the original implementer. Wake sessions must not compete with review. Without active review, request-changes can refuse with `not in an active review run`.
 3. Before reopening, verify prior handoff and required continuation. Leave pending review acceptance with the Reviewer. Never reopen pending review to execute code or bypass unresolved `CHANGES_REQUESTED`.
-4. Inspect local help before `hermes kanban --board <board> reopen-review <task>` to return the card to `ready`/`todo`. If no usable public equivalent exists, apply the same version/identity checks before `reopen_review_task(conn, task_id)`.
-5. Read back the `review_requested` implementer, including planner/operator origins. Do not hardcode a coder.
+4. For a card in `review`, inspect local help before `hermes kanban --board <board> reopen-review <task>` to return it to `ready`/`todo`. If no usable public equivalent exists, apply the same version/identity checks before `reopen_review_task(conn, task_id)`.
+5. For a card still `blocked` from an ended review that now needs explicitly approved implementation changes, verify the installed transition semantics: ordinary `unblock` can restore `review` and race the dispatcher. When native `promote --dry-run --json` confirms that the card can return directly to `ready` with dependencies enforced, read back the approved baseline, restore the original implementer while the card is still blocked, then promote the same card with the audit reason. Require no active claim or unresolved capability blocker; leave dependent gates and the next independent review intact. Read back the native transition and actual claim separately.
+6. Resolve the implementer from the last `review_requested` event, including planner/operator origins. Do not hardcode a coder.
 
 ## Preserved circuit breaker and verification
 
